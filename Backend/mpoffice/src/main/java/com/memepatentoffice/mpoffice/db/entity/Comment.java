@@ -1,4 +1,8 @@
 package com.memepatentoffice.mpoffice.db.entity;
 
-public class Comment {
+import javax.persistence.Entity;
+
+@Entity
+public class Comment extends BaseEntity{
+
 }
