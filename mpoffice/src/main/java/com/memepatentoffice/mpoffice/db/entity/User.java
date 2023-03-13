@@ -1,38 +1,44 @@
 package com.memepatentoffice.mpoffice.db.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
+import javax.persistence.Id;
+import javax.persistence.Lob;
 import java.time.LocalDateTime;
 
-@Entity
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
-public class User extends BaseEntity{
-    @Column(nullable = false, length = 20)
-    String name;
-    @Column(nullable = false)
-    String email;
-    @Column(nullable = false, length = 20)
-    String nickname;
-    String profileImage;
-    String walletAddress;
+@Entity
+public class User {
+    @Id
+    @Column(name = "user_id", nullable = false)
+    private Long id;
 
-//    ??? isValid;
-    @CreatedDate
-    LocalDateTime createdAt;
-    @LastModifiedDate
-    LocalDateTime updatedAt;
+    @Column(name = "name", length = 20)
+    private String name;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "nickname", length = 20)
+    private String nickname;
+
+    @Column(name = "profile_image")
+    private String profileImage;
+
+    @Column(name = "wallet_address")
+    private String walletAddress;
+
+    @Lob
+    @Column(name = "is_valid", nullable = false)
+    private String isValid;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 
 }
