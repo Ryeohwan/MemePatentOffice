@@ -1,27 +1,28 @@
 package com.memepatentoffice.mpoffice.db.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@IdClass(UserCommentLikeId.class)
+@Entity
 public class UserCommentLike {
+    @EmbeddedId
+    private UserCommentLikeId id;
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name="user_id", columnDefinition = "INT UNSIGNED")
-    User user;
+    @MapsId("commentId")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "comment_id", nullable = false)
+    private Comment comment;
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name="comment_id", columnDefinition = "INT UNSIGNED")
-    Comment comment;
+    @MapsId("userId")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @Lob
+    @Column(name = "`like`")
+    private String like;
+
 }
