@@ -1,4 +1,4 @@
-package com.memepatentoffice.mpoffice.domain.meme.db.entity;
+package com.memepatentoffice.mpoffice.db.entity;
 
 import lombok.Getter;
 
@@ -6,9 +6,9 @@ import javax.persistence.*;
 
 @Getter
 @Entity
-public class UserMemeAuctionAlert {
+public class UserMemeLike {
     @EmbeddedId
-    private UserMemeAuctionAlertId id;
+    private UserMemeLikeId id;
 
     @MapsId("memeSeq")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

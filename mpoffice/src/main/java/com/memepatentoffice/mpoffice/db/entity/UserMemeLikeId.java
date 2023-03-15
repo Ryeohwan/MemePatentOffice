@@ -1,4 +1,4 @@
-package com.memepatentoffice.mpoffice.domain.user.db.entity;
+package com.memepatentoffice.mpoffice.db.entity;
 
 import lombok.Getter;
 import org.hibernate.Hibernate;

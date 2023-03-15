@@ -1,4 +1,4 @@
-package com.memepatentoffice.mpoffice.domain.meme.db.entity;
+package com.memepatentoffice.mpoffice.db.entity;
 
 import lombok.AccessLevel;
 import lombok.Getter;
