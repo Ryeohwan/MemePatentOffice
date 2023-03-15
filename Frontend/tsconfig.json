@@ -2,8 +2,10 @@
   "compilerOptions": {
     "target": "ES6",
     "lib": [
+      "ES6",
       "dom",
       "dom.iterable",
+      "ScriptHost",
       "esnext"
     ],
     "allowJs": true,
@@ -20,13 +22,10 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "sourceMap": true,
-    "outDir": "dist",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "allowJs": true,
-    "allowSyntheticDefaultImports": true
+    "outDir": "./dist",
+    "baseUrl": "src",
   },
   "include": [
-    "src"
-  ]
+    "src/**/*.ts"
+  ],
 }
