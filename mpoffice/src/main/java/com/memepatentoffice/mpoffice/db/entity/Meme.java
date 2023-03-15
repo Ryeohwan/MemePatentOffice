@@ -1,5 +1,6 @@
-package com.memepatentoffice.mpoffice.domain.meme.db.entity;
+package com.memepatentoffice.mpoffice.db.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,4 +34,13 @@ public class Meme {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    @Builder
+    public Meme(Long id, Long createrId, Long ownerId, String title, String content, LocalDateTime createdAt) {
+
+
+    }
+
+    public Meme() {
+
+    }
 }
