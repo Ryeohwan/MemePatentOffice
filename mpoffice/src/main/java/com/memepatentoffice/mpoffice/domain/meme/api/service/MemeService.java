@@ -5,6 +5,7 @@ import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeResponse;
 import com.memepatentoffice.mpoffice.db.entity.Meme;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.MemeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class MemeService {
+
+
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
     private final MemeRepository memeRepository;
