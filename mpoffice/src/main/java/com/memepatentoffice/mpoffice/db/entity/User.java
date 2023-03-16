@@ -1,5 +1,6 @@
 package com.memepatentoffice.mpoffice.db.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,5 +41,8 @@ public class User {
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    @Column(name = "withdrawal_reason")
+    private String withdrawalReason;
 
 }

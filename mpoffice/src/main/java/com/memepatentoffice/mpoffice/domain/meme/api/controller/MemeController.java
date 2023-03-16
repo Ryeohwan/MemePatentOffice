@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URL;
 
 @RequiredArgsConstructor
 @RequestMapping("api/meme")
@@ -43,7 +44,7 @@ public class MemeController {
         return ResponseEntity.ok().body(url);
     }
 
-    @GetMapping("/test")
+    @GetMapping("/test/{test}")
     public ResponseEntity testHi(@PathVariable String test){
         System.out.println("came");
         return ResponseEntity.ok().body(test);
