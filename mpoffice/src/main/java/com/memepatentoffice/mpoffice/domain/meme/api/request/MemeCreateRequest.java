@@ -2,6 +2,7 @@ package com.memepatentoffice.mpoffice.domain.meme.api.request;
 
 import com.memepatentoffice.mpoffice.db.entity.Meme;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 public class MemeCreateRequest {
     private Long id;
     private String content;
+    private MultipartFile file;
     private LocalDateTime createdAt;
     private Long createrId;
     private Long ownerId;
@@ -42,6 +44,10 @@ public class MemeCreateRequest {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public void setFile(MultipartFile file){
+        this.file = file;
     }
 
     public Meme toEntity(){

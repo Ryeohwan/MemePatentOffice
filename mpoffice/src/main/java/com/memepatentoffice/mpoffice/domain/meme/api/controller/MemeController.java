@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @RequestMapping("api/meme")
@@ -30,26 +31,37 @@ public class MemeController {
         return ResponseEntity.ok().body(result);
     }
 
+    @GetMapping("/check/{title}")
+    public ResponseEntity titleDuplicatedcheck(@PathVariable String title){
+        String result = memeService.titleCheck(title);
+        return ResponseEntity.ok(result);
+
+    }
+
     // 밈 만들기
     @PostMapping("/create")
     @ResponseBody
-    public ResponseEntity createMeme(@RequestBody MemeCreateRequest memeCreateRequest){
+    public ResponseEntity createMeme(MemeCreateRequest memeCreateRequest) throws Exception{
+        memeCreateRequest.setCreatedAt(LocalDateTime.now());
+        String img = gcpService.uploadFile(memeCreateRequest.getFile());
+        memeCreateRequest.setImageUrl(img);
         String result = memeService.createMeme(memeCreateRequest);
         return ResponseEntity.ok().body(result);
     }
-//    image upload
-    @PostMapping("/upload")
-    @ResponseBody
-    public ResponseEntity upload(@RequestBody MultipartFile file)throws IOException {
-        String url = gcpService.uploadFile(file);
-        return ResponseEntity.ok().body(url);
-    }
+////    image upload test
+//    @PostMapping("/upload")
+//    @ResponseBody
+//    public ResponseEntity upload(@RequestBody MultipartFile file)throws IOException {
+//        String url = gcpService.uploadFile(file);
+//        return ResponseEntity.ok().body(url);
+//    }
 
-    @GetMapping("/test/{test}")
-    public ResponseEntity testHi(@PathVariable String test){
-        System.out.println("came");
-        return ResponseEntity.ok().body(test);
-    }
+    // Get Test
+//    @GetMapping("/test/{test}")
+//    public ResponseEntity testHi(@PathVariable String test){
+//        System.out.println("came");
+//        return ResponseEntity.ok().body(test);
+//    }
 
 
 }

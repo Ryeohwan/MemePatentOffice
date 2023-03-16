@@ -4,15 +4,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
 @Entity
 public class Meme {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "meme_id", nullable = false)
     private Long id;
 
