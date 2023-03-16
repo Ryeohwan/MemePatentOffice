@@ -9,11 +9,12 @@ import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @Entity
 public class Transaction {
     @Id
     @Column(name = "transaction_seq", nullable = false)
-    private Long id;
+    private Integer id;
 
     @Column(name = "meme_seq", nullable = false)
     private Long memeSeq;

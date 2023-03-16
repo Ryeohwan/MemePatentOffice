@@ -1,6 +1,5 @@
 package com.memepatentoffice.mpoffice.db.entity;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,11 +10,12 @@ import javax.persistence.Lob;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @Entity
 public class User {
     @Id
     @Column(name = "user_id", nullable = false)
-    private Long id;
+    private Integer id;
 
     @Column(name = "name", length = 20)
     private String name;

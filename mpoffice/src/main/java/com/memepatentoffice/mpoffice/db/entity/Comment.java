@@ -10,11 +10,12 @@ import javax.persistence.Lob;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @Entity
 public class Comment {
     @Id
     @Column(name = "comment_id", nullable = false)
-    private Long id;
+    private Integer id;
 
     @Column(name = "user_id", nullable = false)
     private Long userId;
