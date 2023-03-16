@@ -30,19 +30,20 @@ public class MemeController {
         return ResponseEntity.ok().body(result);
     }
 
+    // 밈 만들기
     @PostMapping("/create")
     @ResponseBody
     public ResponseEntity createMeme(@RequestBody MemeCreateRequest memeCreateRequest){
         String result = memeService.createMeme(memeCreateRequest);
         return ResponseEntity.ok().body(result);
     }
-
-    @PostMapping("/upload")
-    @ResponseBody
-    public ResponseEntity upload(@RequestBody MultipartFile file)throws IOException {
-        String url = gcpService.uploadFile(file);
-        return ResponseEntity.ok().body(url);
-    }
+//    image upload test
+//    @PostMapping("/upload")
+//    @ResponseBody
+//    public ResponseEntity upload(@RequestBody MultipartFile file)throws IOException {
+//        String url = gcpService.uploadFile(file);
+//        return ResponseEntity.ok().body(url);
+//    }
 
     @GetMapping("/test/{test}")
     public ResponseEntity testHi(@PathVariable String test){

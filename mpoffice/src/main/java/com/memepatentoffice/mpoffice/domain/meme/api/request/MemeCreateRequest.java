@@ -11,9 +11,7 @@ public class MemeCreateRequest {
     private String content;
     private LocalDateTime createdAt;
     private Long createrId;
-
     private Long ownerId;
-
     private String title;
 
     public void setId(Long id) {
