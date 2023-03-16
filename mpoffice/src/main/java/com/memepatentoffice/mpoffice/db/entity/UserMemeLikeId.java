@@ -10,15 +10,14 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Getter
-@Setter
 @Embeddable
 public class UserMemeLikeId implements Serializable {
     private static final long serialVersionUID = -3888702994186248463L;
     @Column(name = "meme_seq", nullable = false)
-    private Integer memeSeq;
+    private Long memeSeq;
 
     @Column(name = "user_seq", nullable = false)
-    private Integer userSeq;
+    private Long userSeq;
 
     @Override
     public boolean equals(Object o) {

@@ -24,9 +24,9 @@ public class MemeController {
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
 
-    @GetMapping("/get")
-    public ResponseEntity getMeme(@PathVariable MemeCreateRequest memeCreateRequest){
-        MemeResponse result = memeService.findByTitle(memeCreateRequest.getTitle());
+    @GetMapping("/{title}")
+    public ResponseEntity getMeme(@PathVariable String title){
+        MemeResponse result = memeService.findByTitle(title);
         return ResponseEntity.ok().body(result);
     }
 
@@ -37,18 +37,19 @@ public class MemeController {
         String result = memeService.createMeme(memeCreateRequest);
         return ResponseEntity.ok().body(result);
     }
-//    image upload test
-//    @PostMapping("/upload")
-//    @ResponseBody
-//    public ResponseEntity upload(@RequestBody MultipartFile file)throws IOException {
-//        String url = gcpService.uploadFile(file);
-//        return ResponseEntity.ok().body(url);
-//    }
+//    image upload
+    @PostMapping("/upload")
+    @ResponseBody
+    public ResponseEntity upload(@RequestBody MultipartFile file)throws IOException {
+        String url = gcpService.uploadFile(file);
+        return ResponseEntity.ok().body(url);
+    }
 
     @GetMapping("/test/{test}")
     public ResponseEntity testHi(@PathVariable String test){
         System.out.println("came");
         return ResponseEntity.ok().body(test);
     }
+
 
 }
