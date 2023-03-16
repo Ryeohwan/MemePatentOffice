@@ -1,9 +1,12 @@
 spring:
+    config:
+      activate:
+          on-profile: prod
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://j8a305.p.ssafy.io:3371/mpoffice-project
-        username: a305
-        password: dkanakf156346!!
+        url: jdbc:mysql://j8a305.p.ssafy.io:3371/${MYSQL_DATABASE}
+        username: ${MYSQL_USER}
+        password: ${MYSQL_PASSWORD}
     jpa:
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         hibernate:
@@ -13,10 +16,8 @@ spring:
                 show_sql: false
                 format_sql: true
 
-#                url: jdbc:mysql://j8a305.p.ssafy.io:3371/mpoffice-project?serverTimezone=Asia/Seoul
-
 server:
-    port: 8080
+    port: 8007
     servlet:
         encoding:
             charset: UTF-8
