@@ -35,12 +35,16 @@ public class Meme {
     private LocalDateTime createdAt;
 
     @Builder
-    public Meme(Long id, Long createrId, Long ownerId, String title, String content, LocalDateTime createdAt) {
-
-
+    public Meme(Long id, Long createrId, Long ownerId, Long id1, String title, String content, LocalDateTime createdAt) {
+        this.id = id;
+        this.createrId = createrId;
+        this.ownerId = ownerId;
+        this.id1 = id1;
+        this.title = title;
+        this.content = content;
+        this.createdAt = createdAt;
     }
 
     public Meme() {
-
     }
 }

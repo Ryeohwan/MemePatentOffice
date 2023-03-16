@@ -1,6 +1,7 @@
 package com.memepatentoffice.mpoffice.db.entity;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.Hibernate;
 
 import javax.persistence.Column;
@@ -13,10 +14,10 @@ import java.util.Objects;
 public class UserCommentLikeId implements Serializable {
     private static final long serialVersionUID = 5704860724562823574L;
     @Column(name = "comment_id", nullable = false)
-    private Long commentId;
+    private Integer commentId;
 
     @Column(name = "user_id", nullable = false)
-    private Long userId;
+    private Integer userId;
 
     @Override
     public boolean equals(Object o) {

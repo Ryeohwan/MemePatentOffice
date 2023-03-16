@@ -1,0 +1,31 @@
+spring:
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://j8a305.p.ssafy.io:3371/mpoffice-project
+        username: a305
+        password: dkanakf156346!!
+    jpa:
+        database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+        hibernate:
+            ddl-auto: none
+        properties:
+            hibernate:
+                show_sql: false
+                format_sql: true
+
+#                url: jdbc:mysql://j8a305.p.ssafy.io:3371/mpoffice-project?serverTimezone=Asia/Seoul
+
+server:
+    port: 8080
+    servlet:
+        encoding:
+            charset: UTF-8
+            enabled: true
+            force: true
+cloud:
+    gcp:
+        storage:
+            bucket: mpoffice
+            project-id: robust-metrics-38060
+            credentials:
+                location: classpath:robust-metrics-380604-8e932ce5312a.json
