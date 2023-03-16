@@ -10,12 +10,11 @@ import javax.persistence.Lob;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @Entity
 public class User {
     @Id
     @Column(name = "user_id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(name = "name", length = 20)
     private String name;

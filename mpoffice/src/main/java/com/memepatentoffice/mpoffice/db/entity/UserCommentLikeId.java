@@ -10,15 +10,14 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Getter
-@Setter
 @Embeddable
 public class UserCommentLikeId implements Serializable {
     private static final long serialVersionUID = 5704860724562823574L;
     @Column(name = "comment_id", nullable = false)
-    private Integer commentId;
+    private Long commentId;
 
     @Column(name = "user_id", nullable = false)
-    private Integer userId;
+    private Long userId;
 
     @Override
     public boolean equals(Object o) {

@@ -14,6 +14,8 @@ public class MemeCreateRequest {
     private Long ownerId;
     private String title;
 
+    private String imageUrl;
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -38,6 +40,10 @@ public class MemeCreateRequest {
         this.title = title;
     }
 
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public Meme toEntity(){
         return Meme.builder()
                 .id(id)
@@ -46,6 +52,7 @@ public class MemeCreateRequest {
                 .title(title)
                 .content(content)
                 .createdAt(createdAt)
+                .imageurl(imageUrl)
                 .build();
     }
 }
