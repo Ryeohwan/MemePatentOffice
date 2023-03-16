@@ -1,3 +1,18 @@
 body{
-  margin:0;
+  margin: 0;
+
+  --point-color: #03A9F4;
+  --button-color: #448AFF;
+  --button-two-color: #774AF9;
+  --setting-color: #0277BD;
+  --white-color: #FFFFFF;
+  --section-line-color: #D0D0D0;
+  --disabled-gray-color: #858585;
+  --black-color: #282828;
+  --impossible-color: #FE7171;
+  --possible-color: #56FB67;
+}
+
+* {
+  font-family: 'Gmarket Sans TTF';
 }

@@ -1,0 +1,23 @@
+.hamburger {
+  color: #7D7D7D;
+  font-size: 34px;
+}
+
+.dropContainer {
+  height: 13rem !important;
+  border-radius: 0 0 6px 6px;
+}
+
+.dropMenu {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  gap: 1rem;
+}
+
+.navLink {
+  margin: 0;
+  text-decoration: none;
+  color: var(--black);
+  font-size: 14px;
+}

@@ -23,7 +23,7 @@
     "jsx": "react-jsx",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "src",
+    "baseUrl": "./src/",
   },
   "include": [
     "src"

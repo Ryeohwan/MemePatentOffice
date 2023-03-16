@@ -1,0 +1,39 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 50px;
+  position: sticky;
+  z-index: 1110;
+}
+
+.navLink {
+  text-decoration: none;
+}
+
+.logoContainer {
+  display: flex;
+}
+
+.logoImg {
+  width: 27px;
+  height: 34px;
+}
+
+.rightContainer {
+  display: flex;
+  gap: 1rem;
+}
+
+.logoTxt {
+  color: var(--point-color);
+  font-size: 18px;
+  margin: 8px 0 0 6px;
+}
+
+.notification {
+  color: #7D7D7D;
+  font-size: 24px;
+  margin-top: 5px;
+}
