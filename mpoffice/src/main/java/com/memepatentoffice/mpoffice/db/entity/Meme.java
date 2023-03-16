@@ -1,6 +1,5 @@
 package com.memepatentoffice.mpoffice.db.entity;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,11 +9,12 @@ import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @Entity
 public class Meme {
     @Id
     @Column(name = "meme_id", nullable = false)
-    private Long id;
+    private Integer id;
 
     @Column(name = "creater_id", nullable = false)
     private Long createrId;
@@ -34,17 +34,7 @@ public class Meme {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Builder
-    public Meme(Long id, Long createrId, Long ownerId, Long id1, String title, String content, LocalDateTime createdAt) {
-        this.id = id;
-        this.createrId = createrId;
-        this.ownerId = ownerId;
-        this.id1 = id1;
-        this.title = title;
-        this.content = content;
-        this.createdAt = createdAt;
-    }
+    @Column(name = "imageurl")
+    private String imageurl;
 
-    public Meme() {
-    }
 }

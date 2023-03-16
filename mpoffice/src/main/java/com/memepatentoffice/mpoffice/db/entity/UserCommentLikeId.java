@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Getter
+@Setter
 @Embeddable
 public class UserCommentLikeId implements Serializable {
     private static final long serialVersionUID = 5704860724562823574L;
