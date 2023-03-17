@@ -1,13 +1,24 @@
-import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 
 import { Icon } from "@iconify/react";
 import { Sidebar } from "primereact/sidebar";
 import styles from "./NavbarHamburger.module.css";
 
+interface RoutePath {
+  pathname: string;
+}
+
 const NavbarHamburger: React.FC = () => {
+  const { pathname } = useLocation() as RoutePath;
+  
   // click하면 dropmenu
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
+
+  // location 이동하면 닫힘 -> click하면 닫히는걸로 수정 고려
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname])
 
   return (
     <>
