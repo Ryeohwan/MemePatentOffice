@@ -34,50 +34,56 @@ import NotificationSettingPage from 'pages/setting/NotificationSettingPage';
 import NotificationListPage from 'pages/NotificationListPage';
 import NotFoundPage from 'pages/NotFoundPage';
 
+import Frame from 'layout/Frame';
+
 
 const App: React.FC = () => {
   return (
     <div className="App">
-      <Routes>
-        
-        <Route path="" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/home" element={<HomePage />} />
+      <Frame>
 
-        <Route path="/meme-upload" element={<MemeUploadPage />} />
-        <Route path="/meme-list" element={<MemeListPage />} />
-        <Route path="/meme-detail/:meme_id" element={<MemeDetailPage />} />
+        <Routes>
+          
+          <Route path="" element={<LandingPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/home" element={<HomePage />} />
 
-        <Route path="/auction-list" element={<AuctionListPage />} />
-        <Route path='/auction/:auction_id' element={<AuctionPage />} />
+          <Route path="/meme-upload" element={<MemeUploadPage />} />
+          <Route path="/meme-list" element={<MemeListPage />} />
+          <Route path="/meme-detail/:meme_id" element={<MemeDetailPage />} />
 
-        <Route path="/profile/:nickname" element={<ProfilePage />} />
+          <Route path="/auction-list" element={<AuctionListPage />} />
+          <Route path='/auction/:auction_id' element={<AuctionPage />} />
 
-        <Route path="/setting" element={<SettingPage />} />
-        
-        <Route path="/setting/user-edit" element={<UserEditPage />} />
-        <Route path="/setting/user-edit/profile" element={<ProfileEditPage />} />
-        <Route path="/setting/user-edit/image" element={<ImageEditPage />} />
-        <Route path="/setting/user-edit/withdrawl" element={<WithdrawlPage />} />
+          <Route path="/profile/:nickname" element={<ProfilePage />} />
 
-        <Route path="/setting/history" element={<HistoryPage />} />
-        <Route path="/setting/history/comment" element={<CommentHistoryPage />} />
-        <Route path="/setting/history/nft-like" element={<NftLikePage />} />
-        <Route path="/setting/history/nft-notification" element={<NftNotificationPage />} />
+          <Route path="/setting" element={<SettingPage />} />
+          
+          <Route path="/setting/user-edit" element={<UserEditPage />} />
+          <Route path="/setting/user-edit/profile" element={<ProfileEditPage />} />
+          <Route path="/setting/user-edit/image" element={<ImageEditPage />} />
+          <Route path="/setting/user-edit/withdrawl" element={<WithdrawlPage />} />
 
-        <Route path="/setting/auction-history" element={<AuctionHistoryPage />} />
-        <Route path="/setting/auction-history/purchase" element={<PurchaseHistoryPage />} />
-        <Route path="setting/auction-history/sale" element={<SaleHistoryPage />} />
+          <Route path="/setting/history" element={<HistoryPage />} />
+          <Route path="/setting/history/comment" element={<CommentHistoryPage />} />
+          <Route path="/setting/history/nft-like" element={<NftLikePage />} />
+          <Route path="/setting/history/nft-notification" element={<NftNotificationPage />} />
 
-        <Route path="/setting/notification" element={<NotificationSettingPage />} />
+          <Route path="/setting/auction-history" element={<AuctionHistoryPage />} />
+          <Route path="/setting/auction-history/purchase" element={<PurchaseHistoryPage />} />
+          <Route path="setting/auction-history/sale" element={<SaleHistoryPage />} />
 
-        <Route path="/notification-list" element={<NotificationListPage />} />
+          <Route path="/setting/notification" element={<NotificationSettingPage />} />
 
-        <Route path="/not-found" element={<NotFoundPage />} />
-        <Route path="*" element={<NotFoundPage />} />
+          <Route path="/notification-list" element={<NotificationListPage />} />
 
-      </Routes>
+          <Route path="/not-found" element={<NotFoundPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+
+        </Routes>
+
+      </Frame>
     </div>
   );
 }

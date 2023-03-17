@@ -13,6 +13,10 @@ body{
   --possible-color: #56FB67;
 }
 
+p {
+  margin: 0;
+}
+
 * {
   font-family: 'Gmarket Sans TTF';
 }
