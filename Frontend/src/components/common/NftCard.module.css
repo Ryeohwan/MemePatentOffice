@@ -1,0 +1,25 @@
+.nftCardWrapper {
+    /* border: 0.1px solid black; */
+    border-radius: 6px;
+    box-shadow: var(--box-shadow);
+    width: 164px;
+    height: 206px;
+    margin-left: 10px;
+}
+
+.nftImg {
+    width: 164px;
+    height: 142px;
+    object-fit: cover;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+}
+
+.nftTxt {
+    font-size: 14px;
+    font-weight: 200;
+}
+
+.nftOwner {
+    font-size: 12px;
+}
