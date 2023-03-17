@@ -4,34 +4,49 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { useLoader, useFrame } from "react-three-fiber";
 
 interface PlayerProps {
-  moving: boolean;
-  sitting: boolean;
+  moving: React.MutableRefObject<Boolean>;
+  sitting: React.MutableRefObject<Boolean>;
   clickPosition: React.MutableRefObject<THREE.Vector3>;
   playerPosition: React.MutableRefObject<THREE.Vector3>;
-  stop: () => void;
+  chairPoints: React.MutableRefObject<THREE.Mesh[]>;
   player: React.MutableRefObject<THREE.Object3D>;
   camera: React.MutableRefObject<THREE.OrthographicCamera>;
-  cameraPosition: THREE.Vector3
+  cameraPosition: THREE.Vector3;
+  canSit: () => void;
+  cantSit: () => void;
+  chairPoint: React.MutableRefObject<THREE.Mesh>;
+  playerAnimation: React.MutableRefObject<THREE.AnimationAction | undefined>;
 }
 
 const Player: React.FC<PlayerProps> = ({
   moving,
   sitting,
   clickPosition,
-  stop,
   playerPosition,
   player,
   camera,
   cameraPosition,
+  chairPoints,
+  canSit,
+  cantSit,
+  chairPoint,
+  playerAnimation,
 }) => {
   const glb = useLoader(GLTFLoader, "/auction/model/arh.glb"); // 나중에 선택해서 가져오는 코드로 바꾸기
   player.current = glb.scene.children[0];
-
+  glb.scene.traverse((child) => {
+    if (child.isObject3D) {
+      child.castShadow = true;
+    }
+  });
   const mixer = new THREE.AnimationMixer(player.current);
   const normal = mixer.clipAction(glb.animations[0]);
   const handsup = mixer.clipAction(glb.animations[1]);
   const sitdown = mixer.clipAction(glb.animations[2]);
+  sitdown.repetitions = 1
+  sitdown.clampWhenFinished = true;
   const standup = mixer.clipAction(glb.animations[3]);
+  standup.clampWhenFinished = true;
   const walk = mixer.clipAction(glb.animations[4]);
 
   useEffect(() => {
@@ -52,9 +67,10 @@ const Player: React.FC<PlayerProps> = ({
 
   useFrame((state, delta) => {
     mixer.update(delta);
-    if (!moving && !sitting) {
+    if (!moving.current && !sitting.current) {
       normal.play();
-    } else if (moving) {
+    } else if (moving.current) {
+      normal.stop();
       walk.play();
       const angle = Math.atan2(
         clickPosition.current.z - player.current.position.z,
@@ -67,10 +83,31 @@ const Player: React.FC<PlayerProps> = ({
         Math.abs(clickPosition.current.x - player.current.position.x) < 0.03 &&
         Math.abs(clickPosition.current.z - player.current.position.z) < 0.03
       ) {
-        stop();
+        moving.current = false;
+        walk.stop();
       }
       camera.current.position.x = cameraPosition.x + player.current.position.x;
       camera.current.position.z = cameraPosition.z + player.current.position.z;
+    } else if (sitting.current) {
+      sitdown.play()
+      playerAnimation.current = standup;
+    }
+    if (!sitting.current) {
+      let isIn;
+      chairPoints.current.forEach((chair) => {
+        if (
+          Math.abs(player.current.position.x - chair.position.x) < 0.5 &&
+          Math.abs(player.current.position.z - chair.position.z) < 0.5
+        ) {
+          canSit();
+          chairPoint.current = chair;
+          isIn = true;
+          playerAnimation.current = sitdown;
+        }
+      });
+      if (!isIn) {
+        cantSit();
+      }
     }
   });
 

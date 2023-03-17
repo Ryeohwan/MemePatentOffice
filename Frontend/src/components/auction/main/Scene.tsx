@@ -1,27 +1,48 @@
 import React, { useState, useCallback, useRef } from "react";
-import { Canvas } from "react-three-fiber";
+import { Canvas, useFrame } from "react-three-fiber";
 import * as THREE from "three";
 import Box from "components/auction/main/mesh/Box";
 import Floor from "components/auction/main/mesh/Floor";
 import Player from "components/auction/main/mesh/Player";
-import Chair from "./mesh/Chair";
+import Chair from "components/auction/main/mesh/Chair";
+import Table from "components/auction/main/mesh/Table";
+import Auctioneer from "components/auction/main/mesh/AuctioneerChar";
+import Border from "components/auction/main/mesh/Border";
+
+import styles from "components/auction/main/Scene.module.css";
 
 interface SceneProps {
   width: number;
   height: number;
+  canSit: () => void;
+  cantSit: () => void;
+  player: React.MutableRefObject<THREE.Object3D>;
+  chairPoint: React.MutableRefObject<THREE.Mesh>;
+  playerAnimation: React.MutableRefObject<THREE.AnimationAction | undefined>;
+  sitting: React.MutableRefObject<Boolean>;
 }
 
-const Scene: React.FC<SceneProps> = ({ width, height }) => {
+const Scene: React.FC<SceneProps> = ({
+  width,
+  height,
+  canSit,
+  cantSit,
+  player,
+  chairPoint,
+  playerAnimation,
+  sitting,
+}) => {
   const [meshes, setMeshes] = useState<THREE.Mesh[]>([]);
+  const table = useRef<THREE.Object3D>(new THREE.Object3D());
+  const chairs = useRef<Array<THREE.Mesh>>([]);
   const raycaster = useRef<THREE.Raycaster>(new THREE.Raycaster());
   const mouse = useRef<THREE.Vector2>(new THREE.Vector2());
   const isPressed = useRef(false);
   const clickPosition = useRef<THREE.Vector3>(new THREE.Vector3());
+  const chairPoints = useRef<Array<THREE.Mesh>>([]);
 
-  const player = useRef<THREE.Object3D>(new THREE.Object3D());
   const playerPosition = useRef<THREE.Vector3>(new THREE.Vector3());
-  const [moving, setMoving] = useState(false);
-  const [sitting, setSitting] = useState(false);
+  const moving = useRef(false);
 
   // 카메라
   const cameraPosition = new THREE.Vector3(13, 10, 25);
@@ -35,7 +56,6 @@ const Scene: React.FC<SceneProps> = ({ width, height }) => {
       1000
     )
   );
-
   // 이벤트
   const createdHandler = () => {
     camera.current.position.set(
@@ -43,26 +63,24 @@ const Scene: React.FC<SceneProps> = ({ width, height }) => {
       cameraPosition.y,
       cameraPosition.z
     );
-    camera.current.zoom = 25;
+    camera.current.zoom = 40;
     camera.current.updateProjectionMatrix();
-  };
-
-  const stop = () => {
-    setMoving(false);
   };
 
   const pushMesh = (mesh: THREE.Mesh) => {
     setMeshes((prev) => [...prev, mesh]);
   };
+
   const checkIntersects = () => {
     const intersects = raycaster.current.intersectObjects(meshes);
     for (const item of intersects) {
+      if (item.object.name === "table") {
+        break;
+      }
       if (item.object.name === "Floor") {
-        setMoving(false);
         clickPosition.current.x = item.point.x; // 하나의 함수 (0,0,0)
         clickPosition.current.y = 0.01;
         clickPosition.current.z = item.point.z;
-        setMoving(true);
         player.current.lookAt(
           item.point.x,
           player.current.position.y,
@@ -88,16 +106,17 @@ const Scene: React.FC<SceneProps> = ({ width, height }) => {
   };
   const mouseDownHandler = (e: React.MouseEvent) => {
     calculateMousePosition(e);
-    isPressed.current = true;
   };
   const mouseUpHandler = (e: React.MouseEvent) => {
-    calculateMousePosition(e);
-    raycasting();
-    isPressed.current = false;
+    if (!sitting.current) {
+      calculateMousePosition(e);
+      raycasting();
+      moving.current = true;
+    }
   };
   return (
     <Canvas
-      style={{ height: "100vh" }}
+      className={styles.scene}
       camera={camera.current}
       dpr={window.devicePixelRatio > 1 ? 2 : 1}
       shadows="soft"
@@ -105,22 +124,41 @@ const Scene: React.FC<SceneProps> = ({ width, height }) => {
       onMouseUp={mouseUpHandler}
       onCreated={createdHandler}
     >
-      <ambientLight />
-      <Floor position={[0, 0, 0]} pushMesh={pushMesh} />
+      <ambientLight intensity={0.7} />
+      <directionalLight
+        intensity={1}
+        color="white"
+        position={[15, 10, 10]}
+        castShadow
+        shadow-mapSize={[2048, 2048]}
+      >
+        <orthographicCamera
+          attach="shadow-camera"
+          args={[-100, 100, 100, -100]}
+        />
+      </directionalLight>
+
+      <Floor position={[0, 0.01, 0]} pushMesh={pushMesh} />
       <Player
         moving={moving}
         sitting={sitting}
         clickPosition={clickPosition}
-        stop={stop}
         playerPosition={playerPosition}
         player={player}
         camera={camera}
         cameraPosition={cameraPosition}
+        canSit={canSit}
+        cantSit={cantSit}
+        chairPoints={chairPoints}
+        chairPoint={chairPoint}
+        playerAnimation={playerAnimation}
       />
       <Box position={[0, 15, 0]} />
-      <Chair position={[0, 0, 0]} />
+      <Table table={table} pushMesh={pushMesh} />
+      <Chair chairs={chairs} chairPoints={chairPoints} />
+      <Auctioneer />
+      <Border />
     </Canvas>
   );
 };
-
 export default Scene;

@@ -15,8 +15,8 @@ const Box: React.FC<BlockProps> = ({ position }) => {
   );
   blockTexture.wrapS = THREE.RepeatWrapping;
   blockTexture.wrapT = THREE.RepeatWrapping;
-  blockTexture.repeat.x = 1;
-  blockTexture.repeat.y = 1;
+  blockTexture.repeat.x = 2;
+  blockTexture.repeat.y = 2;
 
   useEffect(() => {
     if (mesh.current) {
@@ -25,8 +25,8 @@ const Box: React.FC<BlockProps> = ({ position }) => {
   }, []);
 
   return (
-    <mesh position={position} ref={mesh}>
-      <boxGeometry args={[30, 30, 40]} />
+    <mesh receiveShadow position={position} ref={mesh}>
+      <boxGeometry args={[30, 30, 60]} />
       <meshStandardMaterial map={blockTexture} side={THREE.BackSide}/>
     </mesh>
   );

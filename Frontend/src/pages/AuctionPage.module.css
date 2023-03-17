@@ -1,0 +1,20 @@
+.auctionWrapper{
+    position: absolute;
+    width: 100vw;
+    height:100vh;
+}
+
+.sitBtn{
+    margin-left: 90vw;
+    margin-top: 90vh;
+    position: relative;
+    z-index:1;
+}
+
+.sitBtnNone{
+    display: none;
+    margin-left: 90vw;
+    margin-top: 90vh;
+    position: relative;
+    z-index:1;
+}
