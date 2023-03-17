@@ -26,14 +26,22 @@ public class MemeService {
         return result;
     }
 
+    @Transactional
     public String createMeme(MemeCreateRequest memeCreateRequest){
         Meme meme = memeRepository.save(memeCreateRequest.toEntity());
         if(meme.getTitle() == null){
             return FAIL;
         }
+        System.out.println(meme.getTitle());
         return SUCCESS;
     }
 
+    public String titleCheck(String title){
+        if(memeRepository.findMemeByTitle(title) != null){
+            return FAIL;
+        }
+        return SUCCESS;
+    }
 
 
     /**
