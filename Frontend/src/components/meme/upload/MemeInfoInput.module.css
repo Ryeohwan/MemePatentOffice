@@ -1,0 +1,29 @@
+.infoInputContainer {
+    margin: 20px 0;
+}
+
+.inputContainer {
+    border: 1px solid var(--section-line-color);
+    border-radius: 6px;
+    width: 100%;
+    height: 160px;
+    padding: 1% 2%;
+}
+
+.inputBox {
+    border: none;
+    width: 100%;
+    height: 100%;
+    resize: none;
+    font-size: 18px;
+}
+
+.inputBox:focus {
+    outline: none;
+}
+
+.explanation {
+    font-size: 10px;
+    color: var(--disabled-gray-color);
+    margin: 4px 0 0 4px;
+}
