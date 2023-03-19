@@ -1,25 +1,40 @@
 .nftCardWrapper {
-    /* border: 0.1px solid black; */
     border-radius: 6px;
     box-shadow: var(--box-shadow);
-    width: 164px;
-    height: 206px;
+    width: 246px;
+    height: 247px;
     margin-left: 10px;
 }
 
 .nftImg {
-    width: 164px;
-    height: 142px;
+    width: 246px;
+    height: 164px;
     object-fit: cover;
-    border-top-right-radius: 6px;
-    border-top-left-radius: 6px;
+}
+
+.nftTxtWrapper {
+    padding: 10px 3px 10px 7px;
 }
 
 .nftTxt {
     font-size: 14px;
-    font-weight: 200;
 }
 
 .nftOwner {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 6px 3px 6px 10px;
+}
+
+.nftOwnerImg {
+    border-radius: 100%;
+    width: 25px;
+    height: 25px;
+    object-fit: cover;
+}
+
+.nftOwnerName {
     font-size: 12px;
+    margin-left: 7px;
 }

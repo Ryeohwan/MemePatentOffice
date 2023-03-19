@@ -1,0 +1,23 @@
+.nftCardBack {
+    border-radius: 6px;
+    box-shadow: var(--box-shadow);
+    width: 246px;
+    height: 247px;
+    margin-left: 10px;
+    padding: 10px 0px 10px 7px;
+}
+
+.nftCardBackTitle {
+    font-size: 14px;;
+}
+
+.hrTag {
+    margin-right: 7px;
+    height: 0.5px;
+    border: 0;
+    background-color: var(--disabled-gray-color);
+}
+
+.nftCardBackDetail {
+    font-size: 12px;
+}
