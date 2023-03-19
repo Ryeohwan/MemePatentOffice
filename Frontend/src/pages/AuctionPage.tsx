@@ -40,7 +40,6 @@ const AuctionPage: React.FC = () => {
 
     if (playerAnimation.current) {
       playerAnimation.current.play();
-      console.log(playerAnimation.current)
     }
     sitting.current = true;
     cantSit()

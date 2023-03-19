@@ -11,13 +11,13 @@ const Floor: React.FC<FloorProps> = ({ position, pushMesh }) => {
   const mesh = useRef<THREE.Mesh>(null);
 
   const [floorTexture, normalMap] = useLoader(THREE.TextureLoader, [
-    "/auction/material/rug_basecolor.jpg",
-    "/auction/material/rug_normal.jpg",
+    "/auction/material/floor_Graph_BaseColor.jpg",
+    "/auction/material/floor_Graph_Normal.jpg",
   ]);
   floorTexture.wrapS = THREE.RepeatWrapping;
   floorTexture.wrapT = THREE.RepeatWrapping;
   floorTexture.offset.set(1, 1);
-  floorTexture.repeat.set(3, 3);
+  floorTexture.repeat.set(2, 2);
   floorTexture.needsUpdate = true;
   useEffect(() => {
     if (mesh.current) {
@@ -25,7 +25,6 @@ const Floor: React.FC<FloorProps> = ({ position, pushMesh }) => {
       pushMesh(mesh.current);
     }
   }, []);
-
   return (
     <mesh
       receiveShadow
@@ -35,6 +34,7 @@ const Floor: React.FC<FloorProps> = ({ position, pushMesh }) => {
     >
       <planeGeometry args={[30, 60]} />
       <meshStandardMaterial map={floorTexture} normalMap={normalMap} />
+      {/* <meshStandardMaterial color="#D0D0D0" /> */}
     </mesh>
   );
 };

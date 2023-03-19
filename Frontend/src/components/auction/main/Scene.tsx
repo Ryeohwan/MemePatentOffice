@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useRef } from "react";
-import { Canvas, useFrame } from "react-three-fiber";
+import React, { useState, useCallback, useRef, useEffect } from "react";
+import { Canvas } from "react-three-fiber";
 import * as THREE from "three";
 import Box from "components/auction/main/mesh/Box";
 import Floor from "components/auction/main/mesh/Floor";
@@ -32,12 +32,13 @@ const Scene: React.FC<SceneProps> = ({
   playerAnimation,
   sitting,
 }) => {
+  const canvas = useRef<any>();
   const [meshes, setMeshes] = useState<THREE.Mesh[]>([]);
+  const tableAndChairs = useRef<THREE.Mesh[]>([])
   const table = useRef<THREE.Object3D>(new THREE.Object3D());
   const chairs = useRef<Array<THREE.Mesh>>([]);
   const raycaster = useRef<THREE.Raycaster>(new THREE.Raycaster());
   const mouse = useRef<THREE.Vector2>(new THREE.Vector2());
-  const isPressed = useRef(false);
   const clickPosition = useRef<THREE.Vector3>(new THREE.Vector3());
   const chairPoints = useRef<Array<THREE.Mesh>>([]);
 
@@ -56,6 +57,12 @@ const Scene: React.FC<SceneProps> = ({
       1000
     )
   );
+
+  useEffect(() => {
+    if (document.querySelector("#three-canvas")) {
+      canvas.current = document.querySelector("#three-canvas");
+    }
+  }, []);
   // 이벤트
   const createdHandler = () => {
     camera.current.position.set(
@@ -63,7 +70,7 @@ const Scene: React.FC<SceneProps> = ({
       cameraPosition.y,
       cameraPosition.z
     );
-    camera.current.zoom = 40;
+    camera.current.zoom = 20;
     camera.current.updateProjectionMatrix();
   };
 
@@ -74,9 +81,6 @@ const Scene: React.FC<SceneProps> = ({
   const checkIntersects = () => {
     const intersects = raycaster.current.intersectObjects(meshes);
     for (const item of intersects) {
-      if (item.object.name === "table") {
-        break;
-      }
       if (item.object.name === "Floor") {
         clickPosition.current.x = item.point.x; // 하나의 함수 (0,0,0)
         clickPosition.current.y = 0.01;
@@ -92,9 +96,9 @@ const Scene: React.FC<SceneProps> = ({
   };
 
   const calculateMousePosition = useCallback((e: React.MouseEvent) => {
-    if (mouse.current) {
-      mouse.current.x = (e.clientX / width) * 2 - 1;
-      mouse.current.y = -((e.clientY / height) * 2 - 1);
+    if (mouse.current && canvas.current) {
+      mouse.current.x = (e.pageX / canvas.current.clientWidth) * 2 - 1;
+      mouse.current.y = -((e.pageY / canvas.current.clientHeight) * 2 - 1);
     }
   }, []);
 
@@ -104,9 +108,7 @@ const Scene: React.FC<SceneProps> = ({
       checkIntersects();
     }
   };
-  const mouseDownHandler = (e: React.MouseEvent) => {
-    calculateMousePosition(e);
-  };
+
   const mouseUpHandler = (e: React.MouseEvent) => {
     if (!sitting.current) {
       calculateMousePosition(e);
@@ -116,11 +118,11 @@ const Scene: React.FC<SceneProps> = ({
   };
   return (
     <Canvas
+      id="three-canvas"
       className={styles.scene}
       camera={camera.current}
       dpr={window.devicePixelRatio > 1 ? 2 : 1}
       shadows="soft"
-      onMouseDown={mouseDownHandler}
       onMouseUp={mouseUpHandler}
       onCreated={createdHandler}
     >
@@ -152,10 +154,11 @@ const Scene: React.FC<SceneProps> = ({
         chairPoints={chairPoints}
         chairPoint={chairPoint}
         playerAnimation={playerAnimation}
+        tableAndChairs={tableAndChairs}
       />
       <Box position={[0, 15, 0]} />
-      <Table table={table} pushMesh={pushMesh} />
-      <Chair chairs={chairs} chairPoints={chairPoints} />
+      <Table table={table} pushMesh={pushMesh} tableAndChairs={tableAndChairs}/>
+      <Chair chairs={chairs} chairPoints={chairPoints} tableAndChairs={tableAndChairs}/>
       <Auctioneer />
       <Border />
     </Canvas>

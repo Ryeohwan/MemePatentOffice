@@ -16,6 +16,7 @@ interface PlayerProps {
   cantSit: () => void;
   chairPoint: React.MutableRefObject<THREE.Mesh>;
   playerAnimation: React.MutableRefObject<THREE.AnimationAction | undefined>;
+  tableAndChairs: React.MutableRefObject<THREE.Mesh[]>
 }
 
 const Player: React.FC<PlayerProps> = ({
@@ -31,8 +32,11 @@ const Player: React.FC<PlayerProps> = ({
   cantSit,
   chairPoint,
   playerAnimation,
+  tableAndChairs,
 }) => {
   const glb = useLoader(GLTFLoader, "/auction/model/arh.glb"); // 나중에 선택해서 가져오는 코드로 바꾸기
+  const raycaster = new THREE.Raycaster();
+
   player.current = glb.scene.children[0];
   glb.scene.traverse((child) => {
     if (child.isObject3D) {
@@ -48,6 +52,7 @@ const Player: React.FC<PlayerProps> = ({
   const standup = mixer.clipAction(glb.animations[3]);
   standup.clampWhenFinished = true;
   const walk = mixer.clipAction(glb.animations[4]);
+
 
   useEffect(() => {
     const box = new THREE.Box3().setFromObject(player.current); // object는 Object3D 객체
@@ -67,6 +72,17 @@ const Player: React.FC<PlayerProps> = ({
 
   useFrame((state, delta) => {
     mixer.update(delta);
+    const direction = new THREE.Vector3(player.current.rotation.x,player.current.rotation.y,player.current.rotation.z);
+		direction.normalize();
+    raycaster.set(player.current.position, direction);
+    const intersects = raycaster.intersectObjects(tableAndChairs.current)
+    for(const item of intersects){
+      if (item.distance<0.2){
+        moving.current = false
+        walk.stop()
+      }
+    }
+
     if (!moving.current && !sitting.current) {
       normal.play();
     } else if (moving.current) {
