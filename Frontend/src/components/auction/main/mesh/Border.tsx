@@ -48,11 +48,11 @@ const Border: React.FC = () => {
 
   nftLeft.position.set(-9.5, 7, -28.9);
   nftRight.position.set(7.5, 7, -28.9);
-  logo.position.set(-1, 7, -28.9);
+  logo.position.set(-1, 5, -28.9);
   border.position.set(-1, 7, -29);
 
   // const targetTime = new Date(2023, 3, 20, 14, 15, 0)
-  const targetTime = Math.floor(+new Date(2023, 3-1, 19, 15, 30, 0)/1000);
+  const targetTime = Math.floor(+new Date(2023, 3-1, 20, 15, 30, 0)/1000);
 
   const getRemainTime = () => {
     const date = Math.floor(+new Date()/1000)
@@ -82,8 +82,8 @@ const Border: React.FC = () => {
       let diff = timerProps[0]
       let timerView = timerProps[1]
       texContext.fillText(`${timerView}`, 5, 60);
-      texContext.font = "Bold 20px Gmarket Sans TTF";
-      if (diff <= 60*60*100){
+      texContext.font = "20px Gmarket Sans TTF";
+      if (diff <= 60*60){
         texContext.fillStyle = "red"; // 물감
       }else{
         texContext.fillStyle = "white"; // 물감
@@ -92,8 +92,8 @@ const Border: React.FC = () => {
     }
   });
 
-  const timer = new THREE.Mesh(new THREE.PlaneGeometry(5, 1.5), timerMaterial);
-  timer.position.set(-1, 11, -28.9);
+  const timer = new THREE.Mesh(new THREE.PlaneGeometry(5, 3), timerMaterial);
+  timer.position.set(-1, 10, -28.9);
 
   return (
     <>
