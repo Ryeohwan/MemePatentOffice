@@ -20,6 +20,7 @@ interface SceneProps {
   chairPoint: React.MutableRefObject<THREE.Mesh>;
   playerAnimation: React.MutableRefObject<THREE.AnimationAction | undefined>;
   sitting: React.MutableRefObject<Boolean>;
+  camera: React.MutableRefObject<THREE.OrthographicCamera>;
 }
 
 const Scene: React.FC<SceneProps> = ({
@@ -31,6 +32,7 @@ const Scene: React.FC<SceneProps> = ({
   chairPoint,
   playerAnimation,
   sitting,
+  camera
 }) => {
   const canvas = useRef<any>();
   const [meshes, setMeshes] = useState<THREE.Mesh[]>([]);
@@ -47,16 +49,7 @@ const Scene: React.FC<SceneProps> = ({
 
   // 카메라
   const cameraPosition = new THREE.Vector3(13, 10, 25);
-  const camera = useRef<THREE.OrthographicCamera>(
-    new THREE.OrthographicCamera(
-      -(width / height),
-      width / height,
-      1,
-      -1,
-      -1000,
-      1000
-    )
-  );
+  
 
   useEffect(() => {
     if (document.querySelector("#three-canvas")) {
@@ -70,7 +63,7 @@ const Scene: React.FC<SceneProps> = ({
       cameraPosition.y,
       cameraPosition.z
     );
-    camera.current.zoom = 20;
+    camera.current.zoom = 35;
     camera.current.updateProjectionMatrix();
   };
 

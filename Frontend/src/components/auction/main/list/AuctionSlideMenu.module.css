@@ -1,0 +1,9 @@
+.slideDiv{
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+
+.pSlidemenu{
+    width:8.5em !important;
+}
