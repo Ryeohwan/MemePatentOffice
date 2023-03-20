@@ -1,5 +1,6 @@
 package com.memepatentoffice.mpoffice.db.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,4 +22,13 @@ public class UserMemeLike {
     @JoinColumn(name = "user_seq", nullable = false)
     private User userSeq;
 
+    @Builder
+    public UserMemeLike(UserMemeLikeId id, Meme memeSeq, User userSeq) {
+        this.id = id;
+        this.memeSeq = memeSeq;
+        this.userSeq = userSeq;
+    }
+
+    public UserMemeLike() {
+    }
 }

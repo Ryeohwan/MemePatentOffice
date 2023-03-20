@@ -1,8 +1,11 @@
 package com.memepatentoffice.mpoffice.domain.meme.api.service;
 
+import com.memepatentoffice.mpoffice.db.entity.UserMemeLike;
+import com.memepatentoffice.mpoffice.domain.meme.api.request.LikeRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.MemeCreateRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeResponse;
 import com.memepatentoffice.mpoffice.db.entity.Meme;
+import com.memepatentoffice.mpoffice.domain.meme.db.repository.LikeRepository;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.MemeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +16,21 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 public class MemeService {
-
-
     private static final String SUCCESS = "success";
     private static final String FAIL = "fail";
     private final MemeRepository memeRepository;
+    private final LikeRepository likeRepository;
 
     public MemeResponse findByTitle(String title){
         Meme meme = memeRepository.findMemeByTitle(title);
-        MemeResponse result = new MemeResponse();
-
+        MemeResponse result = new MemeResponse().builder()
+                .id(meme.getId())
+                .content(meme.getContent())
+                .createdAt(meme.getCreatedAt())
+                .createrId(meme.getCreaterId())
+                .ownerId(meme.getOwnerId())
+                .title(meme.getTitle())
+                .build();
         return result;
     }
 
@@ -37,12 +45,16 @@ public class MemeService {
     }
 
     public String titleCheck(String title){
-        if(memeRepository.findMemeByTitle(title) != null){
+        if(memeRepository.existsMemeByTitle(title)){
             return FAIL;
         }
         return SUCCESS;
     }
 
+    public UserMemeLike memeLike(LikeRequest like){
+        UserMemeLike ulike = like
+        UserMemeLike result = likeRepository.save(like);
+    }
 
     /**
      *

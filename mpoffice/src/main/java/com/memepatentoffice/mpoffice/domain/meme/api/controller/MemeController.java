@@ -1,9 +1,12 @@
 package com.memepatentoffice.mpoffice.domain.meme.api.controller;
 
+import com.memepatentoffice.mpoffice.db.entity.UserMemeLike;
+import com.memepatentoffice.mpoffice.domain.meme.api.request.LikeRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.MemeCreateRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeResponse;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.MemeService;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.GcpService;
+import com.memepatentoffice.mpoffice.domain.meme.db.repository.LikeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,11 +37,10 @@ public class MemeController {
     @GetMapping("/check/{title}")
     public ResponseEntity titleDuplicatedcheck(@PathVariable String title){
         String result = memeService.titleCheck(title);
+        System.out.println(result);
         return ResponseEntity.ok(result);
-
     }
 
-    // 밈 만들기
     @PostMapping("/create")
     @ResponseBody
     public ResponseEntity createMeme(MemeCreateRequest memeCreateRequest) throws Exception{
@@ -47,6 +49,11 @@ public class MemeController {
         memeCreateRequest.setImageUrl(img);
         String result = memeService.createMeme(memeCreateRequest);
         return ResponseEntity.ok().body(result);
+    }
+
+    @PostMapping("/like")
+    @ResponseBody
+    public ResponseEntity createLike(LikeRequest like){
     }
 ////    image upload test
 //    @PostMapping("/upload")
