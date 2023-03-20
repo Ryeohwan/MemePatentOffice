@@ -12,7 +12,7 @@ COPY auction/gradle gradle
 COPY auction/build.gradle .
 COPY auction/settings.gradle .
 COPY auction/src src
-RUN chmod +x ./gradlews
+RUN chmod +x ./gradlew
 RUN ./gradlew clean bootJar
 
 FROM adoptopenjdk:11-hotspot
