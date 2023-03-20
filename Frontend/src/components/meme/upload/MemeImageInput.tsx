@@ -1,71 +1,81 @@
 import React, { useRef, useState } from "react";
-import {
-  FileUpload,
-  FileUploadHeaderTemplateOptions,
-  FileUploadSelectEvent,
-} from "primereact/fileupload";
-import { ProgressBar } from "primereact/progressbar";
-
+import { FileUpload } from "primereact/fileupload";
 import styles from "./MemeImageInput.module.css";
 
 const MemeImageInput: React.FC = () => {
-  const toast = useRef(null);
-  const [size, setSize] = useState<number>(0);
-  const fileUploadRef = useRef(null);
+  const fileInput = useRef<HTMLInputElement>(null);
+  const [imgSrc, setImgSrc] = useState<string | null>(null);
+  const [imgFile, setImgFile] = useState<File | null>(null);
 
-  const onTemplateSelect = (e: FileUploadSelectEvent) => {
-    console.log("template select!");
-    let file = e.files[0];
-    setSize(file.size);
+  // 파일 크기 변환
+  const getByteSize = (size: number) => {
+    const byteUnits = ["KB", "MB"];
+    for (let i = 0; i < byteUnits.length; i++) {
+      size = Math.floor(size / 1024);
+      if (size < 1024) return size.toFixed(1) + ' ' + byteUnits[i];
+    }
   };
 
-  const headerTemplate = (options: FileUploadHeaderTemplateOptions) => {
-    const { className, chooseButton } = options;
-    const value = size / 10000;
-    // const formatedValue = fileUploadRef && fileUploadRef.current ? fileUploadRef.current.formatSize(size) : '0 B';
-    // const formatedValue = fileUploadRef && `${size} B` : '0 B';
+  // upload img handler
+  const onUploadImg = (e: React.ChangeEvent) => {
+    const target = e.target as HTMLInputElement;
+    if (!target.files) return;
 
-    return (
-      <div
-        className={className}
-        style={{
-          backgroundColor: "transparent",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        {chooseButton}
-        <div className="flex align-items-center gap-3 ml-auto">
-          {/* <span>{formatedValue} / 1 MB</span> */}
-          <ProgressBar
-            value={value}
-            showValue={false}
-            style={{ width: "10rem", height: "12px" }}
-          ></ProgressBar>
-        </div>
-      </div>
-    );
+    const file: File = target.files[0];
+    if (file.size > 200 * 1024 * 1024) return alert('이미지가 너무 큽니다');
+    setImgFile(file);
+
+    // img 미리보기
+    const reader: FileReader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const result = reader.result;
+      if (typeof result === "string") {
+        setImgSrc(result);
+      }
+    };
   };
 
+  // file upload handler
+  const handleClick = (e: React.MouseEvent) => {
+    if (fileInput?.current) {
+      fileInput.current.click();
+    }
+  };
+
+
+  // 디자인 추후 수정 예정
   return (
     <div className={styles.imageInputContainer}>
       <div className={styles.inputContainer}>
-        {/* image 등록 */}
-        {/* <FileUpload
-          ref={fileUploadRef}
-          accept="image/*"
-          maxFileSize={1000000}
-          onSelect={onTemplateSelect}
-          onError={onTemplateClear}
-          onClear={onTemplateClear}
-          headerTemplate={headerTemplate}
-          itemTemplate={itemTemplate}
-          emptyTemplate={emptyTemplate}
-          chooseOptions={chooseOptions}
-          uploadOptions={uploadOptions}
-          cancelOptions={cancelOptions}
-        /> */}
+        {/* header */}
+        <div className={styles.headerContainer}>
+          <div className={styles.header}>
+            <div className={styles.headerBtn}>
+              <div className={styles.customInputBtn} onClick={handleClick}>
+                파일 선택
+              </div>
+              <input
+                type="file"
+                accept="image/*"
+                ref={fileInput}
+                onChange={onUploadImg}
+                className={styles.inputBtn}
+              />
+            </div>
+            <div className={styles.headerInfo}>
+              {imgFile && `${getByteSize(imgFile.size)}`} / 200 MB
+            </div>
+          </div>
+          <hr className={styles.headerLine} />
+        </div>
+
+        {/* content */}
+        <div className={styles.contentContainer}>
+          {imgSrc && <img src={imgSrc} alt="" className={styles.contentImg} />}
+        </div>
       </div>
+
       <p className={styles.explanation}>
         텍스트 밈을 설명할 이미지 혹은 이미지 밈을 등록하세요.
       </p>
