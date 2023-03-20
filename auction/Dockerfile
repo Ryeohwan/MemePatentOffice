@@ -7,11 +7,11 @@ ENV PORT 27017
 ENV DATABASE osakak
 
 # env finish
-COPY server/gradlew .
-COPY server/gradle gradle
-COPY server/build.gradle .
-COPY server/settings.gradle .
-COPY server/src src
+COPY auction/gradlew .
+COPY auction/gradle gradle
+COPY auction/build.gradle .
+COPY auction/settings.gradle .
+COPY auction/src src
 RUN chmod +x ./gradlews
 RUN ./gradlew clean bootJar
 
