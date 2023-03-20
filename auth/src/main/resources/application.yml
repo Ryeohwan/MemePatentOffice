@@ -1,0 +1,10 @@
+server:
+  port: 8070
+
+spring:
+  redis:
+    host: j8a305.p.ssafy.io
+    port: 6370
+    password: ${REDIS_PASSWORD}
+
+
