@@ -1,12 +1,15 @@
 package com.memepatentoffice.mpoffice.domain.meme.api.service;
 
+import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
 import com.memepatentoffice.mpoffice.db.entity.UserMemeLike;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.LikeRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.MemeCreateRequest;
+import com.memepatentoffice.mpoffice.domain.meme.api.response.LikeResponse;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeResponse;
 import com.memepatentoffice.mpoffice.db.entity.Meme;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.LikeRepository;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.MemeRepository;
+import com.memepatentoffice.mpoffice.domain.user.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,8 @@ public class MemeService {
     private static final String FAIL = "fail";
     private final MemeRepository memeRepository;
     private final LikeRepository likeRepository;
+
+    private final UserRepository userRepository;
 
     public MemeResponse findByTitle(String title){
         Meme meme = memeRepository.findMemeByTitle(title);
@@ -51,9 +56,17 @@ public class MemeService {
         return SUCCESS;
     }
 
-    public UserMemeLike memeLike(LikeRequest like){
-        UserMemeLike ulike = like
-        UserMemeLike result = likeRepository.save(like);
+    public LikeResponse memeLike(LikeRequest like) throws NotFoundException {
+        UserMemeLike ulike = UserMemeLike.builder()
+                .memeSeq(memeRepository.findMemeById(like.getMeme().getId()))
+                .userSeq(userRepository.findUserById(like.getUser().getId()))
+                .build();
+        UserMemeLike temp = likeRepository.save(ulike);
+        LikeResponse result = new LikeResponse();
+        result.setMeme(temp.getMemeSeq());
+        result.setUser(temp.getUserSeq());
+        result.setId(temp.getId());
+        return result;
     }
 
     /**

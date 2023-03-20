@@ -3,6 +3,7 @@ package com.memepatentoffice.mpoffice.domain.meme.api.controller;
 import com.memepatentoffice.mpoffice.db.entity.UserMemeLike;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.LikeRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.MemeCreateRequest;
+import com.memepatentoffice.mpoffice.domain.meme.api.response.LikeResponse;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeResponse;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.MemeService;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.GcpService;
@@ -53,8 +54,12 @@ public class MemeController {
 
     @PostMapping("/like")
     @ResponseBody
-    public ResponseEntity createLike(LikeRequest like){
+    public ResponseEntity createLike(LikeRequest like) throws Exception {
+        LikeResponse result = memeService.memeLike(like);
+        return ResponseEntity.ok().body(result);
     }
+
+
 ////    image upload test
 //    @PostMapping("/upload")
 //    @ResponseBody

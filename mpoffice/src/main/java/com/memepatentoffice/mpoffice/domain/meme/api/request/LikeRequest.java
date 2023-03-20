@@ -1,21 +1,24 @@
 package com.memepatentoffice.mpoffice.domain.meme.api.request;
 
 import com.memepatentoffice.mpoffice.db.entity.Meme;
+import com.memepatentoffice.mpoffice.db.entity.User;
 import com.memepatentoffice.mpoffice.db.entity.UserMemeLike;
+import com.memepatentoffice.mpoffice.db.entity.UserMemeLikeId;
 import lombok.Getter;
 
 @Getter
 public class LikeRequest {
-    private Long memeId;
-    private Long userId;
+    private Meme meme;
+    private User user;
 
-    private Long id;
+    private UserMemeLikeId id;
 
     public UserMemeLike toEntity(){
         return UserMemeLike.builder()
                 .id(id)
-                .userSeq(userId)
-                .memeSeq(memeId)
-                .build()
+                .userSeq(user)
+                .memeSeq(meme)
+                .build();
+    }
 
 }

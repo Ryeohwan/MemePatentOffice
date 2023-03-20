@@ -1,5 +1,6 @@
 package com.memepatentoffice.mpoffice.db.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,4 +26,14 @@ public class UserCommentLike {
     @Column(name = "`like`")
     private String like;
 
+    @Builder
+    public UserCommentLike(UserCommentLikeId id, Comment comment, User user, String like) {
+        this.id = id;
+        this.comment = comment;
+        this.user = user;
+        this.like = like;
+    }
+
+    public UserCommentLike() {
+    }
 }
