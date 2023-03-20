@@ -4,17 +4,14 @@
     height:100vh;
 }
 
-.sitBtn{
-    margin-left: 90vw;
-    margin-top: 90vh;
-    position: relative;
-    z-index:1;
+.buttonWrapper{
+    margin-top:95vh;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    position:relative;
 }
 
-.sitBtnNone{
-    display: none;
-    margin-left: 90vw;
-    margin-top: 90vh;
-    position: relative;
+.sitBtn{
     z-index:1;
 }
