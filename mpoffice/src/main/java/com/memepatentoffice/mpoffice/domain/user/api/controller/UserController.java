@@ -5,6 +5,7 @@ import com.memepatentoffice.mpoffice.domain.user.api.dto.CommentDto;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserSignUpRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserUpdateRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserWithdrawRequest;
+import com.memepatentoffice.mpoffice.domain.user.api.response.CommentResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.response.UserResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.response.UserSignUpResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.service.UserService;
@@ -65,9 +66,9 @@ public class UserController {
 //    }
 
     @GetMapping("/comments/{id}?page={page}")
-    public ResponseEntity getUserComments(@PathVariable("id")int page){
-        Page<CommentDto> pages = userService.getUserComments(id, page);
-        return ResponseEntity.ok(pages);
+    public ResponseEntity getUserComments(Long id, int page){
+        Page<CommentResponse> pages = userService.getUserComments(id,page);
+        return ResponseEntity.ok().body(pages);
     }
 
 //    유저의 NFT 발행 갯수를 체크한다

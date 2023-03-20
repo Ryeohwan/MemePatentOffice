@@ -1,5 +1,6 @@
 package com.memepatentoffice.mpoffice.db.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -43,4 +44,60 @@ public class User {
     @Column(name = "withdrawal_reason")
     private String withdrawalReason;
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
+    }
+
+    public void setWalletAddress(String walletAddress) {
+        this.walletAddress = walletAddress;
+    }
+
+    public void setIsValid(String isValid) {
+        this.isValid = isValid;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public void setWithdrawalReason(String withdrawalReason) {
+        this.withdrawalReason = withdrawalReason;
+    }
+
+    @Builder
+    public User(Long id, String name, String email, String nickname, String profileImage, String walletAddress, String isValid, LocalDateTime createdAt, LocalDateTime updatedAt, String withdrawalReason) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.nickname = nickname;
+        this.profileImage = profileImage;
+        this.walletAddress = walletAddress;
+        this.isValid = isValid;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.withdrawalReason = withdrawalReason;
+    }
+
+    public User() {
+    }
 }
