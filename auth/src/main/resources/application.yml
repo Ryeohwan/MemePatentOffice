@@ -7,4 +7,31 @@ spring:
     port: 6370
     password: ${REDIS_PASSWORD}
 
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ${KAKAO_RESTAPI_KEY}
+            redirect-uri: https://j8a305.p.ssafy.io/oauth/kakao
+            authorization-grant-type: authorization-code
+            client-authentication-method: POST
+            client-name: Kakao
+            scope:
+              - profile_nickname
+              - account_email
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
 
+app:
+  auth:
+    tokenSecret: a305-blank-jwt-blank-secret-blank-token-blank-needs-blank-so-very-long-blank-token-exclamation-marks
+    accessTokenExpirationMsec: 3600000
+    refreshTokenExpirationMsec: 604800000
+
+  oauth2:
+    authorizedRedirectUris: https://j8a305.p.ssafy.io/oauth/redirect
