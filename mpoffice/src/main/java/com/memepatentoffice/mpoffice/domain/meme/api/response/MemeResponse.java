@@ -1,5 +1,6 @@
 package com.memepatentoffice.mpoffice.domain.meme.api.response;
 
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -35,5 +36,18 @@ public class MemeResponse {
 
     public void setCreaterId(Long createrId) {
         this.createrId = createrId;
+    }
+
+    @Builder
+    public MemeResponse(Long id, String title, String content, LocalDateTime createdAt, Long ownerId, Long createrId) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.createdAt = createdAt;
+        this.ownerId = ownerId;
+        this.createrId = createrId;
+    }
+
+    public MemeResponse() {
     }
 }
