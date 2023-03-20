@@ -1,8 +1,8 @@
-import Footer from 'components/common/Footer';
-import Navbar from 'components/common/Navbar';
-import { useLocation } from 'react-router-dom';
+import Footer from "components/common/Footer";
+import Navbar from "components/common/Navbar";
+import { useLocation } from "react-router-dom";
 
-import styles from './Frame.module.css'
+import styles from "./Frame.module.css";
 
 interface RoutePath {
   pathname: string;
@@ -14,22 +14,27 @@ interface Props {
 
 const Frame: React.FC<Props> = ({ children }) => {
   const { pathname } = useLocation() as RoutePath;
+  let mainOnly: boolean =
+    ["/", "/login", "/signup"].includes(pathname) ||
+    pathname.startsWith("/auction/");
 
   return (
-  <>
-    <header className={`${['/', '/login', '/signup'].includes(pathname) && styles.nonVisible}`}>
-      <Navbar />
-    </header>
-    
-    <main className={`${styles.mainContainer}`}>
-      {children}
-    </main>
-    
-    <footer className={`${['/', '/login', '/signup'].includes(pathname) && styles.nonVisible}`}>
-      <Footer />
-    </footer>
-  </>
- );
+    <>
+      {!mainOnly && (
+        <header>
+          <Navbar />
+        </header>
+      )}
+
+      <main className={`${styles.mainContainer} ${!mainOnly && styles.mainNotOnly}`}>{children}</main>
+
+      {!mainOnly && (
+        <footer>
+          <Footer />
+        </footer>
+      )}
+    </>
+  );
 };
 
 export default Frame;

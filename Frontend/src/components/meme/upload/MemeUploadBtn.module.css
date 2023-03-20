@@ -1,0 +1,14 @@
+.uploadBtnContainer {
+    margin: 20px 0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btnContainer {
+    width: 44px;
+    height: 44px;
+}
+
+.btnContainer:hover {
+    cursor: pointer;
+}
