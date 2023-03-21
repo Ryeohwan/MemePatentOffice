@@ -5,7 +5,9 @@
 }
 
 .buttonWrapper{
-    margin-top:95vh;
+    margin-top:93vh;
+    margin-right: 1rem;
+    margin-left: 1rem;
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-between;

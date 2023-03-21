@@ -8,6 +8,7 @@ import gsap from "gsap";
 import AuctionSlideMenu from "components/auction/main/list/AuctionSlideMenu";
 
 import { Button } from "primereact/button";
+import ChatMain from "components/auction/main/chat/ChatMain";
 
 const AuctionPage: React.FC = () => {
   const width = window.innerWidth;
@@ -29,7 +30,6 @@ const AuctionPage: React.FC = () => {
       1000
     )
   );
-
   const canSit = useCallback(() => {
     setVisible(true);
   }, []);
@@ -135,7 +135,7 @@ const AuctionPage: React.FC = () => {
               onClick={standUpHandler}
             />
         )}
-        <Button icon="pi pi-comment" />
+        <ChatMain/>
       </div>
     </section>
   );
