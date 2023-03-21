@@ -1,7 +1,5 @@
 .nftCardWrapper {
     border-radius: 6px;
-    border-width: 3px;
-    border-style: outset grey;
     box-shadow: var(--box-shadow);
     width: 246px;
     height: 260px;
