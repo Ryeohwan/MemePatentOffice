@@ -1,0 +1,58 @@
+.chatItems{
+    display: flex;
+    flex-direction: row;
+    justify-content:left;
+    align-items: center;
+    margin-bottom: 1rem;
+    max-width: 100%;
+}
+
+.chatItems > .chip{
+    margin-left: 0.5rem;
+}
+
+.myChat{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content:right;
+    align-items: center;
+    margin-bottom: 1rem;
+    max-width: 100%;
+
+}
+
+.myChat > .chip{
+    margin-right:0.5rem;
+}
+
+.message{
+    display: flex;
+    flex-wrap: wrap;
+    background-color: var(--disabled-gray-color);
+    padding:10px 15px 10px 15px;
+    border: none;
+    border-radius: 10px;
+    max-width: 100%;
+}
+
+.avatar {
+  background-color: #2196F3 !important;
+  color: #ffffff !important;
+  min-width: 2rem;
+}
+
+
+.chip > p{
+    margin-bottom:0.2rem;
+    font-size: 6px;
+    color: black;
+}
+
+.date {
+    margin-top: 2rem;
+    margin-left: 0.3rem;
+    margin-right: 0.3rem;
+    font-size: 1px;
+    color:black;
+    opacity: 0.3;
+}

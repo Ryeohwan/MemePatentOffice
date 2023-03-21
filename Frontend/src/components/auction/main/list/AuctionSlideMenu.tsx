@@ -6,12 +6,14 @@ import { MenuItem } from "primereact/menuitem";
 import styles from "components/auction/main/list/AuctionSlideMenu.module.css";
 import SellerInfo from "./SellerInfo";
 import BiddingHistory from "./BiddingHistory";
+import { useNavigate } from "react-router-dom";
 
 const AuctionSlideMenu: React.FC = () => {
+  const navigate = useNavigate()
   const menu = useRef<SlideMenu>(null);
   const [sellerInfoVisible, setSellerInfoVisible] = useState(false);
-  const [biddingHistoryInfoVisible, setBiddingHistoryInfoVisible] =
-    useState(false);
+  const [biddingHistoryInfoVisible, setBiddingHistoryInfoVisible] =useState(false);
+
   const sellerInfoHandler = () => {
     setSellerInfoVisible(true);
   };
@@ -24,6 +26,11 @@ const AuctionSlideMenu: React.FC = () => {
   const biddingHistoryInfoHandlerFalse = () => {
     setBiddingHistoryInfoVisible(false);
   };
+
+  const goOut = () => {
+    navigate('/auction-list')
+  }
+
   const items: MenuItem[] = [
     {
       label: "입찰 내역",
@@ -38,6 +45,7 @@ const AuctionSlideMenu: React.FC = () => {
     {
       label: "나가기",
       icon: "pi pi-sign-out",
+      command: goOut,
     },
   ];
   return (
