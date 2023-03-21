@@ -1,6 +1,6 @@
 // meme list page (/meme-list)
 import MemeListSearch from 'components/meme/list/MemeListSearch';
-import MemeListTab from 'components/meme/list/MemeListTab';
+import MemeListTabComp from 'components/meme/list/MemeListTabComp';
 import styles from './MemeListPage.module.css'
 
 const MemeListPage: React.FC = () => {
@@ -8,7 +8,7 @@ const MemeListPage: React.FC = () => {
    <div className={styles.pageContainer}>
      <p className={styles.pageHeader}>밈 모음집</p>
       <MemeListSearch />
-      <MemeListTab />
+      <MemeListTabComp />
    </div>
   )
  }
