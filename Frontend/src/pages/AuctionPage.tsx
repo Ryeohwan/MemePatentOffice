@@ -38,8 +38,7 @@ const AuctionPage: React.FC = () => {
   }, []);
 
   const sitDownHandler = () => {
-    console.log(camera.current);
-
+    camera.current.zoom = 25;
     player.current.lookAt(0, 1, -30);
     player.current.rotation.y = 0;
     gsap.fromTo(
@@ -61,21 +60,22 @@ const AuctionPage: React.FC = () => {
       camera.current.rotation.z,
     ];
     gsap.to(camera.current.position, {
-      x: player.current.position.x - 3,
-      y: player.current.position.y + 5,
-      z: player.current.position.z,
+      x: player.current.position.x + 5,
+      y: 9,
+      z: -10,
       duration: 1,
     });
-    camera.current.lookAt(player.current.position.x, 7, -25);
+    camera.current.lookAt(0, 5, -30);
     if (playerAnimation.current) {
       playerAnimation.current.play();
-      console.log(playerAnimation.current);
     }
     sitting.current = true;
     cantSit();
   };
 
   const standUpHandler = () => {
+    camera.current.zoom = 30;
+
     player.current.lookAt(0, 1, -30);
     player.current.rotation.y = 0;
     gsap.fromTo(
@@ -90,7 +90,6 @@ const AuctionPage: React.FC = () => {
         duration: 1,
       }
     );
-    console.log(cameraPoint);
     gsap.to(camera.current.position, {
       x: cameraPoint.current.x,
       y: cameraPoint.current.y,
@@ -129,13 +128,18 @@ const AuctionPage: React.FC = () => {
           />
         )}
         {sitting.current && (
+          <>
+              <Button 
+                icon="pi pi-dollar"
+              />
             <Button
               label="일어나"
               className={styles.sitBtn}
               onClick={standUpHandler}
             />
+          </>
         )}
-        <ChatMain/>
+        <ChatMain />
       </div>
     </section>
   );
