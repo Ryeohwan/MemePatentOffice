@@ -2,7 +2,7 @@
     border-radius: 6px;
     box-shadow: var(--box-shadow);
     width: 246px;
-    height: 247px;
+    height: 260px;
     margin-left: 10px;
 }
 
@@ -13,7 +13,8 @@
 }
 
 .nftTxtWrapper {
-    padding: 10px 3px 10px 7px;
+    padding: 6px 5px 9px 9px;
+    line-height: 20px;
 }
 
 .nftTxt {
@@ -37,4 +38,5 @@
 .nftOwnerName {
     font-size: 12px;
     margin-left: 7px;
+    margin-top: 2px;
 }

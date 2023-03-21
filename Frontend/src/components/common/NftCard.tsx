@@ -4,11 +4,14 @@ import totoro from "assets/totoro.jpg";
 import haku from "assets/haku.png";
 
 const NftCard:React.FC = () => {
-    const NFT_TEXT = "귀여운 토토로 삼형제와 발랄한 자매 사츠키, 메이의 우당탕탕 가족사진"
-
+    // NFT 제목
+    const NFT_TEXT = "귀여운 토토로 삼형제와 발랄한 자매 사츠키, 메이의 우당탕탕 가족사진입니다아~~~~~"
+    // NFT 제목 글자수 슬라이싱
     const slicingText = (NFT_TEXT:string) => {
-        if (NFT_TEXT.length > 19) {
-            return NFT_TEXT.substring(0, 19) + " ...";
+        if (NFT_TEXT.length > 38) {
+            return NFT_TEXT.substring(0, 38) + " ...";
+        } else {
+            return NFT_TEXT;
         }
     }
 

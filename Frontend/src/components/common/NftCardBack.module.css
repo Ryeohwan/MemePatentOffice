@@ -4,11 +4,13 @@
     width: 246px;
     height: 247px;
     margin-left: 10px;
-    padding: 10px 0px 10px 7px;
+    padding: 10px 5px 9px 9px;
+    position: relative;
 }
 
 .nftCardBackTitle {
-    font-size: 14px;;
+    font-size: 14px;
+    line-height: 20px;
 }
 
 .hrTag {
@@ -20,4 +22,17 @@
 
 .nftCardBackDetail {
     font-size: 12px;
+    line-height: 18px;
+    z-index: 100;
+}
+
+.detailBtn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: 1.7rem;
+    color: var(--button-color);
+    border-radius: 6px;
+    margin: 4px;
+    z-index: 100;
 }
