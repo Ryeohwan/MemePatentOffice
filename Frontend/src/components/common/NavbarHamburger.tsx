@@ -42,7 +42,7 @@ const NavbarHamburger: React.FC = () => {
 
         <div className={styles.dropMenu}>
 
-          <NavLink to="/meme-list" className={styles.navLink}>
+          <NavLink to="/meme-list?type=new" className={styles.navLink}>
             밈 도감
           </NavLink>
 
