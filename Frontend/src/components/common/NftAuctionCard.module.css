@@ -1,0 +1,18 @@
+.auctionCardWrapper {
+    border-radius: 6px;
+    box-shadow: var(--box-shadow);
+    width: 246px;
+    height: 300px;
+    margin-left: 10px;
+}
+
+.auctionImg {
+    width: 246px;
+    height: 164px;
+    object-fit: cover;
+}
+
+.nftTitleText {
+    font-size: 14px;
+}
+

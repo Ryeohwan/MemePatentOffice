@@ -4,6 +4,7 @@ import styles from "./HomePage.module.css";
 import { Carousel } from "primereact/carousel";
 import { Button } from "primereact/button";
 import NftCard from "components/common/NftCard";
+import NftAuctionCard from "components/common/NftAuctionCard";
 
 const HomePage: React.FC = () => {
   const NFTS = [
@@ -54,6 +55,7 @@ const HomePage: React.FC = () => {
         circular={true}
 
       />
+      <NftAuctionCard/>
     </div>
   );
 };
