@@ -60,9 +60,9 @@ const AuctionPage: React.FC = () => {
       camera.current.rotation.z,
     ];
     gsap.to(camera.current.position, {
-      x: player.current.position.x + 5,
+      x: player.current.position.x+2,
       y: 9,
-      z: -10,
+      z: -20,
       duration: 1,
     });
     camera.current.lookAt(0, 5, -30);
