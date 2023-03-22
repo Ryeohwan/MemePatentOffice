@@ -1,7 +1,8 @@
 import React from "react";
 
-import { Dialog } from "primereact/dialog";
+import { Sidebar } from "primereact/sidebar";
 import styles from "components/auction/main/list/BiddingHistory.module.css";
+import BiddingHistoryList from "./BiddingHistoryList";
 
 interface BiddingHistoryProps {
     biddingHistoryInfoVisible: boolean;
@@ -13,17 +14,14 @@ const BiddingHistory: React.FC<BiddingHistoryProps> = ({
   biddingHistoryInfoHandlerFalse,
 }) => {
   return (
-    <Dialog
-      className={styles.dialog}
-      header="입찰 내역"
-      visible={biddingHistoryInfoVisible}
-      style={{ width: "50vw" }}
-      onHide={() => biddingHistoryInfoHandlerFalse()}
-    >
-      <div>
-        <div>dsfaasdkfkasndfknsdfk</div>
-      </div>
-    </Dialog>
+    <Sidebar
+        className={styles.sideBar}
+        visible={biddingHistoryInfoVisible}
+        position="bottom"
+        onHide={() => biddingHistoryInfoHandlerFalse()}
+      >
+        <BiddingHistoryList/>
+      </Sidebar>
   );
 };
 

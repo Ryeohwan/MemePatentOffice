@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as THREE from "three";
 import { useFrame, useLoader } from "react-three-fiber";
 
@@ -52,48 +52,54 @@ const Border: React.FC = () => {
   border.position.set(-1, 7, -29);
 
   // const targetTime = new Date(2023, 3, 20, 14, 15, 0)
-  const targetTime = Math.floor(+new Date(2023, 3-1, 20, 16, 0, 0)/1000);
+  const targetTime = Math.floor(+new Date(2023, 3 - 1, 22, 16, 0, 0) / 1000);
 
   const getRemainTime = () => {
-    const date = Math.floor(+new Date()/1000)
+    const date = Math.floor(+new Date() / 1000);
     // console.log(date, targetTime)
-    let diff
-    if (targetTime < date){
-      diff = 0
-    }else{
-      diff = (targetTime-date)
+    let diff;
+    if (targetTime < date) {
+      diff = 0;
+    } else {
+      diff = targetTime - date;
     }
-    const remainTime = new Date(0)
-    remainTime.setSeconds(diff)
-    
+    const remainTime = new Date(0);
+    remainTime.setSeconds(diff);
+
     const hours = remainTime.getUTCHours().toString().padStart(2, "0");
     const minutes = remainTime.getUTCMinutes().toString().padStart(2, "0");
-    const seconds = remainTime.getUTCSeconds().toString().padStart(2,"0");
+    const seconds = remainTime.getUTCSeconds().toString().padStart(2, "0");
 
-    return [diff,`${hours}:${minutes}:${seconds}`];
+    return [diff, `${hours}:${minutes}:${seconds}`];
   };
-
+  useEffect(() => {
+    if (texContext) {
+    }
+  }, []);
+  
   useFrame(() => {
     canvasTexture.needsUpdate = true;
     if (texContext) {
       texContext.fillStyle = "#0277BD"; // 물감
       texContext.fillRect(0, 0, 100, 100); // 좌표0,0, 크기
-      let timerProps = getRemainTime()
-      let diff = timerProps[0]
-      let timerView = timerProps[1]
-      texContext.fillText(`${timerView}`, 5, 60);
-      texContext.font = "20px Gmarket Sans TTF";
-      if (diff <= 60*60){
+      texContext.font = "10px Gmarket Sans TTF";
+      texContext.fillStyle = "white"; // 물감
+      texContext.fillText("50.4 SSF", 30, 37);
+      texContext.font = "17px Gmarket Sans TTF";
+      let timerProps = getRemainTime();
+      let diff = timerProps[0];
+      let timerView = timerProps[1];
+      if (diff <= 60 * 60) {
         texContext.fillStyle = "red"; // 물감
-      }else{
+      } else {
         texContext.fillStyle = "white"; // 물감
       }
-      texContext.fillText(`${timerView}`, 5, 60);
+      texContext.fillText(`${timerView}`, 10, 20);
     }
   });
 
-  const timer = new THREE.Mesh(new THREE.PlaneGeometry(5, 3), timerMaterial);
-  timer.position.set(-1, 10, -28.9);
+  const timer = new THREE.Mesh(new THREE.PlaneGeometry(9, 10), timerMaterial);
+  timer.position.set(-1, 7, -28.95);
 
   return (
     <>
