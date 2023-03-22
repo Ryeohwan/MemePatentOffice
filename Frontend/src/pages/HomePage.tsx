@@ -59,7 +59,9 @@ const HomePage: React.FC = () => {
       imgUrl: "theglory.jpeg",
     },
   ];
+
   // ------------------------------------------------------------------------------
+  
   // Carousel로 띄울 카드 NFT 밈과 Auction 두 개이므로 타입 두 개 지정
   type NftObject = {
     id: number;
@@ -75,7 +77,7 @@ const HomePage: React.FC = () => {
     highest_bid: number;
     imgUrl: string;
   };
-
+  
   const nftCarousel = (nft: NftObject | AuctionObject) => {
     // typeof type guard로 체크 불가능 NftObject에 있는 속성이 AuctionObject에는 없어서 비교 자체가 불가
     // in 키워드로 type guard하면 됨
@@ -85,7 +87,7 @@ const HomePage: React.FC = () => {
       return <NftAuctionCard items={nft}/>
     }
   };
-
+  
   return (
     <div className={styles.homeDiv}>
       <Carousel
@@ -99,14 +101,14 @@ const HomePage: React.FC = () => {
         circular={true}
       />
       <Carousel
-        page={1}
+        // page={1}
         value={AUCTIONS}
         numVisible={1}
         numScroll={1}
         itemTemplate={(page) => nftCarousel(page)}
         orientation={"horizontal"}
         showIndicators={false}
-        circular={true}
+        // circular={true}
       />
     </div>
   );

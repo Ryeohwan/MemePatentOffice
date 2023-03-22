@@ -14,24 +14,33 @@ const NftAuctionCard:React.FC<AuctionProps> = nft => {
     const MEME_DETAIL_URL = `/meme-detail/:${nft.items.meme_id}`;
     const AUCTION_DETAIL_URL = `/auction/:${nft.items.auction_id}`;
 
+    // NFT 제목 글자수 슬라이싱
+    const slicingText = (NFT_TEXT:string) => {
+        if (NFT_TEXT.length > 38) {
+            return NFT_TEXT.substring(0, 38) + " ...";
+        } else {
+            return NFT_TEXT;
+        }
+    };
+
     return (
         <div className={styles.auctionCardWrapper}>
             <img src={AUCTION_IMG} alt="" className={styles.auctionImg} />
-            <div className={styles.nftTitleText}>{AUCTION_MEME}</div>
+            <div className={styles.nftTitleText}>{slicingText(AUCTION_MEME)}</div>
             <div>
-                <div>남은 시간</div>
-                <div>{AUCTION_TIME}</div>
+                <div className={styles.auctionTimeTxt}>남은 시간</div>
+                <div className={styles.auctionTime}>{AUCTION_TIME}</div>
             </div>
             <div>
-                <div>최고가</div>
-                <div>{HIGHEST_BID}</div>
+                <div className={styles.auctionBidTxt}>최고가</div>
+                <div className={styles.auctionBid}>{HIGHEST_BID} SSF</div>
             </div>
-            <div>
-                <NavLink to={MEME_DETAIL_URL}>
-                    <button>상세 보기</button>
+            <div className={styles.btnWrapper}>
+                <NavLink to={MEME_DETAIL_URL} className={styles.navLink}>
+                    <div className={styles.nftDetailBtn}>상세 보기</div>
                 </NavLink>
-                <NavLink to={AUCTION_DETAIL_URL}>
-                    <button>경매방 입장하기</button>
+                <NavLink to={AUCTION_DETAIL_URL} className={styles.navLink}>
+                    <div className={styles.auctionDetailBtn}>경매방 입장하기</div>
                 </NavLink>
             </div>
 

@@ -1,18 +1,65 @@
 .auctionCardWrapper {
     border-radius: 6px;
     box-shadow: var(--box-shadow);
-    width: 246px;
-    height: 300px;
+    width: 95%;
+    height: 80%;
     margin-left: 10px;
+    font-size: 12px;
 }
 
 .auctionImg {
-    width: 246px;
-    height: 164px;
+    width: 100%;
+    height: 50%;
     object-fit: cover;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+}
+
+.auctionTime, .auctionBid {
+    display: inline-block;
+    margin-left: 30px;
+}
+
+.auctionTimeTxt, .auctionBidTxt {
+    display: inline-block;
+    width: 50px;
+    margin-left: 9px;
+    margin-bottom: 7px;
 }
 
 .nftTitleText {
+    padding: 6px 5px 9px 9px;
+    line-height: 20px; 
     font-size: 14px;
 }
 
+.btnWrapper {
+    display: flex;
+    justify-content: space-between;
+    margin: 3px 9px 0px 9px;
+}
+
+.navLink {
+    text-decoration: none;
+    color: white;
+}
+
+.nftDetailBtn {
+    width: 100px;
+    height: 30px;
+    border-radius: 5px;
+    background-color: var(--button-color);
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auctionDetailBtn {
+    width: 100px;
+    height: 30px;
+    border-radius: 5px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--button-two-color);
+}
