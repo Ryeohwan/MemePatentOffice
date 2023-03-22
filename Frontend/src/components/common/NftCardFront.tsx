@@ -9,7 +9,7 @@ interface NftProps {
 const NftCardFront:React.FC<NftProps> = nft => {
     // NFT
     const NFT_TEXT = nft.items.title;
-    const NFT_imgUrl = "http://localhost:3000/" + nft.items.imgUrl;
+    const NFT_imgUrl = "http://localhost:3002/" + nft.items.imgUrl;
     
     // NFT 제목 글자수 슬라이싱
     const slicingText = (NFT_TEXT:string) => {

@@ -84,7 +84,11 @@ const HomePage: React.FC = () => {
     if ("description" in nft) {
       return <NftCard items={nft} />;
     } else {
-      return <NftAuctionCard items={nft}/>
+      return (
+        <div className={styles.auctionCarousel}>
+          <NftAuctionCard items={nft}/>
+        </div>
+      );
     }
   };
   
