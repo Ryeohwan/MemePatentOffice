@@ -93,28 +93,30 @@ const HomePage: React.FC = () => {
   };
   
   return (
-    <div className={styles.homeDiv}>
-      <Carousel
-        page={1}
-        value={NFTS}
-        numVisible={1}
-        numScroll={1}
-        itemTemplate={(page) => nftCarousel(page)}
-        orientation={"horizontal"}
-        showIndicators={false}
-        circular={true}
-      />
-      <Carousel
-        // page={1}
-        value={AUCTIONS}
-        numVisible={1}
-        numScroll={1}
-        itemTemplate={(page) => nftCarousel(page)}
-        orientation={"horizontal"}
-        showIndicators={false}
-        // circular={true}
-      />
-    </div>
+    <>
+      <div className={styles.homeDiv}>
+        <Carousel
+          page={1}
+          value={NFTS}
+          numVisible={1}
+          numScroll={1}
+          itemTemplate={(page) => nftCarousel(page)}
+          orientation={"horizontal"}
+          showIndicators={false}
+          circular={true}
+          />
+        <Carousel
+          // page={1}
+          value={AUCTIONS}
+          numVisible={1}
+          numScroll={1}
+          itemTemplate={(page) => nftCarousel(page)}
+          orientation={"horizontal"}
+          showIndicators={false}
+          // circular={true}
+          />
+      </div>
+    </>
   );
 };
 
