@@ -7,11 +7,11 @@ ENV PORT 88888
 ENV DATABASE orange
 
 # env finish
-COPY auction/gradlew .
-COPY auction/gradle gradle
-COPY auction/build.gradle .
-COPY auction/settings.gradle .
-COPY auction/src src
+COPY mpoffice/gradlew .
+COPY mpoffice/gradle gradle
+COPY mpoffice/build.gradle .
+COPY mpoffice/settings.gradle .
+COPY mpoffice/src src
 RUN chmod +x ./gradlew
 RUN ./gradlew clean bootJar
 
