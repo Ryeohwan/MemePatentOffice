@@ -23,7 +23,6 @@
 .nftCardBackDetail {
     font-size: 12px;
     line-height: 18px;
-    z-index: 100;
 }
 
 .detailBtn {
@@ -34,5 +33,4 @@
     color: var(--button-color);
     border-radius: 6px;
     margin: 4px;
-    z-index: 100;
 }
