@@ -63,7 +63,7 @@ const Scene: React.FC<SceneProps> = ({
       cameraPosition.y,
       cameraPosition.z
     );
-    camera.current.zoom = 35;
+    camera.current.zoom = 30;
     camera.current.updateProjectionMatrix();
   };
 

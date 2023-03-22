@@ -2,11 +2,13 @@ import { configureStore } from '@reduxjs/toolkit'
 
 import  testReducer from 'store/test'
 import  chatReducer from 'store/chat'
+import auctionReducer from 'store/auction'
 
 const store = configureStore({
   reducer: {
     test: testReducer,
     chat: chatReducer,
+    auction: auctionReducer,
   },
 })
 
