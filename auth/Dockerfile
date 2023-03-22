@@ -1,6 +1,6 @@
 FROM adoptopenjdk:11-hotspot AS builder
 # env 
-ENV REDIS_PASSWORD redis_pwd
+ENV PASSWORD password
 
 # env finish
 COPY auth/gradlew .
@@ -14,4 +14,4 @@ RUN ./gradlew clean bootJar
 FROM adoptopenjdk:11-hotspot
 COPY --from=builder build/libs/*.jar app.jar
 
-ENTRYPOINT ["java","-jar", "-Dspring.redis.password=${REDIS_PASSWORD}", "/app.jar"]
+ENTRYPOINT ["java","-jar", "-Dspring.redis.password=${PASSWORD}", "/app.jar"]
