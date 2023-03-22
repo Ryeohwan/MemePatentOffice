@@ -36,7 +36,7 @@ public class CommentController {
         }
     }
 
-    @PostMapping("/like")
+    @PostMapping("/like")  // 좋아요 기능 완료
     @ResponseBody
     public ResponseEntity createLike(CommentLikeRequest commentLikeRequest) throws NotFoundException{
         return ResponseEntity.ok().body(commentService.createCommentLike(commentLikeRequest));
