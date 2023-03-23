@@ -1,24 +1,66 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
-import styles from "./HomeCarousel.module.css";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import styles from "components/main/homepage/HomeCarousel.module.css";
 
-interface MainProps {
-    items: {id: number, imgUrl: string, btnTxt: string, btnUrl: string};
-};
+interface HomeCarouselProps {
+  info: {
+    id: number;
+    imgUrl: string;
+    btnTxt: string;
+    btnUrl: string;
+  }[];
+}
 
-const HomeCarousel:React.FC<MainProps> = main => {
-    const IMG_URL = "http://localhost:3000/" + main.items.imgUrl;
-    const BTN_TXT = main.items.btnTxt;
-    const BTN_URL = main.items.btnUrl;
+const HomeCarousel: React.FC<HomeCarouselProps> = ({ info }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const navigate = useNavigate();
 
-    return (
-        <div className={styles.mainCarousel}>
-            <img src={IMG_URL} alt="" className={styles.carouselImg}/>
-            <NavLink to={BTN_URL}>
-                <button className={styles.carouselBtn}>{BTN_TXT}</button>
-            </NavLink>
-        </div>
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+        setCurrentImageIndex(currentImageIndex=>
+            currentImageIndex === info.length - 1 ? 0 : currentImageIndex + 1
+          );
+    }, 5000);
+    return () => {
+        console.log(2)
+        clearInterval(intervalId);
+    }
+  }, []);
+
+  const navigateHandler = (url: string) => {
+    navigate(url);
+  };
+
+  const handlePrevClick = () => {
+    setCurrentImageIndex(
+      currentImageIndex === 0 ? info.length - 1 : currentImageIndex - 1
     );
+  };
+
+  const handleNextClick = () => {
+    setCurrentImageIndex(
+      currentImageIndex === info.length - 1 ? 0 : currentImageIndex + 1
+    );
+  };
+
+  return (
+    <div className={styles.mainCarousel}>
+      <i className="pi pi-chevron-left" id="left" onClick={handlePrevClick} />
+      <img
+        src={`http://localhost:3000/${info[currentImageIndex].imgUrl}`}
+        alt="carousel"
+      />
+      <i className="pi pi-chevron-right" id="right" onClick={handleNextClick} />
+      <button
+        className={styles.carouselBtn}
+        onClick={() => {
+          navigateHandler(info[currentImageIndex].btnUrl);
+        }}
+      >
+        {info[currentImageIndex].btnTxt}
+      </button>
+    </div>
+  );
 };
 
 export default HomeCarousel;
