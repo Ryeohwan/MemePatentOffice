@@ -5,13 +5,12 @@
 }
 
 .buttonWrapper{
-    margin-top:93vh;
-    margin-right: 1rem;
-    margin-left: 1rem;
+    position:relative;
     display: flex;
+    top: 93%;
+    margin: 0 5% 0 5%;
     flex-direction: row-reverse;
     justify-content: space-between;
-    position:relative;
 }
 
 .sitBtn{

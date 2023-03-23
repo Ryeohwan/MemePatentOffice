@@ -36,5 +36,5 @@ const auctionSlice = createSlice({
   },
 });
 
-export const chatActions = auctionSlice.actions;
+export const auctionActions = auctionSlice.actions;
 export default auctionSlice.reducer;

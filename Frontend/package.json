@@ -13,6 +13,7 @@
     "@types/react-dom": "^18.0.11",
     "@types/react-redux": "^7.1.25",
     "gsap": "^3.11.4",
+    "gsap-plugin": "^5.0.8",
     "primeicons": "^6.0.1",
     "primereact": "^9.2.0",
     "react": "^18.2.0",

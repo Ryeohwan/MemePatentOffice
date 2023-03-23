@@ -12,8 +12,6 @@ import Border from "components/auction/main/mesh/Border";
 import styles from "components/auction/main/Scene.module.css";
 
 interface SceneProps {
-  width: number;
-  height: number;
   canSit: () => void;
   cantSit: () => void;
   player: React.MutableRefObject<THREE.Object3D>;
@@ -21,13 +19,12 @@ interface SceneProps {
   playerAnimation: React.MutableRefObject<THREE.AnimationAction | undefined>;
   sitting: React.MutableRefObject<Boolean>;
   camera: React.MutableRefObject<THREE.OrthographicCamera|THREE.PerspectiveCamera>;
-  playerCamera: React.MutableRefObject<THREE.PerspectiveCamera>
   biddingSubmit: boolean
+  playerPosition: React.MutableRefObject<THREE.Vector3>;
+
 }
 
 const Scene: React.FC<SceneProps> = ({
-  width,
-  height,
   canSit,
   cantSit,
   player,
@@ -35,8 +32,8 @@ const Scene: React.FC<SceneProps> = ({
   playerAnimation,
   sitting,
   camera,
-  playerCamera,
-  biddingSubmit
+  biddingSubmit,
+  playerPosition
 }) => {
   const canvas = useRef<any>();
   const [meshes, setMeshes] = useState<THREE.Mesh[]>([]);
@@ -47,8 +44,6 @@ const Scene: React.FC<SceneProps> = ({
   const mouse = useRef<THREE.Vector2>(new THREE.Vector2());
   const clickPosition = useRef<THREE.Vector3>(new THREE.Vector3());
   const chairPoints = useRef<Array<THREE.Mesh>>([]);
-
-  const playerPosition = useRef<THREE.Vector3>(new THREE.Vector3());
   const moving = useRef(false);
 
   // 카메라
