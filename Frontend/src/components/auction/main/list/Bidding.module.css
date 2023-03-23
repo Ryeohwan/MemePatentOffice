@@ -1,0 +1,21 @@
+.sideBar{
+    height: 20vh !important;
+}
+
+.inputWraper{
+    display: flex;
+    flex-direction: row;
+    margin-top: 5px;
+}
+
+.input{
+    width:79% !important;
+}
+
+.mySSF{
+    margin-top: 5px;
+    margin-left:1rem;
+    font-size: 10px;
+    font-weight: bold;
+    opacity: 0.5;
+}

@@ -1,7 +1,21 @@
+.tabContainer {
+  width: 100%;
+}
+
 .tabNavContainer {
   padding: 10px 0;
 }
 
 .tabRouteContainer {
-
+  padding: 10px 16px;
+  height: 100%;
 }
+
+.transitionsWrapper {
+  overflow: hidden;
+  height: calc(var(--vh, 1vh) * 100);
+  width: 100%;
+  position: relative;
+}
+
+

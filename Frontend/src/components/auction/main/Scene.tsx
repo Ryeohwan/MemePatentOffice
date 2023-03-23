@@ -20,7 +20,9 @@ interface SceneProps {
   chairPoint: React.MutableRefObject<THREE.Mesh>;
   playerAnimation: React.MutableRefObject<THREE.AnimationAction | undefined>;
   sitting: React.MutableRefObject<Boolean>;
-  camera: React.MutableRefObject<THREE.OrthographicCamera>;
+  camera: React.MutableRefObject<THREE.OrthographicCamera|THREE.PerspectiveCamera>;
+  playerCamera: React.MutableRefObject<THREE.PerspectiveCamera>
+  biddingSubmit: boolean
 }
 
 const Scene: React.FC<SceneProps> = ({
@@ -32,7 +34,9 @@ const Scene: React.FC<SceneProps> = ({
   chairPoint,
   playerAnimation,
   sitting,
-  camera
+  camera,
+  playerCamera,
+  biddingSubmit
 }) => {
   const canvas = useRef<any>();
   const [meshes, setMeshes] = useState<THREE.Mesh[]>([]);
@@ -59,9 +63,9 @@ const Scene: React.FC<SceneProps> = ({
   // 이벤트
   const createdHandler = () => {
     camera.current.position.set(
-      cameraPosition.x,
-      cameraPosition.y,
-      cameraPosition.z
+      cameraPosition.x+13,
+      cameraPosition.y+10,
+      cameraPosition.z+29
     );
     camera.current.zoom = 30;
     camera.current.updateProjectionMatrix();
@@ -148,6 +152,7 @@ const Scene: React.FC<SceneProps> = ({
         chairPoint={chairPoint}
         playerAnimation={playerAnimation}
         tableAndChairs={tableAndChairs}
+        biddingSubmit={biddingSubmit}
       />
       <Box position={[0, 15, 0]} />
       <Table table={table} pushMesh={pushMesh} tableAndChairs={tableAndChairs}/>

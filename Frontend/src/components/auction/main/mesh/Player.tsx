@@ -10,13 +10,16 @@ interface PlayerProps {
   playerPosition: React.MutableRefObject<THREE.Vector3>;
   chairPoints: React.MutableRefObject<THREE.Mesh[]>;
   player: React.MutableRefObject<THREE.Object3D>;
-  camera: React.MutableRefObject<THREE.OrthographicCamera>;
+  camera: React.MutableRefObject<
+    THREE.OrthographicCamera | THREE.PerspectiveCamera
+  >;
   cameraPosition: THREE.Vector3;
   canSit: () => void;
   cantSit: () => void;
   chairPoint: React.MutableRefObject<THREE.Mesh>;
   playerAnimation: React.MutableRefObject<THREE.AnimationAction | undefined>;
-  tableAndChairs: React.MutableRefObject<THREE.Mesh[]>
+  tableAndChairs: React.MutableRefObject<THREE.Mesh[]>;
+  biddingSubmit: boolean;
 }
 
 const Player: React.FC<PlayerProps> = ({
@@ -33,6 +36,7 @@ const Player: React.FC<PlayerProps> = ({
   chairPoint,
   playerAnimation,
   tableAndChairs,
+  biddingSubmit,
 }) => {
   const glb = useLoader(GLTFLoader, "/auction/model/arh.glb"); // 나중에 선택해서 가져오는 코드로 바꾸기
   const raycaster = new THREE.Raycaster();
@@ -46,13 +50,14 @@ const Player: React.FC<PlayerProps> = ({
   const mixer = new THREE.AnimationMixer(player.current);
   const normal = mixer.clipAction(glb.animations[0]);
   const handsup = mixer.clipAction(glb.animations[1]);
+  handsup.repetitions = 1;
+  handsup.clampWhenFinished = true;
   const sitdown = mixer.clipAction(glb.animations[2]);
-  sitdown.repetitions = 1
+  sitdown.repetitions = 1;
   sitdown.clampWhenFinished = true;
   const standup = mixer.clipAction(glb.animations[3]);
   standup.clampWhenFinished = true;
   const walk = mixer.clipAction(glb.animations[4]);
-
 
   useEffect(() => {
     const box = new THREE.Box3().setFromObject(player.current); // object는 Object3D 객체
@@ -60,7 +65,7 @@ const Player: React.FC<PlayerProps> = ({
     box.getCenter(player.current.position);
     box.applyMatrix4(player.current.matrixWorld);
     const height = box.max.y - box.min.y;
-    playerPosition.current = new THREE.Vector3(0, height / 2, 0);
+    playerPosition.current = new THREE.Vector3(13, height / 2, 29);
     camera.current.lookAt(player.current.position);
   }, []);
 
@@ -68,18 +73,23 @@ const Player: React.FC<PlayerProps> = ({
     player.current.position.x = playerPosition.current.x;
     player.current.position.y = playerPosition.current.y;
     player.current.position.z = playerPosition.current.z;
-  }, [playerPosition]);
+    player.current.rotation.y += Math.PI;
+  }, []);
 
   useFrame((state, delta) => {
     mixer.update(delta);
-    const direction = new THREE.Vector3(player.current.rotation.x,player.current.rotation.y,player.current.rotation.z);
-		direction.normalize();
+    const direction = new THREE.Vector3(
+      player.current.rotation.x,
+      player.current.rotation.y,
+      player.current.rotation.z
+    );
+    direction.normalize();
     raycaster.set(player.current.position, direction);
-    const intersects = raycaster.intersectObjects(tableAndChairs.current)
-    for(const item of intersects){
-      if (item.distance<0.2){
-        moving.current = false
-        walk.stop()
+    const intersects = raycaster.intersectObjects(tableAndChairs.current);
+    for (const item of intersects) {
+      if (item.distance < 0.2) {
+        moving.current = false;
+        walk.stop();
       }
     }
 
@@ -105,8 +115,12 @@ const Player: React.FC<PlayerProps> = ({
       camera.current.position.x = cameraPosition.x + player.current.position.x;
       camera.current.position.z = cameraPosition.z + player.current.position.z;
     } else if (sitting.current) {
-      sitdown.play()
-      playerAnimation.current = standup;
+      if (biddingSubmit) {
+        handsup.play();
+      } else if (sitting.current) {
+        sitdown.play();
+        playerAnimation.current = standup;
+      }
     }
     if (!sitting.current) {
       let isIn;
