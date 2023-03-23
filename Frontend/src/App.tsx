@@ -53,7 +53,7 @@ const App: React.FC = () => {
           <Route path="/meme-list/*" element={<MemeListPage />} />
           <Route path="/meme-detail/:meme_id" element={<MemeDetailPage />} />
 
-          <Route path="/auction-list" element={<AuctionListPage />} />
+          <Route path="/auction-list/*" element={<AuctionListPage />} />
           <Route path='/auction/:auction_id' element={<AuctionPage />} />
 
           <Route path="/profile/:nickname" element={<ProfilePage />} />

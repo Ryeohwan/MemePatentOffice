@@ -46,7 +46,7 @@ const NavbarHamburger: React.FC = () => {
             밈 도감
           </NavLink>
 
-          <NavLink to="/auction-list" className={styles.navLink}>
+          <NavLink to="/auction-list/type=new" className={styles.navLink}>
             경매목록
           </NavLink>
 
