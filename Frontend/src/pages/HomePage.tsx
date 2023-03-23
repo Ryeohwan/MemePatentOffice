@@ -4,6 +4,7 @@ import { Carousel } from "primereact/carousel";
 import { NavLink } from "react-router-dom";
 import NftCard from "components/common/NftCard";
 import NftAuctionCard from "components/common/NftAuctionCard";
+import HomeCarousel from "components/main/homepage/HomeCarousel";
 import styles from "./HomePage.module.css";
 
 const HomePage: React.FC = () => {
@@ -62,7 +63,37 @@ const HomePage: React.FC = () => {
   ];
 
   // ------------------------------------------------------------------------------
-  
+
+  // Main Carousel에 내려보낼 props
+  const MAIN_INFO = [
+    {
+      id: 1,
+      imgUrl: "home/meme.gif",
+      btnTxt: "밈 사전 바로가기",
+      btnUrl: "/meme-list/type=popular?range=month/"
+    },
+    {
+      id: 2,
+      imgUrl: "home/uploadmeme.jpg",
+      btnTxt: "밈 등록하러 가기",
+      btnUrl: "/meme-upload"
+    },
+    {
+      id: 3,
+      imgUrl: "home/auction.jpg",
+      btnTxt: "경매 구경하러 가기",
+      btnUrl: "/auction-list/type=popular"
+    }
+  ];
+
+  // Main Carousel에 띄울 이미지, 버튼으로 라우팅할 URL
+  type MainObject = {
+    id: number;
+    imgUrl: string;
+    btnTxt: string;
+    btnUrl: string;
+  }
+
   // Carousel로 띄울 카드 NFT 밈과 Auction 두 개이므로 타입 두 개 지정
   type NftObject = {
     id: number;
@@ -78,7 +109,7 @@ const HomePage: React.FC = () => {
     highest_bid: number;
     imgUrl: string;
   };
-
+  // 반응형 캐러셀
   const responsiveOptions = [
     {
         breakpoint: '1024px',
@@ -97,9 +128,13 @@ const HomePage: React.FC = () => {
     }
   ];
 
+  // 홈페이지 맨 위에 띄울 가이드 캐러셀
+  const mainCarousel = (main: MainObject) => {
+    return <HomeCarousel items={main}/>;
+  };
+
+  // 밈, 경매 캐러셀
   const nftCarousel = (nft: NftObject | AuctionObject) => {
-    // typeof type guard로 체크 불가능 NftObject에 있는 속성이 AuctionObject에는 없어서 비교 자체가 불가
-    // in 키워드로 type guard하면 됨
     if ("description" in nft) {
       return <NftCard items={nft} />;
     } else {
@@ -113,6 +148,19 @@ const HomePage: React.FC = () => {
   
   return (
     <div>
+      {/* main carousel */}
+      <Carousel
+        page={1}
+        value={MAIN_INFO} 
+        numVisible={1}
+        numScroll={1} 
+        itemTemplate={(page) => mainCarousel(page)}
+        orientation={"horizontal"}
+        showIndicators={false}
+        circular={true}
+      />
+
+      {/* meme carousel */}
       <div className={styles.homeMenuWrapper}>
         <div className={styles.homeMenuTitle}>오늘의 밈</div>
         <NavLink to="/meme-list/type=popular?range=day" className={styles.listRouter}>더보기</NavLink>
@@ -160,6 +208,7 @@ const HomePage: React.FC = () => {
 
       <hr />
 
+      {/* auction carousel */}
       <div className={styles.homeMenuWrapper}>
         <div className={styles.homeMenuTitle}>인기 경매</div>
         <NavLink to="/auction-list/type=popular" className={styles.listRouter}>더보기</NavLink>
