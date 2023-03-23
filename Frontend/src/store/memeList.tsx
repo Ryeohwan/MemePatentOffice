@@ -1,21 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+type memeType = {
+  id: number;
+  title: string;
+  imgUrl: string;
+  description: string;
+}
 
 interface initialStateInterface {
   input: string;
   period: string;
-  memeNewList: {
-    id: number;
-    title: string;
-    imgUrl: string;
-    description: string;
-  }[];
-  memePopularList: {
-    id: number;
-    title: string;
-    imgUrl: string;
-    description: string;
-  }[];
+  memeNewList: memeType[];
+  memePopularList: memeType[];
 }
 
 const initialState: initialStateInterface = {

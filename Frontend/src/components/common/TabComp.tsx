@@ -33,19 +33,26 @@ const TabComp: React.FC<Props> = ({ items, children }) => {
   }
 
   const clickHandler = (item: TabItem) => {
-    setSlideDirection(
-      pathArr.indexOf(location.pathname) > pathArr.indexOf(item.path.substring(0, item.path.indexOf('?')))
-      ? "left"
-      : "right"
-      )
-
+    let direction = "left";
+    if (item.path.includes("?")) {
+      direction =
+        pathArr.indexOf(location.pathname) > pathArr.indexOf(item.path.substring(0, item.path.indexOf('?')))
+          ? "left"
+          : "right";
+    } else {
+      direction = direction =
+        pathArr.indexOf(location.pathname) > pathArr.indexOf(item.path)
+          ? "left"
+          : "right";
+    };
+    setSlideDirection(direction);
+    console.log(direction);
     setHistoryArr((prev) => [...prev, item.path]);
   };
-  
-  useEffect(()=>{
-    navigate(historyArr[historyArr.length -1], { replace: true });
-  }, [historyArr])
-  
+
+  useEffect(() => {
+    navigate(historyArr[historyArr.length - 1], { replace: true });
+  }, [historyArr]);
 
   return (
     <div className={styles.tabContainer}>
@@ -53,13 +60,11 @@ const TabComp: React.FC<Props> = ({ items, children }) => {
         <TabNavComp items={items} clickHandler={clickHandler} />
       </div>
       <div className={styles.tabRouteContainer}>
-        <TransitionGroup
-          className={styles.transitionsWrapper}
-        >
+        <TransitionGroup className={styles.transitionsWrapper}>
           <CSSTransition
-          key={location.pathname}
-          classNames={slideDirection}
-          timeout={500}
+            key={location.pathname}
+            classNames={slideDirection}
+            timeout={500}
           >
             <Routes location={location}>{children}</Routes>
           </CSSTransition>
