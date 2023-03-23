@@ -5,7 +5,7 @@ services:
     container_name: react-front
     build:
       context: .
-      dockerfile: ./dockerfile
+      dockerfile: ./Dockerfile
     ports:
-      - 3070:3000
+      - 3000:3000
     restart: always
