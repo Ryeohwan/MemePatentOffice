@@ -1,6 +1,8 @@
+import styles from './MemeListNew.module.css';
+
 const MemeListNew: React.FC = () => {
   return(
-    <div>
+    <div className={styles.memeListNewContainer}>
       MemeListNew
     </div>
   );

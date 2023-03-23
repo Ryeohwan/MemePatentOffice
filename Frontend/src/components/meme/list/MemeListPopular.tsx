@@ -1,6 +1,9 @@
+import styles from './MemeListPopular.module.css';
+
+
 const MemeListPopular: React.FC = () => {
   return(
-    <div>
+    <div className={styles.memeListPopularContainer}>
       MemeListPopular
     </div>
   );
