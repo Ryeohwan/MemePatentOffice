@@ -17,7 +17,6 @@ interface Props {
 
 const TabNavComp: React.FC<Props> = ({ items, clickHandler }) => {
   const { pathname } = useLocation() as RoutePath;
-  // const navigate = useNavigate();
   const itemLen = items.length;
   let itemIdx = -1;
   for (let i = 0; i < itemLen; i++) {
@@ -34,7 +33,6 @@ const TabNavComp: React.FC<Props> = ({ items, clickHandler }) => {
             <div
               key={item.name}
               className={styles.tabMenu}
-              // onClick={() => navigate(item.path, { replace: true })}
               onClick={() => clickHandler(item)}
             >
               {item.name}

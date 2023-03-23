@@ -11,7 +11,6 @@ const MemeListTabComp: React.FC = () => {
   const tabItems = [
     { name: "최신순", path: "/meme-list/type=new" },
     { name: "인기순", path: "/meme-list/type=popular" },
-    { name: "기타", path: "/meme-list/type=ddd" },
   ];
 
   return (
@@ -19,7 +18,6 @@ const MemeListTabComp: React.FC = () => {
       <TabComp items={tabItems}>
         <Route path="/type=new" element={<MemeListNew />} />
         <Route path="/type=popular" element={<MemeListPopular />} />
-        <Route path="/type=ddd" element={<MemeListNew />} />
       </TabComp>
     </div>
   );
