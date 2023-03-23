@@ -4,7 +4,7 @@
 
 .right-enter-active {
   transform: translateX(0);
-  transition: transform 1000ms ease-in-out;
+  transition: transform 500ms ease-in-out;
 }
 
 .right-exit {
@@ -13,7 +13,7 @@
 
 .right-exit-active {
   transform: translateX(-100%);
-  transition: transform 1000ms ease-in-out;
+  transition: transform 500ms ease-in-out;
 }
 
 .left-enter {
@@ -22,7 +22,7 @@
 
 .left-enter-active {
   transform: translateX(0);
-  transition: transform 1000ms ease-in-out;
+  transition: transform 500ms ease-in-out;
 }
 
 .left-exit {
@@ -31,5 +31,5 @@
 
 .left-exit-active {
   transform: translateX(100%);
-  transition: transform 1000ms ease-in-out;
+  transition: transform 500ms ease-in-out;
 }
