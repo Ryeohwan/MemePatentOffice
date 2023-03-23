@@ -8,6 +8,7 @@ import HomeCarousel from "components/main/homepage/HomeCarousel";
 import styles from "./HomePage.module.css";
 
 const HomePage: React.FC = () => {
+  
   // NFT 가짜 데이터
   const NFTS = [
     {
@@ -70,7 +71,7 @@ const HomePage: React.FC = () => {
       id: 1,
       imgUrl: "home/meme.gif",
       btnTxt: "밈 사전 바로가기",
-      btnUrl: "/meme-list/type=popular?range=month/",
+      btnUrl: "/meme-list/type=popular?range=today/",
     },
     {
       id: 2,
@@ -136,13 +137,16 @@ const HomePage: React.FC = () => {
   return (
     <div>
       {/* main carousel */}
-      <HomeCarousel info={MAIN_INFO}/>
+      <HomeCarousel info={MAIN_INFO} />
 
       {/* meme carousel */}
       <div className={styles.homeMenuWrapper}>
         <div className={styles.homeMenuTitle}>오늘의 밈</div>
         <NavLink
-          to="/meme-list/type=popular?range=day"
+          to={{
+            pathname: "/meme-list/type=popular",
+            search: "?range=today",
+          }}
           className={styles.listRouter}
         >
           더보기
@@ -162,7 +166,10 @@ const HomePage: React.FC = () => {
       <div className={styles.homeMenuWrapper}>
         <div className={styles.homeMenuTitle}>금주의 밈</div>
         <NavLink
-          to="/meme-list/type=popular?range=week"
+          to={{
+            pathname: "/meme-list/type=popular",
+            search: "?range=week",
+          }}
           className={styles.listRouter}
         >
           더보기
@@ -181,7 +188,13 @@ const HomePage: React.FC = () => {
 
       <div className={styles.homeMenuWrapper}>
         <div className={styles.homeMenuTitle}>신규 밈</div>
-        <NavLink to="/meme-list/type=new" className={styles.listRouter}>
+        <NavLink
+          to={{
+            pathname: "/meme-list/type=popular",
+            search: "?range=all",
+          }}
+          className={styles.listRouter}
+        >
           더보기
         </NavLink>
       </div>
