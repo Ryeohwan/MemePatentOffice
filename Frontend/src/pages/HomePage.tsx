@@ -1,9 +1,10 @@
 // home page (/home)
 import React from "react";
-import styles from "./HomePage.module.css";
 import { Carousel } from "primereact/carousel";
+import { NavLink } from "react-router-dom";
 import NftCard from "components/common/NftCard";
 import NftAuctionCard from "components/common/NftAuctionCard";
+import styles from "./HomePage.module.css";
 
 const HomePage: React.FC = () => {
   // NFT 가짜 데이터
@@ -77,7 +78,25 @@ const HomePage: React.FC = () => {
     highest_bid: number;
     imgUrl: string;
   };
-  
+
+  const responsiveOptions = [
+    {
+        breakpoint: '1024px',
+        numVisible: 3,
+        numScroll: 3
+    },
+    {
+        breakpoint: '768px',
+        numVisible: 2,
+        numScroll: 2
+    },
+    {
+        breakpoint: '560px',
+        numVisible: 1,
+        numScroll: 1
+    }
+  ];
+
   const nftCarousel = (nft: NftObject | AuctionObject) => {
     // typeof type guard로 체크 불가능 NftObject에 있는 속성이 AuctionObject에는 없어서 비교 자체가 불가
     // in 키워드로 type guard하면 됨
@@ -93,30 +112,99 @@ const HomePage: React.FC = () => {
   };
   
   return (
-    <>
-      <div className={styles.homeDiv}>
-        <Carousel
-          page={1}
-          value={NFTS}
-          numVisible={1}
-          numScroll={1}
-          itemTemplate={(page) => nftCarousel(page)}
-          orientation={"horizontal"}
-          showIndicators={false}
-          circular={true}
-          />
-        <Carousel
-          // page={1}
-          value={AUCTIONS}
-          numVisible={1}
-          numScroll={1}
-          itemTemplate={(page) => nftCarousel(page)}
-          orientation={"horizontal"}
-          showIndicators={false}
-          // circular={true}
-          />
+    <div>
+      <div className={styles.homeMenuWrapper}>
+        <div className={styles.homeMenuTitle}>오늘의 밈</div>
+        <NavLink to="/meme-list/type=popular?range=day" className={styles.listRouter}>더보기</NavLink>
       </div>
-    </>
+      <Carousel
+        value={NFTS}
+        numVisible={3}
+        numScroll={3}
+        itemTemplate={(page) => nftCarousel(page)}
+        orientation={"horizontal"}
+        showIndicators={false}
+        circular={true}
+        responsiveOptions={responsiveOptions}
+      />
+
+      <div className={styles.homeMenuWrapper}>
+        <div className={styles.homeMenuTitle}>금주의 밈</div>
+        <NavLink to="/meme-list/type=popular?range=week" className={styles.listRouter}>더보기</NavLink>
+      </div>
+      <Carousel
+        value={NFTS}
+        numVisible={3}
+        numScroll={3}
+        itemTemplate={(page) => nftCarousel(page)}
+        orientation={"horizontal"}
+        showIndicators={false}
+        circular={true}
+        responsiveOptions={responsiveOptions}
+      />
+
+      <div className={styles.homeMenuWrapper}>
+        <div className={styles.homeMenuTitle}>신규 밈</div>
+        <NavLink to="/meme-list/type=new" className={styles.listRouter}>더보기</NavLink>
+      </div>
+      <Carousel
+        value={NFTS}
+        numVisible={3}
+        numScroll={3}
+        itemTemplate={(page) => nftCarousel(page)}
+        orientation={"horizontal"}
+        showIndicators={false}
+        circular={true}
+        responsiveOptions={responsiveOptions}
+      />
+
+      <hr />
+
+      <div className={styles.homeMenuWrapper}>
+        <div className={styles.homeMenuTitle}>인기 경매</div>
+        <NavLink to="/auction-list/type=popular" className={styles.listRouter}>더보기</NavLink>
+      </div>
+      <Carousel
+        value={AUCTIONS}
+        numVisible={3}
+        numScroll={3}
+        itemTemplate={(page) => nftCarousel(page)}
+        orientation={"horizontal"}
+        showIndicators={false}
+        responsiveOptions={responsiveOptions}
+        circular={true}
+      />
+
+      <div className={styles.homeMenuWrapper}>
+        <div className={styles.homeMenuTitle}>마감 임박 경매</div>
+        <NavLink to="/auction-list/type=deadline" className={styles.listRouter}>더보기</NavLink>
+      </div>
+      <Carousel
+        value={AUCTIONS}
+        numVisible={3}
+        numScroll={3}
+        itemTemplate={(page) => nftCarousel(page)}
+        orientation={"horizontal"}
+        showIndicators={false}
+        responsiveOptions={responsiveOptions}
+        circular={true}
+      />
+
+      <div className={styles.homeMenuWrapper}>
+        <div className={styles.homeMenuTitle}>신규 경매</div>
+        <NavLink to="/auction-list/type=new" className={styles.listRouter}>더보기</NavLink>
+      </div>
+      <Carousel
+        value={AUCTIONS}
+        numVisible={3}
+        numScroll={3}
+        itemTemplate={(page) => nftCarousel(page)}
+        orientation={"horizontal"}
+        showIndicators={false}
+        responsiveOptions={responsiveOptions}
+        circular={true}
+      />
+    </div>
   );
 };
 

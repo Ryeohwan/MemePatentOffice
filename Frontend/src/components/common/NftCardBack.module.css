@@ -3,7 +3,6 @@
     box-shadow: var(--box-shadow);
     width: 246px;
     height: 247px;
-    margin-left: 10px;
     padding: 10px 5px 9px 9px;
     position: relative;
 }
