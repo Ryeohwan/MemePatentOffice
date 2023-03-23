@@ -5,10 +5,10 @@
 }
 
 .buttonWrapper{
-    position:relative;
+    position:absolute;
     display: flex;
-    top: 93%;
-    margin: 0 5% 0 5%;
+    width:100%;
+    bottom:0;
     flex-direction: row-reverse;
     justify-content: space-between;
 }
