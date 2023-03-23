@@ -20,7 +20,7 @@ const TabNavComp: React.FC<Props> = ({ items, clickHandler }) => {
   const itemLen = items.length;
   let itemIdx = -1;
   for (let i = 0; i < itemLen; i++) {
-    if (items[i].path === pathname) {
+    if (items[i].path.startsWith(pathname)) {
       itemIdx = i + 1;
     }
   }

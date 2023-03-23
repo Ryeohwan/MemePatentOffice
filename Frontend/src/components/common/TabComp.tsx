@@ -34,7 +34,7 @@ const TabComp: React.FC<Props> = ({ items, children }) => {
 
   const clickHandler = (item: TabItem) => {
     setSlideDirection(
-      pathArr.indexOf(location.pathname) > pathArr.indexOf(item.path)
+      pathArr.indexOf(location.pathname) > pathArr.indexOf(item.path.substring(0, item.path.indexOf('?')))
       ? "left"
       : "right"
       )

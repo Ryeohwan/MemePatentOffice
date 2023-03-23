@@ -1,5 +1,8 @@
 .tabContainer {
   width: 100%;
+  /* background-color: red; */
+  /* height: 400px; */
+  /* overflow: hidden; */
 }
 
 .tabNavContainer {
@@ -12,10 +15,11 @@
 }
 
 .transitionsWrapper {
-  overflow: hidden;
+  overflow-x: hidden;
   height: calc(var(--vh, 1vh) * 100);
   width: 100%;
   position: relative;
 }
+
 
 
