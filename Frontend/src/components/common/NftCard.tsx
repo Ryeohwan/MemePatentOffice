@@ -16,10 +16,10 @@ const NftCard:React.FC<NftProps> = (nft) => {
     return (
         <div className={`${styles.nftCardContainer} ${flipped ? `${styles.nftCardFlipped}`: null}` } onClick={() => onClickHandler(flipped)}>
             <div className={styles.nftCardFront}>
-            <NftCardFront items={nft.items} />
+                <NftCardFront items={nft.items} />
             </div>
             <div className={styles.nftCardBack}>
-            <NftCardBack items={nft.items} />
+                <NftCardBack items={nft.items} />
             </div>
       </div>
     );

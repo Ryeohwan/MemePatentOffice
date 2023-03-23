@@ -19,10 +19,10 @@ const NftAuctionCard:React.FC<AuctionProps> = nft => {
         if (NFT_TEXT.length > 38) {
             return NFT_TEXT.substring(0, 38) + " ...";
         } else {
-            return NFT_TEXT;
+            return NFT_TEXT;  
         }
     };
-
+    
     return (
         <div className={styles.auctionCardWrapper}>
             <img src={AUCTION_IMG} alt="" className={styles.auctionImg} />
