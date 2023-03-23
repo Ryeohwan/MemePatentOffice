@@ -7,7 +7,7 @@ interface AuctionProps {
 };
 
 const NftAuctionCard:React.FC<AuctionProps> = nft => {
-    const AUCTION_IMG = "http://localhost:3002/" + nft.items.imgUrl;
+    const AUCTION_IMG = "http://localhost:3000/" + nft.items.imgUrl;
     const AUCTION_MEME = nft.items.title;
     const AUCTION_TIME = nft.items.time;
     const HIGHEST_BID = nft.items.highest_bid;
