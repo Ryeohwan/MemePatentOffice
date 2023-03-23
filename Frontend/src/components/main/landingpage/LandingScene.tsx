@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import { Canvas, useFrame } from "react-three-fiber";
+import React, { useRef } from "react";
+import { Canvas} from "react-three-fiber";
 import * as THREE from "three";
 import gsap from "gsap";
 import LandingPageBorder from "components/main/landingpage/LandingPageBorder";
@@ -68,7 +68,6 @@ const LandingScene: React.FC<SceneProps> = ({ width, height }) => {
         camera={camera.current}
       >
         <ambientLight />
-        <LandingPageBorder borderPosition={borderPosition[0]} />
         <LandingPanel
           panelState={panelState}
           imageRotation={imageRotation}
@@ -76,10 +75,6 @@ const LandingScene: React.FC<SceneProps> = ({ width, height }) => {
           randomPositionArray={randomPositionArray}
           imagePanelsPosition={imagePanelsPosition}
         />
-        <LandingPageBorder borderPosition={[5,-3,0]} />
-        <LandingPageBorder borderPosition={borderPosition[3]} />
-        <LandingPageBorder borderPosition={borderPosition[4]} />
-        <LandingPageBorder borderPosition={borderPosition[5]} />
       </Canvas>
     </div>
   );

@@ -18,6 +18,7 @@ const AuctionPage: React.FC = () => {
   const player = useRef<THREE.Object3D>(new THREE.Object3D());
   const chairPoint = useRef<THREE.Mesh>(new THREE.Mesh());
   const playerAnimation = useRef<THREE.AnimationAction | undefined>();
+  const playerPosition = useRef<THREE.Vector3>(new THREE.Vector3());
   const sitting = useRef(false);
   const cameraPoint = useRef<THREE.Vector3>(new THREE.Vector3());
   const cameraRotation = useRef<number[]>([]);
@@ -55,7 +56,7 @@ const AuctionPage: React.FC = () => {
     setBiddingSubmit(true)
     setTimeout(()=>{
       setBiddingSubmit(false)
-    },1100)
+    },2500)
   }
   
 
@@ -75,10 +76,10 @@ const AuctionPage: React.FC = () => {
     ];
     playerCamera.current.position.set(
       player.current.position.x,
-      player.current.position.y + 2.5,
+      player.current.position.y+1,
       player.current.position.z + 6.5
     );
-    playerCamera.current.lookAt(0, 10, -30);
+    playerCamera.current.lookAt(0, 3, -30);
     camera.current = playerCamera.current;
     player.current.lookAt(0, 1, -30);
     player.current.rotation.y = 0;
@@ -90,17 +91,12 @@ const AuctionPage: React.FC = () => {
       },
       {
         x: chairPoint.current.position.x - 0.3,
+        y: chairPoint.current.position.y + 0.4,
         z: chairPoint.current.position.z + 0.8,
         duration: 1,
       }
     );
-    // gsap.to(camera.current.position, {
-    //   x: player.current.position.x + 2,
-    //   y: 9,
-    //   z: -20,
-    //   duration: 1,
-    // });
-    // camera.current.lookAt(0, 5, -30);
+
     if (playerAnimation.current) {
       playerAnimation.current.play();
     }
@@ -121,6 +117,7 @@ const AuctionPage: React.FC = () => {
       },
       {
         x: chairPoint.current.position.x,
+        y: playerPosition.current.y,
         z: chairPoint.current.position.z - 0.8,
         duration: 1,
       }
@@ -143,8 +140,6 @@ const AuctionPage: React.FC = () => {
   return (
     <section className={styles.auctionWrapper}>
       <Scene
-        width={width}
-        height={height}
         canSit={canSit}
         cantSit={cantSit}
         player={player}
@@ -152,8 +147,8 @@ const AuctionPage: React.FC = () => {
         playerAnimation={playerAnimation}
         sitting={sitting}
         camera={camera}
-        playerCamera={playerCamera}
         biddingSubmit={biddingSubmit}
+        playerPosition={playerPosition}
       />
       <div className={styles.buttonWrapper}>
         <AuctionSlideMenu />

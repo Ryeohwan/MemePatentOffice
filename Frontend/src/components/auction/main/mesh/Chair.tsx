@@ -37,7 +37,6 @@ const Chair: React.FC<ChairProps> = ({
       chair.receiveShadow = true;
       chair.rotation.y = Math.PI;
       chairs.current.push(chair);
-      tableAndChairs.current.push(chair);
 
       const pointMesh = new THREE.Mesh(
         new THREE.PlaneGeometry(1, 1),
@@ -66,7 +65,6 @@ const Chair: React.FC<ChairProps> = ({
       chair.receiveShadow = true;
       chair.rotation.y = Math.PI;
       chairs.current.push(chair);
-      tableAndChairs.current.push(chair);
 
       const pointMesh = new THREE.Mesh(
         new THREE.PlaneGeometry(1, 1),
