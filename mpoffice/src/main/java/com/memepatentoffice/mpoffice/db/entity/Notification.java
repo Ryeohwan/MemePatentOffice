@@ -29,8 +29,8 @@ public class Notification {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @Column(name = "nft_seq")
-    private Long nftSeq;
+    @Column(name = "nft_id")
+    private Long nftId;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;

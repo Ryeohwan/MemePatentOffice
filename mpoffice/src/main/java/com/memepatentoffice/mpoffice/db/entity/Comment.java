@@ -23,8 +23,8 @@ public class Comment {
     @Column(name = "meme_id", nullable = false)
     private Long memeId;
 
-    @Column(name = "parent_comment_seq")
-    private Long parentCommentSeq;
+    @Column(name = "parent_comment_id")
+    private Long parentCommentId;
 
     @Column(name = "content")
     private String content;
@@ -51,8 +51,8 @@ public class Comment {
         this.memeId = memeId;
     }
 
-    public void setParentCommentSeq(Long parentCommentSeq) {
-        this.parentCommentSeq = parentCommentSeq;
+    public void setParentCommentId(Long parentCommentId) {
+        this.parentCommentId = parentCommentId;
     }
 
     public void setContent(String content) {
@@ -72,11 +72,11 @@ public class Comment {
     }
 
     @Builder
-    public Comment(Long id, Long userId, Long memeId, Long parentCommentSeq, String content, String isValid, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Comment(Long id, Long userId, Long memeId, Long parentCommentId, String content, String isValid, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.userId = userId;
         this.memeId = memeId;
-        this.parentCommentSeq = parentCommentSeq;
+        this.parentCommentId = parentCommentId;
         this.content = content;
         this.isValid = isValid;
         this.createdAt = createdAt;
