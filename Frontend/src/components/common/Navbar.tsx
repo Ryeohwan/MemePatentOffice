@@ -9,7 +9,7 @@ import styles from "./Navbar.module.css";
 const Navbar: React.FC = () => {
   return (
     <nav className={styles.navbar}>
-        <NavLink to="/home" className={`${styles.navLink} ${styles.logoContainer}`}>
+        <NavLink to="/main" className={`${styles.navLink} ${styles.logoContainer}`}>
             <img src={logo} alt="logo" className={styles.logoImg} />
             <p className={styles.logoTxt}>MEME</p>
         </NavLink>
