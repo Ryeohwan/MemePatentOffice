@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-type memeType = {
+export type memeType = {
   id: number;
   title: string;
   imgUrl: string;
