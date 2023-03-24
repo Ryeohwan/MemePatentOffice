@@ -19,14 +19,8 @@ const MemeListTabComp: React.FC = () => {
   
   const tabItems = [
     { name: "최신순", path: "/meme-list/type=new" },
-    { name: "인기순", path: "/meme-list/type=popular?range=today" },
+    { name: "인기순", path: "/meme-list/type=popular" },
   ];
-
-  // location 변할때마다 get 해오기
-  // useEffect(() => {
-  //   if (location.pathname === "/meme-list/type=new") {dispatch(memeListActions.changeType({type: ''}))}
-  //   else {dispatch(memeListActions.changeType({type: 'popular'}))}
-  // }, [location])
 
   return (
     <div className={styles.tabContainer}>

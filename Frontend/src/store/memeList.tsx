@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-type memeType = {
+export type memeType = {
   id: number;
   title: string;
   imgUrl: string;
@@ -11,13 +11,19 @@ type memeType = {
 interface initialStateInterface {
   input: string;
   period: string;
+  loadingMemeNewList: boolean;
   memeNewList: memeType[];
+  loadingMemePopularList: boolean;
   memePopularList: memeType[];
 }
 
 const initialState: initialStateInterface = {
   input: "",
   period: "",
+  loadingMemeNewList: false,
+  // memeNewList: [],
+  loadingMemePopularList: false,
+  // memePopularList: [],
   
   // dummy data
   memeNewList: [
@@ -126,6 +132,7 @@ const initialState: initialStateInterface = {
   ],
 };
 
+// 무한스크롤 하면서 수정해야할듯
 const memeListSlice = createSlice({
   name: "memeList",
   initialState: initialState,
@@ -136,8 +143,14 @@ const memeListSlice = createSlice({
     changePeriod: (state, actions) => {
       state.period = actions.payload;
     },
+    isMemeNewListLoading(state, actions) {
+      state.loadingMemeNewList = actions.payload;
+    },
     getMemeNewList: (state, actions) => {
       state.memeNewList = actions.payload
+    },
+    isMemeNewPopularLoading(state, actions) {
+      state.loadingMemePopularList = actions.payload;
     },
     getMemePopularList: (state, actions) => {
       state.memePopularList = actions.payload

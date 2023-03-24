@@ -21,6 +21,7 @@ interface SceneProps {
   camera: React.MutableRefObject<THREE.OrthographicCamera|THREE.PerspectiveCamera>;
   biddingSubmit: boolean
   playerPosition: React.MutableRefObject<THREE.Vector3>;
+  moving: React.MutableRefObject<boolean>;
 
 }
 
@@ -33,7 +34,8 @@ const Scene: React.FC<SceneProps> = ({
   sitting,
   camera,
   biddingSubmit,
-  playerPosition
+  playerPosition,
+  moving
 }) => {
   const canvas = useRef<any>();
   const [meshes, setMeshes] = useState<THREE.Mesh[]>([]);
@@ -44,10 +46,9 @@ const Scene: React.FC<SceneProps> = ({
   const mouse = useRef<THREE.Vector2>(new THREE.Vector2());
   const clickPosition = useRef<THREE.Vector3>(new THREE.Vector3());
   const chairPoints = useRef<Array<THREE.Mesh>>([]);
-  const moving = useRef(false);
 
   // 카메라
-  const cameraPosition = new THREE.Vector3(13, 10, 25);
+  const cameraPosition = new THREE.Vector3(35, 20, 80);
   
 
   useEffect(() => {
@@ -62,8 +63,10 @@ const Scene: React.FC<SceneProps> = ({
       cameraPosition.y+10,
       cameraPosition.z+29
     );
-    camera.current.zoom = 30;
+    camera.current.zoom = 35;
+    camera.current.lookAt(13,10,29)
     camera.current.updateProjectionMatrix();
+
   };
 
   const pushMesh = (mesh: THREE.Mesh) => {

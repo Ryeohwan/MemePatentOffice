@@ -43,11 +43,11 @@ const NavbarHamburger: React.FC = () => {
         <div className={styles.dropMenu}>
 
           <NavLink to="/meme-list/type=new" className={styles.navLink}>
-            밈 도감
+            밈 사전
           </NavLink>
 
           <NavLink to="/auction-list/type=new" className={styles.navLink}>
-            경매목록
+            경매 둘러보기
           </NavLink>
 
           <NavLink to="/profile/:nickname" className={styles.navLink}>

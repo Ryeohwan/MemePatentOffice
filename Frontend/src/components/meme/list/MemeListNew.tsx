@@ -1,23 +1,15 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/configStore";
+import { memeType } from "store/memeList";
 import { memeListActions } from "store/memeList";
 
 import NftCard from "components/common/NftCard";
-
 import styles from "./MemeListNew.module.css";
-
-type memeList = {
-  id: number;
-  title: string;
-  imgUrl: string;
-  description: string;
-  example: string;
-};
 
 const MemeListNew: React.FC = () => {
   const dispatch = useDispatch();
-  const memeList = useSelector<RootState, memeList[]>(
+  const memeList = useSelector<RootState, memeType[]>(
     (state) => state.memeList.memeNewList
   );
 
