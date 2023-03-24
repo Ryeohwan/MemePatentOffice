@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-type auctionType = {
+export type auctionType = {
   meme_id: number;
   auction_id: number;
   title: string;
@@ -179,7 +179,7 @@ const initialState: initialStateInterface = {
 };
 
 const auctionListSlice = createSlice({
-  name: "memeList",
+  name: "auctionList",
   initialState: initialState,
   reducers: {
     getAuctionNewList: (state, actions) => {

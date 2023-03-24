@@ -45,6 +45,9 @@ const TabComp: React.FC<Props> = ({ items, children }) => {
           ? "left"
           : "right";
     };
+    console.log(pathArr)
+    console.log(location.pathname,  pathArr.indexOf(location.pathname))
+    console.log(item.path, pathArr.indexOf(item.path), item.path.substring(0, item.path.indexOf('?')))
     setSlideDirection(direction);
     console.log(direction);
     setHistoryArr((prev) => [...prev, item.path]);

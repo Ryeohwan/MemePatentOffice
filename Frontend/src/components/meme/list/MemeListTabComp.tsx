@@ -19,7 +19,7 @@ const MemeListTabComp: React.FC = () => {
   
   const tabItems = [
     { name: "최신순", path: "/meme-list/type=new" },
-    { name: "인기순", path: "/meme-list/type=popular?range=today" },
+    { name: "인기순", path: "/meme-list/type=popular" },
   ];
 
   return (

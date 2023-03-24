@@ -4,7 +4,7 @@ import NftCardBack from "components/common/NftCardBack";
 import styles from "./NftCard.module.css";
 
 interface NftProps {
-    items: {id: number, title: string, imgUrl: string, description: string};
+    items: {id: number, title: string, imgUrl: string, description: string, example: string};
 };
 
 const NftCard:React.FC<NftProps> = (nft) => {

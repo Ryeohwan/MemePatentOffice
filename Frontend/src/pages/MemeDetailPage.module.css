@@ -1,0 +1,112 @@
+.memeDetailPage {
+    margin: 14px;
+}
+
+.auctionBtnWrapper {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0px 10px 0px;
+}
+
+.alarmBtn, .auctionInfoBtn{
+    height: 35px;
+    border-radius: 5px;
+    color: var(--white-color);
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+
+.alarmBtn {
+    width: 130px;
+    background-color: var(--button-color);
+}
+
+.auctionInfoBtn {
+    width: 180px;
+    background-color: #d0d0d0;
+}
+
+.memeTitle {
+    font-size: 18px;
+    line-height: 22px;
+    margin-top: 18px;
+}
+
+.memeTimeView {
+    font-size: 10px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-right: 35%;
+}
+
+.memeImg {
+    width: 100%;
+    height: 30%;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+.memeGuide {
+    font-size: 14px;
+    margin-top: 12px;
+    margin-bottom: 5px;
+}
+
+.memeDescription {
+    font-size: 12px;
+    line-height: 19px;
+    margin-bottom: 14px;
+}
+
+.memeOwner {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 10px;
+    
+}
+
+.ownerName {
+    width: 235px;
+}
+
+.heartGroup {
+    display: flex;
+    justify-content: space-between;
+    margin: 30px 30% 30px 30%;
+}
+.heartWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.heartImoji {
+    font-size: 40px;
+    border: 0.5px solid var(--point-color);
+    border-radius: 100%;
+    padding: 6px;
+    color: var(--point-color);
+}
+
+.heartNumber {
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+.uploadAuctionBtn {
+    width: 300px;
+    height: 30px;
+    margin: auto;
+    background-color: var(--button-color);
+    color: var(--white-color);
+    border-radius: 6px;
+    font-size: 13px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

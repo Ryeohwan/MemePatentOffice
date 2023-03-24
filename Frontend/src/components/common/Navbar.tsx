@@ -12,13 +12,10 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className={styles.navbar}>
-      <NavLink
-        to="/home"
-        className={`${styles.navLink} ${styles.logoContainer}`}
-      >
-        <img src={logo} alt="logo" className={styles.logoImg} />
-        <p className={styles.logoTxt}>MEME</p>
-      </NavLink>
+        <NavLink to="/main" className={`${styles.navLink} ${styles.logoContainer}`}>
+            <img src={logo} alt="logo" className={styles.logoImg} />
+            <p className={styles.logoTxt}>MEME</p>
+        </NavLink>
 
       <div className={styles.rightContainer}>
         {!location.pathname.startsWith("/meme-list/") && (

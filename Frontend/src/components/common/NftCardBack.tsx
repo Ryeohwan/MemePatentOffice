@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react';
 import styles from "./NftCardBack.module.css";
 
 interface NftProps {
-    items: {id: number, title: string, imgUrl: string, description: string};
+    items: {id: number, title: string, imgUrl: string, description: string, example: string};
 };
 
 const NftCardBack:React.FC<NftProps> = nft => {
@@ -17,8 +17,8 @@ const NftCardBack:React.FC<NftProps> = nft => {
 
     // NFT 제목 글자수 슬라이싱
     const sliceTitleText = (NFT_TEXT:string) => {
-        if (NFT_TEXT.length > 38) {
-            return NFT_TEXT.substring(0, 38) + " ...";
+        if (NFT_TEXT.length > 56) {
+            return NFT_TEXT.substring(0, 56) + " ...";
         } else {
             return NFT_TEXT;
         }
@@ -26,8 +26,8 @@ const NftCardBack:React.FC<NftProps> = nft => {
 
     // NFT 설명 글자수 슬라이싱
     const sliceDetailText = (NFT_DESCRIPTION:string) => {
-        if (NFT_DESCRIPTION.length > 225) {
-            return NFT_DESCRIPTION.substring(0, 225) + " ...";
+        if (NFT_DESCRIPTION.length > 160) {
+            return NFT_DESCRIPTION.substring(0, 160) + " ...";
         } else {
             return NFT_DESCRIPTION;
         }
@@ -39,13 +39,18 @@ const NftCardBack:React.FC<NftProps> = nft => {
                 {sliceTitleText(NFT_TEXT)}
             </div>
             <hr className={styles.hrTag}/>
+            <div className={styles.nftDescriptionTxt}>이런 뜻이에요 !</div>
             <div className={styles.nftCardBackDetail}>
                 {sliceDetailText(NFT_DESCRIPTION)}
             </div>
             
             {/* meme-id 받아서 넣기 */}
-            <NavLink to={NFT_DETAIL_URL}>
-                <Icon icon="uil:file-search-alt" className={styles.detailBtn}/>
+            <NavLink to={NFT_DETAIL_URL} className={styles.detailNavLink}>
+                {/* <Icon icon="uil:file-search-alt" className={styles.detailBtn}/> */}
+                <div className={styles.detailDiv}>
+                    더보기
+                    <Icon icon="material-symbols:manage-search-rounded" className={styles.detailIcon}/>
+                </div>
             </NavLink>
         </div>
     );

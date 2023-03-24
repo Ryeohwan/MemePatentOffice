@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/configStore";
 import { memeListActions } from "store/memeList";
@@ -13,9 +13,11 @@ type memeList = {
   title: string;
   imgUrl: string;
   description: string;
+  example: string;
 };
 
 const MemeListPopular: React.FC = () => {
+  const location = useLocation()
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -28,6 +30,7 @@ const MemeListPopular: React.FC = () => {
   
   // click하면 url 바꾸기
   const changePeriodHandler = (period: string) => {
+    dispatch(memeListActions.changePeriod(period))
     navigate(`?range=${period}`);
   }
   
@@ -35,11 +38,12 @@ const MemeListPopular: React.FC = () => {
   // 새로고침시에 query 없어짐 -> 일단 today
   // home에서 넘어올때 다른애들 잘 되는지 확인해보기
   useEffect(() => {
-    console.log(searchParams.get('range'));
-    if (searchParams.get('range')) dispatch(memeListActions.changePeriod(searchParams.get('range')))
+    const params = new URLSearchParams(location.search)
+    const range = params.get('range')
+    console.log(range)
+    if (range) dispatch(memeListActions.changePeriod(range))
     else dispatch(memeListActions.changePeriod('today'))
-  }, [searchParams])
-
+  }, [])
 
   return (
     <div className={styles.memeListPopularContainer}>
