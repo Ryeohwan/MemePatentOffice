@@ -10,10 +10,18 @@ import AuctionSlideMenu from "components/auction/main/list/AuctionSlideMenu";
 import { Button } from "primereact/button";
 import ChatMain from "components/auction/main/chat/ChatMain";
 import Bidding from "components/auction/main/list/Bidding";
+import FinishModal from "components/auction/main/FinishModal";
+
+interface AuctionPageProps {
+  finishTime: Date | string;
+  sellerID: string;
+}
 
 const AuctionPage: React.FC = () => {
   const width = window.innerWidth;
   const height = window.innerHeight;
+  const moving = useRef<boolean>(false)
+  const [isFull, setIsFull] = useState<Boolean>(false);
   const [visible, setVisible] = useState<Boolean>(false);
   const player = useRef<THREE.Object3D>(new THREE.Object3D());
   const chairPoint = useRef<THREE.Mesh>(new THREE.Mesh());
@@ -45,6 +53,7 @@ const AuctionPage: React.FC = () => {
   );
   const [biddingVisible, setBiddingVisible] = useState<boolean>(false);
   const [biddingSubmit, setBiddingSubmit] = useState<boolean>(false);
+
   const biddingHandler = () => {
     setBiddingVisible(false);
   };
@@ -52,13 +61,12 @@ const AuctionPage: React.FC = () => {
     setBiddingVisible(true);
   };
   const biddingSubmitHandler = () => {
-    setBiddingVisible(false)
-    setBiddingSubmit(true)
-    setTimeout(()=>{
-      setBiddingSubmit(false)
-    },2500)
-  }
-  
+    setBiddingVisible(false);
+    setBiddingSubmit(true);
+    setTimeout(() => {
+      setBiddingSubmit(false);
+    }, 2500);
+  };
 
   const canSit = useCallback(() => {
     setVisible(true);
@@ -68,19 +76,23 @@ const AuctionPage: React.FC = () => {
   }, []);
 
   const sitDownHandler = () => {
+    moving.current = false
     cameraPoint.current = camera.current.position.clone();
     cameraRotation.current = [
       camera.current.rotation.x,
       camera.current.rotation.y,
       camera.current.rotation.z,
     ];
+    console.log(chairPoint.current.position);
     playerCamera.current.position.set(
-      player.current.position.x,
-      player.current.position.y+1,
-      player.current.position.z + 6.5
+      chairPoint.current.position.x > 0
+        ? chairPoint.current.position.x + 0.5
+        : chairPoint.current.position.x - 1,
+      chairPoint.current.position.y + 1,
+      chairPoint.current.position.z + 3
     );
     playerCamera.current.lookAt(0, 3, -30);
-    camera.current = playerCamera.current;
+    camera.current = playerCamera.current.clone();
     player.current.lookAt(0, 1, -30);
     player.current.rotation.y = 0;
     gsap.fromTo(
@@ -105,8 +117,9 @@ const AuctionPage: React.FC = () => {
   };
 
   const standUpHandler = () => {
+    setIsFull(false);
     camera.current = bigCamera;
-    camera.current.zoom = 30;
+    camera.current.zoom = 35;
     player.current.lookAt(0, 1, -30);
     player.current.rotation.y = 0;
     gsap.fromTo(
@@ -131,12 +144,29 @@ const AuctionPage: React.FC = () => {
     camera.current.rotation.x = cameraRotation.current[0];
     camera.current.rotation.y = cameraRotation.current[1];
     camera.current.rotation.z = cameraRotation.current[2];
-
     if (playerAnimation.current) {
       playerAnimation.current.play();
     }
     sitting.current = false;
   };
+
+  const fullMoniter = () => {
+    gsap.to(camera.current.position, {
+      z: 30,
+      y: 5,
+      duration: 2,
+    });
+    setIsFull(true);
+  };
+  const notFullMoniter = () => {
+    gsap.to(camera.current.position, {
+      z: playerCamera.current.position.z,
+      y: playerCamera.current.position.y,
+      duration: 2,
+    });
+    setIsFull(false);
+  };
+  console.log(sitting.current);
   return (
     <section className={styles.auctionWrapper}>
       <Scene
@@ -149,6 +179,7 @@ const AuctionPage: React.FC = () => {
         camera={camera}
         biddingSubmit={biddingSubmit}
         playerPosition={playerPosition}
+        moving={moving}
       />
       <div className={styles.buttonWrapper}>
         <AuctionSlideMenu />
@@ -161,7 +192,7 @@ const AuctionPage: React.FC = () => {
         )}
         {sitting.current && (
           <>
-            <Button icon="pi pi-dollar" onClick={biddingOpen}/>
+            <Button icon="pi pi-dollar" onClick={biddingOpen} />
             <Button
               label="일어나"
               className={styles.sitBtn}
@@ -176,6 +207,18 @@ const AuctionPage: React.FC = () => {
         />
         <ChatMain />
       </div>
+      <div className={styles.fullMoniterBtn}>
+        {sitting.current ? (
+          isFull ? (
+            <Button onClick={() => notFullMoniter()}>확대</Button>
+          ) : (
+            <Button onClick={() => fullMoniter()}>전체 화면</Button>
+          )
+        ) : (
+          <></>
+        )}
+      </div>
+      <FinishModal />
     </section>
   );
 };

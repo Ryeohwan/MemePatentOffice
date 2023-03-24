@@ -7,3 +7,7 @@
 .pSlidemenu{
     width:8.5em !important;
 }
+
+.slideBtn{
+    background-color: var(--button-color);
+}
