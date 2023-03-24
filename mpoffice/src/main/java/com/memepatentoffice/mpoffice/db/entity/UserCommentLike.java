@@ -23,7 +23,7 @@ public class UserCommentLike {
     private User user;
 
     @Lob
-    @Column(name = "`like`")
+    @Column(name = "like")
     private String like;
 
     @Builder

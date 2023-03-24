@@ -12,17 +12,17 @@ import java.time.LocalDateTime;
 @Entity
 public class Transaction {
     @Id
-    @Column(name = "transaction_seq", nullable = false)
+    @Column(name = "transaction_id", nullable = false)
     private Long id;
 
-    @Column(name = "meme_seq", nullable = false)
-    private Long memeSeq;
+    @Column(name = "meme_id", nullable = false)
+    private Long memeId;
 
-    @Column(name = "buyer_seq", nullable = false)
-    private Long buyerSeq;
+    @Column(name = "buyer_id", nullable = false)
+    private Long buyerId;
 
-    @Column(name = "seller_seq", nullable = false)
-    private Long sellerSeq;
+    @Column(name = "seller_id", nullable = false)
+    private Long sellerId;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

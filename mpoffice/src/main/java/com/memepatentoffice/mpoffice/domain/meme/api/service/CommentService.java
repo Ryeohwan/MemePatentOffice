@@ -35,7 +35,7 @@ public class CommentService {
                 .content(commentRequest.getContent())
                 .userId(userRepository.findUserById(commentRequest.getUserId()).getId())
                 .memeId(memeRepository.findMemeById(commentRequest.getMemeId()).getId())
-                .parentCommentSeq(commentRequest.getParentCommentSeq())
+                .parentCommentId(commentRequest.getParentCommentSeq())
                 .isValid(commentRequest.getIsValid())
                 .updatedAt(LocalDateTime.now())
                 .build();

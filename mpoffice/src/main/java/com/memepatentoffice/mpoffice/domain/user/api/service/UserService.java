@@ -118,7 +118,7 @@ public class UserService {
                     .content(a.getContent())
                     .memeId(a.getMemeId())
                     .isValid(a.getIsValid())
-                    .parentCommentSeq(a.getParentCommentSeq())
+                    .parentCommentSeq(a.getParentCommentId())
                     .id(a.getId())
                     .createdAt(a.getCreatedAt())
                     .build();

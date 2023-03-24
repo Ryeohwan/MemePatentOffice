@@ -7,6 +7,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Getter
+@Setter
 @Entity
 public class UserMemeLike {
     @EmbeddedId
@@ -22,11 +23,16 @@ public class UserMemeLike {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Lob
+    @Column(name = "like")
+    private like like;
+
     @Builder
-    public UserMemeLike(UserMemeLikeId id, Meme meme, User user) {
+    public UserMemeLike(UserMemeLikeId id, Meme meme, User user, like like) {
         this.id = id;
         this.meme = meme;
         this.user = user;
+        this.like = like;
     }
 
     public UserMemeLike() {
