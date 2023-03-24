@@ -13,13 +13,12 @@ const NftCardBack:React.FC<NftProps> = nft => {
     // NFT 제목과 설명, 상세 페이지 url
     const NFT_TEXT = nft.items.title;
     const NFT_DESCRIPTION = nft.items.description;
-    const NFT_EXAMPLE = nft.items.example;
     const NFT_DETAIL_URL = `/meme-detail/:${nft.items.id}`;
 
     // NFT 제목 글자수 슬라이싱
     const sliceTitleText = (NFT_TEXT:string) => {
-        if (NFT_TEXT.length > 38) {
-            return NFT_TEXT.substring(0, 38) + " ...";
+        if (NFT_TEXT.length > 60) {
+            return NFT_TEXT.substring(0, 60) + " ...";
         } else {
             return NFT_TEXT;
         }
@@ -42,9 +41,6 @@ const NftCardBack:React.FC<NftProps> = nft => {
             <hr className={styles.hrTag}/>
             <div className={styles.nftCardBackDetail}>
                 {sliceDetailText(NFT_DESCRIPTION)}
-            </div>
-            <div>
-                {sliceDetailText(NFT_EXAMPLE)}
             </div>
             
             {/* meme-id 받아서 넣기 */}
