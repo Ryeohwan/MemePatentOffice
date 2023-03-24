@@ -16,7 +16,7 @@ const AuctionListTabComp: React.FC = () => {
   const tabItems = [
     { name: "최신순", path: "/auction-list/type=new" },
     { name: "인기순", path: "/auction-list/type=popular" },
-    { name: "마감임박순", path: "/auction-list/type=deadline" },
+    // { name: "마감임박순", path: "/auction-list/type=deadline" },
   ];
 
   return (
@@ -24,7 +24,7 @@ const AuctionListTabComp: React.FC = () => {
       <TabComp items={tabItems}>
         <Route path="/type=new" element={<AuctionListNew />} />
         <Route path="/type=popular" element={<AuctionListPopular />} />
-        <Route path="/type=deadline" element={<AuctionListDeadline />} />
+        {/* <Route path="/type=deadline" element={<AuctionListDeadline />} /> */}
       </TabComp>
     </div>
   );
