@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 
 @Getter
 public class MemeCreateRequest {
-    private Long id;
     private String content;
     private MultipartFile file;
     private LocalDateTime createdAt;
@@ -17,10 +16,6 @@ public class MemeCreateRequest {
     private String title;
 
     private String imageUrl;
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public void setContent(String content) {
         this.content = content;
@@ -52,7 +47,6 @@ public class MemeCreateRequest {
 
     public Meme toEntity(){
         return Meme.builder()
-                .id(id)
                 .createrId(createrId)
                 .ownerId(ownerId)
                 .title(title)

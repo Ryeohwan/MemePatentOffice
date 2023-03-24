@@ -10,7 +10,6 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Getter
-@Setter
 @Embeddable
 public class UserMemeLikeId implements Serializable {
     private static final long serialVersionUID = -3722267237384398894L;

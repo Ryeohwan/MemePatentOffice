@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 public class Meme {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "meme_id", nullable = false)
     private Long id;
 
@@ -21,8 +21,6 @@ public class Meme {
     @Column(name = "owner_id", nullable = false)
     private Long ownerId;
 
-    @Column(name = "id")
-    private Long id1;
 
     @Column(name = "title")
     private String title;
@@ -40,11 +38,10 @@ public class Meme {
     private String situation;
 
     @Builder
-    public Meme(Long id, Long createrId, Long ownerId, Long id1, String title, String content, LocalDateTime createdAt, String imageurl, String situation) {
+    public Meme(Long id, Long createrId, Long ownerId, String title, String content, LocalDateTime createdAt, String imageurl, String situation) {
         this.id = id;
         this.createrId = createrId;
         this.ownerId = ownerId;
-        this.id1 = id1;
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;
