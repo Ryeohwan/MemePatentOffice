@@ -21,9 +21,9 @@ const initialState: initialStateInterface = {
   input: "",
   period: "",
   loadingMemeNewList: false,
-  memeNewList: [],
+  // memeNewList: [],
   loadingMemePopularList: false,
-  memePopularList: [],
+  // memePopularList: [],
   
   // dummy data
   memeNewList: [
