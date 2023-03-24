@@ -58,13 +58,13 @@ public class MemeService {
 
     public LikeResponse memeLike(LikeRequest like) throws NotFoundException {
         UserMemeLike ulike = UserMemeLike.builder()
-                .memeSeq(memeRepository.findMemeById(like.getMeme().getId()))
-                .userSeq(userRepository.findUserById(like.getUser().getId()))
+                .meme(memeRepository.findMemeById(like.getMeme().getId()))
+                .user(userRepository.findUserById(like.getUser().getId()))
                 .build();
         UserMemeLike temp = likeRepository.save(ulike);
         LikeResponse result = new LikeResponse();
-        result.setMeme(temp.getMemeSeq());
-        result.setUser(temp.getUserSeq());
+        result.setMeme(temp.getMeme());
+        result.setUser(temp.getUser());
         result.setId(temp.getId());
         return result;
     }

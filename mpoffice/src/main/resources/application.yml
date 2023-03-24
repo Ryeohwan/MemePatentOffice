@@ -1,7 +1,7 @@
 spring:
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://j8a305.p.ssafy.io:3371/mpoffice-project?serverTimezone=Asia/Seoul
+        url: jdbc:mysql://j8a305.p.ssafy.io:3071/mpoffice-project?serverTimezone=Asia/Seoul
         username: a305
         password: dkanakf156346!!
     jpa:

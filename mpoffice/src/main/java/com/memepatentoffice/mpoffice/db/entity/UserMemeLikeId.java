@@ -10,27 +10,28 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Getter
+@Setter
 @Embeddable
 public class UserMemeLikeId implements Serializable {
-    private static final long serialVersionUID = -3888702994186248463L;
-    @Column(name = "meme_seq", nullable = false)
-    private Long memeSeq;
+    private static final long serialVersionUID = -3722267237384398894L;
+    @Column(name = "meme_id", nullable = false)
+    private Integer memeId;
 
-    @Column(name = "user_seq", nullable = false)
-    private Long userSeq;
+    @Column(name = "user_id", nullable = false)
+    private Integer userId;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         UserMemeLikeId entity = (UserMemeLikeId) o;
-        return Objects.equals(this.memeSeq, entity.memeSeq) &&
-                Objects.equals(this.userSeq, entity.userSeq);
+        return Objects.equals(this.memeId, entity.memeId) &&
+                Objects.equals(this.userId, entity.userId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(memeSeq, userSeq);
+        return Objects.hash(memeId, userId);
     }
 
 }

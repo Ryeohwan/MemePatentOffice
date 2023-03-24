@@ -36,8 +36,11 @@ public class Meme {
     @Column(name = "imageurl")
     private String imageurl;
 
+    @Column(name = "situation")
+    private String situation;
+
     @Builder
-    public Meme(Long id, Long createrId, Long ownerId, Long id1, String title, String content, LocalDateTime createdAt, String imageurl) {
+    public Meme(Long id, Long createrId, Long ownerId, Long id1, String title, String content, LocalDateTime createdAt, String imageurl, String situation) {
         this.id = id;
         this.createrId = createrId;
         this.ownerId = ownerId;
@@ -46,6 +49,7 @@ public class Meme {
         this.content = content;
         this.createdAt = createdAt;
         this.imageurl = imageurl;
+        this.situation = situation;
     }
 
     public Meme() {

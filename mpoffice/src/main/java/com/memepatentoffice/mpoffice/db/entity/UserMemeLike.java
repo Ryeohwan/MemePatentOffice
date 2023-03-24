@@ -12,21 +12,21 @@ public class UserMemeLike {
     @EmbeddedId
     private UserMemeLikeId id;
 
-    @MapsId("memeSeq")
+    @MapsId("memeId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "meme_seq", nullable = false)
-    private Meme memeSeq;
+    @JoinColumn(name = "meme_id", nullable = false)
+    private Meme meme;
 
-    @MapsId("userSeq")
+    @MapsId("userId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_seq", nullable = false)
-    private User userSeq;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Builder
-    public UserMemeLike(UserMemeLikeId id, Meme memeSeq, User userSeq) {
+    public UserMemeLike(UserMemeLikeId id, Meme meme, User user) {
         this.id = id;
-        this.memeSeq = memeSeq;
-        this.userSeq = userSeq;
+        this.meme = meme;
+        this.user = user;
     }
 
     public UserMemeLike() {
