@@ -16,8 +16,8 @@ public class LikeRequest {
     public UserMemeLike toEntity(){
         return UserMemeLike.builder()
                 .id(id)
-                .userSeq(user)
-                .memeSeq(meme)
+                .user(user)
+                .meme(meme)
                 .build();
     }
 

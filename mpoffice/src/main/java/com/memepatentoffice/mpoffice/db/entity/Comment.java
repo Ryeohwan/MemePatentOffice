@@ -17,7 +17,7 @@ public class Comment {
     @Column(name = "comment_id", nullable = false)
     private Long id;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "userId", nullable = false)
     private Long userId;
 
     @Column(name = "meme_id", nullable = false)
@@ -43,7 +43,7 @@ public class Comment {
         this.id = id;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(Long UserId) {
         this.userId = userId;
     }
 
