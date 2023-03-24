@@ -2,7 +2,7 @@
   width: 100%;
   height: 100%;
   padding: 0 16px;
-  margin-bottom: 60%;
+  margin-bottom: 19%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -27,21 +27,38 @@
 }
 
 .pageHeader {
-  font-size: 0.9rem;
+  height: 10%;
+  font-size: 1rem;
   font-weight: bold;
-  margin-bottom: 16px;
+  /* margin-bottom: 15px; */
 }
+
+.timeContainer {
+  color: var(--disabled-gray-color);
+  font-size: 0.8rem;
+  margin: 5px 0 12px 0;
+}
+
+
 
 .rankingContainer {
   width: 100%;
+  height: 80%;
   display: flex;
 }
 
 .itemContainer {
-  width: 50%;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
+.left {
+  width: 45%;
+  margin-right: 10%;
+}
+
+.right {
+  width: 45%
+}

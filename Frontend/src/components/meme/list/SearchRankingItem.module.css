@@ -1,3 +1,23 @@
 .itemContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
   font-size: 0.9rem;
+  align-items: center;
 }
+
+.rankItem {
+  width: 20%;
+}
+
+.rankPoint {
+  font-weight: bold;
+  color: var(--point-color);
+}
+
+
+.textItem {
+  width: 80%;
+  font-size: 0.8rem;
+}
+

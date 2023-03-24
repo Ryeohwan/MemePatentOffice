@@ -4,23 +4,18 @@ interface Props {
   item: {
     rank: number;
     text: string;
-    cnt: number;
   }
 }
 
 const SearchRankingItem: React.FC<Props> = ({item}) => {
   return (
     <div className={styles.itemContainer}>
-      <span>
+      <span className={`${styles.rankItem} ${item.rank < 4 && styles.rankPoint}`}>
         {item.rank}
       </span>
       
-      <span>
+      <span className={styles.textItem}>
         {item.text}
-      </span>
-      
-      <span>
-        {item.cnt}
       </span>
     </div>
   );

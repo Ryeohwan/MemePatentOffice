@@ -1,18 +1,21 @@
+// meme list page (/meme-list)
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "store/configStore";
 import { memeListActions } from "store/memeList";
 
-// meme list page (/meme-list)
 import MemeListSearch from "components/meme/list/MemeListSearch";
-import SearchRankingComp from "components/meme/list/SearchRankingComp";
+import NotInputArea from "components/meme/list/NotInputArea";
 import MemeListTabComp from "components/meme/list/MemeListTabComp";
 import styles from "./MemeListPage.module.css";
 
 const MemeListPage: React.FC = () => {
   const dispatch = useDispatch();
   const input = useSelector<RootState, string>((state) => state.memeList.input);
+
+  // redux에서 
+
 
   // unmount시 redux에 input ""로 바꾸기
   useEffect(() => {
@@ -22,24 +25,24 @@ const MemeListPage: React.FC = () => {
   }, []);
 
 
-  useEffect(() => {
-    if (input) return
-  })
-
-
-
-
   return (
     <div className={styles.pageContainer}>
       <p className={styles.pageHeader}>밈 사전</p>
+
+      {/* input값 없는 경우 설명 글 */}
+      {!input && (
+        <div className={styles.notInputTxt}>
+          설명글입니다. 설명글입니다. 설명글입니다. 설명글입니다. 설명글입니다.
+          설명글입니다. 설명글입니다. 설명글입니다.
+        </div>
+      )}
+
       <MemeListSearch />
 
       {/* input값 없는 경우 -> 햄버거/밈사전으로 들어온 경우 */}
       {!input && (
-        <>
-          {/* 실시간 검색어 */}
-          <SearchRankingComp />
-        </>
+        // 등록된 밈 수 + 인기 검색어
+        <NotInputArea />
       )}
 
       {/* input값 있는 경우 -> 네브 검색으로 들어온 경우  */}
@@ -50,7 +53,9 @@ const MemeListPage: React.FC = () => {
         </>
       )}
 
-      {/* input값 있는데 검색 결과 없는 경우 -> page에서 처리할건지 tabcomp에서 처리할건지 고민 */}
+      {/* input값 있는데 검색 결과 없는 경우 -> random 밈 몇개 띄워주기 */}
+    
+    
     </div>
   );
 };

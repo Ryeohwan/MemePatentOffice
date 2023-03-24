@@ -1,14 +1,15 @@
-import styles from "./SearchRankingComp.module.css";
 import SearchRankingItem from "./SearchRankingItem";
 
-const SearchRankingComp: React.FC = () => {
-  // axios 데이터 받아오기
-  // 1. 등록된 밈 수
+import styles from "./NotInputArea.module.css";
 
-  // 2. 인기 검색어 데이터 -> , 넣는걸로 custom
+const NotInputArea: React.FC = () => {
+  // axios 데이터 받아오기
+  // dummy data
+
+  // 1.등록된 밈 수  -> , 넣는걸로 custom
   const cnt = 102223;
 
-  // dummy data
+  // 2. 인기 검색어 데이터
   const items = [
     {
       rank: 1,
@@ -67,34 +68,40 @@ const SearchRankingComp: React.FC = () => {
     },
   ];
 
+
+  const now = new Date();
+
+
   return (
     <div className={styles.compContainer}>
       <p className={styles.pageCnt}>등록된 밈 수 {cnt}건</p>
 
       <div className={styles.rankingCompContainer}>
-        <p className={styles.pageHeader}>인기 검색어</p>
         
+        <p className={styles.pageHeader}>인기 검색어</p>
+        <div className={styles.timeContainer}>
+          {now.getMonth()+1}.{now.getDate()}   {now.getHours()}:{now.getMinutes()}   기준
+        </div>
+
         {/* 나중에 data.items 이런식으로 내리기 */}
         <div className={styles.rankingContainer}>
-          
           {/* 왼쪽 */}
-          <div className={styles.itemContainer}>
+          <div className={`${styles.itemContainer} ${styles.left}`}>
             {items.slice(0, 5).map((item) => (
               <SearchRankingItem item={item} />
             ))}
           </div>
-          
+
           {/* 오른쪽 */}
-          <div className={styles.itemContainer}>
+          <div className={`${styles.itemContainer} ${styles.right}`}>
             {items.slice(6, 11).map((item) => (
               <SearchRankingItem item={item} />
             ))}
           </div>
-        
         </div>
       </div>
     </div>
   );
 };
 
-export default SearchRankingComp;
+export default NotInputArea;
