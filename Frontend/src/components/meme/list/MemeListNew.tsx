@@ -12,6 +12,7 @@ type memeList = {
   title: string;
   imgUrl: string;
   description: string;
+  example: string;
 };
 
 const MemeListNew: React.FC = () => {
