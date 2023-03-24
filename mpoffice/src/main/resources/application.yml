@@ -1,9 +1,13 @@
 spring:
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: ${HOST}
-        username: ${USERNAME}
-        password: ${PASSWORD}
+#        url: ${HOST}
+#        username: ${USERNAME}
+#        password: ${PASSWORD}
+        url: jdbc:mysql://j8a305.p.ssafy.io:3071/mpoffice-project?serverTimezone=Asia/Seoul
+        username: a305
+        password: dkanakf156346!!
+
     jpa:
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         hibernate:
