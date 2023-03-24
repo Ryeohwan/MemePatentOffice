@@ -5,7 +5,7 @@ import { Icon } from '@iconify/react';
 import styles from "./NftCardBack.module.css";
 
 interface NftProps {
-    items: {id: number, title: string, imgUrl: string, description: string};
+    items: {id: number, title: string, imgUrl: string, description: string, example: string};
 };
 
 const NftCardBack:React.FC<NftProps> = nft => {
@@ -13,6 +13,7 @@ const NftCardBack:React.FC<NftProps> = nft => {
     // NFT 제목과 설명, 상세 페이지 url
     const NFT_TEXT = nft.items.title;
     const NFT_DESCRIPTION = nft.items.description;
+    const NFT_EXAMPLE = nft.items.example;
     const NFT_DETAIL_URL = `/meme-detail/:${nft.items.id}`;
 
     // NFT 제목 글자수 슬라이싱
@@ -41,6 +42,9 @@ const NftCardBack:React.FC<NftProps> = nft => {
             <hr className={styles.hrTag}/>
             <div className={styles.nftCardBackDetail}>
                 {sliceDetailText(NFT_DESCRIPTION)}
+            </div>
+            <div>
+                {sliceDetailText(NFT_EXAMPLE)}
             </div>
             
             {/* meme-id 받아서 넣기 */}

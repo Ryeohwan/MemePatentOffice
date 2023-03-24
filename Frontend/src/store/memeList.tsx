@@ -5,6 +5,7 @@ type memeType = {
   title: string;
   imgUrl: string;
   description: string;
+  example: string;
 }
 
 interface initialStateInterface {
