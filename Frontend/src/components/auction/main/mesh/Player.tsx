@@ -46,7 +46,7 @@ const Player: React.FC<PlayerProps> = ({
   tableAndChairs,
   biddingSubmit,
 }) => {
-  const glb = useLoader(GLTFLoader, "/auction/model/sun.glb"); // 나중에 선택해서 가져오는 코드로 바꾸기
+  const glb = useLoader(GLTFLoader, "/auction/model/arh.glb"); // 나중에 선택해서 가져오는 코드로 바꾸기
   const actions = useRef<action>({
     handsup: null,
     walk: null,
@@ -55,7 +55,6 @@ const Player: React.FC<PlayerProps> = ({
     normal: null,
   });
   player.current = glb.scene.children[0];
-
   glb.scene.traverse((child) => {
     if (child.isObject3D) {
       child.castShadow = true;
@@ -128,7 +127,6 @@ const Player: React.FC<PlayerProps> = ({
       camera.current.position.z = cameraPosition.z + player.current.position.z;
     } else if (sitting.current) {
       if (moving.current) {
-        moving.current = false;
         clickPosition.current = player.current.position
         if (actions.current.walk) actions.current.walk.stop();
       }

@@ -6,6 +6,7 @@
 
 .buttonWrapper{
     position:absolute;
+    background-color: var(--setting-color);
     display: flex;
     width:100%;
     bottom:0;
@@ -13,6 +14,22 @@
     justify-content: space-between;
 }
 
+.buttonWrapper > button{
+    background-color: var(--button-color);
+}
+
 .sitBtn{
     z-index:1;
+}
+
+.fullMoniterBtn{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5%;
+}
+
+.fullMoniterBtn > button{
+    background-color: var(--button-color);
 }
