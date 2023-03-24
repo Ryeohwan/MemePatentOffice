@@ -1,11 +1,13 @@
 // 알림목록 page (/notification-list)
 
+import NoticeList from "components/notice/NoticeList";
+
 const NotificationListPage: React.FC = () => {
   return (
-   <>
-     <h1>NotificationListPage</h1>
-   </>
-  )
- }
- 
- export default NotificationListPage; 
+    <>
+      <NoticeList />
+    </>
+  );
+};
+
+export default NotificationListPage;

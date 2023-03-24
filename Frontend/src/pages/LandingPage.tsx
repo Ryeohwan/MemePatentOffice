@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+import kakaoLogo from 'assets/kakao.png'
 import { Image } from "primereact/image";
 import { Button } from "primereact/button";
 import logo from "assets/logo.png";
@@ -37,8 +38,8 @@ const LandingPage = () => {
       <div ref={ref} className={styles.section}>
         <div id="logo" className={styles.logowrapper}>
           <Image src={logo} />
-          <p>Meme</p>
-          <Button> 카카오 로그인</Button>
+          <p>MEME</p>
+          <button onClick={()=>{window.location.href='main'}}> <Image src={kakaoLogo}/>카카오 로그인</button>
         </div>
         <section id="section1" className={styles.section1}>
           <h2>Title 1</h2>

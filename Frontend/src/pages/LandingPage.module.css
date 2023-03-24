@@ -1,43 +1,68 @@
-.container{
-    height:100vh;
+.container {
+  height: 100vh;
 }
-.logowrapper{
-    position:absolute;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height:100%;
-    width: 100%;
-}
-
-.logowrapper > span{
-    width: 35%;
-    height: 25%;
+.logowrapper {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }
 
-.logowrapper > span > img{
-    width: 100%;
-    height: 100%;
+.logowrapper > span {
+  margin-top: 30%;
+  margin-bottom: 10%;
+  width: 50%;
+  height: 30%;
 }
+
+.logowrapper > span > img {
+  width: 100%;
+  height: 100%;
+}
+
+.logowrapper > button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: #fae100;
+  color: black;
+  font-weight: bolder;
+  font-family: 'Gmarket Sans TTF';
+  width: 15rem;
+  height: 2.5rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+
+.logowrapper > button > span > img{
+  width: 100%;
+  height:100%;
+}
+
+
 .logowrapper > p {
-    font-weight: bolder;
-    font-size: 30px;
-    color: var(--point-color)
+  font-weight: bolder;
+  font-size: 20px;
+  color: var(--point-color);
 }
 
-.logowrapper > button{
-    margin-top: 10%;
+.logowrapper > button {
+  margin-top: 10%;
 }
 
 .section {
-    position: relative;
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }
 .section > section {
-  position: absolute ;
+  position: absolute;
   height: 100%;
   width: 100%;
 }
@@ -47,10 +72,10 @@
 } */
 
 .section1 {
-  background-color: var(--button-two-color)
+  background-color: var(--button-two-color);
 }
 .section2 {
-  background-color: var(--button-color)
+  background-color: var(--button-color);
 }
 .section3 {
   background-color: var(--point-color);

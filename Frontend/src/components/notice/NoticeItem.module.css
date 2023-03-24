@@ -1,0 +1,18 @@
+.itemWrapper{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 6% 0% 6% 0%;
+    font-size: 13px;
+}
+
+.itemWrapper > div{
+    width: 4rem;
+    height: 3rem;
+    margin: 0 3% 0 3%;
+}
+
+.text{
+    width: 80%
+}

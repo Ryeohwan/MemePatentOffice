@@ -35,7 +35,7 @@ const Border: React.FC = () => {
   border.position.set(-1, 7, -29);
 
   // const targetTime = new Date(2023, 3, 20, 14, 15, 0)
-  const targetTime = Math.floor(+new Date(2023, 3 - 1, 24, 14, 30, 0) / 1000);
+  const targetTime = Math.floor(+new Date(2023, 3 - 1, 25, 12, 30, 0) / 1000);
 
   const getRemainTime = () => {
     const date = Math.floor(+new Date() / 1000);
