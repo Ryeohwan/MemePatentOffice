@@ -1,4 +1,8 @@
-.memeListNewContainer {
+.tabContainer {
+  width: 100%;
+}
+
+.auctionListCardContainer {
   width: 100%;
   height: 100%;
   position: absolute;

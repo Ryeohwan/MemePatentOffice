@@ -8,6 +8,7 @@ import HomeCarousel from "components/main/homepage/HomeCarousel";
 import styles from "./HomePage.module.css";
 
 const HomePage: React.FC = () => {
+  
   // NFT 가짜 데이터
   const NFTS = [
     {
@@ -70,29 +71,21 @@ const HomePage: React.FC = () => {
       id: 1,
       imgUrl: "home/meme.gif",
       btnTxt: "밈 사전 바로가기",
-      btnUrl: "/meme-list/type=popular?range=month/"
+      btnUrl: "/meme-list/type=popular?range=today/",
     },
     {
       id: 2,
       imgUrl: "home/uploadmeme.jpg",
       btnTxt: "밈 등록하러 가기",
-      btnUrl: "/meme-upload"
+      btnUrl: "/meme-upload",
     },
     {
       id: 3,
       imgUrl: "home/auction.jpg",
       btnTxt: "경매 구경하러 가기",
-      btnUrl: "/auction-list/type=popular"
-    }
+      btnUrl: "/auction-list/type=popular",
+    },
   ];
-
-  // Main Carousel에 띄울 이미지, 버튼으로 라우팅할 URL
-  type MainObject = {
-    id: number;
-    imgUrl: string;
-    btnTxt: string;
-    btnUrl: string;
-  }
 
   // Carousel로 띄울 카드 NFT 밈과 Auction 두 개이므로 타입 두 개 지정
   type NftObject = {
@@ -112,26 +105,21 @@ const HomePage: React.FC = () => {
   // 반응형 캐러셀
   const responsiveOptions = [
     {
-        breakpoint: '1024px',
-        numVisible: 3,
-        numScroll: 3
+      breakpoint: "1024px",
+      numVisible: 3,
+      numScroll: 3,
     },
     {
-        breakpoint: '768px',
-        numVisible: 2,
-        numScroll: 2
+      breakpoint: "768px",
+      numVisible: 2,
+      numScroll: 2,
     },
     {
-        breakpoint: '560px',
-        numVisible: 1,
-        numScroll: 1
-    }
+      breakpoint: "560px",
+      numVisible: 1,
+      numScroll: 1,
+    },
   ];
-
-  // 홈페이지 맨 위에 띄울 가이드 캐러셀
-  const mainCarousel = (main: MainObject) => {
-    return <HomeCarousel items={main}/>;
-  };
 
   // 밈, 경매 캐러셀
   const nftCarousel = (nft: NftObject | AuctionObject) => {
@@ -140,30 +128,29 @@ const HomePage: React.FC = () => {
     } else {
       return (
         <div className={styles.auctionCarousel}>
-          <NftAuctionCard items={nft}/>
+          <NftAuctionCard items={nft} />
         </div>
       );
     }
   };
-  
+
   return (
     <div>
       {/* main carousel */}
-      <Carousel
-        page={1}
-        value={MAIN_INFO} 
-        numVisible={1}
-        numScroll={1} 
-        itemTemplate={(page) => mainCarousel(page)}
-        orientation={"horizontal"}
-        showIndicators={false}
-        circular={true}
-      />
+      <HomeCarousel info={MAIN_INFO} />
 
       {/* meme carousel */}
       <div className={styles.homeMenuWrapper}>
         <div className={styles.homeMenuTitle}>오늘의 밈</div>
-        <NavLink to="/meme-list/type=popular?range=day" className={styles.listRouter}>더보기</NavLink>
+        <NavLink
+          to={{
+            pathname: "/meme-list/type=popular",
+            search: "?range=today",
+          }}
+          className={styles.listRouter}
+        >
+          더보기
+        </NavLink>
       </div>
       <Carousel
         value={NFTS}
@@ -178,7 +165,15 @@ const HomePage: React.FC = () => {
 
       <div className={styles.homeMenuWrapper}>
         <div className={styles.homeMenuTitle}>금주의 밈</div>
-        <NavLink to="/meme-list/type=popular?range=week" className={styles.listRouter}>더보기</NavLink>
+        <NavLink
+          to={{
+            pathname: "/meme-list/type=popular",
+            search: "?range=week",
+          }}
+          className={styles.listRouter}
+        >
+          더보기
+        </NavLink>
       </div>
       <Carousel
         value={NFTS}
@@ -193,7 +188,15 @@ const HomePage: React.FC = () => {
 
       <div className={styles.homeMenuWrapper}>
         <div className={styles.homeMenuTitle}>신규 밈</div>
-        <NavLink to="/meme-list/type=new" className={styles.listRouter}>더보기</NavLink>
+        <NavLink
+          to={{
+            pathname: "/meme-list/type=popular",
+            search: "?range=all",
+          }}
+          className={styles.listRouter}
+        >
+          더보기
+        </NavLink>
       </div>
       <Carousel
         value={NFTS}
@@ -211,7 +214,9 @@ const HomePage: React.FC = () => {
       {/* auction carousel */}
       <div className={styles.homeMenuWrapper}>
         <div className={styles.homeMenuTitle}>인기 경매</div>
-        <NavLink to="/auction-list/type=popular" className={styles.listRouter}>더보기</NavLink>
+        <NavLink to="/auction-list/type=popular" className={styles.listRouter}>
+          더보기
+        </NavLink>
       </div>
       <Carousel
         value={AUCTIONS}
@@ -226,7 +231,9 @@ const HomePage: React.FC = () => {
 
       <div className={styles.homeMenuWrapper}>
         <div className={styles.homeMenuTitle}>마감 임박 경매</div>
-        <NavLink to="/auction-list/type=deadline" className={styles.listRouter}>더보기</NavLink>
+        <NavLink to="/auction-list/type=deadline" className={styles.listRouter}>
+          더보기
+        </NavLink>
       </div>
       <Carousel
         value={AUCTIONS}
@@ -241,7 +248,9 @@ const HomePage: React.FC = () => {
 
       <div className={styles.homeMenuWrapper}>
         <div className={styles.homeMenuTitle}>신규 경매</div>
-        <NavLink to="/auction-list/type=new" className={styles.listRouter}>더보기</NavLink>
+        <NavLink to="/auction-list/type=new" className={styles.listRouter}>
+          더보기
+        </NavLink>
       </div>
       <Carousel
         value={AUCTIONS}
