@@ -56,7 +56,7 @@ const App: React.FC = () => {
           <Route path="/auction-list/*" element={<AuctionListPage />} />
           <Route path='/auction/:auction_id' element={<AuctionPage />} />
 
-          <Route path="/profile/:nickname" element={<ProfilePage />} />
+          <Route path="/profile/:nickname/*" element={<ProfilePage />} />
 
           <Route path="/setting" element={<SettingPage />} />
           
