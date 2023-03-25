@@ -8,8 +8,13 @@
     align-items: center;
 }
 
-.btnIcon {
+.submitIcon {
     width: 60%;
+    height: 50%;
+}
+
+.addIcon {
+    width: 50%;
     height: 50%;
 }
 

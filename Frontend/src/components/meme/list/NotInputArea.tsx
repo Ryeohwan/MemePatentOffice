@@ -78,10 +78,13 @@ const NotInputArea: React.FC = () => {
 
       <div className={styles.rankingCompContainer}>
         
-        <p className={styles.pageHeader}>인기 검색어</p>
-        <div className={styles.timeContainer}>
-          {now.getMonth()+1}.{now.getDate()}   {now.getHours()}:{now.getMinutes()}   기준
+        <div className={styles.rankingHeader}>
+          <p className={styles.headerTxt}>인기 검색어</p>
+          <div className={styles.headerTime}>
+            {now.getMonth()+1}.{now.getDate()}   {now.getHours()}:{now.getMinutes()}   기준
+          </div>
         </div>
+
 
         {/* 나중에 data.items 이런식으로 내리기 */}
         <div className={styles.rankingContainer}>
