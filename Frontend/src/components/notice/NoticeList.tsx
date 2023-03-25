@@ -8,7 +8,7 @@ import styles from "components/notice/NoticeList.module.css";
 import { Divider } from "primereact/divider";
 import NoticeItem from "./NoticeItem";
 
-const NoticeList = () => {
+const NoticeList:React.FC = () => {
   const today = useSelector<RootState, noticeObject[]>(
     (state) => state.notice.today
   );
@@ -31,7 +31,6 @@ const NoticeList = () => {
       )}
       {week.length > 0 && (
         <>
-          <Divider />
           <div className={styles.weekList}>
             <p>이번 주</p>
             {week.map((item,index) => {
