@@ -2,7 +2,6 @@
 import React from "react";
 import { Carousel } from "primereact/carousel";
 import { useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
 import { RootState } from "store/configStore";
 import { memeType } from "store/memeList";
 import { auctionType } from "store/auctionList";
@@ -82,7 +81,7 @@ const HomePage: React.FC = () => {
 
       {/* meme carousel */}
       <div className={styles.homeMenuWrapper}>
-        <div className={styles.homeMenuTitle}>이번 주 HOT한 밈</div>
+        <div className={styles.homeMenuTitle}>요즘 HOT한 밈</div>
       </div>
       <Carousel
         value={memeList}
@@ -96,7 +95,7 @@ const HomePage: React.FC = () => {
       />
 
       <div className={styles.homeMenuWrapper}>
-        <div className={styles.homeMenuTitle}>이번 주 가장 비싸게 팔린 밈</div>
+        <div className={styles.homeMenuTitle}>이번 주 비싸게 팔린 밈</div>
       </div>
       <Carousel
         value={memeList}
