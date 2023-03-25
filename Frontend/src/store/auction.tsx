@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+export type biddingHistory = {
+    nickname: string,
+    SSF: number,
+    time: string
+}
+
 interface initialStateInterface {
-    biddingHistory:{
-        nickname: string,
-        SSF: number,
-        time: string
-    }[]
+    biddingHistory:biddingHistory[]
 }
 
 const initialState: initialStateInterface = {

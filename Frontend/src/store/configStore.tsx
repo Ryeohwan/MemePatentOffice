@@ -6,15 +6,18 @@ import auctionReducer from 'store/auction'
 import memeListReducer from 'store/memeList'
 import auctionListReducer from 'store/auctionList'
 import noticeReducer from 'store/notice'
+import auctionUploadReducer from 'store/auctionUpload'
 
 const store = configureStore({
   reducer: {
     test: testReducer,
     chat: chatReducer,
     auction: auctionReducer,
-    memeList: memeListReducer,
     auctionList: auctionListReducer,
-    notice: noticeReducer
+    auctionUpload: auctionUploadReducer,
+    memeList: memeListReducer,
+    notice: noticeReducer,
+    
   },
 })
 

@@ -18,9 +18,6 @@
 .sortContainer > div {
   font-size: 13px;
 }
-:hover {
-  cursor: pointer;
-}
 
 .active {
   color: var(--point-color);
