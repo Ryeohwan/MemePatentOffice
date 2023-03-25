@@ -30,11 +30,13 @@ const Frame: React.FC<Props> = ({ children }) => {
         className={`${styles.mainContainer} ${!mainOnly && styles.mainNotOnly}`}
       >
         {children}
-        {!mainOnly && (
+        
+        {/* {!mainOnly && (
           <footer>
             <Footer />
           </footer>
-        )}
+        )} */}
+      
       </main>
     </>
   );

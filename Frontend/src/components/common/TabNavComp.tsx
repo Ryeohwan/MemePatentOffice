@@ -1,9 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./TabNavComp.module.css";
 
-interface RoutePath {
-  pathname: string;
-}
 
 interface TabItem {
   name: string;
@@ -16,11 +13,11 @@ interface Props {
 }
 
 const TabNavComp: React.FC<Props> = ({ items, clickHandler }) => {
-  const { pathname } = useLocation() as RoutePath;
+  const location = useLocation();
   const itemLen = items.length;
   let itemIdx = -1;
   for (let i = 0; i < itemLen; i++) {
-    if (items[i].path.startsWith(pathname)) {
+    if (items[i].path.startsWith(decodeURIComponent(location.pathname))) {
       itemIdx = i + 1;
     }
   }

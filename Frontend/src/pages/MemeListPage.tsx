@@ -8,14 +8,14 @@ import { memeListActions } from "store/memeList";
 import MemeListSearch from "components/meme/list/MemeListSearch";
 import NotInputArea from "components/meme/list/NotInputArea";
 import MemeListTabComp from "components/meme/list/MemeListTabComp";
+import MemeAddBtn from "components/meme/list/MemeAddBtn"
 import styles from "./MemeListPage.module.css";
 
 const MemeListPage: React.FC = () => {
   const dispatch = useDispatch();
   const input = useSelector<RootState, string>((state) => state.memeList.input);
 
-  // redux에서 
-
+  // redux에서
 
   // unmount시 redux에 input ""로 바꾸기
   useEffect(() => {
@@ -23,7 +23,6 @@ const MemeListPage: React.FC = () => {
       dispatch(memeListActions.changeInputTxt(""));
     };
   }, []);
-
 
   return (
     <div className={styles.pageContainer}>
@@ -54,7 +53,9 @@ const MemeListPage: React.FC = () => {
       )}
 
       {/* input값 있는데 검색 결과 없는 경우 -> random 밈 몇개 띄워주기 */}
-    
+
+      {/* 밈 등록 버튼 */}
+      <MemeAddBtn />
     
     </div>
   );

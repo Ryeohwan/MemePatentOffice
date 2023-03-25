@@ -20,6 +20,12 @@ const NavbarHamburger: React.FC = () => {
     setOpen(false);
   }, [pathname])
 
+  // mypage 이동하기 위한 url
+  // const mypageUrl = `/profile/${sessionStorage.getItem(nickname)}/tab=nft`
+  // 임시 nickname url
+  const mypageUrl = "/profile/단발머리 부엉이20/tab=nft"
+
+
   return (
     <>
       <Icon
@@ -50,7 +56,7 @@ const NavbarHamburger: React.FC = () => {
             경매 둘러보기
           </NavLink>
 
-          <NavLink to="/profile/:nickname" className={styles.navLink}>
+          <NavLink to={mypageUrl} className={styles.navLink}>
             마이페이지
           </NavLink>
 

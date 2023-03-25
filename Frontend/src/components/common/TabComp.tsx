@@ -36,20 +36,20 @@ const TabComp: React.FC<Props> = ({ items, children }) => {
     let direction = "left";
     if (item.path.includes("?")) {
       direction =
-        pathArr.indexOf(location.pathname) > pathArr.indexOf(item.path.substring(0, item.path.indexOf('?')))
+        pathArr.indexOf(decodeURIComponent(location.pathname)) > pathArr.indexOf(item.path.substring(0, item.path.indexOf('?')))
           ? "left"
           : "right";
     } else {
       direction = direction =
-        pathArr.indexOf(location.pathname) > pathArr.indexOf(item.path)
+        pathArr.indexOf(decodeURIComponent(location.pathname)) > pathArr.indexOf(item.path)
           ? "left"
           : "right";
     };
-    console.log(pathArr)
-    console.log(location.pathname,  pathArr.indexOf(location.pathname))
-    console.log(item.path, pathArr.indexOf(item.path), item.path.substring(0, item.path.indexOf('?')))
+    // console.log(pathArr)
+    // console.log(decodeURIComponent(location.pathname),  pathArr.indexOf(location.pathname))
+    // console.log(item.path, pathArr.indexOf(item.path), item.path.substring(0, item.path.indexOf('?')))
     setSlideDirection(direction);
-    console.log(direction);
+    // console.log(direction);
     setHistoryArr((prev) => [...prev, item.path]);
   };
 
