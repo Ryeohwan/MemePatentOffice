@@ -28,7 +28,7 @@ const AuctionSlideMenu: React.FC = () => {
   };
 
   const goOut = () => {
-    navigate('/auction-list')
+    navigate('/auction-list/type=new')
   }
 
   const items: MenuItem[] = [

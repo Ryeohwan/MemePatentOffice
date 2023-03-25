@@ -14,7 +14,6 @@ const UploadDropDown: React.FC = () => {
   const dispatch = useDispatch();
   const [selectedMeme,setSelectedMeme] = useState<memeList|null>(null)
   // 내가 선택한 밈 id
-  console.log(selectedMeme)
   // 내가 보유하는 밈 리스트
   const myMemeList = useSelector<RootState, memeList[]>(
     (state) => state.auctionUpload.memeList
