@@ -7,7 +7,7 @@
   position: fixed;
   top: 0;
   padding: 10px 20px;
-  z-index: 1110;
+  z-index: 3000;
   backdrop-filter: blur(8px);
 }
 

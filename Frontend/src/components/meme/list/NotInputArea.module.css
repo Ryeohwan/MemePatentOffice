@@ -2,7 +2,7 @@
   width: 100%;
   height: 100%;
   padding: 0 16px;
-  margin-bottom: 19%;
+  margin-bottom: 22%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -12,7 +12,7 @@
 .pageCnt {
   width: 100%;
   margin-top: 10px;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
   padding-left: 1%;
   color: var(--disabled-gray-color);
   font-size: 13px;
@@ -26,20 +26,24 @@
   border-radius: 6px;
 }
 
-.pageHeader {
-  height: 10%;
-  font-size: 1rem;
-  font-weight: bold;
-  /* margin-bottom: 15px; */
+.rankingHeader {
+  display: flex;
+  padding-right: 0.5rem;
+  justify-content: space-between;
+  align-items: end;
+  margin-bottom: 18px;
 }
 
-.timeContainer {
+.headerTxt {
+  height: 10%;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.headerTime {
   color: var(--disabled-gray-color);
   font-size: 0.8rem;
-  margin: 5px 0 12px 0;
 }
-
-
 
 .rankingContainer {
   width: 100%;
