@@ -4,15 +4,31 @@
     flex-direction: row;
     align-items: center;
     margin: 6% 0% 6% 0%;
-    font-size: 13px;
+    z-index: 0;
 }
 
-.itemWrapper > div{
+.avatar{
     width: 4rem;
     height: 3rem;
     margin: 0 3% 0 3%;
 }
-
+.textWrapper{
+    width:100%;
+}
 .text{
-    width: 80%
+    font-size: 13px;
+    width:100%
+}
+
+.text > span {
+    position: static;
+    font-weight: bold;
+    font-size:14px;
+    z-index: 1;
+}
+
+.textWrapper > .elapsedText {
+    font-size:8px;
+    text-align: end;
+    opacity: 0.3;
 }

@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export type noticeObject = {
-  id: number; // 경매 or 밈 id
+  id: number; //밈 id
+  auctionId: number | null; // 경매 시작 알림일 경우 바로 입장을 위해 필요
   commentId: number | null; // 대댓글일 경우 댓글의 id까지 필요
   title: string; // 알림 받은 밈의 이름
   type: string; // 알림이 댓글 or 대댓글 or 경매 시작 or 경매 끝 or 경매 등록
@@ -9,7 +10,7 @@ export type noticeObject = {
   nickname: string | null; // 상대방의 nickname (경매일때 null)
   profileSrc: string | null; // 상대방의 프로필 사진 src (경매일때 null)
   memeSrc: string; // 밈 사진 src
-  date: Date; // 받은 시간
+  date: Date|string; // 받은 시간
 };
 
 interface initialStateInterface {
@@ -23,127 +24,139 @@ const initialState: initialStateInterface = {
   today: [
     {
       id: 1,
+      auctionId: null,
       title: "우는 페페",
-      commentId:null,
+      commentId: null,
       type: "reply",
       nickname: "3반 김재준",
       profileSrc: "totoro.jpg",
       memeSrc: "totoro.jpg",
-      date: new Date(2023, 2, 24, 16, 0, 0),
+      date: new Date(2023, 2, 24, 16, 0, 0).toISOString(),
     },
     {
       id: 1,
+      auctionId: null,
       title: "우는 페페",
-      commentId:null,
-      type: "auctionFinish",
+      commentId: null,
+      type: "auctionEnd",
       nickname: null,
       profileSrc: null,
       memeSrc: "totoro.jpg",
-      date: new Date(2023, 2, 24, 18, 0, 0),
+      date: new Date(2023, 2, 24, 18, 0, 0).toISOString(),
     },
     {
       id: 1,
+      auctionId: null,
       title: "우는 페페",
-      commentId:null,
+      commentId: null,
       type: "auctionStart",
       nickname: null,
       profileSrc: null,
       memeSrc: "totoro.jpg",
-      date: new Date(2023, 2, 24, 16, 0, 0),
+      date: new Date(2023, 2, 24, 16, 0, 0).toISOString(),
     },
     {
       id: 1,
+      auctionId: null,
       title: "우는 페페",
-      commentId:null,
+      commentId: null,
       type: "comment",
       nickname: "3반 김재준",
       profileSrc: "totoro.jpg",
       memeSrc: "totoro.jpg",
-      date: new Date(2023, 2, 24, 16, 0, 0),
+      date: new Date(2023, 2, 24, 16, 0, 0).toISOString(),
     },
     {
       id: 1,
+      auctionId: null,
       title: "우는 페페",
-      commentId:null,
+      commentId: null,
       type: "auctionReg",
       nickname: null,
       profileSrc: null,
       memeSrc: "totoro.jpg",
-      date: new Date(2023, 2, 24, 16, 0, 0),
+      date: new Date(2023, 2, 24, 16, 0, 0).toISOString(),
     },
     {
       id: 1,
+      auctionId: null,
       title: "우는 페페",
-      commentId:null,
+      commentId: null,
       type: "comment",
       nickname: "3반 김재준",
       profileSrc: "totoro.jpg",
       memeSrc: "totoro.jpg",
-      date: new Date(2023, 2, 24, 16, 0, 0),
+      date: new Date(2023, 2, 24, 16, 0, 0).toISOString(),
     },
   ],
   week: [
     {
       id: 1,
+      auctionId: null,
       title: "우는 페페",
-      commentId:null,
+      commentId: null,
       type: "comment",
       nickname: "3반 김재준",
       profileSrc: "totoro.jpg",
       memeSrc: "totoro.jpg",
-      date: new Date(2023, 2, 18, 16, 0, 0),
+      date: new Date(2023, 2, 18, 16, 0, 0).toISOString(),
     },
     {
       id: 1,
+      auctionId: null,
       title: "우는 페페",
-      commentId:null,
+      commentId: null,
       type: "comment",
       nickname: "3반 김재준",
       profileSrc: "totoro.jpg",
       memeSrc: "totoro.jpg",
-      date: new Date(2023, 2, 18, 16, 0, 0),
+      date: new Date(2023, 2, 18, 16, 0, 0).toISOString(),
     },
   ],
   month: [
     {
       id: 1,
+      auctionId: null,
       title: "우는 페페",
-      commentId:null,
+      commentId: null,
       type: "comment",
       nickname: "3반 김재준",
       profileSrc: "totoro.jpg",
       memeSrc: "totoro.jpg",
-      date: new Date(2023, 1, 27, 16, 0, 0),
+      date: new Date(2023, 1, 27, 16, 0, 0).toISOString(),
     },
     {
       id: 1,
+      auctionId: null,
       title: "우는 페페",
-      commentId:null,
+      commentId: null,
       type: "comment",
       nickname: "3반 김재준",
       profileSrc: "totoro.jpg",
       memeSrc: "totoro.jpg",
-      date: new Date(2023, 1, 27, 16, 0, 0),
+      date: new Date(2023, 1, 27, 16, 0, 0).toISOString(),
     },
     {
       id: 1,
+      auctionId: null,
       title: "우는 페페",
-      commentId:null,
+      commentId: null,
       type: "comment",
       nickname: "3반 김재준",
       profileSrc: "totoro.jpg",
       memeSrc: "totoro.jpg",
-      date: new Date(2023, 1, 27, 16, 0, 0),
+      date: new Date(2023, 1, 27, 16, 0, 0).toISOString(),
     },
     {
       id: 1,
+      auctionId: null,
       title: "우는 페페",
-      commentId:null,
+      commentId: null,
       type: "comment",
       nickname: "3반 김재준",
       profileSrc: "totoro.jpg",
       memeSrc: "totoro.jpg",
-      date: new Date(2023, 1, 27, 16, 0, 0),
+      date: new Date(2023, 1, 27, 16, 0, 0).toISOString(),
     },
   ],
 };

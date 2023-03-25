@@ -1,0 +1,24 @@
+.dropdown{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 3rem;
+}
+
+.optionItem{
+    display:flex;
+    flex-direction: row;
+    justify-self: center;
+    align-items: center;
+    width:100%;
+}
+
+.optionTitle{
+    margin-left: 16px;
+}
+
+.memeImg{
+    border-radius: 6px;
+    overflow: hidden;
+}
