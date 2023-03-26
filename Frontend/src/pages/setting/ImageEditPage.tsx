@@ -64,24 +64,27 @@ const ImageEditPage: React.FC = () => {
 
         <div className={styles.myNFT}>
           <p>내 NFT</p>
+          <div className={styles.myNftList}>
+
           {MYNFT.map((item, index) => {
             return (
               <Avatar
-                key={index}
-                image={item.imgSrc}
-                onClick={() => {
-                  selectedImg === item.id
-                    ? setSelectedImg(-1)
-                    : setSelectedImg(item.id);
-                    selectedImg === item.id ? setSelectedImgSrc(null) : setSelectedImgSrc(item.imgSrc);
-                }}
-                className={
-                  selectedImg === item.id ? styles.selected : styles.avatar
-                }
+              key={index}
+              image={item.imgSrc}
+              onClick={() => {
+                selectedImg === item.id
+                ? setSelectedImg(-1)
+                : setSelectedImg(item.id);
+                selectedImg === item.id ? setSelectedImgSrc(null) : setSelectedImgSrc(item.imgSrc);
+              }}
+              className={
+                selectedImg === item.id ? styles.selected : styles.avatar
+              }
                 shape="circle"
               />
-            );
-          })}
+              );
+            })}
+            </div>
         </div>
       </div>
     </div>

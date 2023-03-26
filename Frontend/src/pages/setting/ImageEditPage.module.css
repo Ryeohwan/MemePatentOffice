@@ -23,6 +23,11 @@
     margin-bottom: 5%;
 }
 
+.myNftList{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
 .avatar{
     object-fit : cover;
     border: 1px var(--section-line-color) solid;
