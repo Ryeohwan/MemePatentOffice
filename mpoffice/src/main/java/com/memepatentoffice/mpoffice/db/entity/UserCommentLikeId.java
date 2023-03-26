@@ -6,6 +6,7 @@ import org.hibernate.Hibernate;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.GeneratedValue;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -13,6 +14,10 @@ import java.util.Objects;
 @Embeddable
 public class UserCommentLikeId implements Serializable {
     private static final long serialVersionUID = 5704860724562823574L;
+    @GeneratedValue
+    @Column(name = "id", nullable = false)
+    private Long id;
+
     @Column(name = "comment_id", nullable = false)
     private Long commentId;
 

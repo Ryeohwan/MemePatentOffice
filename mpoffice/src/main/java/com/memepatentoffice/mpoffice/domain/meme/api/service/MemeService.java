@@ -2,6 +2,8 @@ package com.memepatentoffice.mpoffice.domain.meme.api.service;
 
 import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
 import com.memepatentoffice.mpoffice.db.entity.UserMemeLike;
+import com.memepatentoffice.mpoffice.db.entity.UserMemeLikeId;
+import com.memepatentoffice.mpoffice.db.entity.like;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.LikeRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.MemeCreateRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.LikeResponse;
@@ -11,9 +13,9 @@ import com.memepatentoffice.mpoffice.domain.meme.db.repository.LikeRepository;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.MemeRepository;
 import com.memepatentoffice.mpoffice.domain.user.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 @RequiredArgsConstructor
 @Service
@@ -23,7 +25,6 @@ public class MemeService {
     private static final String FAIL = "fail";
     private final MemeRepository memeRepository;
     private final LikeRepository likeRepository;
-
     private final UserRepository userRepository;
 
     public MemeResponse findByTitle(String title){
@@ -56,28 +57,28 @@ public class MemeService {
         return SUCCESS;
     }
 
-    public LikeResponse memeLike(LikeRequest like) throws NotFoundException {
+    @Transactional
+    public LikeResponse memeLike(LikeRequest lrequest) throws NotFoundException {
+        UserMemeLikeId umi = new UserMemeLikeId();
+        umi.setMeme(lrequest.getMeme());
+        umi.setUser(lrequest.getUser());
+        if(lrequest.getLike() == like.LIKE){
+            lrequest.setLike(like.LIKE);
+        }else{
+            lrequest.setLike(like.HATE);
+        }
         UserMemeLike ulike = UserMemeLike.builder()
-                .meme(memeRepository.findMemeById(like.getMeme().getId()))
-                .user(userRepository.findUserById(like.getUser().getId()))
+                .meme(memeRepository.findMemeById(umi.getMeme()))
+                .user(userRepository.findUserById(umi.getUser()))
+                .like(lrequest.getLike())
                 .build();
+
         UserMemeLike temp = likeRepository.save(ulike);
-        LikeResponse result = new LikeResponse();
-        result.setMeme(temp.getMeme());
-        result.setUser(temp.getUser());
-        result.setId(temp.getId());
+        LikeResponse result = LikeResponse.builder()
+                .meme(temp.getMeme())
+                .user(temp.getUser())
+                .like(temp.getLike())
+                .build();
         return result;
     }
-
-    /**
-     *
-     * MemeResponse result = new MemeResponse();
-     *         result.setCreatedAt(meme.getCreatedAt());
-     *         result.setId(meme.getId());
-     *         result.setCreaterId(meme.getCreaterId());
-     *         result.setOwnerId(meme.getOwnerId());
-     *         result.setTitle(meme.getTitle());
-     *         result.setContent(meme.getContent());
-     *
-     * **/
 }

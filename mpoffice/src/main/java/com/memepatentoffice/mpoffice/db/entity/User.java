@@ -33,7 +33,7 @@ public class User {
 
     @Lob
     @Column(name = "is_valid", nullable = false)
-    private String isValid;
+    private isValid isValid;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -68,7 +68,7 @@ public class User {
         this.walletAddress = walletAddress;
     }
 
-    public void setIsValid(String isValid) {
+    public void setIsValid(isValid isValid) {
         this.isValid = isValid;
     }
 
@@ -85,7 +85,7 @@ public class User {
     }
 
     @Builder
-    public User(Long id, String name, String email, String nickname, String profileImage, String walletAddress, String isValid, LocalDateTime createdAt, LocalDateTime updatedAt, String withdrawalReason) {
+    public User(Long id, String name, String email, String nickname, String profileImage, String walletAddress, isValid isValid, LocalDateTime createdAt, LocalDateTime updatedAt, String withdrawalReason) {
         this.id = id;
         this.name = name;
         this.email = email;
