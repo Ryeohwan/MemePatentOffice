@@ -9,6 +9,7 @@ import noticeReducer from 'store/notice'
 import auctionUploadReducer from 'store/auctionUpload'
 import nftHistoryReducer from 'store/nftHistory'
 import historyReducer from 'store/history'
+import memeUploadReducer from 'store/memeUpload'
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     auctionList: auctionListReducer,
     auctionUpload: auctionUploadReducer,
     memeList: memeListReducer,
+    memeUpload: memeUploadReducer,
     notice: noticeReducer,
     nftHistory: nftHistoryReducer,
     history: historyReducer,

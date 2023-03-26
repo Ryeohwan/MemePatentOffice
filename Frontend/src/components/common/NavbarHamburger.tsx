@@ -36,7 +36,6 @@ const NavbarHamburger: React.FC = () => {
       />
 
       <Sidebar
-        appendTo={document.getElementById("auction")}
         className={styles.dropContainer}
         visible={open}
         position="top"
