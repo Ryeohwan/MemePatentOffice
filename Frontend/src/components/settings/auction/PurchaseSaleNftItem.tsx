@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Avatar } from "primereact/avatar";
 import { myHistoryList } from "store/nftHistory"; // type
 
-import styles from "components/settings/history/PurchaseSaleNftItem.module.css";
+import styles from "components/settings/auction/PurchaseSaleNftItem.module.css";
 
 interface PurchaseSaleNftItemProps {
   item: myHistoryList;
