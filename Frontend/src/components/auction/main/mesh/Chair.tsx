@@ -29,7 +29,7 @@ const Chair: React.FC<ChairProps> = ({
         color: "#03A9F4",
       });
       chair.position.set(
-        (i % 7) - 11,
+        (i % 7)*1.3 - 12,
         chairHeight / 2,
         Math.floor(i / 8) * 5 - 12
       );
@@ -57,7 +57,7 @@ const Chair: React.FC<ChairProps> = ({
         color: "#03A9F4",
       });
       chair.position.set(
-        (i % 7) + 3,
+        (i % 7)*1.3 + 3,
         chairHeight / 2,
         Math.floor(i / 8) * 5 - 12
       );
