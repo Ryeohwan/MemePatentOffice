@@ -35,7 +35,7 @@ const CommentHistoryPage: React.FC = () => {
       </>
       {week.length > 0 && (
         <>
-          <Divider />
+          <Divider className="divider" />
           <p className={styles.date}>이번 주</p>
           {week.map((item) => {
             return <CommentHistoryItem item={item} />;
@@ -45,7 +45,7 @@ const CommentHistoryPage: React.FC = () => {
 
       {month.length > 0 && (
         <>
-          <Divider />
+          <Divider className="divider" />
           <p className={styles.date}>이번 달</p>
           {month.map((item) => {
             return <CommentHistoryItem item={item} />;

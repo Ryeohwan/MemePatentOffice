@@ -15,3 +15,18 @@
 .divider{
     margin: 0.5rem !important;
 }
+
+.router-wrapper{
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 10% 0 10% 5%;
+    flex-direction: row;
+}
+
+.router-wrapper > i {
+    font-size: 25px;
+    font-weight: bolder;
+    margin-right: 5%;
+}
