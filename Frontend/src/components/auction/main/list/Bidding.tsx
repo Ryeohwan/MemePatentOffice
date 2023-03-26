@@ -23,23 +23,27 @@ const Bidding: React.FC<BiddingProps> = ({
   };
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-  }
+    e.preventDefault();
+  };
 
   return (
     <Sidebar
+      appendTo={document.getElementById("auction")}
       className={styles.sideBar}
       visible={biddingVisible}
       position="bottom"
       onHide={() => biddingHandler()}
     >
-      <form className={styles.inputWraper} onSubmit={(e:React.FormEvent<HTMLFormElement>) => submitHandler(e)}>
-          <InputNumber
-            className={styles.input}
-            placeholder="SSF"
-            onChange={inputHandler}
-          />
-        <Button label="입찰" onClick={()=>biddingSubmitHandler()}/>
+      <form
+        className={styles.inputWraper}
+        onSubmit={(e: React.FormEvent<HTMLFormElement>) => submitHandler(e)}
+      >
+        <InputNumber
+          className={styles.input}
+          placeholder="SSF"
+          onChange={inputHandler}
+        />
+        <Button label="입찰" onClick={() => biddingSubmitHandler()} />
       </form>
       <p className={styles.mySSF}>보유 SSF: 124 SSF </p>
     </Sidebar>
