@@ -1,8 +1,12 @@
-import React, { useRef, useState } from "react";
-import { FileUpload } from "primereact/fileupload";
+import React, { useRef, useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { memeUploadActions } from "store/memeUpload";
+import { RootState } from "store/configStore";
+
 import styles from "./MemeImageInput.module.css";
 
 const MemeImageInput: React.FC = () => {
+  const dispatch = useDispatch();
   const fileInput = useRef<HTMLInputElement>(null);
   const [imgSrc, setImgSrc] = useState<string | null>(null);
   const [imgFile, setImgFile] = useState<File | null>(null);
@@ -12,7 +16,7 @@ const MemeImageInput: React.FC = () => {
     const byteUnits = ["KB", "MB"];
     for (let i = 0; i < byteUnits.length; i++) {
       size = Math.floor(size / 1024);
-      if (size < 1024) return size.toFixed(1) + ' ' + byteUnits[i];
+      if (size < 1024) return size.toFixed(1) + " " + byteUnits[i];
     }
   };
 
@@ -22,7 +26,7 @@ const MemeImageInput: React.FC = () => {
     if (!target.files) return;
 
     const file: File = target.files[0];
-    if (file.size > 200 * 1024 * 1024) return alert('이미지가 너무 큽니다');
+    if (file.size > 200 * 1024 * 1024) return alert("이미지가 너무 큽니다");
     setImgFile(file);
 
     // img 미리보기
@@ -32,6 +36,7 @@ const MemeImageInput: React.FC = () => {
       const result = reader.result;
       if (typeof result === "string") {
         setImgSrc(result);
+        dispatch(memeUploadActions.putImgUrl(result));
       }
     };
   };
@@ -42,7 +47,6 @@ const MemeImageInput: React.FC = () => {
       fileInput.current.click();
     }
   };
-
 
   // 디자인 추후 수정 예정
   return (
@@ -73,12 +77,13 @@ const MemeImageInput: React.FC = () => {
         {/* content */}
         <div className={styles.contentContainer}>
           {imgSrc && <img src={imgSrc} alt="" className={styles.contentImg} />}
+          {!imgSrc && (
+            <p>텍스트 밈을 설명할 이미지 혹은 이미지 밈을 등록하세요.</p>
+          )}
         </div>
       </div>
 
-      <p className={styles.explanation}>
-        텍스트 밈을 설명할 이미지 혹은 이미지 밈을 등록하세요.
-      </p>
+      <p className={styles.explanation}>유해성 검사를 통과하지 못했습니다.</p>
     </div>
   );
 };
