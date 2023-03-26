@@ -6,6 +6,7 @@
 
 .pSlidemenu{
     width:8.5em !important;
+    z-index: 100;
 }
 
 .slideBtn{

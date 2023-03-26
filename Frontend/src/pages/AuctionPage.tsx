@@ -53,10 +53,9 @@ const AuctionPage: React.FC = () => {
   );
   const [biddingVisible, setBiddingVisible] = useState<boolean>(false);
   const [biddingSubmit, setBiddingSubmit] = useState<boolean>(false);
-
+  const [fullScreen, setFullScreen] = useState(false)
   useEffect(() => {
     const elem = document.getElementById("auction");
-    console.log(elem)
     if (elem) {
       elem.addEventListener("click", () => {
         if (elem.requestFullscreen) {
@@ -64,7 +63,7 @@ const AuctionPage: React.FC = () => {
         }
       });
     }
-
+    setFullScreen(true)
     return () => {
       if (document.fullscreenElement)
       document.exitFullscreen();
@@ -198,7 +197,7 @@ const AuctionPage: React.FC = () => {
         moving={moving}
       />
       <div className={styles.buttonWrapper}>
-        <AuctionSlideMenu />
+        {document.getElementById("auction") && <AuctionSlideMenu />}
         {visible && !sitting.current && (
           <Button
             label="앉기"
