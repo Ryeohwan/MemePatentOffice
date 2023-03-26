@@ -30,7 +30,7 @@ const NoticeItem: React.FC<NoticeItemProps> = ({ item }) => {
     } else if (type === "meme") {
       navigate(`/meme-detail/${item.id}`);
     } else {
-      navigate(`/profile/${item.nickname}`);
+      navigate(`/profile/${item.nickname}/tab=nft`);
     }
   };
 

@@ -18,6 +18,7 @@ const ChatSideBar: React.FC<ChatSideBarProps> = ({
   return (
     <>
       <Sidebar
+      appendTo={document.getElementById('auction')}
         className={styles.sideBar}
         visible={chatVisible}
         position="bottom"

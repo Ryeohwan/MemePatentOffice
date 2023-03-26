@@ -1,6 +1,6 @@
 // auction page (/auction/:auction_id)
 
-import React, { useRef, useState, useCallback } from "react";
+import React, { useRef, useState, useCallback, useEffect } from "react";
 import Scene from "components/auction/main/Scene";
 import styles from "pages/AuctionPage.module.css";
 import * as THREE from "three";
@@ -20,7 +20,7 @@ interface AuctionPageProps {
 const AuctionPage: React.FC = () => {
   const width = window.innerWidth;
   const height = window.innerHeight;
-  const moving = useRef<boolean>(false)
+  const moving = useRef<boolean>(false);
   const [isFull, setIsFull] = useState<Boolean>(false);
   const [visible, setVisible] = useState<Boolean>(false);
   const player = useRef<THREE.Object3D>(new THREE.Object3D());
@@ -54,6 +54,23 @@ const AuctionPage: React.FC = () => {
   const [biddingVisible, setBiddingVisible] = useState<boolean>(false);
   const [biddingSubmit, setBiddingSubmit] = useState<boolean>(false);
 
+  useEffect(() => {
+    const elem = document.getElementById("auction");
+    console.log(elem)
+    if (elem) {
+      elem.addEventListener("click", () => {
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        }
+      });
+    }
+
+    return () => {
+      if (document.fullscreenElement)
+      document.exitFullscreen();
+    };
+  }, []);
+
   const biddingHandler = () => {
     setBiddingVisible(false);
   };
@@ -76,7 +93,7 @@ const AuctionPage: React.FC = () => {
   }, []);
 
   const sitDownHandler = () => {
-    moving.current = false
+    moving.current = false;
     cameraPoint.current = camera.current.position.clone();
     cameraRotation.current = [
       camera.current.rotation.x,
@@ -166,9 +183,8 @@ const AuctionPage: React.FC = () => {
     });
     setIsFull(false);
   };
-  console.log(sitting.current);
   return (
-    <section className={styles.auctionWrapper}>
+    <section id="auction" className={styles.auctionWrapper}>
       <Scene
         canSit={canSit}
         cantSit={cantSit}

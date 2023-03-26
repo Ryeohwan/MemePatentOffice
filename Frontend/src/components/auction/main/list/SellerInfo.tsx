@@ -14,12 +14,12 @@ const SellerInfo: React.FC<SellerInfoProps> = ({
 }) => {
   return (
     <Sidebar
-        className={styles.sideBar}
-        visible={sellerInfoVisible}
-        position="bottom"
-        onHide={() => sellerInfoHandlerFalse()}
-      >
-      </Sidebar>
+      appendTo={document.getElementById("auction")}
+      className={styles.sideBar}
+      visible={sellerInfoVisible}
+      position="bottom"
+      onHide={() => sellerInfoHandlerFalse()}
+    ></Sidebar>
   );
 };
 

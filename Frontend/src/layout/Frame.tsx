@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Footer from "components/common/Footer";
 import Navbar from "components/common/Navbar";
 import { useLocation } from "react-router-dom";
@@ -30,13 +31,12 @@ const Frame: React.FC<Props> = ({ children }) => {
         className={`${styles.mainContainer} ${!mainOnly && styles.mainNotOnly}`}
       >
         {children}
-        
+
         {/* {!mainOnly && (
           <footer>
             <Footer />
           </footer>
         )} */}
-      
       </main>
     </>
   );
