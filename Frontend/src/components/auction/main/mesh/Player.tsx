@@ -20,7 +20,7 @@ interface PlayerProps {
   playerAnimation: React.MutableRefObject<THREE.AnimationAction | undefined>;
   tableAndChairs: React.MutableRefObject<THREE.Mesh[]>;
   biddingSubmit: boolean;
-  isSitting: React.MutableRefObject<boolean>
+  isSitting: React.MutableRefObject<boolean>;
 }
 
 type action = {
@@ -46,7 +46,7 @@ const Player: React.FC<PlayerProps> = ({
   playerAnimation,
   tableAndChairs,
   biddingSubmit,
-  isSitting
+  isSitting,
 }) => {
   const glb = useLoader(GLTFLoader, "/auction/model/character.glb"); // 나중에 선택해서 가져오는 코드로 바꾸기
   const actions = useRef<action>({
@@ -115,8 +115,8 @@ const Player: React.FC<PlayerProps> = ({
         clickPosition.current.z - player.current.position.z,
         clickPosition.current.x - player.current.position.x
       );
-      player.current.position.x += Math.cos(angle) * 0.07;
-      player.current.position.z += Math.sin(angle) * 0.07;
+      player.current.position.x += Math.cos(angle) * 0.06;
+      player.current.position.z += Math.sin(angle) * 0.06;
 
       if (
         Math.abs(clickPosition.current.x - player.current.position.x) < 0.03 &&
@@ -135,10 +135,16 @@ const Player: React.FC<PlayerProps> = ({
       if (biddingSubmit) {
         if (actions.current.handsup) actions.current.handsup.play();
       } else if (sitting.current) {
-        if (actions.current.sitdown && actions.current.walk && !isSitting.current) {
-          actions.current.walk.stop()
+        if (
+          actions.current.normal &&
+          actions.current.sitdown &&
+          actions.current.walk &&
+          !isSitting.current
+        ) {
+          actions.current.normal.stop();
+          actions.current.walk.stop();
           actions.current.sitdown.play();
-          isSitting.current=true
+          isSitting.current = true;
         }
         if (actions.current.standup)
           playerAnimation.current = actions.current.standup;
@@ -148,8 +154,8 @@ const Player: React.FC<PlayerProps> = ({
       let isIn;
       chairPoints.current.forEach((chair) => {
         if (
-          Math.abs(player.current.position.x - chair.position.x) < 0.6 &&
-          Math.abs(player.current.position.z - chair.position.z) < 0.6
+          Math.abs(player.current.position.x - chair.position.x) < 0.5 &&
+          Math.abs(player.current.position.z - chair.position.z) < 0.5
         ) {
           canSit();
           chairPoint.current = chair;
