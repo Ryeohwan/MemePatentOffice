@@ -28,6 +28,7 @@ const AuctionPage: React.FC = () => {
   const playerAnimation = useRef<THREE.AnimationAction | undefined>();
   const playerPosition = useRef<THREE.Vector3>(new THREE.Vector3());
   const sitting = useRef(false);
+  const isSitting = useRef<boolean>(false);
   const cameraPoint = useRef<THREE.Vector3>(new THREE.Vector3());
   const cameraRotation = useRef<number[]>([]);
   const camera = useRef<THREE.OrthographicCamera | THREE.PerspectiveCamera>(
@@ -99,13 +100,12 @@ const AuctionPage: React.FC = () => {
       camera.current.rotation.y,
       camera.current.rotation.z,
     ];
-    console.log(chairPoint.current.position);
     playerCamera.current.position.set(
       chairPoint.current.position.x > 0
         ? chairPoint.current.position.x + 0.5
         : chairPoint.current.position.x - 1,
-      chairPoint.current.position.y + 1,
-      chairPoint.current.position.z + 3
+      chairPoint.current.position.y + 2,
+      chairPoint.current.position.z + 5
     );
     playerCamera.current.lookAt(0, 3, -30);
     camera.current = playerCamera.current.clone();
@@ -119,7 +119,7 @@ const AuctionPage: React.FC = () => {
       },
       {
         x: chairPoint.current.position.x - 0.3,
-        y: chairPoint.current.position.y + 0.4,
+        y: chairPoint.current.position.y + 0.8,
         z: chairPoint.current.position.z + 0.8,
         duration: 1,
       }
@@ -133,9 +133,10 @@ const AuctionPage: React.FC = () => {
   };
 
   const standUpHandler = () => {
+    isSitting.current=false
     setIsFull(false);
     camera.current = bigCamera;
-    camera.current.zoom = 35;
+    camera.current.zoom = 30;
     player.current.lookAt(0, 1, -30);
     player.current.rotation.y = 0;
     gsap.fromTo(
@@ -195,6 +196,7 @@ const AuctionPage: React.FC = () => {
         biddingSubmit={biddingSubmit}
         playerPosition={playerPosition}
         moving={moving}
+        isSitting={isSitting}
       />
       <div className={styles.buttonWrapper}>
         {document.getElementById("auction") && <AuctionSlideMenu />}

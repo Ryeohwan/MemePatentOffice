@@ -22,7 +22,7 @@ interface SceneProps {
   biddingSubmit: boolean
   playerPosition: React.MutableRefObject<THREE.Vector3>;
   moving: React.MutableRefObject<boolean>;
-
+  isSitting: React.MutableRefObject<boolean>
 }
 
 const Scene: React.FC<SceneProps> = ({
@@ -35,7 +35,8 @@ const Scene: React.FC<SceneProps> = ({
   camera,
   biddingSubmit,
   playerPosition,
-  moving
+  moving,
+  isSitting
 }) => {
   const canvas = useRef<any>();
   const [meshes, setMeshes] = useState<THREE.Mesh[]>([]);
@@ -63,7 +64,7 @@ const Scene: React.FC<SceneProps> = ({
       cameraPosition.y+10,
       cameraPosition.z+29
     );
-    camera.current.zoom = 35;
+    camera.current.zoom = 30;
     camera.current.lookAt(13,10,29)
     camera.current.updateProjectionMatrix();
 
@@ -151,6 +152,7 @@ const Scene: React.FC<SceneProps> = ({
         playerAnimation={playerAnimation}
         tableAndChairs={tableAndChairs}
         biddingSubmit={biddingSubmit}
+        isSitting={isSitting}
       />
       <Box position={[0, 15, 0]} />
       <Table table={table} pushMesh={pushMesh} tableAndChairs={tableAndChairs}/>

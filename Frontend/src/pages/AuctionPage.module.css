@@ -24,8 +24,8 @@
 
 .fullMoniterBtn{
     position: absolute;
-    margin-left: 35%;
-    margin-top: 5%;
+    top:5%;
+    left:35%;
 }
 
 .fullMoniterBtn > button{
