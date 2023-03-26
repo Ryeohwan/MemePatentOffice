@@ -111,6 +111,7 @@ const AuctionPage: React.FC = () => {
     camera.current = playerCamera.current.clone();
     player.current.lookAt(0, 1, -30);
     player.current.rotation.y = 0;
+    if(playerAnimation.current) playerAnimation.current.play()
     gsap.fromTo(
       player.current.position,
       {
