@@ -2,6 +2,7 @@ package com.memepatentoffice.mpoffice.domain.user.api.request;
 
 import lombok.Builder;
 import lombok.Getter;
+import com.memepatentoffice.mpoffice.db.entity.isValid;
 
 import java.time.LocalDateTime;
 
@@ -18,14 +19,14 @@ public class UserSignUpRequest {
 
     private final String walletAddress;
 
-    private final String isValid;
+    private final isValid isValid;
 
     private final LocalDateTime createdAt;
 
     private final LocalDateTime updatedAt;
 
     @Builder
-    public UserSignUpRequest(Long id, String name, String email, String nickname, String profileImage, String walletAddress, String isValid, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public UserSignUpRequest(Long id, String name, String email, String nickname, String profileImage, String walletAddress, isValid isValid, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.name = name;
         this.email = email;

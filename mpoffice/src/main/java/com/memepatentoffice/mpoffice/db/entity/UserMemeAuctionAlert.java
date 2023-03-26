@@ -7,6 +7,7 @@ import javax.persistence.*;
 
 @Getter
 @Entity
+@Table(name = "userMemeAuctionAlert")
 public class UserMemeAuctionAlert {
     @EmbeddedId
     private UserMemeAuctionAlertId id;

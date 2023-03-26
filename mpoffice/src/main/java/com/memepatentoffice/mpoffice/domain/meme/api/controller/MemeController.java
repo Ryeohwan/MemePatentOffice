@@ -38,13 +38,15 @@ public class MemeController {
     @GetMapping("/check/{title}")
     public ResponseEntity titleDuplicatedcheck(@PathVariable String title){
         String result = memeService.titleCheck(title);
-        System.out.println(result);
         return ResponseEntity.ok(result);
     }
 
     @PostMapping("/create")
     @ResponseBody
     public ResponseEntity createMeme(MemeCreateRequest memeCreateRequest) throws Exception{
+        if( memeService.titleCheck(memeCreateRequest.getTitle()) == "fail"){
+            return ResponseEntity.ok().body("Title is already exist");
+        }
         memeCreateRequest.setCreatedAt(LocalDateTime.now());
         String img = gcpService.uploadFile(memeCreateRequest.getFile());
         memeCreateRequest.setImageUrl(img);
