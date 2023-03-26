@@ -14,7 +14,7 @@ import styles from "./MemeListPage.module.css";
 const MemeListPage: React.FC = () => {
   const dispatch = useDispatch();
   const input = useSelector<RootState, string>((state) => state.memeList.input);
-
+  
   // redux에서
 
   // unmount시 redux에 input ""로 바꾸기
