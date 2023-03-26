@@ -28,8 +28,7 @@ import NftLikePage from 'pages/setting/NftLikePage';
 import NftNotificationPage from 'pages/setting/NftNotificationPage';
 
 import AuctionHistoryPage from 'pages/setting/AuctionHistoryPage';
-import PurchaseHistoryPage from 'pages/setting/PurchaseHistoryPage';
-import SaleHistoryPage from 'pages/setting/SaleHistoryPage';
+import PurchaseSaleHistoryPage from 'pages/setting/PurchaseSaleHistoryPage';
 import NotificationSettingPage from 'pages/setting/NotificationSettingPage';
 import NotificationListPage from 'pages/NotificationListPage';
 import NotFoundPage from 'pages/NotFoundPage';
@@ -71,8 +70,8 @@ const App: React.FC = () => {
           <Route path="/setting/history/nft-notification" element={<NftNotificationPage />} />
 
           <Route path="/setting/auction-history" element={<AuctionHistoryPage />} />
-          <Route path="/setting/auction-history/purchase" element={<PurchaseHistoryPage />} />
-          <Route path="setting/auction-history/sale" element={<SaleHistoryPage />} />
+          <Route path="/setting/auction-history/purchase" element={<PurchaseSaleHistoryPage />} />
+          <Route path="setting/auction-history/sale" element={<PurchaseSaleHistoryPage />} />
 
           <Route path="/setting/notification" element={<NotificationSettingPage />} />
 

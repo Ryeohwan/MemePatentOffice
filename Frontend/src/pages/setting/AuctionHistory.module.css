@@ -1,0 +1,21 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 16px;
+}
+
+.pageName{
+    font-size:25px;
+    font-weight: bolder;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.divider{
+    margin: 0.5rem !important;
+}
+
+.date{
+    text-align: start;
+}
