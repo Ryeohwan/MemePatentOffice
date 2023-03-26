@@ -136,13 +136,9 @@ const Player: React.FC<PlayerProps> = ({
         if (actions.current.handsup) actions.current.handsup.play();
       } else if (sitting.current) {
         if (
-          actions.current.normal &&
           actions.current.sitdown &&
-          actions.current.walk &&
           !isSitting.current
         ) {
-          actions.current.normal.stop();
-          actions.current.walk.stop();
           actions.current.sitdown.play();
           isSitting.current = true;
         }
@@ -151,6 +147,9 @@ const Player: React.FC<PlayerProps> = ({
       }
     }
     if (!sitting.current) {
+      if (actions.current.sitdown) {
+        playerAnimation.current = actions.current.sitdown;
+      }
       let isIn;
       chairPoints.current.forEach((chair) => {
         if (
