@@ -24,8 +24,8 @@ import WithdrawlPage from 'pages/setting/WithdrawlPage';
 
 import HistoryPage from 'pages/setting/HistoryPage';
 import CommentHistoryPage from 'pages/setting/CommentHistoryPage';
-import NftLikePage from 'pages/setting/NftLikePage';
-import NftNotificationPage from 'pages/setting/NftNotificationPage';
+import NftLikePage from 'pages/setting/NftLikeNoticePage';
+import NftNotificationPage from 'pages/setting/NftLikeNoticePage';
 
 import AuctionHistoryPage from 'pages/setting/AuctionHistoryPage';
 import PurchaseSaleHistoryPage from 'pages/setting/PurchaseSaleHistoryPage';
