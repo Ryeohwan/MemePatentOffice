@@ -11,8 +11,8 @@ const NftAuctionCard:React.FC<AuctionProps> = nft => {
     const AUCTION_MEME = nft.items.title;
     const AUCTION_TIME = nft.items.time;
     const HIGHEST_BID = nft.items.highest_bid;
-    const MEME_DETAIL_URL = `/meme-detail/:${nft.items.meme_id}`;
-    const AUCTION_DETAIL_URL = `/auction/:${nft.items.auction_id}`;
+    const MEME_DETAIL_URL = `/meme-detail/${nft.items.meme_id}`;
+    const AUCTION_DETAIL_URL = `/auction/${nft.items.auction_id}`;
 
     // NFT 제목 글자수 슬라이싱
     const slicingText = (NFT_TEXT:string) => {
