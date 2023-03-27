@@ -5,7 +5,7 @@ import AuctionCanvas from "components/auction/main/AuctionCanvas";
 
 import styles from "pages/AuctionPage.module.css";
 
-const ENDPOINT = "https://j8a305.p.ssafy.io/ws";
+const ENDPOINT = "wss://j8a305.p.ssafy.io/ws";
 
 // const ENDPOINT = "ws://localhost:3072/ws";
 const AuctionPage: React.FC = () => {
