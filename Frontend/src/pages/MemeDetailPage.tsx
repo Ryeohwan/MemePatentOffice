@@ -4,6 +4,9 @@ import styles from "./MemeDetailPage.module.css";
 import { useDispatch } from "react-redux";
 import { auctionUploadActions } from "store/auctionUpload";
 import UploadModal from "components/auction/upload/UploadModal";
+import NftChart from "components/meme/detail/NftChart";
+
+
 const MemeDetailPage: React.FC = () => {
   const dispatch = useDispatch()
 
@@ -66,7 +69,10 @@ const MemeDetailPage: React.FC = () => {
       </div>
       <div className={styles.uploadAuctionBtn} onClick={()=>{dispatch(auctionUploadActions.controlModal({visible:true}))}}>이 NFT 경매 등록하러 가기</div>
       <UploadModal/>
-      <div>거래 내역 리스트</div>
+      
+      <div className={styles.nftChartWrapper}>
+        <NftChart />
+      </div>
       <div>댓글 리스트</div>
     </div>
   );
