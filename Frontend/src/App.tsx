@@ -50,7 +50,7 @@ const App: React.FC = () => {
 
           <Route path="/meme-upload" element={<MemeUploadPage />} />
           <Route path="/meme-list/*" element={<MemeListPage />} />
-          <Route path="/meme-detail/:meme_id" element={<MemeDetailPage />} />
+          <Route path="/meme-detail/:meme_id/*" element={<MemeDetailPage />} />
 
           <Route path="/auction-list/*" element={<AuctionListPage />} />
           <Route path='/auction/:auction_id' element={<AuctionPage />} />

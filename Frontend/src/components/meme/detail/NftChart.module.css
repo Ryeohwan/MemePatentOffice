@@ -8,3 +8,25 @@
     font-size: 12px;
     line-height: 11px;
 }
+
+.priceArrow {
+    font-size: 15px;
+    color: var(--disabled-gray-color);
+}
+
+.bidText {
+    font-size: 12px;
+    color: var(--disabled-gray-color);
+}
+
+.bidWrapper {
+    display: flex;
+    align-items: center;
+}
+
+.bidWrapperDiv {
+    display: flex;
+    justify-content: center;
+    gap: 1.3rem;
+    margin-top: 30px;
+}
