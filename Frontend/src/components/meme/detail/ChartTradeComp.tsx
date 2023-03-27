@@ -1,7 +1,6 @@
 import React from "react";
 import NftChart from "components/meme/detail/NftChart";
-import TransactionList from "components/meme/detail/TradeList";
-import DetailInfo from "components/meme/detail/DetailInfo";
+import TradeList from "components/meme/detail/TradeList";
 import styles from "./ChartTradeComp.module.css";
 
 const ChartTradeComp: React.FC = () => {
@@ -12,7 +11,7 @@ const ChartTradeComp: React.FC = () => {
       <div className={styles.nftChartWrapper}>
         <NftChart />
       </div>
-      <TransactionList />
+      <TradeList />
     </div>
   );
 };

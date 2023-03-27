@@ -15,7 +15,9 @@ interface ColumnMeta {
     header: string;
 }
 
-const TransactionList:React.FC = () => {
+const TradeList:React.FC = () => {
+    
+    // 가짜 데이터
     const products = [
         {
             date: "2021-02-03",
@@ -56,4 +58,4 @@ const TransactionList:React.FC = () => {
     );
 };
 
-export default TransactionList;
+export default TradeList;
