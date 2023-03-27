@@ -30,26 +30,26 @@ public class SecurityConfig {
                 .formLogin()
                 .disable()
                 .httpBasic()
-                .disable();
+                .disable()
 
-//                // 접근제한 설정
-//                .authorizeRequests()
-//                .antMatchers("/",
-//                        "/error",
-//                        "/favicon.ico",
-//                        "/**/*.png",
-//                        "/**/*.gif",
-//                        "/**/*.svg",
-//                        "/**/*.jpg",
-//                        "/**/*.html",
-//                        "/**/*.css",
-//                        "/**/*.js")
-//                .permitAll()
-//                .antMatchers("/api/auth/**", "/api/oauth2/**")
-//                .permitAll()
-//                .anyRequest()
-//                .authenticated()
-//                .and();
+                // 접근제한 설정
+                .authorizeRequests()
+                .antMatchers("/",
+                        "/error",
+                        "/favicon.ico",
+                        "/**/*.png",
+                        "/**/*.gif",
+                        "/**/*.svg",
+                        "/**/*.jpg",
+                        "/**/*.html",
+                        "/**/*.css",
+                        "/**/*.js")
+                .permitAll()
+                .antMatchers("/auction/api/**", "/auction/docs/**")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+                .and();
 
 
         return httpSecurity.build();

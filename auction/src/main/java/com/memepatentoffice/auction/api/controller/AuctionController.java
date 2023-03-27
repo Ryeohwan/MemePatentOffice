@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Timer;
 
-@RestController("/api/auction")
+@RestController("/auction/api")
 @RequiredArgsConstructor
 public class AuctionController {
     private final AuctionService auctionService;
