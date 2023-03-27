@@ -7,7 +7,6 @@ interface initialStateInterface {
     title: string;
     titleChecked: boolean;  // 중복검사
     titleState: boolean;
-    titleMsg: "";
 
     imgUrl: string;
     imgState: boolean;
@@ -25,7 +24,6 @@ const initialState: initialStateInterface = {
     title: "",
     titleChecked: false,
     titleState: true,
-    titleMsg: "",
     imgUrl: "",
     imgState: true,
     info: "",
@@ -47,9 +45,6 @@ const memeUploadSlice = createSlice({
     },
     setTitleState: (state, actions) => {
         state.titleState = actions.payload;
-    },
-    setTitleMsg: (state, actions) => {
-        state.titleMsg = actions.payload;
     },
     putImgUrl: (state, actions) => {
         state.imgUrl = actions.payload;
@@ -76,7 +71,6 @@ const memeUploadSlice = createSlice({
         state.title = "";
         state.titleChecked = false;
         state.titleState = true;
-        state.titleMsg = "";
         state.imgUrl = "";
         state.imgState = true;
         state.info = "";

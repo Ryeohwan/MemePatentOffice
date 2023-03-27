@@ -27,9 +27,13 @@
     color: var(--disabled-gray-color);
 }   
 
+.errorBox {
+    border: 1px solid var(--impossible-color) !important;
+}
 
-.explanation {
+.errorMsg {
     font-size: 10px;
-    color: var(--disabled-gray-color);
+    color: var(--impossible-color);
     margin: 4px 0 0 4px;
+    height: 10px;
 }

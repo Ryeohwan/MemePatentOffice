@@ -43,14 +43,15 @@ const MemeUploadBtn: React.FC = () => {
     }
 
     // 유해성 검사 해야함
-    controlCheckModal(true)
+    controlCheckModal(true);
     // 실패하면 실패한 항목의 state false로 바꾸기
     // 통과하면 업로드하고 밈 디테일로 이동
 
     // 일단 임시 time out
     const identifier = setTimeout(() => {
-        controlCheckModal(false)
-      }, 1000);
+      dispatch(memeUploadActions.setSituationState(false));
+      controlCheckModal(false);
+    }, 1000);
   };
 
   return (
