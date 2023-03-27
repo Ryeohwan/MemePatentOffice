@@ -1,6 +1,10 @@
 FROM adoptopenjdk:11-hotspot AS builder
-# env
-ENV PASSWORD password
+# env 
+ENV USERNAME username
+ENV PASSWORD pwd
+ENV HOST localhost
+ENV PORT 27017
+ENV DATABASE osakak
 
 # env finish
 COPY auction/gradlew .
