@@ -13,5 +13,5 @@ RUN ./gradlew clean bootJar
 
 FROM adoptopenjdk:11-hotspot
 COPY --from=builder build/libs/*.jar app.jar
-
+EXPOSE 8072
 ENTRYPOINT ["java","-jar", "-Dspring.redis.password=${PASSWORD}", "/app.jar"]
