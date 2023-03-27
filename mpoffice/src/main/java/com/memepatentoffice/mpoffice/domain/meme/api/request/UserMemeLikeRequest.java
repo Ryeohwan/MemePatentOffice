@@ -1,15 +1,14 @@
 package com.memepatentoffice.mpoffice.domain.meme.api.request;
+
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class CommentLikeRequest {
-    private Long commentId;
+public class UserMemeLikeRequest {
+    private Long memeId;
     private Long userId;
 
-    public CommentLikeRequest() {
-    }
 }

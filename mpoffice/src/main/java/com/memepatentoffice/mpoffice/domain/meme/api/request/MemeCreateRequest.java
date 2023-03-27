@@ -1,6 +1,7 @@
 package com.memepatentoffice.mpoffice.domain.meme.api.request;
 
 import com.memepatentoffice.mpoffice.db.entity.Meme;
+import com.memepatentoffice.mpoffice.db.entity.User;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -45,13 +46,12 @@ public class MemeCreateRequest {
         this.file = file;
     }
 
-    public Meme toEntity(){
+    public Meme toEntity(User creater, User owner){
         return Meme.builder()
-                .createrId(createrId)
-                .ownerId(ownerId)
+                .creater(creater)
+                .owner(owner)
                 .title(title)
                 .content(content)
-                .createdAt(createdAt)
                 .imageurl(imageUrl)
                 .build();
     }

@@ -1,25 +1,24 @@
 package com.memepatentoffice.mpoffice.db.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Getter
 @Entity
-public class Meme {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "meme_id", nullable = false)
-    private Long id;
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EntityListeners(AuditingEntityListener.class)
+public class Meme extends BaseEntity{
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "creater_id")
+    private User creater;
 
-    @Column(name = "creater_id", nullable = false)
-    private Long createrId;
-
-    @Column(name = "owner_id", nullable = false)
-    private Long ownerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
+    private User owner;
 
 
     @Column(name = "title")
@@ -28,27 +27,9 @@ public class Meme {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
     @Column(name = "imageurl")
     private String imageurl;
 
     @Column(name = "situation")
     private String situation;
-
-    @Builder
-    public Meme(Long id, Long createrId, Long ownerId, String title, String content, LocalDateTime createdAt, String imageurl, String situation) {
-        this.id = id;
-        this.createrId = createrId;
-        this.ownerId = ownerId;
-        this.title = title;
-        this.content = content;
-        this.createdAt = createdAt;
-        this.imageurl = imageurl;
-        this.situation = situation;
-    }
-
-    public Meme() {
-    }
 }

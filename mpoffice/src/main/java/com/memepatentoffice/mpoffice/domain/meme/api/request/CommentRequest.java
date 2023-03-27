@@ -1,13 +1,16 @@
 package com.memepatentoffice.mpoffice.domain.meme.api.request;
 
+import com.memepatentoffice.mpoffice.db.entity.IsValid;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-
-import javax.persistence.Column;
-import javax.persistence.Lob;
+import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CommentRequest {
     private Long id;
 
@@ -19,7 +22,7 @@ public class CommentRequest {
 
     private String content;
 
-    private String isValid;
+    private IsValid isValid;
 
     private LocalDateTime createdAt;
 
@@ -31,44 +34,5 @@ public class CommentRequest {
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-    public void setMemeId(Long memeId) {
-        this.memeId = memeId;
-    }
-
-    public void setParentCommentSeq(Long parentCommentSeq) {
-        this.parentCommentSeq = parentCommentSeq;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setIsValid(String isValid) {
-        this.isValid = isValid;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    @Builder
-    public CommentRequest(Long id, Long userId, Long memeId, Long parentCommentSeq, String content, String isValid, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.userId = userId;
-        this.memeId = memeId;
-        this.parentCommentSeq = parentCommentSeq;
-        this.content = content;
-        this.isValid = isValid;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-
-    public CommentRequest() {
     }
 }

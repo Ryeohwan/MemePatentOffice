@@ -1,17 +1,19 @@
 package com.memepatentoffice.mpoffice.db.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Getter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @IdClass(UserMemeLikeId.class)
-@Table(name = "user_meme_like")
-public class UserMemeLike{
-    @EmbeddedId
-    private UserMemeLikeId id;
+public class UserMemeLike {
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -22,18 +24,9 @@ public class UserMemeLike{
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-    @Lob
-    @Column(name = "like")
-    private like like;
-    @Builder
-    public UserMemeLike(Meme meme, User user, com.memepatentoffice.mpoffice.db.entity.like like) {
-        this.meme = meme;
-        this.user = user;
-        this.like = like;
-    }
-
-    public UserMemeLike() {
-    }
+//
+//    @Lob
+//    @Column(name = "like")
+//    private Like like;
 
 }

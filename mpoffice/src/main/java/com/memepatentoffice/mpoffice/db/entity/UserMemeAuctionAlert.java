@@ -1,23 +1,20 @@
 package com.memepatentoffice.mpoffice.db.entity;
 
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 
 @Getter
 @Entity
-@Table(name = "userMemeAuctionAlert")
+@IdClass(UserMemeAuctionAlertId.class)
 public class UserMemeAuctionAlert {
-    @EmbeddedId
-    private UserMemeAuctionAlertId id;
-
-    @MapsId("memeId")
+    @Id
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "meme_id", nullable = false)
     private Meme meme;
 
-    @MapsId("userId")
+
+    @Id
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

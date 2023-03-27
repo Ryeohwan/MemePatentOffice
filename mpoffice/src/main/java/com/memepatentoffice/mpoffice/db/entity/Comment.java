@@ -1,86 +1,48 @@
 package com.memepatentoffice.mpoffice.db.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
 @Entity
-public class Comment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id", nullable = false)
-    private Long id;
+@NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
+public class Comment extends BaseEntity{
 
-    @Column(name = "userId", nullable = false)
-    private Long userId;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column(name = "meme_id", nullable = false)
-    private Long memeId;
+    @ManyToOne(fetch =FetchType.LAZY)
+    @JoinColumn(name = "meme_id")
+    private Meme meme;
 
-    @Column(name = "parent_comment_id")
-    private Long parentCommentId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_comment_id")
+    private Comment parentComment;
 
     @Column(name = "content")
     private String content;
 
-    @Lob
-    @Column(name = "isValid")
-    private String isValid;
+    @Column(name = "is_valid")
+    @Enumerated(EnumType.STRING)
+    private IsValid isValid;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
-
+    @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setUserId(Long UserId) {
-        this.userId = userId;
-    }
-
-    public void setMemeId(Long memeId) {
-        this.memeId = memeId;
-    }
-
-    public void setParentCommentId(Long parentCommentId) {
-        this.parentCommentId = parentCommentId;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setIsValid(String isValid) {
-        this.isValid = isValid;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
     @Builder
-    public Comment(Long id, Long userId, Long memeId, Long parentCommentId, String content, String isValid, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.userId = userId;
-        this.memeId = memeId;
-        this.parentCommentId = parentCommentId;
-        this.content = content;
-        this.isValid = isValid;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+    public Comment(String content, User user, Meme meme, Comment parentComment, IsValid isValid){
+        this.content=content;
+        this.user=user;
+        this.meme=meme;
+        this.parentComment=parentComment;
+        this.isValid=isValid;
     }
 
-    public Comment() {
-    }
 }

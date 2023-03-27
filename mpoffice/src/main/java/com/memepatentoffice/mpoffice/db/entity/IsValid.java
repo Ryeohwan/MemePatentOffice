@@ -1,5 +1,5 @@
 package com.memepatentoffice.mpoffice.db.entity;
 
-public enum isValid {
+public enum IsValid {
     VALID,InVALID;
 }

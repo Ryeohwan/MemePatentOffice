@@ -1,23 +1,19 @@
 package com.memepatentoffice.mpoffice.db.entity;
 
 import lombok.Getter;
-import lombok.Setter;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Getter
 @Entity
-public class Notification {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "notification_id", nullable = false)
-    private Long id;
+@EntityListeners(AuditingEntityListener.class)
+public class Notification extends BaseEntity{
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Lob
     @Column(name = "type", nullable = false)
     private String type;
 
@@ -29,8 +25,5 @@ public class Notification {
 
     @Column(name = "nft_id")
     private Long nftId;
-
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
 
 }

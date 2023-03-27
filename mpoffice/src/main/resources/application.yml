@@ -9,13 +9,16 @@ spring:
         password: dkanakf156346!!
 
     jpa:
+        database: mysql
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+        generate-ddl: true
         hibernate:
-            ddl-auto: none
+            ddl-auto: create
         properties:
             hibernate:
-                show_sql: false
+                show_sql: true
                 format_sql: true
+        open-in-view: true
     servlet:
         multipart:
             max-file-size: 10MB
