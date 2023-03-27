@@ -1,5 +1,4 @@
-package com.memepatentoffice.auction;
-
+package com.memepatentoffice.auction.db.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -10,11 +9,7 @@ import java.sql.Timestamp;
 @Getter
 @NoArgsConstructor
 @Table(name = "chat")
-public class Chat {
-    @Id
-    @Column(name = "chat_id", nullable = false)
-    private Long id;
-
+public class Chat extends BaseEntity {
     @Column(name = "auction_id", nullable = false)
     private Long auctionId;
 

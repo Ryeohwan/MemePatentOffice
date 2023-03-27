@@ -37,6 +37,14 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver
 	implementation 'org.mongodb:mongo-java-driver:3.12.12'
 
+	/* swagger2 */
+	// https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	// https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
+	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+
+
+
 }
 
 tasks.named('test') {
