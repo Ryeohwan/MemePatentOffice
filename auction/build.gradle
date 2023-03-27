@@ -33,9 +33,12 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 
 	// https://mvnrepository.com/artifact/org.springframework.data/spring-data-mongodb
-	implementation 'org.springframework.data:spring-data-mongodb:4.0.4'
+	implementation 'org.springframework.data:spring-data-mongodb'
 	// https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver
 	implementation 'org.mongodb:mongo-java-driver:3.12.12'
+
+	/*websocket*/
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
 	/* swagger2 */
 	// https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter
