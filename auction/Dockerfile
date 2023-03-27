@@ -1,6 +1,10 @@
 FROM adoptopenjdk:11-hotspot AS builder
-# env
-ENV PASSWORD password
+# env 
+ENV USERNAME username
+ENV PASSWORD pwd
+ENV HOST localhost
+ENV PORT 27017
+ENV DATABASE osakak
 
 # env finish
 COPY auction/gradlew .
@@ -14,4 +18,4 @@ RUN ./gradlew clean bootJar
 FROM adoptopenjdk:11-hotspot
 COPY --from=builder build/libs/*.jar app.jar
 
-ENTRYPOINT ["java","-jar", "-Dspring.redis.password=${PASSWORD}", "/app.jar"]
+ENTRYPOINT ["java","-jar", "-Dspring.datasource.username=${USERNAME}", "-Dspring.datasource.password=${PASSWORD}", "-Dspring.datasource.url=${HOST}", "/app.jar"]
