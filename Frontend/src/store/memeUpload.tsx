@@ -3,19 +3,22 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface initialStateInterface {  
     // state: 유해성 검사
+    // -1 : 유해성검사 안함
+    // 0  : 유해성검사 통과 못함
+    // 1  : 유해성검사 통과
     
     title: string;
     titleChecked: boolean;  // 중복검사
-    titleState: boolean;
+    titleState: number;
 
     imgUrl: string;
-    imgState: boolean;
+    imgState: number;
     
     info: string;
-    infoState: boolean;
+    infoState: number;
     
     situation: string;
-    situationState: boolean;
+    situationState: number;
 
     checkbox: boolean;
 }
@@ -23,13 +26,13 @@ interface initialStateInterface {
 const initialState: initialStateInterface = {
     title: "",
     titleChecked: false,
-    titleState: true,
+    titleState: -1,
     imgUrl: "",
-    imgState: true,
+    imgState: -1,
     info: "",
-    infoState: true,
+    infoState: -1,
     situation: "",
-    situationState: true,
+    situationState: -1,
     checkbox: false
 };
 
@@ -70,13 +73,13 @@ const memeUploadSlice = createSlice({
     resetData: (state) => {
         state.title = "";
         state.titleChecked = false;
-        state.titleState = true;
+        state.titleState = -1;
         state.imgUrl = "";
-        state.imgState = true;
+        state.imgState = -1;
         state.info = "";
-        state.infoState = true;
+        state.infoState = -1;
         state.situation = "";
-        state.situationState = true;
+        state.situationState = -1;
         state.checkbox = false;
     } 
   },

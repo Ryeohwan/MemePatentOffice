@@ -10,9 +10,7 @@ const MemeImageInput: React.FC = () => {
   const fileInput = useRef<HTMLInputElement>(null);
   const [imgSrc, setImgSrc] = useState<string | null>(null);
   const [imgFile, setImgFile] = useState<File | null>(null);
-  const imgState = useSelector<RootState, boolean>(
-    (state) => state.memeUpload.imgState
-  );
+  const imgState = useSelector<RootState, number>((state) => state.memeUpload.imgState);
 
   // 파일 크기 변환
   const getByteSize = (size: number) => {
@@ -32,8 +30,8 @@ const MemeImageInput: React.FC = () => {
     if (file.size > 200 * 1024 * 1024) return alert("이미지가 너무 큽니다");
     setImgFile(file);
 
-    // 유해성검사 실패해서 돌아왔는데, input 바뀐 경우 -> true로 변경
-    if (!imgState) dispatch(memeUploadActions.setImgState(true));
+    // 유해성검사 실패해서 돌아왔는데, input 바뀐 경우 -> -1로 변경
+    if (imgState === 0) dispatch(memeUploadActions.setImgState(-1));
 
     // img 미리보기
     const reader: FileReader = new FileReader();
@@ -57,7 +55,7 @@ const MemeImageInput: React.FC = () => {
   // 디자인 추후 수정 예정
   return (
     <div className={styles.imageInputContainer}>
-      <div className={`${styles.inputContainer} ${!imgState && styles.errorBox}`}>
+      <div className={`${styles.inputContainer} ${imgState === 0 && styles.errorBox}`}>
         {/* header */}
         <div className={styles.headerContainer}>
           <div className={styles.header}>
@@ -90,7 +88,7 @@ const MemeImageInput: React.FC = () => {
       </div>
 
       <div className={styles.errorMsg}>
-        {!imgState && <p>유해성 검사를 통과하지 못했습니다.</p>}
+        {imgState === 0 && <p>유해성 검사를 통과하지 못했습니다.</p>}
       </div>
     </div>
   );
