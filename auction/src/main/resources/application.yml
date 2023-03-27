@@ -1,17 +1,24 @@
+server:
+  port: 8072
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://j8a305.p.ssafy.io:3072/${MYSQL_DB}
-    username: ${MYSQL_USER}
-    password: ${MYSQL_PASSWORD}
+    url: jdbc:mysql://j8a305.p.ssafy.io:3072/auction-project
+    username: a305
+    password: dkanakf156346!!
   data:
     mongodb:
       host: j8a305.p.ssafy.io
       port: 27017
       authentication-database: admin
-      username: ${MONGO_INITDB_ROOT_USERNAME}
-      password: ${MONGO_INITDB_ROOT_PASSWORD}
-      database: ${MONGO_INITDB_DATABASE}
+      username: a305
+      password: dkanakf156346!!
+      database: a305_mongodb
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
