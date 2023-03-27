@@ -1,17 +1,20 @@
-import React from 'react';
 import { ResponsiveLine } from '@nivo/line';
 import styles from "./NftChart.module.css";
 
 const NftChart = () => {
+
+  // 거래내역 날짜 어떻게 들어오는지 보고 거래한 날짜 data.x에 넣기
+
   const data = [
     {
-      id: 'japan',
+      id: 'nft1',
       data: [
         { x: '2018', y: 100 },
         { x: '2019', y: 120 },
         { x: '2020', y: 150 },
         { x: '2021', y: 200 },
         { x: '2022', y: 250 },
+        { x: '2023', y: 180 },
       ],
     }
   ];
@@ -19,7 +22,7 @@ const NftChart = () => {
   return (
     <ResponsiveLine
       data={data}
-      margin={{ top: 30, right: 15, bottom: 50, left: 35 }}
+      margin={{ top: 50, right: 15, bottom: 50, left: 35 }}
       xScale={{ type: 'point' }}
       yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: true, reverse: false }}
       axisTop={null}
@@ -43,9 +46,9 @@ const NftChart = () => {
           const meridiem = hour >= 12 ? '오후' : '오전';
           const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
           const formattedMinute = minute < 10 ? `0${minute}` : minute;
-          
           return `${year}.${month}.${day} ${meridiem} ${formattedHour}:${formattedMinute}`;
         };
+
         return (
           <div className={styles.detailInfoBox}>
             <div>{format(slice.points[0].data.x)}</div>
