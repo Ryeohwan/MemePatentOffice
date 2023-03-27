@@ -59,7 +59,7 @@ const MemeUploadPage: React.FC = () => {
         checkModalVisible={checkModalVisible}
         controlCheckModal={controlCheckModal}
         headerInput="검사 중..."
-        textInput="등록이 가능한지 확인 중입니다..."
+        textInput="등록이 가능한지 확인 중입니다."
       />
     </>
   );
