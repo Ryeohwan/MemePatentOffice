@@ -16,7 +16,7 @@ const MemeCheckBox: React.FC = () => {
   return (
     <>
       <div className={styles.checkboxWrapper}>
-        <p>경매를 등록한 이후에는 수정 및 취소가 불가합니다.</p>
+        <p>뭐라쓰지,,, 저작권 뭐 어쩌구 이런거.,,, 수정 못한다,,,,</p>
         <div>
           <span>이에 동의 하십니까?</span>
           <Checkbox
