@@ -17,6 +17,7 @@
 .bidText {
     font-size: 12px;
     color: var(--disabled-gray-color);
+    margin-left: 5px;
 }
 
 .bidWrapper {

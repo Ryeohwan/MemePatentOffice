@@ -1,11 +1,12 @@
 import React from "react";
+import CommentItem from "./CommentItem";
 
 const CommentList:React.FC = () => {
 
     return (
-        <div>
-            댓글 리스트
-        </div>
+        <>
+            <CommentItem/>
+        </>
     );
 };
 

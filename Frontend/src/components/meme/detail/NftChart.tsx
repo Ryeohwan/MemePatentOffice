@@ -31,13 +31,13 @@ const NftChart = () => {
         <div className={styles.bidWrapper}>
           <Icon icon="ph:arrow-line-up-bold" className={styles.priceArrow}/>
           <span className={styles.bidText}>
-            최고 낙찰가   {HIGHEST_BID} SSF
+            최고 낙찰가 &nbsp;&nbsp; {HIGHEST_BID} SSF
           </span>
         </div>
         <div className={styles.bidWrapper}>
           <Icon icon="ph:arrow-line-down-bold" className={styles.priceArrow}/>
           <span className={styles.bidText}>
-            최저 낙찰가   {LOWEST_BID} SSF
+             최저 낙찰가 &nbsp;&nbsp; {LOWEST_BID} SSF
           </span>
         </div>
       </div>
