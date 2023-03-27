@@ -147,7 +147,7 @@ const MemeUploadBtn: React.FC = () => {
     dispatch(memeUploadActions.setSituationState(situationMonitor));
 
     // 유해성 검사 모두 통과한 경우
-    if (titleMonitor > 0 || imgMonitor > 0 || infoMonitor > 0 || situationMonitor > 0) {
+    if (titleMonitor > 0 && imgMonitor > 0 && infoMonitor > 0 && situationMonitor > 0) {
       // nft 등록
       setModalTxt("NFT 등록중...");
       await new Promise((resolve) => setTimeout(resolve, 3000));
