@@ -11,6 +11,7 @@ body{
   --black-color: #282828;
   --impossible-color: #FE7171;
   --possible-color: #56FB67;
+  --heart-color: rgb(249, 125, 145);
 }
 
 p {

@@ -1,23 +1,40 @@
-import React from "react";
-import haku from "assets/haku.png";
+import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import styles from "./CommentItem.module.css";
+import { commentType } from "store/commentList";
+import { useDispatch } from "react-redux";
+import { commentListActions } from "store/commentList";
 
-const CommentItem:React.FC = () => {
+interface CommentType {
+    items: commentType
+};
+
+const CommentItem:React.FC<CommentType> = comment => {
+    const dispatch = useDispatch()
+    const userName = comment.items.userName;
+    const userImg = "http://localhost:3000/" + comment.items.userImgUrl;
+    const commentDate = comment.items.date;
+    const commentText = comment.items.comment;
+    const heart = comment.items.liked;
+    const heartNum = comment.items.likes;
+
+    const handleHeart = (heart:number) => {
+        dispatch(commentListActions.toggleLike({id:comment.items.id}))
+    };
 
     return (
         <div className={styles.commentItemContainer}>
             <div className={styles.userImgWrapper}>
-                <img src={haku} alt="" className={styles.commentUserImg}/>
+                <img src={userImg} alt="" className={styles.commentUserImg}/>
             </div>
 
             <div className={styles.commentInfoWrapper}>
                 <div className={styles.commentHeader}>
                     <div className={styles.commentUserName}>
-                        단발머리 부엉이
+                        {userName}
                     </div>
                     <div className={styles.commentTime}>
-                        3주 전
+                        {commentDate}
                     </div>
                     <div className={styles.bestComment}>
                         Best
@@ -26,16 +43,16 @@ const CommentItem:React.FC = () => {
 
                 <div className={styles.commentBody}>
                     <div className={styles.commentText}>
-                        댓글 어쩌구 저쩌구 와라로로로라라랑호로로로로로로로로로라라랄ㄹ  ㅎ허호호호호호호호 히히히힝 히히히 나능야 그리드 천재 서유진 지상 최대 그리드 신
+                        {commentText}
                     </div>
                     <div className={styles.iconWrapper}>
-                        <Icon icon="clarity:heart-line" className={styles.heartIcon}/>
+                        {heart===1 ? <Icon icon="clarity:heart-solid" className={styles.heartFilledIcon} onClick={() => {handleHeart(heart)}}/> : <Icon icon="clarity:heart-line" className={styles.heartIcon} onClick={()=> {handleHeart(heart)}}/>}
                     </div>
                 </div>
 
                 <div className={styles.userReaction}>
                     <div>
-                        좋아요 30개
+                        좋아요 {heartNum}개
                     </div>
                     <div>
                         답글 달기

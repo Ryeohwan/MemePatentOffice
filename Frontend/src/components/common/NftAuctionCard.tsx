@@ -7,12 +7,12 @@ interface AuctionProps {
 };
 
 const NftAuctionCard:React.FC<AuctionProps> = nft => {
-    const AUCTION_IMG = "http://localhost:3000/" + nft.items.imgUrl;
-    const AUCTION_MEME = nft.items.title;
-    const AUCTION_TIME = nft.items.time;
-    const HIGHEST_BID = nft.items.highest_bid;
-    const MEME_DETAIL_URL = `/meme-detail/${nft.items.meme_id}/tab=trade`;
-    const AUCTION_DETAIL_URL = `/auction/${nft.items.auction_id}`;
+    const auctionImg = "http://localhost:3000/" + nft.items.imgUrl;
+    const auctionMemeTitle = nft.items.title;
+    const auctionTime = nft.items.time;
+    const highestBid = nft.items.highest_bid;
+    const memeDetailUrl = `/meme-detail/${nft.items.meme_id}/tab=trade`;
+    const auctionDetailUrl = `/auction/${nft.items.auction_id}`;
 
     // NFT 제목 글자수 슬라이싱
     const slicingText = (NFT_TEXT:string) => {
@@ -25,21 +25,21 @@ const NftAuctionCard:React.FC<AuctionProps> = nft => {
     
     return (
         <div className={styles.auctionCardWrapper}>
-            <img src={AUCTION_IMG} alt="" className={styles.auctionImg} />
-            <div className={styles.nftTitleText}>{slicingText(AUCTION_MEME)}</div>
+            <img src={auctionImg} alt="" className={styles.auctionImg} />
+            <div className={styles.nftTitleText}>{slicingText(auctionMemeTitle)}</div>
             <div>
                 <div className={styles.auctionTimeTxt}>남은 시간</div>
-                <div className={styles.auctionTime}>{AUCTION_TIME}</div>
+                <div className={styles.auctionTime}>{auctionTime}</div>
             </div>
             <div>
                 <div className={styles.auctionBidTxt}>최고가</div>
-                <div className={styles.auctionBid}>{HIGHEST_BID} SSF</div>
+                <div className={styles.auctionBid}>{highestBid} SSF</div>
             </div>
             <div className={styles.btnWrapper}>
-                <NavLink to={MEME_DETAIL_URL} className={styles.navLink}>
+                <NavLink to={memeDetailUrl} className={styles.navLink}>
                     <div className={styles.nftDetailBtn}>상세 보기</div>
                 </NavLink>
-                <NavLink to={AUCTION_DETAIL_URL} className={styles.navLink}>
+                <NavLink to={auctionDetailUrl} className={styles.navLink}>
                     <div className={styles.auctionDetailBtn}>경매방 입장하기</div>
                 </NavLink>
             </div>

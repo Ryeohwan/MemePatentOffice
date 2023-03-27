@@ -63,6 +63,12 @@
     font-size: 20px;
 }
 
+.heartFilledIcon {
+    font-size: 20px;
+    color: var(--impossible-color);
+    border: var(--impossible-color);
+}
+
 .userReaction {
    display: flex;
    font-size: 12px; 
