@@ -6,12 +6,12 @@ import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.CommentService;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.MemeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
-@Controller
+@RestController
 @RequestMapping("api/meme/comment")
 @RequiredArgsConstructor
 public class CommentController {
@@ -29,17 +29,13 @@ public class CommentController {
     @PostMapping("/create")
     @ResponseBody
     public ResponseEntity createComment(CommentRequest commentRequest) throws NotFoundException {
-        if (commentService.createCommenmt(commentRequest)){
-            return ResponseEntity.ok().body(SUCCESS);
-        }else{
-            return ResponseEntity.ok().body(FAIL);
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createCommenmt(commentRequest));
     }
 
     @PostMapping("/like")  // 좋아요 기능 완료
     @ResponseBody
     public ResponseEntity createLike(CommentLikeRequest commentLikeRequest) throws NotFoundException{
-        return ResponseEntity.ok().body(commentService.createCommentLike(commentLikeRequest));
+        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createCommentLike(commentLikeRequest));
     }
 
 

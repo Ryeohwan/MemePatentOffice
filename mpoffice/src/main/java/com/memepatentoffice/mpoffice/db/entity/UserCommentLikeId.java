@@ -1,41 +1,29 @@
 package com.memepatentoffice.mpoffice.db.entity;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.Hibernate;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.GeneratedValue;
 import java.io.Serializable;
 import java.util.Objects;
 
-@Getter
-@Embeddable
 public class UserCommentLikeId implements Serializable {
     private static final long serialVersionUID = 5704860724562823574L;
-    @GeneratedValue
-    @Column(name = "id", nullable = false)
-    private Long id;
 
-    @Column(name = "comment_id", nullable = false)
-    private Long commentId;
+    private Long comment;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    private Long user;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         UserCommentLikeId entity = (UserCommentLikeId) o;
-        return Objects.equals(this.commentId, entity.commentId) &&
-                Objects.equals(this.userId, entity.userId);
+        return Objects.equals(this.comment, entity.comment) &&
+                Objects.equals(this.user, entity.user);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(commentId, userId);
+        return Objects.hash(comment, user);
     }
 
 }

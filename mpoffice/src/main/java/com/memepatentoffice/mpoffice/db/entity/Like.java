@@ -1,8 +1,6 @@
 package com.memepatentoffice.mpoffice.db.entity;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-
-public enum like {
+public enum Like {
     LIKE,HATE;
 
 //    @JsonCreator

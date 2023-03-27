@@ -1,8 +1,8 @@
 package com.memepatentoffice.mpoffice.domain.user.api.response;
 
-import lombok.Builder;
+import com.memepatentoffice.mpoffice.db.entity.User;
 import lombok.Getter;
-import com.memepatentoffice.mpoffice.db.entity.isValid;
+import com.memepatentoffice.mpoffice.db.entity.IsValid;
 
 import java.time.LocalDateTime;
 
@@ -20,22 +20,21 @@ public class UserResponse {
 
     private final String walletAddress;
 
-    private final isValid isValid;
+    private final IsValid isValid;
 
     private final LocalDateTime createdAt;
 
     private final LocalDateTime updatedAt;
 
-    @Builder
-    public UserResponse(Long id, String name, String email, String nickname, String profileImage, String walletAddress, isValid isValid, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.nickname = nickname;
-        this.profileImage = profileImage;
-        this.walletAddress = walletAddress;
-        this.isValid = isValid;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+    public UserResponse(User user) {
+        this.id = user.getId();
+        this.name = user.getName();
+        this.email = user.getEmail();
+        this.nickname = user.getNickname();
+        this.profileImage = user.getProfileImage();
+        this.walletAddress = user.getWalletAddress();
+        this.isValid = user.getIsValid();
+        this.createdAt = user.getCreatedAt();
+        this.updatedAt = user.getUpdatedAt();
     }
 }

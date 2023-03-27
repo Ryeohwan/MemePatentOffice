@@ -1,21 +1,13 @@
 package com.memepatentoffice.mpoffice.domain.user.api.controller;
 
 import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
-import com.memepatentoffice.mpoffice.domain.user.api.dto.CommentDto;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserSignUpRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserUpdateRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserWithdrawRequest;
-import com.memepatentoffice.mpoffice.domain.user.api.response.CommentResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.response.UserResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.response.UserSignUpResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.service.UserService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,8 +41,8 @@ public class UserController {
 //    @Operation(description = "회원정보 수정 API", summary = "회원정보 수정 API")
     @PostMapping("/update")
     public ResponseEntity updateUser(@RequestBody UserUpdateRequest userUpdateRequest) throws NotFoundException {
-        UserResponse userResponse = userService.updateUser(userUpdateRequest);
-        return ResponseEntity.ok().body(userResponse);
+        Long id = userService.updateUser(userUpdateRequest);
+        return ResponseEntity.ok().body(id);
     }
 
     @GetMapping("/withdraw")
@@ -65,11 +57,11 @@ public class UserController {
 //        return ResponseEntity.ok().body("upload success");
 //    }
 
-    @GetMapping("/comments/{id}?page={page}")
-    public ResponseEntity getUserComments(Long id, int page){
-        Page<CommentResponse> pages = userService.getUserComments(id,page);
-        return ResponseEntity.ok().body(pages);
-    }
+//    @GetMapping("/comments/{id}?page={page}")
+//    public ResponseEntity getUserComments(Long id, int page){
+//        Page<CommentResponse> pages = userService.getUserComments(id,page);
+//        return ResponseEntity.ok().body(pages);
+//    }
 
 //    유저의 NFT 발행 갯수를 체크한다
 //    DB에 count 컬럼 추가 필요
