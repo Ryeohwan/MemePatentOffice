@@ -8,11 +8,14 @@ import { Divider } from "primereact/divider";
 
 import "pages/setting/Setting.css";
 import styles from "pages/setting/ImageEditPage.module.css";
-// 더미 데이터
+
+
+
+// 더미 데이터 -> Axios 받아와서 수정
 import auction from "assets/auction.png";
 import haku from "assets/haku.png";
 import kakao from "assets/kakao.png";
-const MYNFT = [
+const myNFT = [
   {
     id: 1,
     imgSrc: haku,
@@ -44,7 +47,7 @@ const ImageEditPage: React.FC = () => {
     <div className="wrapper">
       <div className={styles.header}>
         <p onClick={()=>navigate('/setting/user-edit/profile')}>취소</p>
-        <p className="pageName">ImageEditPage</p>
+        <p className="pageName">프로필 사진</p>
         <p className={styles.submit} onClick={submitHandler}>확인</p>
       </div>
       <Divider className="divider" />
@@ -66,7 +69,7 @@ const ImageEditPage: React.FC = () => {
           <p>내 NFT</p>
           <div className={styles.myNftList}>
 
-          {MYNFT.map((item, index) => {
+          {myNFT.map((item, index) => {
             return (
               <Avatar
               key={index}
