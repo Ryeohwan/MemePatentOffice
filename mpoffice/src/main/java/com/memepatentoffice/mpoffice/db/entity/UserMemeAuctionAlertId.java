@@ -6,10 +6,9 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class UserMemeAuctionAlertId implements Serializable {
-    private static final long serialVersionUID = 3557203199373495295L;
     private Long meme;
-
     private Long user;
+
 
     @Override
     public boolean equals(Object o) {

@@ -8,11 +8,12 @@ import com.memepatentoffice.mpoffice.domain.user.api.response.UserResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.response.UserSignUpResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-@RequestMapping("api/user")
+@RequestMapping("api/mpoffice/user")
 @RestController
 public class UserController {
 
@@ -23,7 +24,7 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity createUser(@RequestBody UserSignUpRequest userSignUpRequest) {
         UserSignUpResponse userSignUpResponse = userService.createUser(userSignUpRequest);
-        return ResponseEntity.ok().body(userSignUpResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userSignUpResponse);
 
     }
 
@@ -48,8 +49,9 @@ public class UserController {
     @GetMapping("/withdraw")
     public ResponseEntity withdrawUser(@RequestBody UserWithdrawRequest userWithdrawRequest) throws NotFoundException {
         userService.withdrawUser(userWithdrawRequest);
-        return ResponseEntity.ok().body("withdraw success");
+        return ResponseEntity.status(HttpStatus.OK).body("withdraw success");
     }
+
 
 //    @PostMapping("/upload")
 //    public ResponseEntity uploadUserImage(@RequestBody UserUploadRequest userUploadRequest) throws NotFoundException {

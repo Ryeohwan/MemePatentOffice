@@ -1,6 +1,7 @@
 package com.memepatentoffice.mpoffice.domain.meme.api.controller;
 
 import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
+import com.memepatentoffice.mpoffice.domain.meme.api.request.CartRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.UserMemeLikeRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.MemeCreateRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeResponse;
@@ -12,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
-@RequestMapping("api/meme")
+@RequestMapping("/api/mpoffice/meme")
 @RestController
 public class MemeController {
     private final MemeService memeService;
@@ -52,6 +53,13 @@ public class MemeController {
     @ResponseBody
     public ResponseEntity<?> createLike(@RequestBody UserMemeLikeRequest userMemeLikeRequest) throws Exception {
         memeService.addMemeLike(userMemeLikeRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    }
+
+    @PostMapping("/cart")
+    @ResponseBody
+    public ResponseEntity cart(@RequestBody CartRequest cartRequest) throws Exception {
+        memeService.addCart(cartRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 

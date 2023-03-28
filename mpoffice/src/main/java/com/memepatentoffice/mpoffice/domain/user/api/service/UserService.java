@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -41,6 +43,7 @@ public class UserService {
                 .isValid(userSignUpRequest.getIsValid())
                 .walletAddress(userSignUpRequest.getWalletAddress())
                 .profileImage(userSignUpRequest.getProfileImage())
+                .today(LocalDateTime.now())
                 .build();
 
         user = userRepository.save(user);
@@ -70,7 +73,7 @@ public class UserService {
         }
         return user.getId();
     }
-
+    @Transactional
     public void withdrawUser(UserWithdrawRequest userWithdrawRequest) throws NotFoundException {
         User user = findUser(userWithdrawRequest.getId());
     }
@@ -98,4 +101,6 @@ public class UserService {
 //
 //        return resultPage;
 //    }
+
+
 }

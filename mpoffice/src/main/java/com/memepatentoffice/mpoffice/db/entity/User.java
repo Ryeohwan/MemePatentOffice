@@ -39,11 +39,20 @@ public class User extends BaseEntity{
     @Column(name = "withdrawal_reason")
     private String withdrawalReason;
 
+    @Column(name = "today_meme_count")
+    private int todayMemeLike;
+
+    @Column(name = "today")
+    private LocalDateTime today;
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
 
     public void setProfileImage(String profileImage) {
         this.profileImage = profileImage;
+    }
+
+    public void setTodayMemeLike(int todayMemeLike) {
+        this.todayMemeLike = todayMemeLike;
     }
 }

@@ -6,10 +6,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class UserCommentLikeId implements Serializable {
-    private static final long serialVersionUID = 5704860724562823574L;
-
     private Long comment;
-
     private Long user;
 
     @Override
