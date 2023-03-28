@@ -13,7 +13,7 @@ const ProfileEditPage: React.FC = () => {
   const navigate = useNavigate()
   const location = useLocation()
   
-  const porfileImg = location.state ? location.state.imgSrc : sessionStorage.getItem('imgSrc') // 나중에 맞게 변경
+  const porfileImg = location.state ? location.state.imgSrc : JSON.parse(sessionStorage.user).imgUrl
   
   return (
     <div className="wrapper">
@@ -34,7 +34,7 @@ const ProfileEditPage: React.FC = () => {
 
         <div className={styles.nickname}>
           <label htmlFor="nickname">닉네임</label>
-          <InputText id="nickname" />
+          <InputText id="nickname" placeholder={JSON.parse(sessionStorage.user).nickname}/>
         </div>
       </div>
     </div>

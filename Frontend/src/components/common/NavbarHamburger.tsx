@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { Icon } from "@iconify/react";
 import { Sidebar } from "primereact/sidebar";
@@ -11,6 +11,7 @@ interface RoutePath {
 
 const NavbarHamburger: React.FC = () => {
   const { pathname } = useLocation() as RoutePath;
+  const navigate = useNavigate();
 
   // click하면 dropmenu
   const [open, setOpen] = useState<boolean>(false);
@@ -20,10 +21,17 @@ const NavbarHamburger: React.FC = () => {
     setOpen(false);
   }, [pathname]);
 
-  // mypage 이동하기 위한 url
-  // const mypageUrl = `/profile/${sessionStorage.getItem(nickname)}/tab=nft`
-  // 임시 nickname url
-  const mypageUrl = "/profile/단발머리 부엉이20/tab=nft";
+
+  const mypageHandler = () => {
+    // mypage 이동하기 위한 url
+    const mypageUrl = `/profile/${JSON.parse(sessionStorage.getItem('user')!).nickname}/tab=nft`;
+    
+    if (pathname.includes('profile')) {
+      window.location.href = mypageUrl
+    } else {
+      navigate(mypageUrl)
+    }
+  }
 
   return (
     <>
@@ -53,9 +61,13 @@ const NavbarHamburger: React.FC = () => {
             경매 둘러보기
           </NavLink>
 
-          <NavLink to={mypageUrl} className={styles.navLink}>
+          {/* <NavLink to={mypageUrl} className={styles.navLink}>
             마이페이지
-          </NavLink>
+          </NavLink> */}
+
+          <div className={styles.navLink} onClick={mypageHandler}>
+            마이페이지
+          </div>
 
           <p className={styles.navLink}>로그아웃</p>
         </div>
