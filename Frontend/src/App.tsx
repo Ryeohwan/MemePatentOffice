@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Route, Routes } from "react-router-dom";
 
 import LandingPage from 'pages/LandingPage';
@@ -35,15 +35,43 @@ import NotificationListPage from 'pages/NotificationListPage';
 import NotFoundPage from 'pages/NotFoundPage';
 
 import Frame from 'layout/Frame';
+import BlockChainPage from 'contracts/BlockChainPage';
 
 
 const App: React.FC = () => {
+  const [account, setAccount] = useState("");
+
+  const getAccount = async () => {
+    try {
+      if (window.ethereum) {
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        setAccount(accounts[0]);
+      } else {
+        alert("Install Metamask");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getAccount();
+  }, []);
+
+  useEffect(() => {
+    console.log(account);
+  }, [account]);
+
+
   return (
     <div className="App">
       <Frame>
 
         <Routes>
-          
+          {/* blockchain 시험용 페이지 */}
+          <Route path="/blockchain" element={<BlockChainPage account={account}/>}/>
           <Route path="" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
@@ -72,7 +100,7 @@ const App: React.FC = () => {
 
           <Route path="/setting/auction-history" element={<AuctionHistoryPage />} />
           <Route path="/setting/auction-history/purchase" element={<PurchaseHistoryPage />} />
-          <Route path="setting/auction-history/sale" element={<SaleHistoryPage />} />
+          <Route path="/setting/auction-history/sale" element={<SaleHistoryPage />} />
 
           <Route path="/setting/notification" element={<NotificationSettingPage />} />
 
