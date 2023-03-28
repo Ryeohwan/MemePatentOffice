@@ -14,9 +14,10 @@ const AuctionSlideMenu: React.FC = () => {
   const [sellerInfoVisible, setSellerInfoVisible] = useState(false);
   const [biddingHistoryInfoVisible, setBiddingHistoryInfoVisible] =
     useState(false);
-
+  const nickname="3반 김재준"
   const sellerInfoHandler = () => {
     setSellerInfoVisible(true);
+    navigate(`${nickname}/tab=nft`)
   };
   const sellerInfoHandlerFalse = () => {
     setSellerInfoVisible(false);
