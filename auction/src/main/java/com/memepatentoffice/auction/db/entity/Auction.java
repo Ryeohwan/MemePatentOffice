@@ -33,7 +33,7 @@ public class Auction extends BaseEntity{
     public Auction(Long memeId){
         this.memeId = memeId;
     }
-    protected void terminate(){
+    public void terminate(){
         this.status = Status.TERMINATED;
     }
 }

@@ -18,25 +18,19 @@ public class SwaggerConfig {
     public Docket api(){
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.memepatentoffice.auction"))
+                .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo())
                 .useDefaultResponseMessages(false);
     }
+
     private ApiInfo apiInfo(){
-        return new ApiInfoBuilder()
-                .title("REST API")
-                .description("밈 특허청")
-                .version("v1")
-                .termsOfServiceUrl("https://j8a305.p.ssafy.io")
-                .contact(new Contact(
-                        "a305",
-                        "https://j8a305.p.ssafy.io"
-                        ,"developerhongjulee@gmail.com"
-                ))
-                .license("License")
-                .licenseUrl("https://j8a305.p.ssafy.io")
+        return new ApiInfoBuilder().title("Meme Patent Office")
+                .description("온라인 밈 특허청의 API Swagger입니다.")
+                .contact(new Contact("Meme Patent Swagger", "https://url.com", "developerhongjulee@gmail.com"))
+                .version("v1.0")
                 .build();
     }
+
 }
