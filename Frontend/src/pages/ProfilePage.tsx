@@ -10,6 +10,7 @@ import styles from "./ProfilePage.module.css";
 const ProfilePage: React.FC = () => {
   const params = useParams();
   const nickname = params.nickname;
+  const auction_id = params.auction_id ? params.auction_id : null
 
   // useAxios api get
   // 임시 data
@@ -126,8 +127,8 @@ const ProfilePage: React.FC = () => {
       {nickname && (
         <div className={styles.pageContainer}>
           <ProfileImageArea imgUrl={data.imgUrl} />
-          <ProfileNicknameArea nickname={nickname} />
-          <ProfileTabComp nickname={nickname} nftList={data.nftList} auctionList={data.auctionList}/>
+          <ProfileNicknameArea nickname={nickname}/>
+          <ProfileTabComp nickname={nickname} nftList={data.nftList} auctionList={data.auctionList} auction_id={auction_id}/>
         </div>
       )}
     </>

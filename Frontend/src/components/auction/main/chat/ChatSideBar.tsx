@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import ChatInputText from "./ChatInputText";
 import ChatList from "./ChatList";
@@ -15,16 +15,17 @@ const ChatSideBar: React.FC<ChatSideBarProps> = ({
   chatVisible,
   chatVisibleHandlerFalse,
 }) => {
+
   return (
     <>
       <Sidebar
-      appendTo={document.getElementById('auction')}
+        appendTo={document.getElementById("auction")}
         className={styles.sideBar}
         visible={chatVisible}
         position="bottom"
         onHide={() => chatVisibleHandlerFalse()}
       >
-        <ChatList />
+        <ChatList chatVisible={chatVisible}/>
         <ChatInputText />
       </Sidebar>
     </>

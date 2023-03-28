@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Routes } from "react-router-dom";
-
+import ScrollToTop from 'components/common/ScrollToTop';
 import LandingPage from 'pages/LandingPage';
 import LoginPage from 'pages/LoginPage';
 import SignupPage from 'pages/SignupPage';
@@ -39,6 +39,7 @@ import Frame from 'layout/Frame';
 const App: React.FC = () => {
   return (
     <div className="App">
+      <ScrollToTop width={0} height={0}/>
       <Frame>
 
         <Routes>
@@ -53,7 +54,7 @@ const App: React.FC = () => {
           <Route path="/meme-detail/:meme_id/*" element={<MemeDetailPage />} />
 
           <Route path="/auction-list/*" element={<AuctionListPage />} />
-          <Route path='/auction/:auction_id' element={<AuctionPage />} />
+          <Route path='/auction/:auction_id/*' element={<AuctionPage />} />
 
           <Route path="/profile/:nickname/*" element={<ProfilePage />} />
 
