@@ -6,4 +6,4 @@ services:
       context: .
       dockerfile: ./Dockerfile
     ports:
-      - "8007:8007"
+      - "8071:8071"
