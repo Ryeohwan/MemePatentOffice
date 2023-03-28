@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import static com.memepatentoffice.auth.common.security.oauth.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
@@ -31,8 +32,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     final private TokenProvider tokenProvider;
     final private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
 
-    @Value("${app.oauth2.authorized-redirect-uri}")
-    private String AUTHORIZED_REDIRECT_URL;
+    @Value("${app.oauth2.authorized-redirect-uris}")
+    private List<String> AUTHORIZED_REDIRECT_URLS;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -76,11 +77,16 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private boolean isAuthorizedRedirectUri(String uri) {
         URI clientRedirectUri = URI.create(uri);
 
-        URI authorizedURI = URI.create(AUTHORIZED_REDIRECT_URL);
-        if(authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
-                && authorizedURI.getPort() == clientRedirectUri.getPort()) {
-            return true;
-        }
-        return false;
+        return AUTHORIZED_REDIRECT_URLS
+                .stream()
+                .anyMatch(authorizedRedirectUri -> {
+                    // Only validate host and port. Let the clients use different paths if they want to
+                    URI authorizedURI = URI.create(authorizedRedirectUri);
+                    if(authorizedURI.getHost().equalsIgnoreCase(clientRedirectUri.getHost())
+                            && authorizedURI.getPort() == clientRedirectUri.getPort()) {
+                        return true;
+                    }
+                    return false;
+                });
     }
 }
