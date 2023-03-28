@@ -1,10 +1,10 @@
-package com.memepatentoffice.auction;
+package com.memepatentoffice.auth;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MemePatentOfficeApplicationTests {
+class AuthApplicationTests {
 
 	@Test
 	void contextLoads() {
