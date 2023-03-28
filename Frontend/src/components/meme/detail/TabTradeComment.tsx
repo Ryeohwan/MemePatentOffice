@@ -3,7 +3,7 @@ import TabComp from "components/common/TabComp";
 import { Route } from "react-router-dom";
 import styles from "./TabTradeComment.module.css";
 import ChartTradeComp from "./ChartTradeComp";
-import CommentListComp from "./CommentListComp";
+import CommentTab from "../comment/CommentTab";
 
 
 const TabTradeComment:React.FC = () => {
@@ -19,7 +19,7 @@ const TabTradeComment:React.FC = () => {
         <div className={styles.tabContainer}>
           <TabComp items={tabItems}>
             <Route path="/tab=trade" element={<ChartTradeComp/>} />             
-            <Route path="/tab=comment" element={<CommentListComp />} />
+            <Route path="/tab=comment" element={<CommentTab />} />
           </TabComp>
         </div>
       );

@@ -10,16 +10,20 @@ interface CommentType {
 };
 
 const CommentItem:React.FC<CommentType> = comment => {
-    const dispatch = useDispatch()
+    
+    const dispatch = useDispatch();
+
     const userName = comment.items.userName;
     const userImg = "http://localhost:3000/" + comment.items.userImgUrl;
     const commentDate = comment.items.date;
     const commentText = comment.items.comment;
     const heart = comment.items.liked;
     const heartNum = comment.items.likes;
+    const best = comment.items.best;
 
-    const handleHeart = (heart:number) => {
-        dispatch(commentListActions.toggleLike({id:comment.items.id}))
+    // 좋아요 눌렀을 때 내가 이미 좋아한 댓글이면 좋아요 취소, 아니면 좋아요 => 좋아요 개수 -1, +1
+    const handleHeart = () => {
+        dispatch(commentListActions.toggleLike({id:comment.items.id}));
     };
 
     return (
@@ -36,9 +40,7 @@ const CommentItem:React.FC<CommentType> = comment => {
                     <div className={styles.commentTime}>
                         {commentDate}
                     </div>
-                    <div className={styles.bestComment}>
-                        Best
-                    </div>
+                    { best === 1 ? <div className={styles.bestComment}>Best</div> : null}
                 </div>
 
                 <div className={styles.commentBody}>
@@ -46,7 +48,7 @@ const CommentItem:React.FC<CommentType> = comment => {
                         {commentText}
                     </div>
                     <div className={styles.iconWrapper}>
-                        {heart===1 ? <Icon icon="clarity:heart-solid" className={styles.heartFilledIcon} onClick={() => {handleHeart(heart)}}/> : <Icon icon="clarity:heart-line" className={styles.heartIcon} onClick={()=> {handleHeart(heart)}}/>}
+                        {heart===1 ? <Icon icon="clarity:heart-solid" className={styles.heartFilledIcon} onClick={() => {handleHeart()}}/> : <Icon icon="clarity:heart-line" className={styles.heartIcon} onClick={()=> {handleHeart()}}/>}
                     </div>
                 </div>
 
