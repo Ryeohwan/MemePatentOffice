@@ -9,4 +9,6 @@ public interface UserMemeLikeRepository extends JpaRepository<UserMemeLike,Long>
 
 
     boolean existsUserMemeLikeByUserIdAndMemeId(Long userId, Long memeId);
+
+    UserMemeLike findUserMemeLikeByUserIdAndMemeId(Long userId, Long memeId);
 }

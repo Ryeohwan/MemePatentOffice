@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -28,4 +30,10 @@ public class UserMemeLike {
     @Column(name = "like")
     private Like like;
 
+    @Column(name = "date")
+    private LocalDate date;
+
+    public void setLike(Like like) {
+        this.like = like;
+    }
 }
