@@ -55,21 +55,21 @@ const AuctionCanvas: React.FC = () => {
   const [biddingVisible, setBiddingVisible] = useState<boolean>(false);
   const [biddingSubmit, setBiddingSubmit] = useState<boolean>(false);
   const [fullScreen, setFullScreen] = useState(false)
-  useEffect(() => {
-    const elem = document.getElementById("auction");
-    if (elem) {
-      elem.addEventListener("click", () => {
-        if (elem.requestFullscreen) {
-          elem.requestFullscreen();
-        }
-      });
-    }
-    setFullScreen(true)
-    return () => {
-      if (document.fullscreenElement)
-      document.exitFullscreen();
-    };
-  }, []);
+  // useEffect(() => {
+  //   const elem = document.getElementById("auction");
+  //   if (elem) {
+  //     elem.addEventListener("click", () => {
+  //       if (elem.requestFullscreen) {
+  //         elem.requestFullscreen();
+  //       }
+  //     });
+  //   }
+  //   setFullScreen(true)
+  //   return () => {
+  //     if (document.fullscreenElement)
+  //     document.exitFullscreen();
+  //   };
+  // }, []);
 
   const biddingHandler = () => {
     setBiddingVisible(false);
@@ -200,7 +200,8 @@ const AuctionCanvas: React.FC = () => {
         isSitting={isSitting}
       />
       <div className={styles.buttonWrapper}>
-        {document.getElementById("auction") && <AuctionSlideMenu />}
+        {/* {document.getElementById("auction") && <AuctionSlideMenu />} */}
+        <AuctionSlideMenu />
         {visible && !sitting.current && (
           <Button
             label="앉기"
