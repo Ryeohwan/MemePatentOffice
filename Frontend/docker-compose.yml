@@ -9,3 +9,9 @@ services:
     ports:
       - 3000:3000
     restart: always
+    networks:
+      - a305-net
+networks:
+  a305-net:
+    external:
+      name: a305-net
