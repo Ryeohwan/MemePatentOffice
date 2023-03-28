@@ -16,12 +16,18 @@ const ChatInputText: React.FC = () => {
   };
 
   const sendMessageHandler = (value: string) => {
-    const offset = 1000 * 60 * 60 * 9
-    const date = new Date((new Date()).getTime() + offset).toISOString();
+    const offset = 1000 * 60 * 60 * 9;
+    const date = new Date(new Date().getTime() + offset).toISOString();
     const newDate = date.split("T");
-    const time = newDate[1].split(':')
-    const formatTime = `${newDate[0]}-${time[0]}-${time[1]}`
-    dispatch(chatActions.sendChat({chat:{id:"조명오", message:value, time:formatTime}}))
+    const time = newDate[1].split(":");
+    const formatTime = `${newDate[0]}-${time[0]}-${time[1]}`;
+    if (value.trim()) {
+      dispatch(
+        chatActions.sendChat({
+          chat: { id: "조명오", message: value, time: formatTime },
+        })
+      );
+    }
   };
   return (
     <div className={styles.wrapper}>

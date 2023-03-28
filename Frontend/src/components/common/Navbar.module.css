@@ -7,7 +7,7 @@
   position: fixed;
   top: 0;
   padding: 10px 20px;
-  z-index: 1110;
+  z-index: 10000;
   backdrop-filter: blur(8px);
 }
 
@@ -20,25 +20,37 @@
 }
 
 .logoImg {
-  width: 2.2rem;
+  width: 1.5  rem;
   height: 2rem;
   margin-top: 3px;
 }
 
 .logoTxt {
   color: var(--point-color);
-  font-size: 1.3rem;
-  margin: 8px 0 0 6px;
+  font-size: 1.1rem;
+  margin: 10px 0 0 6px;
   font-weight: bold;
 }
 
 .rightContainer {
   display: flex;
-  gap: 1rem;
+  gap: 0.6rem;
 }
+
+.rightItem {
+  border: 1px solid var(--box-shadow);
+  background-color: var(--white-color);
+  width: 2.3rem;
+  height: 2.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+
 
 .notification {
   color: #7D7D7D;
-  font-size: 1.9rem;
+  font-size: 1.5rem;
   margin-top: 3px;
 }

@@ -22,6 +22,11 @@
     outline: none;
 }
 
+.inputBox::placeholder {
+    font-size: 12px;
+    color: var(--disabled-gray-color);
+}
+
 .spinnerContainer {
     width: 5%;
     height: 100%;
@@ -31,8 +36,13 @@
     color: var(--point-color);
 }
 
-.explanation {
+.errorBox {
+    border: 1px solid var(--impossible-color) !important;
+}
+
+.errorMsg {
     font-size: 10px;
-    color: var(--disabled-gray-color);
+    color: var(--impossible-color);
     margin: 4px 0 0 4px;
+    height: 10px;
 }

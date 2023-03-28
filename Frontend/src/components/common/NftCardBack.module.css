@@ -3,7 +3,6 @@
     box-shadow: var(--box-shadow);
     width: 246px;
     height: 247px;
-    margin-left: 10px;
     padding: 10px 5px 9px 9px;
     position: relative;
 }
@@ -19,18 +18,39 @@
     border: 0;
     background-color: var(--disabled-gray-color);
 }
+.nftDescriptionTxt {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
 
 .nftCardBackDetail {
     font-size: 12px;
     line-height: 18px;
 }
 
-.detailBtn {
+.detailIcon {
+    font-size: 1.4rem;
+    color: var(--white-color);
+    margin-left: 5px;
+    margin-bottom: 2px;
+}
+
+.detailNavLink {
+    text-decoration: none;
+    color: var(--white-color);
     position: absolute;
     bottom: 0;
     right: 0;
-    font-size: 1.7rem;
-    color: var(--button-color);
-    border-radius: 6px;
-    margin: 4px;
+    margin: 0px 5px 4px 0px;
+}
+
+.detailDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+    width: 90px;
+    height: 25px;
+    border-radius: 4px;
+    background-color: var(--button-color);
 }

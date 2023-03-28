@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
 import { Avatar } from "primereact/avatar";
-import { Chip } from "primereact/chip";
 
 import styles from "components/auction/main/chat/ChatItem.module.css";
 

@@ -1,10 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./TabNavComp.module.css";
 
-interface RoutePath {
-  pathname: string;
-  search: string;
-}
 
 interface TabItem {
   name: string;
@@ -13,16 +9,15 @@ interface TabItem {
 
 interface Props {
   items: TabItem[];
+  clickHandler: (item: TabItem) => void;
 }
 
-const TabNavComp: React.FC<Props> = ({ items }) => {
-  const { pathname, search } = useLocation() as RoutePath;
-  const navigate = useNavigate();
-
+const TabNavComp: React.FC<Props> = ({ items, clickHandler }) => {
+  const location = useLocation();
   const itemLen = items.length;
   let itemIdx = -1;
-  for (let i = 0; i < itemLen; i++)  {
-    if (items[i].path === pathname + search) {
+  for (let i = 0; i < itemLen; i++) {
+    if (items[i].path.startsWith(decodeURIComponent(location.pathname))) {
       itemIdx = i + 1;
     }
   }
@@ -35,7 +30,7 @@ const TabNavComp: React.FC<Props> = ({ items }) => {
             <div
               key={item.name}
               className={styles.tabMenu}
-              onClick={() => navigate(item.path, { replace: true })}
+              onClick={() => clickHandler(item)}
             >
               {item.name}
             </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Route, Routes } from "react-router-dom";
-
+import ScrollToTop from 'components/common/ScrollToTop';
 import LandingPage from 'pages/LandingPage';
 import LoginPage from 'pages/LoginPage';
 import SignupPage from 'pages/SignupPage';
@@ -24,12 +24,11 @@ import WithdrawlPage from 'pages/setting/WithdrawlPage';
 
 import HistoryPage from 'pages/setting/HistoryPage';
 import CommentHistoryPage from 'pages/setting/CommentHistoryPage';
-import NftLikePage from 'pages/setting/NftLikePage';
-import NftNotificationPage from 'pages/setting/NftNotificationPage';
+import NftLikePage from 'pages/setting/NftLikeNoticePage';
+import NftNotificationPage from 'pages/setting/NftLikeNoticePage';
 
 import AuctionHistoryPage from 'pages/setting/AuctionHistoryPage';
-import PurchaseHistoryPage from 'pages/setting/PurchaseHistoryPage';
-import SaleHistoryPage from 'pages/setting/SaleHistoryPage';
+import PurchaseSaleHistoryPage from 'pages/setting/PurchaseSaleHistoryPage';
 import NotificationSettingPage from 'pages/setting/NotificationSettingPage';
 import NotificationListPage from 'pages/NotificationListPage';
 import NotFoundPage from 'pages/NotFoundPage';
@@ -67,6 +66,7 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
+      <ScrollToTop width={0} height={0}/>
       <Frame>
 
         <Routes>
@@ -75,16 +75,16 @@ const App: React.FC = () => {
           <Route path="" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/home" element={<HomePage />} />
+          <Route path="/main" element={<HomePage />} />
 
           <Route path="/meme-upload" element={<MemeUploadPage />} />
           <Route path="/meme-list/*" element={<MemeListPage />} />
-          <Route path="/meme-detail/:meme_id" element={<MemeDetailPage />} />
+          <Route path="/meme-detail/:meme_id/*" element={<MemeDetailPage />} />
 
-          <Route path="/auction-list" element={<AuctionListPage />} />
-          <Route path='/auction/:auction_id' element={<AuctionPage />} />
+          <Route path="/auction-list/*" element={<AuctionListPage />} />
+          <Route path='/auction/:auction_id/*' element={<AuctionPage />} />
 
-          <Route path="/profile/:nickname" element={<ProfilePage />} />
+          <Route path="/profile/:nickname/*" element={<ProfilePage />} />
 
           <Route path="/setting" element={<SettingPage />} />
           
@@ -99,8 +99,8 @@ const App: React.FC = () => {
           <Route path="/setting/history/nft-notification" element={<NftNotificationPage />} />
 
           <Route path="/setting/auction-history" element={<AuctionHistoryPage />} />
-          <Route path="/setting/auction-history/purchase" element={<PurchaseHistoryPage />} />
-          <Route path="/setting/auction-history/sale" element={<SaleHistoryPage />} />
+          <Route path="/setting/auction-history/purchase" element={<PurchaseSaleHistoryPage />} />
+          <Route path="/setting/auction-history/sale" element={<PurchaseSaleHistoryPage />} />
 
           <Route path="/setting/notification" element={<NotificationSettingPage />} />
 

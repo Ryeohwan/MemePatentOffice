@@ -9,13 +9,15 @@ import BiddingHistory from "./BiddingHistory";
 import { useNavigate } from "react-router-dom";
 
 const AuctionSlideMenu: React.FC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const menu = useRef<SlideMenu>(null);
   const [sellerInfoVisible, setSellerInfoVisible] = useState(false);
-  const [biddingHistoryInfoVisible, setBiddingHistoryInfoVisible] =useState(false);
-
+  const [biddingHistoryInfoVisible, setBiddingHistoryInfoVisible] =
+    useState(false);
+  const nickname="3반 김재준"
   const sellerInfoHandler = () => {
     setSellerInfoVisible(true);
+    navigate(`${nickname}/tab=nft`)
   };
   const sellerInfoHandlerFalse = () => {
     setSellerInfoVisible(false);
@@ -28,8 +30,8 @@ const AuctionSlideMenu: React.FC = () => {
   };
 
   const goOut = () => {
-    navigate('/auction-list')
-  }
+    navigate("/auction-list/type=new");
+  };
 
   const items: MenuItem[] = [
     {
@@ -60,6 +62,7 @@ const AuctionSlideMenu: React.FC = () => {
       />
       <div className={styles.slideDiv}>
         <SlideMenu
+          appendTo={document.getElementById("auction")}
           className={styles.pSlidemenu}
           ref={menu}
           model={items}

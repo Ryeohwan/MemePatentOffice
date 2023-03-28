@@ -1,0 +1,10 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.pageHeader {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 16px;
+}

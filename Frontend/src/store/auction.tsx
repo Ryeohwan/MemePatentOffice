@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+export type biddingHistory = {
+    nickname: string,
+    SSF: number,
+    time: string
+}
+
 interface initialStateInterface {
-    biddingHistory:{
-        nickname: string,
-        SSF: number,
-        time: string
-    }[]
+    biddingHistory:biddingHistory[]
 }
 
 const initialState: initialStateInterface = {
@@ -36,5 +38,5 @@ const auctionSlice = createSlice({
   },
 });
 
-export const chatActions = auctionSlice.actions;
+export const auctionActions = auctionSlice.actions;
 export default auctionSlice.reducer;

@@ -113,13 +113,6 @@ const LandingPanel: React.FC<LandingPanelProps> = ({
     }
   });
 
-  //   useFrame(() => {
-  //     if (panelState.current) {
-  //       setPanelRandom(true);
-  //     } else {
-  //       setPanelRandom(false);
-  //     }
-  //   });
 
   return (
     <>

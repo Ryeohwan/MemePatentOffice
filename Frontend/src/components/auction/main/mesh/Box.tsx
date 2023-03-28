@@ -9,14 +9,14 @@ interface BlockProps {
 const Box: React.FC<BlockProps> = ({ position }) => {
   const mesh = useRef<THREE.Mesh>(null);
 
-  const blockTexture = useLoader(
-    THREE.TextureLoader,
-    "/auction/material/grid.png"
-  );
-  blockTexture.wrapS = THREE.RepeatWrapping;
-  blockTexture.wrapT = THREE.RepeatWrapping;
-  blockTexture.repeat.x = 2;
-  blockTexture.repeat.y = 2;
+  // const blockTexture = useLoader(
+  //   THREE.TextureLoader,
+  //   "/auction/material/grid.png"
+  // );
+  // blockTexture.wrapS = THREE.RepeatWrapping;
+  // blockTexture.wrapT = THREE.RepeatWrapping;
+  // blockTexture.repeat.x = 2;
+  // blockTexture.repeat.y = 2;
 
   useEffect(() => {
     if (mesh.current) {
@@ -27,7 +27,7 @@ const Box: React.FC<BlockProps> = ({ position }) => {
   return (
     <mesh receiveShadow position={position} ref={mesh}>
       <boxGeometry args={[30, 30, 60]} />
-      <meshStandardMaterial map={blockTexture} side={THREE.BackSide}/>
+      <meshStandardMaterial side={THREE.BackSide}/>
     </mesh>
   );
 };

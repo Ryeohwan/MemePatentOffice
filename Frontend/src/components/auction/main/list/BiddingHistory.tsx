@@ -5,8 +5,8 @@ import styles from "components/auction/main/list/BiddingHistory.module.css";
 import BiddingHistoryList from "./BiddingHistoryList";
 
 interface BiddingHistoryProps {
-    biddingHistoryInfoVisible: boolean;
-    biddingHistoryInfoHandlerFalse: () => void;
+  biddingHistoryInfoVisible: boolean;
+  biddingHistoryInfoHandlerFalse: () => void;
 }
 
 const BiddingHistory: React.FC<BiddingHistoryProps> = ({
@@ -15,13 +15,14 @@ const BiddingHistory: React.FC<BiddingHistoryProps> = ({
 }) => {
   return (
     <Sidebar
-        className={styles.sideBar}
-        visible={biddingHistoryInfoVisible}
-        position="bottom"
-        onHide={() => biddingHistoryInfoHandlerFalse()}
-      >
-        <BiddingHistoryList/>
-      </Sidebar>
+      appendTo={document.getElementById("auction")}
+      className={styles.sideBar}
+      visible={biddingHistoryInfoVisible}
+      position="bottom"
+      onHide={() => biddingHistoryInfoHandlerFalse()}
+    >
+      <BiddingHistoryList />
+    </Sidebar>
   );
 };
 

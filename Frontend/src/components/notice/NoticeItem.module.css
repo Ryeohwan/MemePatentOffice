@@ -1,0 +1,35 @@
+.itemWrapper{
+    height: 2.5rem;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 6% 0% 0% 0%;
+    z-index: 0;
+}
+
+.avatar{
+    width: 4rem !important;
+    height: 100% !important;
+    margin: 0 3% 0 3%;
+}
+.textWrapper{
+    width:100%;
+}
+.text{
+    font-size: 13px;
+    width:100%
+}
+
+.text > span {
+    position: static;
+    font-weight: bold;
+    font-size:14px;
+    z-index: 1;
+}
+
+.textWrapper > .elapsedText {
+    font-size:8px;
+    text-align: end;
+    opacity: 0.3;
+}

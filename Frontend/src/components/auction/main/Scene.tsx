@@ -12,27 +12,31 @@ import Border from "components/auction/main/mesh/Border";
 import styles from "components/auction/main/Scene.module.css";
 
 interface SceneProps {
-  width: number;
-  height: number;
   canSit: () => void;
   cantSit: () => void;
   player: React.MutableRefObject<THREE.Object3D>;
   chairPoint: React.MutableRefObject<THREE.Mesh>;
   playerAnimation: React.MutableRefObject<THREE.AnimationAction | undefined>;
   sitting: React.MutableRefObject<Boolean>;
-  camera: React.MutableRefObject<THREE.OrthographicCamera>;
+  camera: React.MutableRefObject<THREE.OrthographicCamera|THREE.PerspectiveCamera>;
+  biddingSubmit: boolean
+  playerPosition: React.MutableRefObject<THREE.Vector3>;
+  moving: React.MutableRefObject<boolean>;
+  isSitting: React.MutableRefObject<boolean>
 }
 
 const Scene: React.FC<SceneProps> = ({
-  width,
-  height,
   canSit,
   cantSit,
   player,
   chairPoint,
   playerAnimation,
   sitting,
-  camera
+  camera,
+  biddingSubmit,
+  playerPosition,
+  moving,
+  isSitting
 }) => {
   const canvas = useRef<any>();
   const [meshes, setMeshes] = useState<THREE.Mesh[]>([]);
@@ -44,11 +48,8 @@ const Scene: React.FC<SceneProps> = ({
   const clickPosition = useRef<THREE.Vector3>(new THREE.Vector3());
   const chairPoints = useRef<Array<THREE.Mesh>>([]);
 
-  const playerPosition = useRef<THREE.Vector3>(new THREE.Vector3());
-  const moving = useRef(false);
-
   // 카메라
-  const cameraPosition = new THREE.Vector3(13, 10, 25);
+  const cameraPosition = new THREE.Vector3(35, 20, 80);
   
 
   useEffect(() => {
@@ -59,12 +60,14 @@ const Scene: React.FC<SceneProps> = ({
   // 이벤트
   const createdHandler = () => {
     camera.current.position.set(
-      cameraPosition.x,
-      cameraPosition.y,
-      cameraPosition.z
+      cameraPosition.x+13,
+      cameraPosition.y+10,
+      cameraPosition.z+29
     );
     camera.current.zoom = 30;
+    camera.current.lookAt(13,10,29)
     camera.current.updateProjectionMatrix();
+
   };
 
   const pushMesh = (mesh: THREE.Mesh) => {
@@ -148,6 +151,8 @@ const Scene: React.FC<SceneProps> = ({
         chairPoint={chairPoint}
         playerAnimation={playerAnimation}
         tableAndChairs={tableAndChairs}
+        biddingSubmit={biddingSubmit}
+        isSitting={isSitting}
       />
       <Box position={[0, 15, 0]} />
       <Table table={table} pushMesh={pushMesh} tableAndChairs={tableAndChairs}/>

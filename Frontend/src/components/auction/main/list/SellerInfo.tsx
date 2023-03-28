@@ -2,6 +2,9 @@ import React from "react";
 
 import { Sidebar } from "primereact/sidebar";
 import styles from "components/auction/main/list/SellerInfo.module.css";
+import ProfilePage from "pages/ProfilePage";
+import { Routes, Route } from "react-router";
+import { Dialog } from "primereact/dialog";
 
 interface SellerInfoProps {
   sellerInfoVisible: boolean;
@@ -14,12 +17,17 @@ const SellerInfo: React.FC<SellerInfoProps> = ({
 }) => {
   return (
     <Sidebar
-        className={styles.sideBar}
-        visible={sellerInfoVisible}
-        position="bottom"
-        onHide={() => sellerInfoHandlerFalse()}
-      >
-      </Sidebar>
+      appendTo={document.getElementById("auction")}
+      className={styles.sideBar}
+      visible={sellerInfoVisible}
+      position="bottom"
+      onHide={() => sellerInfoHandlerFalse()}
+      modal={false}
+    >
+      <Routes>
+        <Route path=":nickname/*" element={<ProfilePage />} />
+      </Routes>
+    </Sidebar>
   );
 };
 
