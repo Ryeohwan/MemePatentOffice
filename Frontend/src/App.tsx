@@ -2,7 +2,6 @@ import React from 'react';
 import { Route, Routes } from "react-router-dom";
 import ScrollToTop from 'components/common/ScrollToTop';
 import LandingPage from 'pages/LandingPage';
-import LoginPage from 'pages/LoginPage';
 import SignupPage from 'pages/SignupPage';
 import HomePage from 'pages/HomePage';
 
@@ -45,7 +44,6 @@ const App: React.FC = () => {
         <Routes>
           
           <Route path="" element={<LandingPage />} />
-          <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/main" element={<HomePage />} />
 

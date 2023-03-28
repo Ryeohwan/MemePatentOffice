@@ -1,5 +1,6 @@
 // profile page (/profile/:nickname)
-import { useParams } from "react-router-dom";
+import { useEffect } from 'react';
+import { useParams, useLocation } from "react-router-dom";
 
 import ProfileImageArea from "components/profile/ProfileImageArea";
 import ProfileNicknameArea from "components/profile/ProfileNicknameArea";
@@ -12,10 +13,12 @@ const ProfilePage: React.FC = () => {
   const nickname = params.nickname;
   const auction_id = params.auction_id ? params.auction_id : null
 
+  
   // useAxios api get
   // 임시 data
+  const isMyProfile = (JSON.parse(sessionStorage.getItem('user')!).nickname === nickname)
   const data = {
-    imgUrl: "totoro.jpg",
+    imgUrl: isMyProfile ? JSON.parse(sessionStorage.getItem('user')!).imgUrl : "http://localhost:3000/totoro.jpg",
     nftList: [
       {
         id: 1,

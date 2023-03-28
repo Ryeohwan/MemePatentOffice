@@ -9,9 +9,7 @@ interface Props {
 const ProfileNicknameArea: React.FC<Props> = ({ nickname }) => {
   const navigate = useNavigate();
   // myprofile 이면 true 다른 user profile이면 false
-  // const isMyProfile = sessionStorage.getItem('nickname') === nickname
-  // 임시 상태
-  const isMyProfile = true;
+  const isMyProfile = (JSON.parse(sessionStorage.getItem('user')!).nickname === nickname)
 
   return (
     <div className={styles.areaContainer}>
