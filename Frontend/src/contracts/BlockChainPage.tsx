@@ -18,8 +18,8 @@ const BlockChainPage: React.FC<AccountProps> = ({ account }) => {
         
         if (response.status) {
           const balanceLength = await mintAnimalTokenContract.methods.balanceOf(account).call();
-          const animalType = await mintAnimalTokenContract.methods.animalTypes(animalTokenId).call();
-          setNewAnimalType(animalType);
+          // const animalType = await mintAnimalTokenContract.methods.animalTypes(animalTokenId).call();
+          // setNewAnimalType(animalType);
         }
 
     } catch (e) {
