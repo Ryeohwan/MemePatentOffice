@@ -4,6 +4,7 @@ import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserSignUpRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserUpdateRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserWithdrawRequest;
+import com.memepatentoffice.mpoffice.domain.user.api.response.CountResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.response.UserResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.response.UserSignUpResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.service.UserService;
@@ -12,11 +13,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @RequiredArgsConstructor
 @RequestMapping("api/mpoffice/user")
 @RestController
 public class UserController {
-
     private final UserService userService;
 
 //    @ApiResponse(responseCode = "200", description = "회원가입 성공", content = @Content(schema = @Schema(implementation = UserSignUpResponse.class)))
@@ -25,8 +28,16 @@ public class UserController {
     public ResponseEntity createUser(@RequestBody UserSignUpRequest userSignUpRequest) {
         UserSignUpResponse userSignUpResponse = userService.createUser(userSignUpRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(userSignUpResponse);
-
     }
+
+//    @PostMapping("/signupList")
+//    @ResponseBody
+//    public ResponseEntity createUserList(@RequestBody List<UserSignUpRequest> list) {
+//        for(UserSignUpRequest a : list){
+//            userService.createUser(a);
+//        }
+//        return ResponseEntity.status(HttpStatus.CREATED).body("finish");
+//    }
 
 //    @ApiResponse(responseCode = "200", description = "회원정보 조회 성공", content = @Content(schema = @Schema(implementation = UserResponse.class)))
 //    @ApiResponse(responseCode = "404", description = "회원정보 조회 실패")
@@ -41,23 +52,25 @@ public class UserController {
 //    @ApiResponse(responseCode = "404", description = "회원정보 수정 실패")
 //    @Operation(description = "회원정보 수정 API", summary = "회원정보 수정 API")
     @PostMapping("/update")
+    @ResponseBody
     public ResponseEntity updateUser(@RequestBody UserUpdateRequest userUpdateRequest) throws NotFoundException {
         Long id = userService.updateUser(userUpdateRequest);
-        return ResponseEntity.ok().body(id);
+        return ResponseEntity.status(HttpStatus.OK).body(id);
     }
 
-    @GetMapping("/withdraw")
+    @PostMapping("/withdraw")
+    @ResponseBody
     public ResponseEntity withdrawUser(@RequestBody UserWithdrawRequest userWithdrawRequest) throws NotFoundException {
         userService.withdrawUser(userWithdrawRequest);
         return ResponseEntity.status(HttpStatus.OK).body("withdraw success");
     }
 
+    @GetMapping("/check/{id}")
+    public ResponseEntity checkCount(@PathVariable("id") Long id) throws NotFoundException {
+        CountResponse result = userService.userCount(id);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 
-//    @PostMapping("/upload")
-//    public ResponseEntity uploadUserImage(@RequestBody UserUploadRequest userUploadRequest) throws NotFoundException {
-//        userService.uploadUser(userUploadRequest);
-//        return ResponseEntity.ok().body("upload success");
-//    }
 
 //    @GetMapping("/comments/{id}?page={page}")
 //    public ResponseEntity getUserComments(Long id, int page){
@@ -65,13 +78,6 @@ public class UserController {
 //        return ResponseEntity.ok().body(pages);
 //    }
 
-//    유저의 NFT 발행 갯수를 체크한다
-//    DB에 count 컬럼 추가 필요
-//    @GetMapping("/check/{id}")
-//    public ResponseEntity checkUserCount(@PathVariable("id") Long id){
-//        userService.getUserCount
-//        return ResponseEntity.ok().build();
-//    }
 
 //    유저의 알람 기능을 끈다
 //    DB에 alarm 컬럼 추가 필요

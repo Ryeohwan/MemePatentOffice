@@ -12,14 +12,11 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("api/meme/comment")
+@RequestMapping("api/mpoffice/meme/comment")
 @RequiredArgsConstructor
 public class CommentController {
     private final MemeService memeService;
     private final CommentService commentService;
-    private static final String SUCCESS = "success";
-    private static final String FAIL = "fail";
-
     @GetMapping("/check/{title}")
     public ResponseEntity titleDuplicatedcheck(@PathVariable String title){
         String result = memeService.titleCheck(title);
@@ -31,12 +28,15 @@ public class CommentController {
     public ResponseEntity createComment(CommentRequest commentRequest) throws NotFoundException {
         return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createCommenmt(commentRequest));
     }
-
     @PostMapping("/like")  // 좋아요 기능 완료
     @ResponseBody
     public ResponseEntity createLike(CommentLikeRequest commentLikeRequest) throws NotFoundException{
         return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createCommentLike(commentLikeRequest));
     }
 
+    @GetMapping("/list/latest/{id}")
+    public ResponseEntity latestComment(@PathVariable("id") Long id){
+        return ResponseEntity.ok("result");
+    }
 
 }

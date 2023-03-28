@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 @RequiredArgsConstructor
 @RequestMapping("/api/mpoffice/meme")
 @RestController
@@ -24,19 +25,16 @@ public class MemeController {
                 memeService.findAll()
         );
     }
-
     @GetMapping("/{title}")
     public ResponseEntity getMeme(@PathVariable String title) throws NotFoundException {
         MemeResponse result = memeService.findByTitle(title);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
-
     @GetMapping("/check/{title}")
     public ResponseEntity titleDuplicatedCheck(@PathVariable String title){
         String result = memeService.titleCheck(title);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
-
     @PostMapping("/create")
     @ResponseBody
     public ResponseEntity createMeme(MemeCreateRequest memeCreateRequest) throws Exception{
@@ -49,13 +47,31 @@ public class MemeController {
         return ResponseEntity.status(HttpStatus.OK).body(id);
     }
 
+//    @PostMapping("/createList")
+//    @ResponseBody
+//    public ResponseEntity createMemeList(@RequestBody List<MemeCreateListRequest> list) throws Exception{
+//        for(MemeCreateListRequest a: list){
+//            a.setImageUrl(a.getImageUrl());
+//
+//            MemeCreateRequest result = MemeCreateRequest.builder()
+//                    .content(a.getContent())
+//                    .createrId(a.getCreaterId())
+//                    .imageUrl(a.getImageUrl())
+//                    .ownerId(a.getCreaterId())
+//                    .situation(a.getSituation())
+//                    .title(a.getTitle())
+//                    .build();
+//            memeService.createMeme(result);
+//        }
+//        return ResponseEntity.status(HttpStatus.OK).body("Meme_dummy_finish");
+//    }
+
     @PostMapping("/like")
     @ResponseBody
     public ResponseEntity<?> createLike(@RequestBody UserMemeLikeRequest userMemeLikeRequest) throws Exception {
         memeService.addMemeLike(userMemeLikeRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
-
     @PostMapping("/cart")
     @ResponseBody
     public ResponseEntity cart(@RequestBody CartRequest cartRequest) throws Exception {
@@ -64,11 +80,4 @@ public class MemeController {
     }
 
 
-////    image upload test
-//    @PostMapping("/upload")
-//    @ResponseBody
-//    public ResponseEntity upload(@RequestBody MultipartFile file)throws IOException {
-//        String url = gcpService.uploadFile(file);
-//        return ResponseEntity.ok().body(url);
-//    }
 }

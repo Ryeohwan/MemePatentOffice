@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -16,5 +17,7 @@ public class UserMemeLikeRequest {
     private Long userId;
     @Enumerated(EnumType.STRING)
     private Like like;
+
+    private LocalDateTime date;
 
 }

@@ -1,12 +1,12 @@
 package com.memepatentoffice.mpoffice.domain.user.api.service;
 
 import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
+import com.memepatentoffice.mpoffice.db.entity.IsValid;
 import com.memepatentoffice.mpoffice.db.entity.User;
-import com.memepatentoffice.mpoffice.domain.meme.db.repository.CommentRepository;
-import com.memepatentoffice.mpoffice.domain.meme.db.repository.MemeRepository;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserSignUpRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserUpdateRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserWithdrawRequest;
+import com.memepatentoffice.mpoffice.domain.user.api.response.CountResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.response.UserResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.response.UserSignUpResponse;
 import com.memepatentoffice.mpoffice.domain.user.db.repository.UserRepository;
@@ -18,20 +18,16 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserService {
-
     private final UserRepository userRepository;
-    private final MemeRepository memeRepository;
-
-    private final CommentRepository commentRepository;
-
     private User findUser(Long userId) throws NotFoundException {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId + " : User"));
     }
 
-    @Transactional(readOnly = true)
     public UserResponse getUserInfo(Long userId) throws NotFoundException {
-        return new UserResponse(findUser(userId));
+        return new UserResponse(userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("해당 유저가 없습니다.")));
     }
     @Transactional
     public UserSignUpResponse createUser(final UserSignUpRequest userSignUpRequest) {
@@ -40,10 +36,10 @@ public class UserService {
                 .name(userSignUpRequest.getName())
                 .nickname(userSignUpRequest.getNickname())
                 .email(userSignUpRequest.getEmail())
-                .isValid(userSignUpRequest.getIsValid())
-                .walletAddress(userSignUpRequest.getWalletAddress())
                 .profileImage(userSignUpRequest.getProfileImage())
                 .today(LocalDateTime.now())
+                .isValid(IsValid.VALID)
+                .todayMemeCount(2)
                 .build();
 
         user = userRepository.save(user);
@@ -63,8 +59,8 @@ public class UserService {
 
     @Transactional
     public Long updateUser(UserUpdateRequest userUpdateRequest) throws NotFoundException{
-        User user = findUser(userUpdateRequest.getId());
-
+        User user = userRepository.findById(userUpdateRequest.getId())
+                .orElseThrow(()-> new NotFoundException("해당하는 유저가 없습니다."));
         if(userUpdateRequest.getNickname() != null){
             user.setNickname(userUpdateRequest.getNickname());
         }
@@ -75,9 +71,21 @@ public class UserService {
     }
     @Transactional
     public void withdrawUser(UserWithdrawRequest userWithdrawRequest) throws NotFoundException {
-        User user = findUser(userWithdrawRequest.getId());
+        User user = userRepository.findById(userWithdrawRequest.getId())
+                .orElseThrow(()->new NotFoundException("해당하는 유저가 없읍니다.."));
+        user.setWithdrawalReason(userWithdrawRequest.getWithdrawalReason());
+        user.setIsValid(IsValid.InVALID);
     }
-//    @Transactional(readOnly = true)
+
+    public CountResponse userCount(Long id) throws NotFoundException{
+        User user = userRepository.findById(id).orElseThrow(
+                ()-> new NotFoundException("해당 유저를 찾을 수 없읍니다."));
+        CountResponse result = CountResponse.builder()
+                .count(user.getTodayMemeCount())
+                .today(user.getToday())
+                .build();
+        return result;
+    }
 //    public Page<CommentResponse> getUserComments (Long id, int page) {
 //        PageRequest pageRequest = PageRequest.of(page,8, Sort.by(Sort.Direction.DESC, "id"));
 //        List<Comment> pages = commentRepository.findCommentsByUserId(id);

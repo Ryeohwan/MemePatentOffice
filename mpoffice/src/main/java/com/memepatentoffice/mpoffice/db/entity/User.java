@@ -40,7 +40,7 @@ public class User extends BaseEntity{
     private String withdrawalReason;
 
     @Column(name = "today_meme_count")
-    private int todayMemeLike;
+    private int todayMemeCount;
 
     @Column(name = "today")
     private LocalDateTime today;
@@ -52,7 +52,19 @@ public class User extends BaseEntity{
         this.profileImage = profileImage;
     }
 
-    public void setTodayMemeLike(int todayMemeLike) {
-        this.todayMemeLike = todayMemeLike;
+    public void setTodayMemeLike(int todayMemeCount) {
+        this.todayMemeCount = todayMemeCount;
+    }
+
+    public void setToday(LocalDateTime today) {
+        this.today = today;
+    }
+
+    public void setWithdrawalReason(String withdrawalReason) {
+        this.withdrawalReason = withdrawalReason;
+    }
+
+    public void setIsValid(IsValid isValid) {
+        this.isValid = isValid;
     }
 }
