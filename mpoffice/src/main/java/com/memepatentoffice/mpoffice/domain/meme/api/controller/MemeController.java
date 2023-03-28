@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 public class MemeController {
     private final MemeService memeService;
     private final GcpService gcpService;
-    private static final String SUCCESS = "success";
-    private static final String FAIL = "fail";
     @GetMapping("/")
     public ResponseEntity<?> getAllMemes(){
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -33,7 +31,7 @@ public class MemeController {
     }
 
     @GetMapping("/check/{title}")
-    public ResponseEntity titleDuplicatedcheck(@PathVariable String title){
+    public ResponseEntity titleDuplicatedCheck(@PathVariable String title){
         String result = memeService.titleCheck(title);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
@@ -41,7 +39,7 @@ public class MemeController {
     @PostMapping("/create")
     @ResponseBody
     public ResponseEntity createMeme(MemeCreateRequest memeCreateRequest) throws Exception{
-        if( memeService.titleCheck(memeCreateRequest.getTitle()) == "fail"){
+        if( memeService.titleCheck(memeCreateRequest.getTitle()).equals("fail")){
             return ResponseEntity.ok().body("Title is already exist");
         }
         String img = gcpService.uploadFile(memeCreateRequest.getFile());
@@ -65,13 +63,4 @@ public class MemeController {
 //        String url = gcpService.uploadFile(file);
 //        return ResponseEntity.ok().body(url);
 //    }
-
-    // Get Test
-//    @GetMapping("/test/{test}")
-//    public ResponseEntity testHi(@PathVariable String test){
-//        System.out.println("came");
-//        return ResponseEntity.ok().body(test);
-//    }
-
-
 }

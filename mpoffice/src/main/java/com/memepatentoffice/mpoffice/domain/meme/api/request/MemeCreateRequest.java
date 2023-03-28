@@ -15,8 +15,9 @@ public class MemeCreateRequest {
     private Long createrId;
     private Long ownerId;
     private String title;
-
     private String imageUrl;
+
+    private String situation;
 
     public void setContent(String content) {
         this.content = content;
@@ -53,6 +54,7 @@ public class MemeCreateRequest {
                 .title(title)
                 .content(content)
                 .imageurl(imageUrl)
+                .situation(situation)
                 .build();
     }
 }

@@ -28,6 +28,7 @@ public class User extends BaseEntity{
     @Column(name = "wallet_address")
     private String walletAddress;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "is_valid", nullable = false)
     private IsValid isValid;
 
