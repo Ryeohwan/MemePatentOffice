@@ -8,7 +8,6 @@ ENV DATABASE orange
 
 # env finish
 
-EXPOSE port 8071
 COPY mpoffice/gradlew .
 COPY mpoffice/gradle gradle
 COPY mpoffice/build.gradle .
