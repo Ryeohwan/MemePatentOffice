@@ -5,13 +5,13 @@ import styles from "./CommentList.module.css";
 
 interface CommentProps {
   recentComments: commentType[],
-  bestComments: commentType[]
+  bestComments: commentType[],
 };
 
-const CommentList: React.FC<CommentProps> = ({recentComments, bestComments}) => {
+
+const CommentList: React.FC<CommentProps> = ({recentComments, bestComments }) => {
   const bestCommentList = bestComments;
   const recentCommentList = recentComments;
-  
 
   return (
     <>

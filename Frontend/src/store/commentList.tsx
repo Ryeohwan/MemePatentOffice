@@ -89,6 +89,9 @@ const commentListSlice = createSlice({
         },
         commentAddHander : (state, actions) => { // 댓글 입력 시
             state.commentNewList = [...actions.payload ,...state.commentNewList]
+        },
+        commentDeleteHandler : (state, actions) => {
+            state.commentNewList.filter((item) => item.id !== actions.payload.id)
         }
 
     }

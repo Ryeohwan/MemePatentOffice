@@ -1,18 +1,22 @@
-import React, { useState } from "react";
+import React, {useState, useEffect} from "react";
 import { Icon } from "@iconify/react";
 import styles from "./CommentItem.module.css";
-import { commentType } from "store/commentList";
+import commentList, { commentType } from "store/commentList";
 import { useDispatch } from "react-redux";
 import { commentListActions } from "store/commentList";
 
 interface CommentType {
-    items: commentType
+    items: commentType,
 };
 
 const CommentItem:React.FC<CommentType> = comment => {
-    
     const dispatch = useDispatch();
 
+    const deleteCommentHandler = () => {
+        dispatch(commentListActions.commentDeleteHandler({id:comment.items.id}));
+    }
+
+    // const nickName = JSON.parse(sessionStorage.getItem('user')!).nickname
     const userName = comment.items.userName;
     const userImg = "http://localhost:3000/" + comment.items.userImgUrl;
     const commentDate = comment.items.date;
@@ -59,9 +63,7 @@ const CommentItem:React.FC<CommentType> = comment => {
                     <div>
                         답글 달기
                     </div>
-                    <div>
-                        삭제
-                    </div>
+                    {"단발머리 부엉이"===userName ? <div onClick={() => deleteCommentHandler()}>삭제</div>: null}
                 </div>
             </div>
         </div>

@@ -5,9 +5,11 @@ import { RootState } from "store/configStore";
 import { commentType } from "store/commentList";
 import CommentList from "../detail/CommentList";
 import NewComment from "../detail/NewComment";
+import styles from "./CommentTab.module.css";
 
 const CommentTab:React.FC = () => {
     const dispatch = useDispatch()
+    
     const recentCommentList = useSelector<RootState, commentType[]>(
         (state) => state.commentList.commentNewList
     );
@@ -21,10 +23,10 @@ const CommentTab:React.FC = () => {
     };
 
     return (
-        <>
-            <CommentList recentComments={recentCommentList} bestComments={bestCommentList}/>
+        <div className={styles.commentTabContainer}>
+            <CommentList recentComments={recentCommentList} bestComments={bestCommentList} />
             <NewComment onAddComment={commentAddHandler}/>
-        </>
+        </div>
     );
 };
 
