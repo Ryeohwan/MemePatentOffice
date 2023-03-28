@@ -13,10 +13,10 @@ spring:
         database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
         generate-ddl: true
         hibernate:
-            ddl-auto: create
+            ddl-auto: none
         properties:
             hibernate:
-                show_sql: true
+                show_sql: false
                 format_sql: true
         open-in-view: true
     servlet:

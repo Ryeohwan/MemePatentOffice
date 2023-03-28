@@ -60,6 +60,7 @@ public class MemeService {
     public Long createMeme(MemeCreateRequest memeCreateRequest) throws NotFoundException{
         User creater = userRepository.findById(memeCreateRequest.getCreaterId())
                 .orElseThrow(()->new NotFoundException("존재하지 않는 유저입니다"));
+
         Meme meme = memeRepository.save(memeCreateRequest.toEntity(creater, creater));
         log.info(meme.getTitle());
         return meme.getId();
@@ -78,6 +79,7 @@ public class MemeService {
         Long memeId = userMemeLikeRequest.getMemeId();
         log.info("userid: "+userId);
         log.info("memeid: "+memeId);
+        log.info("like: "+userMemeLikeRequest.getLike());
         if(userMemeLikeRepository.existsUserMemeLikeByUserIdAndMemeId(userId, memeId)){
             throw new Exception("헐 좋아요 이미 누름");
         }
@@ -87,6 +89,7 @@ public class MemeService {
                                 .orElseThrow(()->new NotFoundException("유저가 없습니다")))
                         .meme(memeRepository.findById(memeId)
                                 .orElseThrow(()->new NotFoundException("밈이 없습니다")))
+                        .like(userMemeLikeRequest.getLike())
                         .build()
         );
         return true;

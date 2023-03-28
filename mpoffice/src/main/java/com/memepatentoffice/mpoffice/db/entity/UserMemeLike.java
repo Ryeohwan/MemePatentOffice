@@ -24,9 +24,8 @@ public class UserMemeLike {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-//
-//    @Lob
-//    @Column(name = "like")
-//    private Like like;
+    @Transient
+    @Column(name = "like")
+    private Like like;
 
 }
