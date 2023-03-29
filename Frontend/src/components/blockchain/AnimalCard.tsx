@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "./AnimalCard.module.css";
 
 interface AnimalCardProps {
     animalType: string;
@@ -7,8 +8,8 @@ interface AnimalCardProps {
 const AnimalCard:React.FC<AnimalCardProps> = ({animalType}) => {
     return (
         <div>
-            Animal Card
-            <img src={`images/${animalType}.jpg`} alt="" />
+            nft card
+            <img src={`images/${animalType}.jpg`} alt="" className={styles.nftCardImg}/>
         </div>
     )
 };

@@ -1,6 +1,7 @@
 import { mintAnimalTokenContract } from "web3config";
 import React, { useState } from "react";
 import AnimalCard from "components/blockchain/AnimalCard";
+import Layout from "components/blockchain/Layout";
 
 interface AccountProps {
   account: string;
@@ -15,11 +16,12 @@ const BlockChainPage: React.FC<AccountProps> = ({ account }) => {
       const response = await mintAnimalTokenContract.methods
         .mintAnimalToken()
         .send({ from: account });
-        
+      console.log(response)
         if (response.status) {
           const balanceLength = await mintAnimalTokenContract.methods.balanceOf(account).call();
-          // const animalType = await mintAnimalTokenContract.methods.animalTypes(animalTokenId).call();
-          // setNewAnimalType(animalType);
+          const animalTokenId = await mintAnimalTokenContract.methods.tokenOfOwnerByIndex(account, parseInt(balanceLength.length, 10) - 1).call();
+          const animalType = await mintAnimalTokenContract.methods.animalTypes(animalTokenId).call();
+          setNewAnimalType(animalType);
         }
 
     } catch (e) {
@@ -29,6 +31,9 @@ const BlockChainPage: React.FC<AccountProps> = ({ account }) => {
 
   return (
     <div>
+      <div>
+        <Layout/>
+      </div>
       {newAnimalType ? (
         <AnimalCard animalType={newAnimalType} />
       ) : (
@@ -37,6 +42,7 @@ const BlockChainPage: React.FC<AccountProps> = ({ account }) => {
           <button onClick={onClickMint}>mint</button>
         </div>
       )}
+
     </div>
   );
 };
