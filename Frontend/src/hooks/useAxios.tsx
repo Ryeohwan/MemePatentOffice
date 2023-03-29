@@ -24,9 +24,9 @@ const useAxios = () => {
   //  axios 함수
   const sendRequest = useCallback(async (requestConfig: any) => {
     setIsLoading(true);
-    console.log('sendRequest!', requestConfig.url);
+    console.log('sendRequest!', `${process.env.REACT_APP_HOST}${requestConfig.url}`);
     try {
-      const response = await axios(requestConfig.url, {
+      const response = await axios(`${process.env.REACT_APP_HOST}${requestConfig.url}`, {
         method: requestConfig.method ? requestConfig.method : "GET",
         headers: authHeader(),
         data: requestConfig.data && JSON.stringify(requestConfig.data),
@@ -45,7 +45,6 @@ const useAxios = () => {
           }
         }
       });
-
       // 1. unauthorized 401 (access 만료)
       if (response.status === 401) {
         console.log("unauthorized!");
@@ -56,12 +55,11 @@ const useAxios = () => {
 
       // 2. validate Status인 경우
       else {
-        // console.log("axios success!");
+        console.log("axios success!");
         setData(response.data);
         setStatus(response.status);
       }
     } catch (err) {
-      console.log(err);
       if (axios.isAxiosError(err) && err.response) {setStatus(err.response.status)}
     }
     setIsLoading(false);

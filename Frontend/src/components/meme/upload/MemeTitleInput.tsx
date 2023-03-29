@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import useAxios from 'hooks/useAxios';
 import { memeUploadActions } from "store/memeUpload";
 import { RootState } from "store/configStore";
 
@@ -12,11 +13,13 @@ const MemeTitleInput: React.FC = () => {
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(memeUploadActions.putTitle(e.target.value));
   };
-  const titleChecked = useSelector<RootState, boolean>(state => state.memeUpload.titleChecked)
   const titleState = useSelector<RootState, number>(state => state.memeUpload.titleState)
+  // const titleChecked = useSelector<RootState, boolean>(state => state.memeUpload.titleChecked)
+  const [titleLoading, setTitleLoading] = useState(false);
+  const [titleChecked, setTitleChecked] = useState<boolean | null>(null);
 
-  // 임시 loading -> useAxios 사용할거임
-  const [loading, setLoading] = useState(false);
+  // 중복검사 Axios
+  const { data, status, sendRequest } = useAxios();
 
   // text keyup 할때 1초 후 중복검사 api
   useEffect(() => {
@@ -24,18 +27,23 @@ const MemeTitleInput: React.FC = () => {
     if (titleState === 0) dispatch(memeUploadActions.setTitleState(-1));
 
     if (!input) return;
-    setLoading(true);
+    setTitleLoading(true);
     const identifier = setTimeout(() => {
-      // 중복검사 api 임시로 true 보내기
-      console.log("중복검사 보냄", input);
-      dispatch(memeUploadActions.setTitleChecked(true));
-      setLoading(false);
-
+      // key up 1초 후 중복검사 api
+      sendRequest({url: `/api/mpoffice/meme/check/${input}`})
     }, 1000);
     return () => {
       clearTimeout(identifier);
     };
   }, [input]);
+
+
+  useEffect(() => {
+    if (!status || status !== 200) return;
+    if (data === "success") setTitleChecked(true);
+    else if (data === "fail") setTitleChecked(false);
+    setTitleLoading(false);
+  }, [status])
 
 
   return (
@@ -49,7 +57,7 @@ const MemeTitleInput: React.FC = () => {
           placeholder="이미지 밈의 제목 혹은 텍스트 밈을 입력하세요."
         />
 
-        {input && loading && (
+        {input && titleLoading && (
           <div className={styles.spinnerContainer}>
             <i className="pi pi-spin pi-spinner" />
           </div>
