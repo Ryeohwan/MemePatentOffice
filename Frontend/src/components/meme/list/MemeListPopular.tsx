@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/configStore";
 import { memeListActions } from "store/memeList";
 
-import NftCard from "components/common/NftCard";
+import NftCard from "components/common/card/NftCard";
 
 import styles from "./MemeListPopular.module.css";
 

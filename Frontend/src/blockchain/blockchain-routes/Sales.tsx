@@ -1,4 +1,4 @@
-import SaleAnimal from "blockchain-middler/SaleAnimal";
+import SaleAnimal from "blockchain/blockchain-middler/SaleAnimal";
 import React, { useState, useEffect } from "react";
 
 const Sales: React.FC = () => {

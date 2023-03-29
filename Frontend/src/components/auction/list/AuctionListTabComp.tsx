@@ -2,7 +2,7 @@ import { Route } from "react-router-dom";
 import { useDispatch } from 'react-redux'
 
 
-import TabComp from "components/common/TabComp";
+import TabComp from "components/common/tab/TabComp";
 import AuctionListNew from './AuctionListNew';
 import AuctionListPopular from './AuctionListPopular';
 import AuctionListDeadline from './AuctionListDeadline';

@@ -1,4 +1,4 @@
-import MyAnimal from "blockchain-middler/MyAnimal";
+import MyAnimal from "blockchain/blockchain-middler/MyAnimal";
 import React, { useState, useEffect } from "react";
 
 const Animals: React.FC = () => {

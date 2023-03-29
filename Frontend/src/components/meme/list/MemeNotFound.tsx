@@ -4,7 +4,7 @@ import { RootState } from "store/configStore";
 import { memeListActions } from "store/memeList";
 import { memeType } from "store/memeList";
 
-import NftCard from "components/common/NftCard";
+import NftCard from "components/common/card/NftCard";
 import styles from "components/meme/list/MemeNotFound.module.css";
 
 const MemeNotFound: React.FC = () => {

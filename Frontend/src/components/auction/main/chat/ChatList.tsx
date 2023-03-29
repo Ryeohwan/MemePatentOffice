@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "store/configStore";
 
 import ChatItem from "./ChatItem";
-import ScrollToTop from "components/common/ScrollToTop";
+import ScrollToTop from "components/common/elements/ScrollToTop";
 import { ScrollPanel } from "primereact/scrollpanel";
 import styles from "components/auction/main/chat/ChatList.module.css";
 

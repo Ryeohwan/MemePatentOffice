@@ -1,4 +1,4 @@
-import BlockChainPage from "blockchain-middler/BlockChainPage";
+import BlockChainPage from "blockchain/blockchain-middler/BlockChainPage";
 import React, { useState, useEffect } from "react";
 
 const BlockChain: React.FC = () => {

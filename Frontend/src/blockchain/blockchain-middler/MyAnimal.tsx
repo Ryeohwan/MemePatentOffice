@@ -1,6 +1,6 @@
-import Layout from "blockchain-components/Layout";
-import MyAnimalCard from "blockchain-components/MyAnimalCard";
-import { IMyAnimalCard } from "blockchain-components/MyAnimalCard";
+import Layout from "blockchain/blockchain-components/Layout";
+import MyAnimalCard from "blockchain/blockchain-components/MyAnimalCard";
+import { IMyAnimalCard } from "blockchain/blockchain-components/MyAnimalCard";
 import React, { useEffect, useState } from "react";
 import { mintAnimalTokenContract, saleAnimalTokenAddress } from "web3config";
 
@@ -78,7 +78,7 @@ const MyAnimal: React.FC<MyAnimalProps> = ({ account }) => {
 
   return (
     <div>
-      <Layout/>
+      <Layout />
       {animalCardArray &&
         animalCardArray.map((v, i) => {
           return (

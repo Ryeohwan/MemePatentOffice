@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import NftCardFront from "components/common/NftCardFront";
-import NftCardBack from "components/common/NftCardBack";
+import NftCardFront from "components/common/card/NftCardFront";
+import NftCardBack from "components/common/card/NftCardBack";
 import styles from "./NftCard.module.css";
 
 interface NftProps {
