@@ -1,11 +1,14 @@
 import React, { useEffect, useRef } from "react";
+
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "store/configStore";
+import { auctionActions } from "store/auction";
+
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { useLoader, useFrame } from "react-three-fiber";
 
 interface PlayerProps {
-  moving: React.MutableRefObject<Boolean>;
-  sitting: React.MutableRefObject<Boolean>;
   clickPosition: React.MutableRefObject<THREE.Vector3>;
   playerPosition: React.MutableRefObject<THREE.Vector3>;
   chairPoints: React.MutableRefObject<THREE.Mesh[]>;
@@ -23,6 +26,7 @@ interface PlayerProps {
   isSitting: React.MutableRefObject<boolean>;
 }
 
+
 type action = {
   handsup: THREE.AnimationAction | null;
   walk: THREE.AnimationAction | null;
@@ -32,8 +36,6 @@ type action = {
 };
 
 const Player: React.FC<PlayerProps> = ({
-  moving,
-  sitting,
   clickPosition,
   playerPosition,
   player,
@@ -48,7 +50,11 @@ const Player: React.FC<PlayerProps> = ({
   biddingSubmit,
   isSitting,
 }) => {
-  const glb = useLoader(GLTFLoader, "/auction/model/character.glb"); // 나중에 선택해서 가져오는 코드로 바꾸기
+  const disptach = useDispatch();
+  const playerState = useSelector<RootState, number>(
+    (state) => state.auction.playerState
+  );
+  const glb = useLoader(GLTFLoader, "/auction/model/character.glb");
   const actions = useRef<action>({
     handsup: null,
     walk: null,
@@ -64,6 +70,7 @@ const Player: React.FC<PlayerProps> = ({
   });
 
   const mixer = new THREE.AnimationMixer(player.current);
+
   for (let i = 0; i < glb.animations.length; i++) {
     const action = mixer.clipAction(glb.animations[i]);
     const name = action.getClip().name;
@@ -103,12 +110,12 @@ const Player: React.FC<PlayerProps> = ({
     player.current.position.z = playerPosition.current.z;
     player.current.rotation.y += Math.PI;
   }, []);
-
+  console.log(playerState)
   useFrame((state, delta) => {
     mixer.update(delta);
-    if (!moving.current && !sitting.current) {
+    if (playerState === 0) {
       if (actions.current.normal) actions.current.normal.play();
-    } else if (moving.current) {
+    } else if (playerState === 1) {
       if (actions.current.normal) actions.current.normal.stop();
       if (actions.current.walk) actions.current.walk.play();
       const angle = Math.atan2(
@@ -122,31 +129,26 @@ const Player: React.FC<PlayerProps> = ({
         Math.abs(clickPosition.current.x - player.current.position.x) < 0.03 &&
         Math.abs(clickPosition.current.z - player.current.position.z) < 0.03
       ) {
-        moving.current = false;
-        if (actions.current.walk) actions.current.walk.stop();
+        disptach(auctionActions.controlPlayerState(0));
+        
       }
       camera.current.position.x = cameraPosition.x + player.current.position.x;
       camera.current.position.z = cameraPosition.z + player.current.position.z;
-    } else if (sitting.current) {
-      if (moving.current) {
-        clickPosition.current = player.current.position;
-        if (actions.current.walk) actions.current.walk.stop();
-      }
+    } else if (playerState === 2) {
+      clickPosition.current = player.current.position;
+      if (actions.current.walk) actions.current.walk.stop();
+
       if (biddingSubmit) {
         if (actions.current.handsup) actions.current.handsup.play();
-      } else if (sitting.current) {
-        if (
-          actions.current.sitdown &&
-          !isSitting.current
-        ) {
-          actions.current.sitdown.play();
-          isSitting.current = true;
-        }
-        if (actions.current.standup)
-          playerAnimation.current = actions.current.standup;
       }
+      if (actions.current.sitdown && !isSitting.current) {
+        actions.current.sitdown.play();
+        isSitting.current = true;
+      }
+      if (actions.current.standup)
+        playerAnimation.current = actions.current.standup;
     }
-    if (!sitting.current) {
+    if (playerState !== 2) {
       if (actions.current.sitdown) {
         playerAnimation.current = actions.current.sitdown;
       }
