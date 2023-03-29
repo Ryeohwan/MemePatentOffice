@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Route, Routes } from "react-router-dom";
 import ScrollToTop from 'components/common/ScrollToTop';
 import LandingPage from 'pages/LandingPage';
+import LoginPage from 'pages/LoginPage';
 import SignupPage from 'pages/SignupPage';
 import HomePage from 'pages/HomePage';
 
@@ -33,35 +34,11 @@ import NotificationListPage from 'pages/NotificationListPage';
 import NotFoundPage from 'pages/NotFoundPage';
 
 import Frame from 'layout/Frame';
-import BlockChainPage from 'contracts/BlockChainPage';
-
+import BlockChain from 'components/blockchain/BlockChain';
+// import MyAnimal from 'contracts/MyAnimal';
 
 const App: React.FC = () => {
-  const [account, setAccount] = useState("");
-
-  const getAccount = async () => {
-    try {
-      if (window.ethereum) {
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        setAccount(accounts[0]);
-      } else {
-        alert("Install Metamask");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getAccount();
-  }, []);
-
-  useEffect(() => {
-    console.log(account);
-  }, [account]);
-
+ 
 
   return (
     <div className="App">
@@ -70,8 +47,11 @@ const App: React.FC = () => {
 
         <Routes>
           {/* blockchain 시험용 페이지 */}
-          <Route path="/blockchain" element={<BlockChainPage account={account}/>}/>
+          <Route path="/blockchain" element={<BlockChain/>}/>
+          {/* <Route path="/my-animal" element={<MyAnimal account={account}/>}/> */}
+
           <Route path="" element={<LandingPage />} />
+          <Route path="/oauth2/redirect" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/main" element={<HomePage />} />
 
