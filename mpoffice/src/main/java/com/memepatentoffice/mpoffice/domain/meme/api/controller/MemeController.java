@@ -19,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/mpoffice/meme")
 @RestController
+@CrossOrigin("http://j8a305.p.ssafy.io")
 public class MemeController {
     private final MemeService memeService;
     private final GcpService gcpService;
