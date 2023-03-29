@@ -30,14 +30,14 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userSignUpResponse);
     }
 
-//    @PostMapping("/signupList")
-//    @ResponseBody
-//    public ResponseEntity createUserList(@RequestBody List<UserSignUpRequest> list) {
-//        for(UserSignUpRequest a : list){
-//            userService.createUser(a);
-//        }
-//        return ResponseEntity.status(HttpStatus.CREATED).body("finish");
-//    }
+    @PostMapping("/signupList")
+    @ResponseBody
+    public ResponseEntity createUserList(@RequestBody List<UserSignUpRequest> list) {
+        for(UserSignUpRequest a : list){
+            userService.createUser(a);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body("finish");
+    }
 
 //    @ApiResponse(responseCode = "200", description = "회원정보 조회 성공", content = @Content(schema = @Schema(implementation = UserResponse.class)))
 //    @ApiResponse(responseCode = "404", description = "회원정보 조회 실패")
@@ -65,9 +65,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body("withdraw success");
     }
 
-    @GetMapping("/check/{id}")
-    public ResponseEntity checkCount(@PathVariable("id") Long id) throws NotFoundException {
-        CountResponse result = userService.userCount(id);
+    @GetMapping("/check/{nickname}")
+    public ResponseEntity checkCount(@PathVariable("nickname") String nickname) throws NotFoundException {
+        CountResponse result = userService.userCount(nickname);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

@@ -77,8 +77,8 @@ public class UserService {
         user.setIsValid(IsValid.InVALID);
     }
 
-    public CountResponse userCount(Long id) throws NotFoundException{
-        User user = userRepository.findById(id).orElseThrow(
+    public CountResponse userCount(String nickName) throws NotFoundException{
+        User user = userRepository.findUserByNickname(nickName).orElseThrow(
                 ()-> new NotFoundException("해당 유저를 찾을 수 없읍니다."));
         CountResponse result = CountResponse.builder()
                 .count(user.getTodayMemeCount())
