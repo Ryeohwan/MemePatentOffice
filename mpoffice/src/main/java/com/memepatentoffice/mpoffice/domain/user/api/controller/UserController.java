@@ -68,7 +68,7 @@ public class UserController {
 
     @GetMapping("/check/{nickname}")
     public ResponseEntity checkCount(@PathVariable("nickname") String nickname) throws NotFoundException {
-        CountResponse result = userService.userCount(nickname);
+        Boolean result = userService.userCount(nickname);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
