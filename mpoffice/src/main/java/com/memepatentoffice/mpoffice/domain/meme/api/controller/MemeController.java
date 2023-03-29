@@ -47,7 +47,6 @@ public class MemeController {
         Long id = memeService.createMeme(memeCreateRequest);
         return ResponseEntity.status(HttpStatus.OK).body(id);
     }
-
 //    @PostMapping("/createList")
 //    @ResponseBody
 //    public ResponseEntity createMemeList(@RequestBody List<MemeCreateListRequest> list) throws Exception{
@@ -66,19 +65,16 @@ public class MemeController {
 //        }
 //        return ResponseEntity.status(HttpStatus.OK).body("Meme_dummy_finish");
 //    }
-
     @PostMapping("/like")
     @ResponseBody
     public ResponseEntity<?> createLike(@RequestBody UserMemeLikeRequest userMemeLikeRequest) throws Exception {
         memeService.addMemeLike(userMemeLikeRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userMemeLikeRequest.getMemeLike());
     }
     @PostMapping("/cart")
     @ResponseBody
-    public ResponseEntity cart(CartRequest cartRequest) throws Exception {
+    public ResponseEntity cart(@RequestBody CartRequest cartRequest) throws Exception {
         memeService.addCart(cartRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        return ResponseEntity.status(HttpStatus.CREATED).body(cartRequest.getCart());
     }
-
-
 }

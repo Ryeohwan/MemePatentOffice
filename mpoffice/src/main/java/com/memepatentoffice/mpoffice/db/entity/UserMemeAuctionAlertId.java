@@ -9,7 +9,6 @@ public class UserMemeAuctionAlertId implements Serializable {
     private Long meme;
     private Long user;
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

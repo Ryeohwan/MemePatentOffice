@@ -24,7 +24,6 @@ public class GcpService {
         BlobId blobId = BlobId.of("mpoffice", file.getOriginalFilename());
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(file.getContentType()).build();
         storage.create(blobInfo, file.getInputStream());
-
         // 하드코딩 죄송함돠ㅠㅠ
         String front = "https://storage.googleapis.com/";
         String buck = storage.get("mpoffice", file.getOriginalFilename()).getBucket() + "/";

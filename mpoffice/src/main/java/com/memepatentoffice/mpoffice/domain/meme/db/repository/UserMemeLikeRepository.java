@@ -7,7 +7,6 @@ public interface UserMemeLikeRepository extends JpaRepository<UserMemeLike,Long>
     @Override
     <S extends UserMemeLike> S save(S entity);
 
-
     boolean existsUserMemeLikeByUserIdAndMemeId(Long userId, Long memeId);
 
     UserMemeLike findUserMemeLikeByUserIdAndMemeId(Long userId, Long memeId);
