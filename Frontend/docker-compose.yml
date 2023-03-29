@@ -12,3 +12,10 @@ services:
     restart: always
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt
+    networks:
+      - a305-net
+
+networks:
+    a305-net:
+        external:
+            name: a305-net
