@@ -9,10 +9,6 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - 3000:3000
-    networks:
-      - a305-net
-
-networks:
-    a305-net:
-        external:
-            name: a305-net
+    restart: always
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
