@@ -26,19 +26,24 @@ const MyAnimalCard: React.FC<MyAnimalCardProps> = ({
   const onChangeSellPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSellPrice(e.target.value);
   };
+
   const onClickSell = async () => {
     try {
-        if (!account || !saleStatus) return;
-        const response = await saleAnimalTokenContract.methods.setForSaleAnimalToken(animalTokenId, web3.utils.toWei(sellPrice, 'ether')).send({from: account});
-        console.log(response);
-        if (response.status) {
-            setMyAnimalPrice(web3.utils.toWei(sellPrice, 'ether'));
-            
-        }
+      if (!account || !saleStatus) return;
+      const response = await saleAnimalTokenContract.methods
+        .setForSaleAnimalToken(
+          animalTokenId,
+          web3.utils.toWei(sellPrice, "ether")
+        )
+        .send({ from: account });
+      console.log(response);
+      if (response.status) {
+        setMyAnimalPrice(web3.utils.toWei(sellPrice, "ether"));
+      }
     } catch (e) {
-        console.log(e);
+      console.log(e);
     }
-  }
+  };
   return (
     <div>
       <AnimalCard animalType={animalType} />

@@ -18,6 +18,11 @@ const Layout:React.FC<Props> = ({children}) => {
                     <button>my animal</button>
                 </Link>
             </div>
+            <div>
+                <Link to="/sale-animal">
+                    <button>sale animal</button>
+                </Link>
+            </div>
             {children}
         </div>
     );

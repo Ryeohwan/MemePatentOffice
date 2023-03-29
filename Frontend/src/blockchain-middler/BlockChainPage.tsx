@@ -1,7 +1,7 @@
 import { mintAnimalTokenContract } from "web3config";
 import React, { useState } from "react";
-import AnimalCard from "components/blockchain/AnimalCard";
-import Layout from "components/blockchain/Layout";
+import AnimalCard from "blockchain-components/AnimalCard";
+import Layout from "blockchain-components/Layout";
 
 interface AccountProps {
   account: string;
@@ -16,15 +16,20 @@ const BlockChainPage: React.FC<AccountProps> = ({ account }) => {
       const response = await mintAnimalTokenContract.methods
         .mintAnimalToken()
         .send({ from: account });
-      console.log(response)
-        if (response.status) {
-          const balanceLength = await mintAnimalTokenContract.methods.balanceOf(account).call();
-          const animalTokenId = await mintAnimalTokenContract.methods.tokenOfOwnerByIndex(account, parseInt(balanceLength.length, 10) - 1).call();
-          console.log("token ID ",animalTokenId); 
-          const animalType = await mintAnimalTokenContract.methods.animalTypes(animalTokenId).call();
-          setNewAnimalType(animalType);
-        }
-
+      console.log(response);
+      if (response.status) {
+        const balanceLength = await mintAnimalTokenContract.methods
+          .balanceOf(account)
+          .call();
+        const animalTokenId = await mintAnimalTokenContract.methods
+          .tokenOfOwnerByIndex(account, parseInt(balanceLength.length, 10) - 1)
+          .call();
+        console.log("token ID ", animalTokenId);
+        const animalType = await mintAnimalTokenContract.methods
+          .animalTypes(animalTokenId)
+          .call();
+        setNewAnimalType(animalType);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -34,7 +39,7 @@ const BlockChainPage: React.FC<AccountProps> = ({ account }) => {
   return (
     <div>
       <div>
-        <Layout/>
+        <Layout />
       </div>
       {newAnimalType ? (
         <AnimalCard animalType={newAnimalType} />
@@ -44,7 +49,6 @@ const BlockChainPage: React.FC<AccountProps> = ({ account }) => {
           <button onClick={onClickMint}>mint</button>
         </div>
       )}
-
     </div>
   );
 };
