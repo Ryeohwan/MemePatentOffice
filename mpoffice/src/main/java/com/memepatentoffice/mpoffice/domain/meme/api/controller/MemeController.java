@@ -2,6 +2,7 @@ package com.memepatentoffice.mpoffice.domain.meme.api.controller;
 
 import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CartRequest;
+import com.memepatentoffice.mpoffice.domain.meme.api.request.MemeCreateListRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.UserMemeLikeRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.MemeCreateRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeResponse;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -47,24 +50,24 @@ public class MemeController {
         Long id = memeService.createMeme(memeCreateRequest);
         return ResponseEntity.status(HttpStatus.OK).body(id);
     }
-//    @PostMapping("/createList")
-//    @ResponseBody
-//    public ResponseEntity createMemeList(@RequestBody List<MemeCreateListRequest> list) throws Exception{
-//        for(MemeCreateListRequest a: list){
-//            a.setImageUrl(a.getImageUrl());
-//
-//            MemeCreateRequest result = MemeCreateRequest.builder()
-//                    .content(a.getContent())
-//                    .createrId(a.getCreaterId())
-//                    .imageUrl(a.getImageUrl())
-//                    .ownerId(a.getCreaterId())
-//                    .situation(a.getSituation())
-//                    .title(a.getTitle())
-//                    .build();
-//            memeService.createMeme(result);
-//        }
-//        return ResponseEntity.status(HttpStatus.OK).body("Meme_dummy_finish");
-//    }
+    @PostMapping("/createList")
+    @ResponseBody
+    public ResponseEntity createMemeList(@RequestBody List<MemeCreateListRequest> list) throws Exception{
+        for(MemeCreateListRequest a: list){
+            a.setImageUrl(a.getImageUrl());
+
+            MemeCreateRequest result = MemeCreateRequest.builder()
+                    .content(a.getContent())
+                    .createrId(a.getCreaterId())
+                    .imageUrl(a.getImageUrl())
+                    .ownerId(a.getCreaterId())
+                    .situation(a.getSituation())
+                    .title(a.getTitle())
+                    .build();
+            memeService.createMeme(result);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body("Meme_dummy_finish");
+    }
     @PostMapping("/like")
     @ResponseBody
     public ResponseEntity<?> createLike(@RequestBody UserMemeLikeRequest userMemeLikeRequest) throws Exception {
