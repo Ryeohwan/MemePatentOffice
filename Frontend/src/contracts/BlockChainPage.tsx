@@ -20,6 +20,7 @@ const BlockChainPage: React.FC<AccountProps> = ({ account }) => {
         if (response.status) {
           const balanceLength = await mintAnimalTokenContract.methods.balanceOf(account).call();
           const animalTokenId = await mintAnimalTokenContract.methods.tokenOfOwnerByIndex(account, parseInt(balanceLength.length, 10) - 1).call();
+          console.log("token ID ",animalTokenId); 
           const animalType = await mintAnimalTokenContract.methods.animalTypes(animalTokenId).call();
           setNewAnimalType(animalType);
         }
@@ -28,6 +29,7 @@ const BlockChainPage: React.FC<AccountProps> = ({ account }) => {
       console.log(e);
     }
   };
+  console.log(newAnimalType);
 
   return (
     <div>

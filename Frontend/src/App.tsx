@@ -34,7 +34,7 @@ import NotFoundPage from 'pages/NotFoundPage';
 
 import Frame from 'layout/Frame';
 import BlockChain from 'components/blockchain/BlockChain';
-// import MyAnimal from 'contracts/MyAnimal';
+import Animals from 'components/blockchain/Animals';
 
 const App: React.FC = () => {
  
@@ -47,7 +47,7 @@ const App: React.FC = () => {
         <Routes>
           {/* blockchain 시험용 페이지 */}
           <Route path="/blockchain" element={<BlockChain/>}/>
-          {/* <Route path="/my-animal" element={<MyAnimal account={account}/>}/> */}
+          <Route path="/my-animal" element={<Animals/>}/>
 
           <Route path="" element={<LandingPage />} />
           <Route path="/signup" element={<SignupPage />} />

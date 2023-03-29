@@ -1,7 +1,7 @@
-import BlockChainPage from 'contracts/BlockChainPage';
-import React, { useState, useEffect } from 'react';
+import MyAnimal from "contracts/MyAnimal";
+import React, { useState, useEffect } from "react";
 
-const BlockChain:React.FC = () => {
+const Animals:React.FC = () => {
     const [account, setAccount] = useState("");
 
     const getAccount = async () => {
@@ -26,12 +26,12 @@ const BlockChain:React.FC = () => {
     useEffect(() => {
       console.log(account);
     }, [account]);
-  
+
     return (
         <div>
-            <BlockChainPage account={account} />
+            <MyAnimal account={account}/>
         </div>
     );
 };
 
-export default BlockChain;
+export default Animals;

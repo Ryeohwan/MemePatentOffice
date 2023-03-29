@@ -12,6 +12,9 @@ import HomeCarousel from "components/main/homepage/HomeCarousel";
 import styles from "./HomePage.module.css";
 
 const HomePage: React.FC = () => {
+
+
+  // 얘네 다 빼고 useAxios() 훅으로 대체
   const memeList = useSelector<RootState, memeType[]>(
     (state) => state.memeList.memeNewList
   );

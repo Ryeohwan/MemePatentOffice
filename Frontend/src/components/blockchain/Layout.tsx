@@ -10,7 +10,7 @@ const Layout:React.FC<Props> = ({children}) => {
         <div>
             <div>
                 <Link to="/blockchain">
-                    <button>blockchainpage</button>
+                    <button>blockchain</button>
                 </Link>
             </div>
             <div>
