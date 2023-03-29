@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Route, Routes } from "react-router-dom";
 import ScrollToTop from 'components/common/ScrollToTop';
 import LandingPage from 'pages/LandingPage';
+import LoginPage from 'pages/LoginPage';
 import SignupPage from 'pages/SignupPage';
 import HomePage from 'pages/HomePage';
 
@@ -50,6 +51,7 @@ const App: React.FC = () => {
           {/* <Route path="/my-animal" element={<MyAnimal account={account}/>}/> */}
 
           <Route path="" element={<LandingPage />} />
+          <Route path="/oauth2/redirect" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/main" element={<HomePage />} />
 
