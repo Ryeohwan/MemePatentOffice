@@ -45,7 +45,6 @@ const useAxios = () => {
           }
         }
       });
-      console.log(response)
       // 1. unauthorized 401 (access 만료)
       if (response.status === 401) {
         console.log("unauthorized!");
