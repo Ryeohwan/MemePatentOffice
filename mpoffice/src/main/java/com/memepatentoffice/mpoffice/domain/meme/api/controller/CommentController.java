@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/mpoffice/meme/comment")
 @RequiredArgsConstructor
-@CrossOrigin("http://j8a305.p.ssafy.io")
 public class CommentController {
     private final MemeService memeService;
     private final CommentService commentService;

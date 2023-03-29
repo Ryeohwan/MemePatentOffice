@@ -38,3 +38,7 @@ cloud:
             project-id: robust-metrics-38060
             credentials:
                 location: classpath:robust-metrics-380604-8e932ce5312a.json
+
+app:
+    cors:
+        allowedOrigins: http://localhost:3000
