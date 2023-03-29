@@ -26,15 +26,15 @@ public class UserMemeLike {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-    @Transient
-    @Column(name = "like")
-    private Like like;
+
+    @Enumerated(EnumType.STRING)
+    private MemeLike memeLike;
 
     @Column(name = "date")
     private LocalDateTime date;
 
-    public void setLike(Like like) {
-        this.like = like;
+    public void setLike(MemeLike memeLike) {
+        this.memeLike = memeLike;
     }
 
     public void setDate(LocalDateTime date) {

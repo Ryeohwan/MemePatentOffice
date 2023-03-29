@@ -94,15 +94,12 @@ public class MemeService {
     public boolean addMemeLike(UserMemeLikeRequest userMemeLikeRequest) throws Exception{
         Long userId = userMemeLikeRequest.getUserId();
         Long memeId = userMemeLikeRequest.getMemeId();
-        log.info("userid: "+userId);
-        log.info("memeid: "+memeId);
-        log.info("like: "+userMemeLikeRequest.getLike());
 
         // 이미 있으면 좋아요나 싫어요 상태를 바꿔준다.
         if(userMemeLikeRepository.existsUserMemeLikeByUserIdAndMemeId(userId, memeId)){
             UserMemeLike find = userMemeLikeRepository.findUserMemeLikeByUserIdAndMemeId(userId,memeId);
-            find.setLike(userMemeLikeRequest.getLike());
-            find.setDate(userMemeLikeRequest.getDate());
+            find.setLike(userMemeLikeRequest.getMemeLike());
+            find.setDate(LocalDateTime.now());
             return true;
         }else{
             // 없으면 새로 만들어준다.
@@ -112,7 +109,7 @@ public class MemeService {
                                     .orElseThrow(()->new NotFoundException("유저가 없습니다")))
                             .meme(memeRepository.findById(memeId)
                                     .orElseThrow(()->new NotFoundException("밈이 없습니다")))
-                            .like(userMemeLikeRequest.getLike())
+                            .memeLike(userMemeLikeRequest.getMemeLike())
                             .date(LocalDateTime.now())
                             .build()
             );

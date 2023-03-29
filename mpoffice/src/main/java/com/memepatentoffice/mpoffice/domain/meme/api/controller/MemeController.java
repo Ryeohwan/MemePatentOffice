@@ -69,7 +69,7 @@ public class MemeController {
 
     @PostMapping("/like")
     @ResponseBody
-    public ResponseEntity<?> createLike(UserMemeLikeRequest userMemeLikeRequest) throws Exception {
+    public ResponseEntity<?> createLike(@RequestBody UserMemeLikeRequest userMemeLikeRequest) throws Exception {
         memeService.addMemeLike(userMemeLikeRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
