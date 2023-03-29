@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -37,15 +38,13 @@ public class MemeService {
 
     public MemeResponse findByTitle(String title)throws NotFoundException{
         //추후 중복검사 로직 추가
-        Meme meme = memeRepository.findMemeByTitle(title)
-                .orElseThrow(()->new NotFoundException("타이틀에 해당하는 밈이 없습니다"));
+        Optional<Meme> meme = memeRepository.findMemeByTitle(title);
         MemeResponse result = new MemeResponse().builder()
-                .id(meme.getId())
-                .content(meme.getContent())
-                .createdAt(meme.getCreatedAt())
-                .createrId(meme.getCreater().getId())
-                .ownerId(meme.getOwner().getId())
-                .title(meme.getTitle())
+                .content(meme.get().getContent())
+                .createdAt(meme.get().getCreatedAt())
+                .createrId(meme.get().getCreater().getId())
+                .ownerId(meme.get().getOwner().getId())
+                .title(meme.get().getTitle())
                 .build();
         return result;
     }
