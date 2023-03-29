@@ -47,6 +47,9 @@ const auctionUploadSlice = createSlice({
       // actions 보낼때 객체로 보내줘야함 {id:meme,visible:true} or {visible:true} or {visible:false}
       state.submitMeme = {id : actions.payload.memeid, auctionDate:null, lowPrice:null}
       state.isVisible = actions.payload.visible; // payload = true or false
+      if (!actions.payload.visible) {
+        state.submitMeme = { id: null, auctionDate: null, lowPrice: null }
+      }
     },
     // 상세 페이지에서 버튼을 누르면 선택된 밈이 default
     selectMeme: (state, actions) => {

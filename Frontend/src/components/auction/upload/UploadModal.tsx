@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-
+import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { auctionUploadActions } from "store/auctionUpload";
 import { submitMeme } from "store/auctionUpload";
 import { RootState } from "store/configStore";
+
 import { Checkbox, CheckboxChangeEvent } from "primereact/checkbox";
 import { Dialog } from "primereact/dialog";
 import UploadDropDown from "./UploadDropDown";
@@ -15,6 +16,7 @@ import CheckingModal from "./CheckingModal";
 
 const UploadModal: React.FC = () => {
   const dispatch = useDispatch();
+
   // 나중에 props로 바꾸기 홈갔다오면 켜져있어서 문제
   const visible = useSelector<RootState, boolean>(
     (state) => state.auctionUpload.isVisible
@@ -77,7 +79,6 @@ const UploadModal: React.FC = () => {
               <Checkbox
                 className={styles.checkbox}
                 onChange={(e: CheckboxChangeEvent) => {
-                  console.log(e);
                   if (e.checked === true || e.checked === false)
                     setIsCheck(e.checked);
                 }}

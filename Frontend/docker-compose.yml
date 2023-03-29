@@ -1,11 +1,8 @@
-version: "3.7"
-
+version: "3"
 services:
-  react-front:
+  front:
+    image: wx776654/a305:react-front
     container_name: react-front
-    build:
-      context: .
-      dockerfile: ./Dockerfile
     ports:
       - 3000:3000
     restart: always
