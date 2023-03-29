@@ -19,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("api/mpoffice/user")
 @RestController
+@CrossOrigin("http://j8a305.p.ssafy.io")
 public class UserController {
     private final UserService userService;
 
