@@ -1,8 +1,15 @@
-FROM nginx:stable-alpine
+FROM node:14.17.0 as build-stage
 WORKDIR /app
-RUN mkdir ./build
-ADD ./build ./build
-RUN rm /etc/nginx/conf.d/default.conf
-COPY ./nginx.conf /etc/nginx/conf.d
+COPY package*.json ./
+RUN npm install
+COPY ./ .
+RUN npm run build
+
+FROM nginx as production-stage
+RUN mkdir /app
+COPY --from=build-stage /app/build /app
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# 3000포트 오픈하고 nginx 실행
 EXPOSE 3000
 CMD ["nginx", "-g", "daemon off;"]
