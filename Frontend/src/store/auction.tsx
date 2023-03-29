@@ -6,8 +6,11 @@ export type biddingHistory = {
     time: string
 }
 
+
+
 interface initialStateInterface {
-    biddingHistory:biddingHistory[]
+    biddingHistory:biddingHistory[],
+    playerState: number, // 0: default, 1: moving, 2: sitting, 3:handsup, 4: standup
 }
 
 const initialState: initialStateInterface = {
@@ -25,7 +28,8 @@ const initialState: initialStateInterface = {
         {nickname:'3반 CA 김재준', SSF:1100, time: "2023.04.08 09:09"},
         {nickname:'조명오', SSF:1000, time: "2023.04.08 09:06"},
         {nickname:'3반 CA 김재준', SSF:950, time: "2023.04.08 09:05"},
-    ]
+    ],
+    playerState: 0,
 };
 
 const auctionSlice = createSlice({
@@ -34,7 +38,10 @@ const auctionSlice = createSlice({
   reducers: {
     getBiddingHistory: (state, actions) => {
         state.biddingHistory = actions.payload
-    }
+    },
+    controlPlayerState: (state, actions) => {
+        state.playerState = actions.payload
+    },
   },
 });
 
