@@ -1,6 +1,6 @@
 package com.memepatentoffice.mpoffice.db.entity;
 
-public enum Like {
+public enum MemeLike {
     LIKE,HATE;
 
 //    @JsonCreator
