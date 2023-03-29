@@ -17,8 +17,7 @@ import Border from "components/auction/main/mesh/Border";
 import styles from "components/auction/main/Scene.module.css";
 
 interface SceneProps {
-  canSit: () => void;
-  cantSit: () => void;
+  canSitHandler: (state:boolean) => void;
   player: React.MutableRefObject<THREE.Object3D>;
   chairPoint: React.MutableRefObject<THREE.Mesh>;
   playerAnimation: React.MutableRefObject<THREE.AnimationAction | undefined>;
@@ -29,8 +28,7 @@ interface SceneProps {
 }
 
 const Scene: React.FC<SceneProps> = ({
-  canSit,
-  cantSit,
+  canSitHandler,
   player,
   chairPoint,
   playerAnimation,
@@ -146,8 +144,7 @@ const Scene: React.FC<SceneProps> = ({
         player={player}
         camera={camera}
         cameraPosition={cameraPosition}
-        canSit={canSit}
-        cantSit={cantSit}
+        canSitHandler={canSitHandler}
         chairPoints={chairPoints}
         chairPoint={chairPoint}
         playerAnimation={playerAnimation}

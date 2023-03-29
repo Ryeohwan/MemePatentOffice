@@ -1,23 +1,29 @@
 import React, { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "store/configStore";
+import { auctionInfo } from "store/auction";
+
 import { SlideMenu } from "primereact/slidemenu";
 import { Button } from "primereact/button";
 import { MenuItem } from "primereact/menuitem";
 
 import styles from "components/auction/main/list/AuctionSlideMenu.module.css";
-import SellerInfo from "./SellerInfo";
-import BiddingHistory from "./BiddingHistory";
-import { useNavigate } from "react-router-dom";
+import SellerInfo from "components/auction/main/list/SellerInfo";
+import BiddingHistory from "components/auction/main/list/BiddingHistory";
 
 const AuctionSlideMenu: React.FC = () => {
   const navigate = useNavigate();
   const menu = useRef<SlideMenu>(null);
+  const { sellerNickname } = useSelector<RootState, auctionInfo>(
+    (state) => state.auction.auctionInfo
+  );
   const [sellerInfoVisible, setSellerInfoVisible] = useState(false);
   const [biddingHistoryInfoVisible, setBiddingHistoryInfoVisible] =
     useState(false);
-  const nickname="3반 김재준"
   const sellerInfoHandler = () => {
     setSellerInfoVisible(true);
-    navigate(`${nickname}/tab=nft`)
+    navigate(`${sellerNickname}/tab=nft`);
   };
   const sellerInfoHandlerFalse = () => {
     setSellerInfoVisible(false);
