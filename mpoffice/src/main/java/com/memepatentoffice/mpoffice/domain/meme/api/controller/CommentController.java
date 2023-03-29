@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api/mpoffice/meme/comment")
+@RequestMapping("api/mpoffice/meme/comment")
 @RequiredArgsConstructor
 public class CommentController {
     private final MemeService memeService;
