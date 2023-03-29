@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import { RootState } from 'store/configStore'
 import { memeListActions } from 'store/memeList'
 
-import TabComp from "components/common/TabComp";
+import TabComp from "components/common/tab/TabComp";
 import MemeListNew from "./MemeListNew";
 import MemeListPopular from "./MemeListPopular";
 

@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
-import { NavLink } from 'react-router-dom';
-import AddBtn from "components/common/AddBtn";
+import { NavLink } from "react-router-dom";
+import AddBtn from "components/common/elements/AddBtn";
 
 import { OverlayPanel } from "primereact/overlaypanel";
 import styles from "./MemeAddBtn.module.css";
@@ -17,13 +17,12 @@ const MemeAddBtn: React.FC = () => {
       >
         <AddBtn />
       </div>
-      
+
       <OverlayPanel ref={op}>
         <NavLink to="/meme-upload" className={styles.navLink}>
-            밈 등록하기
+          밈 등록하기
         </NavLink>
       </OverlayPanel>
-    
     </div>
   );
 };

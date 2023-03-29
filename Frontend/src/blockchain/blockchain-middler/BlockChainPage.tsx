@@ -1,7 +1,7 @@
 import { mintAnimalTokenContract } from "web3config";
 import React, { useState } from "react";
-import AnimalCard from "blockchain-components/AnimalCard";
-import Layout from "blockchain-components/Layout";
+import AnimalCard from "blockchain/blockchain-components/AnimalCard";
+import Layout from "blockchain/blockchain-components/Layout";
 
 interface AccountProps {
   account: string;

@@ -1,4 +1,4 @@
-import NftAuctionCard from "components/common/NftAuctionCard";
+import NftAuctionCard from "components/common/card/NftAuctionCard";
 import { auctionType } from "store/auctionList";
 
 import styles from "./ProfileAuction.module.css";

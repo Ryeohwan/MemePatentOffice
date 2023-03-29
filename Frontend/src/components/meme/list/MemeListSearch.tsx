@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import { RootState } from 'store/configStore'
 import { memeListActions } from 'store/memeList'
 
-import SearchComp from 'components/common/SearchComp';
+import SearchComp from 'components/common/elements/SearchComp';
 import styles from './MemeListSearch.module.css';
 
 const MemeListSearch = () => {

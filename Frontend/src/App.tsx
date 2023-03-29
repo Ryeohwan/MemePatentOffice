@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import ScrollToTop from "components/common/ScrollToTop";
+import ScrollToTop from "components/common/elements/ScrollToTop";
 import LandingPage from "pages/LandingPage";
 import LoginPage from "pages/LoginPage";
 import SignupPage from "pages/SignupPage";
@@ -34,9 +34,9 @@ import NotificationListPage from "pages/NotificationListPage";
 import NotFoundPage from "pages/NotFoundPage";
 
 import Frame from "layout/Frame";
-import BlockChain from "blockchain-routes/BlockChain";
-import Animals from "blockchain-routes/Animals";
-import SaleAnimal from "blockchain-routes/Sales";
+import BlockChain from "blockchain/blockchain-routes/BlockChain";
+import Animals from "blockchain/blockchain-routes/Animals";
+import SaleAnimal from "blockchain/blockchain-routes/Sales";
 
 const App: React.FC = () => {
   return (

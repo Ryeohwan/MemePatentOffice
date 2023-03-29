@@ -11,7 +11,7 @@ import "pages/setting/Setting.css";
 import haku from "assets/haku.png";
 import kakao from 'assets/kakao.png'
 import logo from 'assets/logo.png'
-import NftCard from "components/common/NftCard";
+import NftCard from "components/common/card/NftCard";
 const MY_NFT: memeType[] = [
   {
     id: 1,

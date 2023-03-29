@@ -1,5 +1,5 @@
 import React from "react";
-import TabComp from "components/common/TabComp";
+import TabComp from "components/common/tab/TabComp";
 import { Route } from "react-router-dom";
 import styles from "./TabTradeComment.module.css";
 import ChartTradeComp from "./ChartTradeComp";

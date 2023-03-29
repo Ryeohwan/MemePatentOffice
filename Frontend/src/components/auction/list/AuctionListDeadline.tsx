@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/configStore";
 import { auctionListActions } from "store/auctionList";
 
-import NftAuctionCard from "components/common/NftAuctionCard";
+import NftAuctionCard from "components/common/card/NftAuctionCard";
 import styles from "./AuctionListTabComp.module.css";
 
 type auctionType = {

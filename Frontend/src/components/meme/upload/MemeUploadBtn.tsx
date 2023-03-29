@@ -3,7 +3,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { memeUploadActions } from "store/memeUpload";
 import { RootState } from "store/configStore";
-import SubmitBtn from "components/common/SubmitBtn";
+import SubmitBtn from "components/common/elements/SubmitBtn";
 import CheckingModal from "components/auction/upload/CheckingModal";
 
 import styles from "./MemeUploadBtn.module.css";
