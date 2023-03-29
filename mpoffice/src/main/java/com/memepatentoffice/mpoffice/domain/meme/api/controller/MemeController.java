@@ -27,6 +27,7 @@ public class MemeController {
     }
     @GetMapping("/{title}")
     public ResponseEntity getMeme(@PathVariable String title) throws NotFoundException {
+        System.out.println("나불렀니?");
         MemeResponse result = memeService.findByTitle(title);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
@@ -74,7 +75,7 @@ public class MemeController {
     }
     @PostMapping("/cart")
     @ResponseBody
-    public ResponseEntity cart(@RequestBody CartRequest cartRequest) throws Exception {
+    public ResponseEntity cart(CartRequest cartRequest) throws Exception {
         memeService.addCart(cartRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
