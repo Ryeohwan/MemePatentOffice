@@ -4,10 +4,12 @@ import styles from "./DetailInfo.module.css";
 import { useDispatch } from "react-redux";
 import { auctionUploadActions } from "store/auctionUpload";
 import UploadModal from "components/auction/upload/UploadModal";
+import { useParams } from "react-router-dom";
 
 const DetailInfo: React.FC = () => {
     const dispatch = useDispatch();
-    
+    const params = useParams()
+    const memeid = parseInt(params.meme_id! ,10)
     return (
       <>
         <div className={styles.memeDetailPage}>
@@ -66,7 +68,7 @@ const DetailInfo: React.FC = () => {
               <div className={styles.heartNumber}>2</div>
             </div>
           </div>
-          <div className={styles.uploadAuctionBtn} onClick={()=>{dispatch(auctionUploadActions.controlModal({visible:true}))}}>이 NFT 경매 등록하러 가기</div>
+          <div className={styles.uploadAuctionBtn} onClick={()=>{dispatch(auctionUploadActions.controlModal({visible:true, memeid:memeid}))}}>이 NFT 경매 등록하러 가기</div>
           <UploadModal/>
         </div>
       </>

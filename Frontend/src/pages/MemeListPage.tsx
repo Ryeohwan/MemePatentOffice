@@ -4,17 +4,21 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "store/configStore";
 import { memeListActions } from "store/memeList";
+import { memeType } from "store/memeList";
 
 import MemeListSearch from "components/meme/list/MemeListSearch";
 import NotInputArea from "components/meme/list/NotInputArea";
 import MemeListTabComp from "components/meme/list/MemeListTabComp";
-import MemeAddBtn from "components/meme/list/MemeAddBtn"
+import MemeAddBtn from "components/meme/list/MemeAddBtn";
 import styles from "./MemeListPage.module.css";
+import MemeNotFound from "components/meme/list/MemeNotFound";
 
 const MemeListPage: React.FC = () => {
   const dispatch = useDispatch();
   const input = useSelector<RootState, string>((state) => state.memeList.input);
-  
+  const memeList = useSelector<RootState, memeType[]>(
+    (state) => state.memeList.memeNewList
+  );
   // redux에서
 
   // unmount시 redux에 input ""로 바꾸기
@@ -45,18 +49,20 @@ const MemeListPage: React.FC = () => {
       )}
 
       {/* input값 있는 경우 -> 네브 검색으로 들어온 경우  */}
-      {input && (
+      {input && memeList.length > 0 && (
         <>
           {/* 검색 결과 tab */}
           <MemeListTabComp />
         </>
+      )}{input && memeList.length === 0 &&  (
+        <>
+          <MemeNotFound />
+          {/* input값 있는데 검색 결과 없는 경우 -> random 밈 몇개 띄워주기 */}
+        </>
       )}
-
-      {/* input값 있는데 검색 결과 없는 경우 -> random 밈 몇개 띄워주기 */}
 
       {/* 밈 등록 버튼 */}
       <MemeAddBtn />
-    
     </div>
   );
 };

@@ -13,6 +13,7 @@ const MemeListNew: React.FC = () => {
     (state) => state.memeList.memeNewList
   );
 
+  
   // console.log(memeList);
 
   return (
