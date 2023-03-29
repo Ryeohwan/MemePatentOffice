@@ -1,8 +1,8 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "store/configStore";
-import { auctionUploadActions } from "store/auctionUpload";
+import { auctionUploadActions, submitMeme } from "store/auctionUpload";
 import { memeList } from "store/auctionUpload";
 
 import { Dropdown, DropdownChangeEvent, DropdownProps } from "primereact/dropdown";
@@ -18,7 +18,20 @@ const UploadDropDown: React.FC = () => {
   const myMemeList = useSelector<RootState, memeList[]>(
     (state) => state.auctionUpload.memeList
   );
+  const visible = useSelector<RootState, boolean>(state => state.auctionUpload.isVisible)
+  // 만약 상세페이지에서 왔을때 
 
+  const {id} = useSelector<RootState, submitMeme>(state=>state.auctionUpload.submitMeme)
+  useEffect(()=>{
+    if(id){
+      for (let i=0; i<myMemeList.length; i++){
+        if(myMemeList[i].id === id){
+          setSelectedMeme(myMemeList[i])
+        }
+      }
+    }
+  },[visible])
+  
   // 드랍다운 템플릿
   const selectedMemeTemplate = (option: memeList,props:DropdownProps) => {
     if (option) {

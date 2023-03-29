@@ -43,7 +43,7 @@ const MemeListPopular: React.FC = () => {
     console.log(range)
     if (range) dispatch(memeListActions.changePeriod(range))
     else dispatch(memeListActions.changePeriod('today'))
-  }, [])
+  }, [location])
 
   return (
     <div className={styles.memeListPopularContainer}>
