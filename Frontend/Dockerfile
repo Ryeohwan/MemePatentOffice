@@ -1,13 +1,8 @@
-FROM node:14.15.4 as build-stage
+FROM nginx:stable-alpine
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY ./ .
-RUN npm run build
-FROM nginx as production-stage
-RUN mkdir /app
-COPY --from=build-stage /app/build /app
-COPY nginx.conf /etc/nginx/nginx.conf
-
+RUN mkdir ./build
+ADD ./build ./build
+RUN rm /etc/nginx/conf.d/default.conf
+COPY ./nginx.conf /etc/nginx/conf.d
 EXPOSE 3000
-CMD ["nginx ", "-g", "daemon off"]
+CMD ["nginx", "-g", "daemon off;"]
