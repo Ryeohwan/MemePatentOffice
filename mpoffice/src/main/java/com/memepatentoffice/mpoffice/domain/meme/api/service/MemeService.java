@@ -38,13 +38,14 @@ public class MemeService {
 
     public MemeResponse findByTitle(String title)throws NotFoundException{
         //추후 중복검사 로직 추가
-        Optional<Meme> meme = memeRepository.findMemeByTitle(title);
+        Meme meme = memeRepository.findMemeByTitle(title).orElseThrow(() -> new NotFoundException("해당하는 밈이 없습니다."));
         MemeResponse result = new MemeResponse().builder()
-                .content(meme.get().getContent())
-                .createdAt(meme.get().getCreatedAt())
-                .createrId(meme.get().getCreater().getId())
-                .ownerId(meme.get().getOwner().getId())
-                .title(meme.get().getTitle())
+                .id(meme.getId())
+                .content(meme.getContent())
+                .createdAt(meme.getCreatedAt())
+                .createrId(meme.getCreater().getId())
+                .ownerId(meme.getOwner().getId())
+                .title(meme.getTitle())
                 .build();
         return result;
     }

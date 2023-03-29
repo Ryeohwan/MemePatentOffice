@@ -17,7 +17,6 @@ public class UserMemeLikeRequest {
     private Long userId;
     @Enumerated(EnumType.STRING)
     private Like like;
-
     private LocalDateTime date;
 
 }
