@@ -38,7 +38,8 @@ const LandingPage = () => {
  
   // 로그인 핸들러
   const loginHandler = () => {
-    const KAKAO_LOGIN_URL = "https://j8a305.p.ssafy.io/api/auth/oauth2/authorize/kakao?redirect_uri=http://localhost:3000/oauth2/redirect"
+    const REDIRECT_URL = window.location.href.includes('localhost') ? `http://localhost:3000/oauth2/redirect` : `${process.env.REACT_APP_HOST}/oauth2/redirect`
+    const KAKAO_LOGIN_URL = `${process.env.REACT_APP_HOST}/api/auth/oauth2/authorize/kakao?redirect_uri=${REDIRECT_URL}`
     window.location.href = KAKAO_LOGIN_URL
   }
 
