@@ -65,9 +65,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body("withdraw success");
     }
 
-    @GetMapping("/check/{id}")
-    public ResponseEntity checkCount(@PathVariable("id") Long id) throws NotFoundException {
-        CountResponse result = userService.userCount(id);
+    @GetMapping("/check/{nickname}")
+    public ResponseEntity checkCount(@PathVariable("nickname") String nickname) throws NotFoundException {
+        CountResponse result = userService.userCount(nickname);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
