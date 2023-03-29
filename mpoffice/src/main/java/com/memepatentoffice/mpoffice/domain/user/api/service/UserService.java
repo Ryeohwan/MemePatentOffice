@@ -77,14 +77,19 @@ public class UserService {
         user.setIsValid(IsValid.InVALID);
     }
 
-    public CountResponse userCount(String nickName) throws NotFoundException{
+    public Boolean userCount(String nickName) throws NotFoundException{
         User user = userRepository.findUserByNickname(nickName).orElseThrow(
                 ()-> new NotFoundException("해당 유저를 찾을 수 없읍니다."));
         CountResponse result = CountResponse.builder()
                 .count(user.getTodayMemeCount())
                 .today(user.getToday())
                 .build();
-        return result;
+        Boolean fin = true;
+        if(result.getCount() > 0){
+            return true;
+        }else {
+            return false;
+        }
     }
 //    public Page<CommentResponse> getUserComments (Long id, int page) {
 //        PageRequest pageRequest = PageRequest.of(page,8, Sort.by(Sort.Direction.DESC, "id"));
