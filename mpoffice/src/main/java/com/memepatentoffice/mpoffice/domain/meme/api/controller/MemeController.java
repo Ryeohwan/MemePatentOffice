@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RequiredArgsConstructor
-@RequestMapping("api/mpoffice/meme")
+@RequestMapping("/api/mpoffice/meme")
 @RestController
 public class MemeController {
     private final MemeService memeService;
