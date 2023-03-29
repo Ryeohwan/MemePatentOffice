@@ -17,15 +17,13 @@ interface PlayerProps {
     THREE.OrthographicCamera | THREE.PerspectiveCamera
   >;
   cameraPosition: THREE.Vector3;
-  canSit: () => void;
-  cantSit: () => void;
+  canSitHandler: (state: boolean) => void;
   chairPoint: React.MutableRefObject<THREE.Mesh>;
   playerAnimation: React.MutableRefObject<THREE.AnimationAction | undefined>;
   tableAndChairs: React.MutableRefObject<THREE.Mesh[]>;
   biddingSubmit: boolean;
   isSitting: React.MutableRefObject<boolean>;
 }
-
 
 type action = {
   handsup: THREE.AnimationAction | null;
@@ -42,8 +40,7 @@ const Player: React.FC<PlayerProps> = ({
   camera,
   cameraPosition,
   chairPoints,
-  canSit,
-  cantSit,
+  canSitHandler,
   chairPoint,
   playerAnimation,
   tableAndChairs,
@@ -51,6 +48,7 @@ const Player: React.FC<PlayerProps> = ({
   isSitting,
 }) => {
   const disptach = useDispatch();
+  const hasChange = useRef<boolean>(false);
   const playerState = useSelector<RootState, number>(
     (state) => state.auction.playerState
   );
@@ -110,11 +108,32 @@ const Player: React.FC<PlayerProps> = ({
     player.current.position.z = playerPosition.current.z;
     player.current.rotation.y += Math.PI;
   }, []);
-  console.log(playerState)
+
   useFrame((state, delta) => {
     mixer.update(delta);
     if (playerState === 0) {
       if (actions.current.normal) actions.current.normal.play();
+      let isIn;
+      chairPoints.current.forEach((chair) => {
+        if (
+          Math.abs(player.current.position.x - chair.position.x) < 0.6 &&
+          Math.abs(player.current.position.z - chair.position.z) < 0.6
+        ) {
+          if (!hasChange.current) {
+            canSitHandler(true);
+            hasChange.current=true
+          }
+          chairPoint.current = chair;
+          isIn = true;
+          if (actions.current.sitdown) {
+            playerAnimation.current = actions.current.sitdown;
+          }
+        }
+      });
+      if (!isIn) {
+        hasChange.current = false;
+        canSitHandler(false);
+      }
     } else if (playerState === 1) {
       if (actions.current.normal) actions.current.normal.stop();
       if (actions.current.walk) actions.current.walk.play();
@@ -124,20 +143,17 @@ const Player: React.FC<PlayerProps> = ({
       );
       player.current.position.x += Math.cos(angle) * 0.06;
       player.current.position.z += Math.sin(angle) * 0.06;
-
       if (
         Math.abs(clickPosition.current.x - player.current.position.x) < 0.03 &&
         Math.abs(clickPosition.current.z - player.current.position.z) < 0.03
       ) {
         disptach(auctionActions.controlPlayerState(0));
-        
       }
       camera.current.position.x = cameraPosition.x + player.current.position.x;
       camera.current.position.z = cameraPosition.z + player.current.position.z;
     } else if (playerState === 2) {
-      clickPosition.current = player.current.position;
+      clickPosition.current = player.current.position.clone();
       if (actions.current.walk) actions.current.walk.stop();
-
       if (biddingSubmit) {
         if (actions.current.handsup) actions.current.handsup.play();
       }
@@ -151,22 +167,6 @@ const Player: React.FC<PlayerProps> = ({
     if (playerState !== 2) {
       if (actions.current.sitdown) {
         playerAnimation.current = actions.current.sitdown;
-      }
-      let isIn;
-      chairPoints.current.forEach((chair) => {
-        if (
-          Math.abs(player.current.position.x - chair.position.x) < 0.5 &&
-          Math.abs(player.current.position.z - chair.position.z) < 0.5
-        ) {
-          canSit();
-          chairPoint.current = chair;
-          isIn = true;
-          if (actions.current.sitdown)
-            playerAnimation.current = actions.current.sitdown;
-        }
-      });
-      if (!isIn) {
-        cantSit();
       }
     }
   });

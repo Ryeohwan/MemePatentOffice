@@ -1,14 +1,17 @@
 // 경매장 auction/:id
 import React, { useEffect, useRef } from "react";
+
+import { useDispatch } from "react-redux";
+import { auctionActions } from "store/auction";
+
 import * as StompJs from "@stomp/stompjs";
 import AuctionCanvas from "components/auction/main/AuctionCanvas";
 
 import styles from "pages/AuctionPage.module.css";
 
 // const ENDPOINT = "wss://j8a305.p.ssafy.io/ws";
-
-const ENDPOINT = "ws://localhost:3072/ws";
 const AuctionPage: React.FC = () => {
+  const dispatch = useDispatch()
   // const client = useRef<StompJs.Client>();
   // const connect = () => {
   //   client.current = new StompJs.Client({
@@ -63,7 +66,9 @@ const AuctionPage: React.FC = () => {
   // };
 
   // useEffect(() => {
+      // dispatch(auctionActions.getAuctionInfo()) // redux에 있는 api 실행
   //   connect();
+
   //   return () => disconnect();
   // }, []);
 
