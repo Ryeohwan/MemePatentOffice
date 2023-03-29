@@ -42,7 +42,7 @@ const MemeUploadPage: React.FC = () => {
     }
 
     // 밈 등록 가능한 사람인지 확인하는 axios 보냄
-    // sendRequest({url: `/api/mpoffice/user/check/${JSON.parse(sessionStorage.user).nickname}`})
+    sendRequest({url: `/api/mpoffice/user/check/${JSON.parse(sessionStorage.user).nickname}`})
     // controlCheckModal(false); // 임시
   }
 

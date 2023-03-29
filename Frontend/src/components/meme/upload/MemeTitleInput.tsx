@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import useAxios from 'hooks/useAxios';
 import { memeUploadActions } from "store/memeUpload";
 import { RootState } from "store/configStore";
 
@@ -15,8 +16,7 @@ const MemeTitleInput: React.FC = () => {
   const titleChecked = useSelector<RootState, boolean>(state => state.memeUpload.titleChecked)
   const titleState = useSelector<RootState, number>(state => state.memeUpload.titleState)
 
-  // 임시 loading -> useAxios 사용할거임
-  const [loading, setLoading] = useState(false);
+  const { data, isLoading, status, sendRequest } = useAxios();
 
   // text keyup 할때 1초 후 중복검사 api
   useEffect(() => {
@@ -24,17 +24,17 @@ const MemeTitleInput: React.FC = () => {
     if (titleState === 0) dispatch(memeUploadActions.setTitleState(-1));
 
     if (!input) return;
-    setLoading(true);
-    const identifier = setTimeout(() => {
-      // 중복검사 api 임시로 true 보내기
-      console.log("중복검사 보냄", input);
-      dispatch(memeUploadActions.setTitleChecked(true));
-      setLoading(false);
+    // setLoading(true);
+    // const identifier = setTimeout(() => {
+    //   // 중복검사 api 임시로 true 보내기
+    //   console.log("중복검사 보냄", input);
+    //   dispatch(memeUploadActions.setTitleChecked(true));
+    //   setLoading(false);
 
-    }, 1000);
-    return () => {
-      clearTimeout(identifier);
-    };
+    // }, 1000);
+    // return () => {
+    //   clearTimeout(identifier);
+    // };
   }, [input]);
 
 
@@ -49,7 +49,7 @@ const MemeTitleInput: React.FC = () => {
           placeholder="이미지 밈의 제목 혹은 텍스트 밈을 입력하세요."
         />
 
-        {input && loading && (
+        {input && isLoading && (
           <div className={styles.spinnerContainer}>
             <i className="pi pi-spin pi-spinner" />
           </div>
