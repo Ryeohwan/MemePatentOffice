@@ -12,18 +12,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class CommentService {
-    private static final String SUCCESS = "success";
-    private static final String FAIL = "fail";
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final MemeRepository memeRepository;
-
     private final UserCommentLikeRepository userCommentLikeRepository;
-
     @Transactional
     public Long createCommenmt(CommentRequest commentRequest) throws NotFoundException {
         User user = userRepository.findById(commentRequest.getUserId())
@@ -53,8 +51,15 @@ public class CommentService {
                 .user(userRepository.findById(commentLikeRequest.getUserId())
                                 .orElseThrow(()->new NotFoundException("유효하지 않은 유저입니다")))
                 .build();
+        userCommentLikeRepository.save(temp);
         return true;
     }
+
+    public void CommentList(Long id) throws NotFoundException{
+        List<Comment> list = commentRepository.findCommentsByMemeId(id);
+    }
+
+
 
 
 

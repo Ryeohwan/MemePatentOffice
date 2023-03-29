@@ -26,6 +26,10 @@ public class UserResponse {
 
     private final LocalDateTime updatedAt;
 
+    private int todayMemeCount;
+
+    private LocalDateTime today;
+
     public UserResponse(User user) {
         this.id = user.getId();
         this.name = user.getName();
@@ -36,5 +40,7 @@ public class UserResponse {
         this.isValid = user.getIsValid();
         this.createdAt = user.getCreatedAt();
         this.updatedAt = user.getUpdatedAt();
+        this.todayMemeCount = user.getTodayMemeCount();
+        this.today = user.getToday();
     }
 }

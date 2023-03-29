@@ -68,11 +68,12 @@ public class MemeService {
 
         if(creater.getToday().getDayOfMonth() < LocalDateTime.now().getDayOfMonth()){
                 creater.setTodayMemeLike(1);
+                creater.setToday(LocalDateTime.now());
         }else{
-            if(creater.getTodayMemeLike() < 1){
-                throw new MemeCreateCountException("하루 제한 2회를 넘었읍니다...");
+            if(creater.getTodayMemeCount() < 1){
+                throw new MemeCreateCountException("하루 제한 2회를 넘었습니다...");
             }else{
-                int count = creater.getTodayMemeLike() -1 ;
+                int count = creater.getTodayMemeCount() -1 ;
                 creater.setTodayMemeLike(count);
             }
         }
@@ -101,6 +102,7 @@ public class MemeService {
         if(userMemeLikeRepository.existsUserMemeLikeByUserIdAndMemeId(userId, memeId)){
             UserMemeLike find = userMemeLikeRepository.findUserMemeLikeByUserIdAndMemeId(userId,memeId);
             find.setLike(userMemeLikeRequest.getLike());
+            find.setDate(userMemeLikeRequest.getDate());
             return true;
         }
 
@@ -112,7 +114,7 @@ public class MemeService {
                         .meme(memeRepository.findById(memeId)
                                 .orElseThrow(()->new NotFoundException("밈이 없습니다")))
                         .like(userMemeLikeRequest.getLike())
-                        .date(LocalDate.now())
+                        .date(LocalDateTime.now())
                         .build()
         );
         return true;

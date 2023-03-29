@@ -31,9 +31,13 @@ public class UserMemeLike {
     private Like like;
 
     @Column(name = "date")
-    private LocalDate date;
+    private LocalDateTime date;
 
     public void setLike(Like like) {
         this.like = like;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 }
