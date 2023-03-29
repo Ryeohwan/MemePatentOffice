@@ -123,19 +123,20 @@ public class MemeService {
     // 찜하기
     @Transactional
     public boolean addCart(CartRequest cartRequest) throws Exception{
+        log.info("여기 오긴 하니?");
         Long userId = cartRequest.getUserId();
         Long memeId = cartRequest.getMemeId();
         log.info("userid: "+userId);
         log.info("memeid: "+memeId);
         log.info("add or: "+cartRequest.getCart());
-
-        if(cartRepository.existsUserMemeAuctionAlertByUserAndMeme(userId,memeId)){
-            UserMemeAuctionAlert find = cartRepository.findUserMemeAuctionAlertByUserAndMeme(
+        if(cartRepository.existsUserMemeAuctionAlertByUserIdAndMemeId(userId,memeId)){
+            log.info("이미 존재하는 알람 정보를 수정합니다.");
+            UserMemeAuctionAlert seak = cartRepository.findUserMemeAuctionAlertByUserIdAndMemeId(
                     userRepository.findById(userId)
-                            .orElseThrow(()-> new NotFoundException("유저가 없습니다."))
+                            .orElseThrow(()-> new NotFoundException("유저가 없습니다.")).getId()
                     ,memeRepository.findById(memeId)
-                            .orElseThrow(() -> new NotFoundException("밈이 없습니다.")));
-            find.setCart(cartRequest.getCart());
+                            .orElseThrow(() -> new NotFoundException("밈이 없습니다.")).getId());
+            seak.setCart(cartRequest.getCart());
         }else{
             cartRepository.save(
                     UserMemeAuctionAlert.builder()
