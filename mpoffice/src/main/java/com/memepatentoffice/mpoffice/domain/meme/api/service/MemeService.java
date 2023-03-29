@@ -104,20 +104,22 @@ public class MemeService {
             find.setLike(userMemeLikeRequest.getLike());
             find.setDate(userMemeLikeRequest.getDate());
             return true;
+        }else{
+            // 없으면 새로 만들어준다.
+            userMemeLikeRepository.save(
+                    UserMemeLike.builder()
+                            .user(userRepository.findById(userId)
+                                    .orElseThrow(()->new NotFoundException("유저가 없습니다")))
+                            .meme(memeRepository.findById(memeId)
+                                    .orElseThrow(()->new NotFoundException("밈이 없습니다")))
+                            .like(userMemeLikeRequest.getLike())
+                            .date(LocalDateTime.now())
+                            .build()
+            );
+            return true;
         }
 
-        // 없으면 새로 만들어준다.
-        userMemeLikeRepository.save(
-                UserMemeLike.builder()
-                        .user(userRepository.findById(userId)
-                                .orElseThrow(()->new NotFoundException("유저가 없습니다")))
-                        .meme(memeRepository.findById(memeId)
-                                .orElseThrow(()->new NotFoundException("밈이 없습니다")))
-                        .like(userMemeLikeRequest.getLike())
-                        .date(LocalDateTime.now())
-                        .build()
-        );
-        return true;
+
     }
 
     

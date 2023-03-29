@@ -33,7 +33,6 @@ public class CommentController {
     public ResponseEntity createLike(CommentLikeRequest commentLikeRequest) throws NotFoundException{
         return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createCommentLike(commentLikeRequest));
     }
-
     @GetMapping("/list/latest/{id}")
     public ResponseEntity latestComment(@PathVariable("id") Long id){
         return ResponseEntity.ok("result");
