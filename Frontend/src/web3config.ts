@@ -611,8 +611,8 @@ const saleAnimalTokenAbi:AbiItem[] = [
 ];
 
 // let web3 = new Web3('wss://eth-sepolia.g.alchemy.com/v2/wMn84GBFPKxhdDb0EALg2UE9yNnJz-lf');
-const mintAnimalTokenAddress = "0xeba9e16a5d4c25ad0fa3282d76b39bb98218f645";
-const saleAnimalTokenAddress = "0xab639593c713cc9f023217353914e5ac2e4fed57";
+export const mintAnimalTokenAddress = "0xeba9e16a5d4c25ad0fa3282d76b39bb98218f645";
+export const saleAnimalTokenAddress = "0xab639593c713cc9f023217353914e5ac2e4fed57";
 export const web3 = new Web3(window.ethereum);
 // const mintAnimalTokenAddress = "0x8a8b71684093db7Dd2D3b474557687DDD18767C0";
 // const saleAnimalTokenAddress = "0x4A8c7C951072Ae130318e0A976420EAEe5e0245a";

@@ -10,12 +10,17 @@ const Layout:React.FC<Props> = ({children}) => {
         <div>
             <div>
                 <Link to="/blockchain">
-                    <button>blockchainpage</button>
+                    <button>blockchain</button>
                 </Link>
             </div>
             <div>
                 <Link to="/my-animal">
                     <button>my animal</button>
+                </Link>
+            </div>
+            <div>
+                <Link to="/sale-animal">
+                    <button>sale animal</button>
                 </Link>
             </div>
             {children}
