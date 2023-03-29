@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -23,22 +24,9 @@ public class AuctionController {
     private final AuctionRepository auctionRepository;
 
     @PostMapping("/")
-    public ResponseEntity<?> enrollAuction(@RequestBody AuctionCreationReq auctionCreationReq) throws NotFoundException{
+    public ResponseEntity<?> enrollAuction(@RequestBody AuctionCreationReq auctionCreationReq) throws IOException, NotFoundException{
         auctionService.enrollAuction(auctionCreationReq);
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
-    }
-    @GetMapping("/")
-    public ResponseEntity<?> getAuctionAll(){
-        return ResponseEntity.status(HttpStatus.OK).body(
-                auctionService.findAll()
-        );
-    }
-
-    @GetMapping("/{auctionId}")
-    public ResponseEntity<?> getAuctionById(@PathVariable Long auctionId) throws NotFoundException {
-        return ResponseEntity.status(HttpStatus.OK).body(
-          auctionService.findById(auctionId)
-        );
     }
 
 }

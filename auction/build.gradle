@@ -40,6 +40,13 @@ dependencies {
 	/*websocket*/
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
+	/*okhttp3*/
+	implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.11'
+	/*gson*/
+	implementation 'com.google.code.gson:gson:2.10.1'
+
+
+
 	/* swagger2 */
 	// https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
