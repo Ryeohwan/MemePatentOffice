@@ -21,17 +21,35 @@ const NavbarHamburger: React.FC = () => {
     setOpen(false);
   }, [pathname]);
 
-
   const mypageHandler = () => {
     // mypage 이동하기 위한 url
-    const mypageUrl = `/profile/${JSON.parse(sessionStorage.getItem('user')!).nickname}/tab=nft`;
-    
-    if (pathname.includes('profile')) {
-      window.location.href = mypageUrl
+    const mypageUrl = `/profile/${
+      JSON.parse(sessionStorage.getItem("user")!).nickname
+    }/tab=nft`;
+
+    if (pathname.includes("profile")) {
+      window.location.href = mypageUrl;
     } else {
-      navigate(mypageUrl)
+      navigate(mypageUrl);
     }
-  }
+  };
+
+  const accountHandler = async () => {
+    try {
+      if (window.ethereum) {
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        const account = accounts[0];
+        sessionStorage.setItem("account", account);
+        alert("지갑 연결 성공!");
+      } else {
+        alert("MetaMask를 설치해주세요.");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -64,6 +82,8 @@ const NavbarHamburger: React.FC = () => {
           {/* <NavLink to={mypageUrl} className={styles.navLink}>
             마이페이지
           </NavLink> */}
+
+          <div onClick={accountHandler}>지갑 연결하기</div>
 
           <div className={styles.navLink} onClick={mypageHandler}>
             마이페이지

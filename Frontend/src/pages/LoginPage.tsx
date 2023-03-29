@@ -17,7 +17,8 @@ const LoginPage: React.FC = () => {
     const obj = new URLSearchParams(searchParams);
     // token 받아오기
     const accessToken = obj.get("token");
-    console.log(accessToken);
+    // console.log(accessToken);
+    sessionStorage.setItem("accessToken", accessToken!)
 
     // 첫 로그인이면 회원가입....? -> 아니면 그냥 냅다 카카오 닉네임 닉네임으로 박아버리기 (이게 나을듯)
 
@@ -32,7 +33,7 @@ const LoginPage: React.FC = () => {
       }
     }
 
-    const user = new User('단발머리 부엉이', 'https://mblogthumb-phinf.pstatic.net/MjAyMDA4MjhfMjAw/MDAxNTk4NjIyNzAzMTY2.4OMKwJR76tS20oeIwYTKWt18EeLhUkRzN0GG_cD8Mdgg.DuP-r3tHSyMPjZjlDdOItSVa9jhMj0KSh4vBPfzHg0sg.JPEG.chance_pol/1598622702162.jpg?type=w800')
+    const user = new User('사나이', 'https://mblogthumb-phinf.pstatic.net/MjAyMDA4MjhfMjAw/MDAxNTk4NjIyNzAzMTY2.4OMKwJR76tS20oeIwYTKWt18EeLhUkRzN0GG_cD8Mdgg.DuP-r3tHSyMPjZjlDdOItSVa9jhMj0KSh4vBPfzHg0sg.JPEG.chance_pol/1598622702162.jpg?type=w800')
     sessionStorage.setItem("user", JSON.stringify(user));
     
     navigate('/main')

@@ -1,7 +1,9 @@
 // meme upload page (/meme-upload)
 import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import { memeUploadActions } from "store/memeUpload";
+import useAxios from 'hooks/useAxios';
 
 import CheckingModal from "components/auction/upload/CheckingModal";
 import MemeTitleInput from "components/meme/upload/MemeTitleInput";
@@ -15,26 +17,51 @@ import styles from "./MemeUploadPage.module.css";
 
 const MemeUploadPage: React.FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  // 등록가능한 사람(하루2번)인지 확인하는 모달
+  // 등록가능한 사람인지 확인하는 모달
   const [checkModalVisible, setCheckModalVisible] = useState<boolean>(false);
   const controlCheckModal = (visible: boolean) => {
     setCheckModalVisible(visible);
   };
 
-  // mount 될때 loading 띄우고 등록 가능한사람인지 먼저 확인
-  useEffect(() => {
+  // 밈 등록 가능한 사람인지 확인하는 axios
+  const { data, status, sendRequest } = useAxios();
+
+  const checkHandler = async () => {
     controlCheckModal(true);
 
-    // axios 보내기
-    // const result = await ...
-    // 가능한 상태면 -> checkmodal false
-    // 불가능한 상태면 -> checkmodal false / alert -> 밈 사전 페이지 navigate
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
-    // 일단 임시 time out
-    const identifier = setTimeout(() => {
+    // MetaMask 계정 연결되어 있는지 확인
+    if (!sessionStorage.getItem('account')) {
+      alert('MetaMask를 연결하세요.')
       controlCheckModal(false);
-    }, 1000);
+      navigate(-1)
+      return;
+    }
+
+    // 밈 등록 가능한 사람인지 확인하는 axios 보냄
+    // sendRequest({url: `/api/mpoffice/user/check/${JSON.parse(sessionStorage.user).nickname}`})
+    // controlCheckModal(false); // 임시
+  }
+
+  // status 바꼈을때 실행
+  useEffect(() => {
+    if (status && status !== 200) {
+      alert('잠시 후 다시 시도해주세요.')
+      controlCheckModal(false);
+      navigate(-1)
+    }
+    controlCheckModal(false);
+    if (data === false) {
+      navigate(-1)
+    }
+  }, [status])
+
+  useEffect(() => {
+    // mount 될때 loading 띄우고 등록 가능한사람인지 먼저 확인
+    checkHandler();
 
     // unmount 될때 redux 초기화 시키기
     return () => {
