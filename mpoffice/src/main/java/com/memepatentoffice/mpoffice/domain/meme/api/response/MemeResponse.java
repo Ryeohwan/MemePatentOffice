@@ -30,6 +30,7 @@ public class MemeResponse {
     private int likeCount;
     private int hateCount;
     private int searched;
+    private String situation;
     private String userProfileImage;
     public void setCart(Cart cart){
         this.cart = cart;

@@ -47,6 +47,7 @@ public class MemeService {
                 .ownerNickname(meme.getOwner().getNickname())
                 .userProfileImage(user.getProfileImage())
                 .searched(meme.getSearched())
+                .situation(meme.getSituation())
                 .title(meme.getTitle())
                 .likeCount(userMemeLikeRepository.countLike(userId,meme.getId(),MemeLike.LIKE))
                 .hateCount(userMemeLikeRepository.countLike(userId,meme.getId(),MemeLike.HATE))
