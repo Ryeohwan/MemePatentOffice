@@ -1,6 +1,11 @@
 // auction page (/auction/:auction_id)
 
 import React, { useRef, useState, useCallback, useEffect } from "react";
+
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "store/configStore";
+import { auctionActions } from "store/auction";
+
 import Scene from "components/auction/main/Scene";
 import styles from "components/auction/main/AuctionCanvas.module.css";
 import * as THREE from "three";
@@ -12,22 +17,20 @@ import ChatMain from "components/auction/main/chat/ChatMain";
 import Bidding from "components/auction/main/list/Bidding";
 import FinishModal from "components/auction/main/FinishModal";
 
-interface AuctionCanvasProps {
-  finishTime: Date | string;
-  sellerID: string;
-}
-
 const AuctionCanvas: React.FC = () => {
   const width = window.innerWidth;
   const height = window.innerHeight;
-  const moving = useRef<boolean>(false);
+  const dispatch = useDispatch();
+  const playerState = useSelector<RootState, number>(
+    (state) => state.auction.playerState
+  );
+
   const [isFull, setIsFull] = useState<Boolean>(false);
   const [visible, setVisible] = useState<Boolean>(false);
   const player = useRef<THREE.Object3D>(new THREE.Object3D());
   const chairPoint = useRef<THREE.Mesh>(new THREE.Mesh());
   const playerAnimation = useRef<THREE.AnimationAction | undefined>();
   const playerPosition = useRef<THREE.Vector3>(new THREE.Vector3());
-  const sitting = useRef(false);
   const isSitting = useRef<boolean>(false);
   const cameraPoint = useRef<THREE.Vector3>(new THREE.Vector3());
   const cameraRotation = useRef<number[]>([]);
@@ -54,7 +57,7 @@ const AuctionCanvas: React.FC = () => {
   );
   const [biddingVisible, setBiddingVisible] = useState<boolean>(false);
   const [biddingSubmit, setBiddingSubmit] = useState<boolean>(false);
-  const [fullScreen, setFullScreen] = useState(false)
+  const [fullScreen, setFullScreen] = useState(false);
   // useEffect(() => {
   //   const elem = document.getElementById("auction");
   //   if (elem) {
@@ -68,14 +71,13 @@ const AuctionCanvas: React.FC = () => {
   //   return () => {
   //     if (document.fullscreenElement)
   //     document.exitFullscreen();
+      // dispatch(auctionActions.closeAuction())
+      // dispatch(chatActions.closeAuction())
   //   };
   // }, []);
 
-  const biddingHandler = () => {
-    setBiddingVisible(false);
-  };
-  const biddingOpen = () => {
-    setBiddingVisible(true);
+  const biddingHandler = (state:boolean) => {
+    setBiddingVisible(state);
   };
   const biddingSubmitHandler = () => {
     setBiddingVisible(false);
@@ -85,15 +87,13 @@ const AuctionCanvas: React.FC = () => {
     }, 2500);
   };
 
-  const canSit = useCallback(() => {
-    setVisible(true);
-  }, []);
-  const cantSit = useCallback(() => {
-    setVisible(false);
+  const canSitHandler = useCallback((state: boolean) => {
+    setVisible(state);
   }, []);
 
   const sitDownHandler = () => {
-    moving.current = false;
+    isSitting.current = false;
+    dispatch(auctionActions.controlPlayerState(2));
     cameraPoint.current = camera.current.position.clone();
     cameraRotation.current = [
       camera.current.rotation.x,
@@ -111,7 +111,7 @@ const AuctionCanvas: React.FC = () => {
     camera.current = playerCamera.current.clone();
     player.current.lookAt(0, 1, -30);
     player.current.rotation.y = 0;
-    if(playerAnimation.current) playerAnimation.current.play()
+    if (playerAnimation.current) playerAnimation.current.play();
     gsap.fromTo(
       player.current.position,
       {
@@ -129,12 +129,10 @@ const AuctionCanvas: React.FC = () => {
     if (playerAnimation.current) {
       playerAnimation.current.play();
     }
-    sitting.current = true;
-    cantSit();
+    canSitHandler(false);
   };
 
   const standUpHandler = () => {
-    isSitting.current=false
     setIsFull(false);
     camera.current = bigCamera;
     camera.current.zoom = 30;
@@ -150,14 +148,14 @@ const AuctionCanvas: React.FC = () => {
         x: chairPoint.current.position.x,
         y: playerPosition.current.y,
         z: chairPoint.current.position.z - 0.8,
-        duration: 1,
+        duration: 2,
       }
     );
     gsap.to(camera.current.position, {
       x: cameraPoint.current.x,
       y: cameraPoint.current.y,
       z: cameraPoint.current.z,
-      duration: 1,
+      duration: 2,
     });
     camera.current.rotation.x = cameraRotation.current[0];
     camera.current.rotation.y = cameraRotation.current[1];
@@ -165,7 +163,7 @@ const AuctionCanvas: React.FC = () => {
     if (playerAnimation.current) {
       playerAnimation.current.play();
     }
-    sitting.current = false;
+    setTimeout(()=>{dispatch(auctionActions.controlPlayerState(0))},1500)
   };
 
   const fullMoniter = () => {
@@ -187,31 +185,28 @@ const AuctionCanvas: React.FC = () => {
   return (
     <section id="auction" className={styles.auctionWrapper}>
       <Scene
-        canSit={canSit}
-        cantSit={cantSit}
+        canSitHandler={canSitHandler}
         player={player}
         chairPoint={chairPoint}
         playerAnimation={playerAnimation}
-        sitting={sitting}
         camera={camera}
         biddingSubmit={biddingSubmit}
         playerPosition={playerPosition}
-        moving={moving}
         isSitting={isSitting}
       />
       <div className={styles.buttonWrapper}>
         {/* {document.getElementById("auction") && <AuctionSlideMenu />} */}
         <AuctionSlideMenu />
-        {visible && !sitting.current && (
+        {visible && playerState === 0 && (
           <Button
             label="앉기"
             className={styles.sitBtn}
             onClick={sitDownHandler}
           />
         )}
-        {sitting.current && (
+        {playerState === 2 && (
           <>
-            <Button icon="pi pi-dollar" onClick={biddingOpen} />
+            <Button icon="pi pi-dollar" onClick={()=>biddingHandler(true)} />
             <Button
               label="일어나"
               className={styles.sitBtn}
@@ -227,7 +222,7 @@ const AuctionCanvas: React.FC = () => {
         <ChatMain />
       </div>
       <div className={styles.fullMoniterBtn}>
-        {sitting.current ? (
+        {playerState === 2 ? (
           isFull ? (
             <Button onClick={() => notFullMoniter()}>확대</Button>
           ) : (

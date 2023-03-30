@@ -1,6 +1,6 @@
 import { Route, useLocation } from "react-router-dom";
 
-import TabComp from "components/common/TabComp";
+import TabComp from "components/common/tab/TabComp";
 
 import { memeType } from "store/memeList";
 import { auctionType } from "store/auctionList";

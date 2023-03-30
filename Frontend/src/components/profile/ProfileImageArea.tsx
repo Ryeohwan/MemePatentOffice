@@ -4,14 +4,13 @@ interface Props {
   imgUrl: string;
 }
 
-const ProfileImageArea: React.FC<Props> = ({imgUrl}) => {
-  const imgSrc = "http://localhost:3000/" + imgUrl
-  
+const ProfileImageArea: React.FC<Props> = ({ imgUrl }) => {
+
   return (
     <div className={styles.areaContainer}>
         <div className={styles.backgroundContainer} />
         <div className={styles.imgContainer}>
-          <img src={imgSrc} alt="" className={styles.img}/>
+          <img src={imgUrl} alt="" className={styles.img}/>
         </div>
     </div>
   );

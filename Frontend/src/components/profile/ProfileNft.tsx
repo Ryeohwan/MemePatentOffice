@@ -1,5 +1,5 @@
 import { memeType } from "store/memeList";
-import NftCard from "components/common/NftCard";
+import NftCard from "components/common/card/NftCard";
 
 import styles from "./ProfileNft.module.css";
 

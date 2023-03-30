@@ -1,46 +1,63 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
+import Box from "./mesh/Box";
+import { useSelector } from "react-redux";
+import { auctionInfo, biddingHistory } from "store/auction";
+import { RootState } from "store/configStore";
+
+import { Canvas } from "react-three-fiber";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import styles from "components/auction/main/FinishModal.module.css";
+import FinishModalCharacter from "./FinishModalCharacter";
 
-interface FinishModalProps {}
+type action = {
+  buy: THREE.AnimationAction | null;
+  notbuy: THREE.AnimationAction | null;
+};
 
-const FinishModal: React.FC<FinishModalProps> = () => {
+const FinishModal: React.FC = () => {
   const navigate = useNavigate();
-  // 끝나는 시간 더미 데이터
-  const finishTime = "2023-03-24 14:16";
+  const { finishTime, memeId } = useSelector<RootState, auctionInfo>(
+    (state) => state.auction.auctionInfo
+  );
+  const biddingHistory = useSelector<RootState, biddingHistory[]>(
+    (state) => state.auction.biddingHistory
+  );
+  // 끝나는 시간 format
+  const finishFormat = finishTime.split("T")[1].substring(0, 5);
 
   // 모달창
   const [visible, setVisible] = useState<boolean>(false);
-  // 남은 시간
-  const [time, setTime] = useState<Date>(new Date());
-  const [remainTime, setRemainTime] = useState<number>(5);
 
+  // 남은 시간
+  // const [remainTime, setRemainTime] = useState<number>(5);
+  const remainTime = useRef<number>(5)
   useEffect(() => {
     const interval = setInterval(() => {
-      setTime((time) => new Date(time.getTime() + 1000));
+      const currentTime = new Date().toISOString().split("T")[1].substring(0, 5);
+      if (currentTime === finishFormat) {
+        if (!visible){
+          setVisible(true);
+          remainTime.current -= 1
+          // setRemainTime((prev)=>prev-1)
+        }
+      }
+      if (remainTime.current ===0){
+        navigate(`/meme-detail/${memeId}`)
+      }
     }, 1000);
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    const day = `${time.getFullYear()}-${(time.getMonth() + 1)
-      .toString()
-      .padStart(2, "0")}-${time.getDate().toString().padStart(2, "0")}`;
-    const times = `${time.getHours().toString().padStart(2, "0")}:${time
-      .getMinutes()
-      .toString()
-      .padStart(2, "0")}`;
-    const currentTime = `${day} ${times}`;
-    if (currentTime === finishTime) {
-      setVisible(true);
-      setRemainTime((time)=>time-1)
-    }
-    if (remainTime === 0){
-        navigate('meme-detail/:1')
-    }
-  }, [time]);
+  // useEffect(() => {
+  //   const currentTime = new Date().toISOString().split("T")[1].substring(0, 5);
+  //   if (currentTime === finishFormat) {
+  //     setVisible(true);
+  //     setRemainTime((time) => time - 1);
+  //   }
+  //   console.log(remainTime);
+  // }, [time]);
 
   return (
     <Dialog
@@ -51,10 +68,19 @@ const FinishModal: React.FC<FinishModalProps> = () => {
       className={styles.modal}
       onHide={() => {}}
     >
-      <p>nickname 님이 낙찰되었습니다!</p>
-      <div>캐릭터</div>
-      <p>{remainTime}초 후에 종료...</p>
-      <Button>나가기</Button>
+      {/* 경매 끝났을 때 최고가 닉네임 띄우기 */}
+      <div className={styles.wrapper}>
+        <p className={styles.nickname}>{biddingHistory[0].nickname}님</p>
+        <p className={styles.cong}>축하드립니다!!</p>
+        <div className={styles.canvasDiv}>
+          <Canvas className={styles.canvas} camera={{ fov: 75, near: 0.1, far: 100, position: [0, 1, 2] }}>
+            <ambientLight />
+          <FinishModalCharacter />
+          </Canvas>
+        </div>
+        <p className={styles.remainTime}>5초 후에 종료됩니다.</p>
+        <Button>나가기</Button>
+      </div>
     </Dialog>
   );
 };

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/configStore";
 import { memeListActions } from "store/memeList";
 
-import NftCard from "components/common/NftCard";
+import NftCard from "components/common/card/NftCard";
 
 import styles from "./MemeListPopular.module.css";
 
@@ -43,7 +43,7 @@ const MemeListPopular: React.FC = () => {
     console.log(range)
     if (range) dispatch(memeListActions.changePeriod(range))
     else dispatch(memeListActions.changePeriod('today'))
-  }, [])
+  }, [location])
 
   return (
     <div className={styles.memeListPopularContainer}>

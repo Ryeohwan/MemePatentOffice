@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
-import SearchComp from "./SearchComp";
+import SearchComp from "../elements/SearchComp";
 import { memeListActions } from "store/memeList";
 
 import { Icon } from "@iconify/react";

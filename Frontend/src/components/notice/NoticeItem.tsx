@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { noticeObject } from "store/notice";
-import ElapsedText from "components/common/ElapsedText";
+import ElapsedText from "components/common/elements/ElapsedText";
 
 import { Avatar } from "primereact/avatar";
 import { Divider } from "primereact/divider";
@@ -27,6 +27,7 @@ const NoticeItem: React.FC<NoticeItemProps> = ({ item }) => {
       navigate(`/auction/${item.id}`);
     } else if (type === "auctionEnd") {
     } else if (type === "auctionReg") {
+      navigate(`/meme-detail/${item.id}`, {state:'auctionReg'})
     } else if (type === "meme") {
       navigate(`/meme-detail/${item.id}`);
     } else {

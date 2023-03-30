@@ -1,14 +1,16 @@
 import React, { useEffect, useRef } from "react";
+import { useNavigate } from 'react-router-dom';
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import kakaoLogo from 'assets/kakao.png'
+import kakaoLogo from "assets/kakao.png";
 import { Image } from "primereact/image";
 import { Button } from "primereact/button";
 import logo from "assets/logo.png";
 import styles from "pages/LandingPage.module.css";
 
 const LandingPage = () => {
+  
   const ref = useRef(null);
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -33,13 +35,25 @@ const LandingPage = () => {
       .from("#section3", { opacity: 0, yPercent: -100 });
   }, []);
 
+ 
+  // 로그인 핸들러
+  const loginHandler = () => {
+    const REDIRECT_URL = window.location.href.includes('localhost') ? `http://localhost:3000/oauth2/redirect` : `${process.env.REACT_APP_HOST}/oauth2/redirect`
+    const KAKAO_LOGIN_URL = `${process.env.REACT_APP_HOST}/api/auth/oauth2/authorize/kakao?redirect_uri=${REDIRECT_URL}`
+    window.location.href = KAKAO_LOGIN_URL
+  }
+
+
   return (
     <div className={styles.container}>
       <div ref={ref} className={styles.section}>
         <div id="logo" className={styles.logowrapper}>
           <Image src={logo} />
           <p>MEME</p>
-          <button onClick={()=>{window.location.href='main'}}> <Image src={kakaoLogo}/>카카오 로그인</button>
+          <button onClick={loginHandler}>
+            <Image src={kakaoLogo} />
+            카카오 로그인
+          </button>
         </div>
         <section id="section1" className={styles.section1}>
           <h2>Title 1</h2>

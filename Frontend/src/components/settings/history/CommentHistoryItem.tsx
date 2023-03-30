@@ -1,5 +1,5 @@
 import React from "react"
-import ElapsedText from "components/common/ElapsedText"
+import ElapsedText from "components/common/elements/ElapsedText"
 import { myCommentList } from "store/history"
 
 import styles from 'components/settings/history/CommentHistoryItem.module.css'

@@ -1,4 +1,9 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
+
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "store/configStore";
+import { auctionActions } from "store/auction";
+
 import { Canvas } from "react-three-fiber";
 import * as THREE from "three";
 import Box from "components/auction/main/mesh/Box";
@@ -12,33 +17,29 @@ import Border from "components/auction/main/mesh/Border";
 import styles from "components/auction/main/Scene.module.css";
 
 interface SceneProps {
-  canSit: () => void;
-  cantSit: () => void;
+  canSitHandler: (state:boolean) => void;
   player: React.MutableRefObject<THREE.Object3D>;
   chairPoint: React.MutableRefObject<THREE.Mesh>;
   playerAnimation: React.MutableRefObject<THREE.AnimationAction | undefined>;
-  sitting: React.MutableRefObject<Boolean>;
   camera: React.MutableRefObject<THREE.OrthographicCamera|THREE.PerspectiveCamera>;
   biddingSubmit: boolean
   playerPosition: React.MutableRefObject<THREE.Vector3>;
-  moving: React.MutableRefObject<boolean>;
   isSitting: React.MutableRefObject<boolean>
 }
 
 const Scene: React.FC<SceneProps> = ({
-  canSit,
-  cantSit,
+  canSitHandler,
   player,
   chairPoint,
   playerAnimation,
-  sitting,
   camera,
   biddingSubmit,
   playerPosition,
-  moving,
   isSitting
 }) => {
+  const dispatch = useDispatch()
   const canvas = useRef<any>();
+  const playerState = useSelector<RootState, number>(state => state.auction.playerState)
   const [meshes, setMeshes] = useState<THREE.Mesh[]>([]);
   const tableAndChairs = useRef<THREE.Mesh[]>([])
   const table = useRef<THREE.Object3D>(new THREE.Object3D());
@@ -106,10 +107,10 @@ const Scene: React.FC<SceneProps> = ({
   };
 
   const mouseUpHandler = (e: React.MouseEvent) => {
-    if (!sitting.current) {
+    if (playerState !== 2) {
       calculateMousePosition(e);
       raycasting();
-      moving.current = true;
+      dispatch(auctionActions.controlPlayerState(1))
     }
   };
   return (
@@ -138,15 +139,12 @@ const Scene: React.FC<SceneProps> = ({
 
       <Floor position={[0, 0.01, 0]} pushMesh={pushMesh} />
       <Player
-        moving={moving}
-        sitting={sitting}
         clickPosition={clickPosition}
         playerPosition={playerPosition}
         player={player}
         camera={camera}
         cameraPosition={cameraPosition}
-        canSit={canSit}
-        cantSit={cantSit}
+        canSitHandler={canSitHandler}
         chairPoints={chairPoints}
         chairPoint={chairPoint}
         playerAnimation={playerAnimation}

@@ -4,7 +4,7 @@ import { RootState } from "store/configStore";
 import { memeType } from "store/memeList";
 import { memeListActions } from "store/memeList";
 
-import NftCard from "components/common/NftCard";
+import NftCard from "components/common/card/NftCard";
 import styles from "./MemeListNew.module.css";
 
 const MemeListNew: React.FC = () => {
@@ -13,6 +13,7 @@ const MemeListNew: React.FC = () => {
     (state) => state.memeList.memeNewList
   );
 
+  
   // console.log(memeList);
 
   return (
