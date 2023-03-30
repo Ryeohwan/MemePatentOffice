@@ -22,13 +22,14 @@ public class MemeResponse {
     private String content;
     private LocalDateTime createdAt;
     private String ownerNickname;
-    private String createrNicklname;
+    private String createrNickname;
     @Enumerated(EnumType.STRING)
     private Cart cart;
     @Enumerated(EnumType.STRING)
     private MemeLike memeLike;
     private int likeCount;
     private int hateCount;
+    private String userProfileImage;
 
     public void setCart(Cart cart){
         this.cart = cart;
