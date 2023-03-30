@@ -22,7 +22,6 @@ const CheckingModal: React.FC<ModalProps> = ({
       className={styles.modal}
       visible={checkModalVisible}
       onHide={() => controlCheckModal(false)}
-      blockScroll={true}
       closable={false}
     >
       <div className={styles.wrapper}>
