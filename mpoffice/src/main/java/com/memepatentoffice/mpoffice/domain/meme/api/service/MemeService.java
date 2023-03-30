@@ -38,12 +38,14 @@ public class MemeService {
     public MemeResponse findByTitle(Long userId, Long memeId)throws NotFoundException{
         //추후 중복검사 로직 추가
         Meme meme = memeRepository.findById(memeId).orElseThrow(() -> new NotFoundException("해당하는 밈이 없습니다."));
+        User user = userRepository.findById(userId).orElseThrow(()-> new NotFoundException("해당하는 유저가 없습니다."));
         MemeResponse result = new MemeResponse().builder()
                 .id(meme.getId())
                 .content(meme.getContent())
                 .createdAt(meme.getCreatedAt())
-                .createrNicklname(meme.getCreater().getNickname())
+                .createrNickname(meme.getCreater().getNickname())
                 .ownerNickname(meme.getOwner().getNickname())
+                .userProfileImage(user.getProfileImage())
                 .title(meme.getTitle())
                 .likeCount(userMemeLikeRepository.countLike(userId,meme.getId(),MemeLike.LIKE))
                 .hateCount(userMemeLikeRepository.countLike(userId,meme.getId(),MemeLike.HATE))
@@ -64,7 +66,7 @@ public class MemeService {
                         .id(meme.getId())
                         .content(meme.getContent())
                         .createdAt(meme.getCreatedAt())
-                        .createrNicklname(meme.getCreater().getNickname())
+                        .createrNickname(meme.getCreater().getNickname())
                         .ownerNickname(meme.getOwner().getNickname())
                         .title(meme.getTitle())
                         .build()).collect(Collectors.toList());
