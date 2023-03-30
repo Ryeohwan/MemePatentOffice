@@ -272,7 +272,6 @@ const MemeUploadBtn: React.FC = () => {
         console.log('memeId: ', backRes)
         // 밈 상세로 navigate
         navigate(`/meme-detail/${backRes}/tab=trade`)
-        window.location.href = `/meme-detail/${backRes}/tab=trade`
       }
 
     } else {
