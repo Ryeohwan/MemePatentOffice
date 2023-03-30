@@ -31,12 +31,12 @@ public class AuctionController {
         auctionService.sendChat(req);
     }
 
-    @MessageMapping("/chat")
+    @MessageMapping("/character")
     public void sendCharacter(WebSocketCharacter vo) throws NotFoundException{
         auctionService.sendCharacter(vo);
     }
-    @MessageMapping("/chat")
-    public void sendChat(WebSocketTransaction vo) throws NotFoundException{
+    @MessageMapping("/transaction")
+    public void sendTransaction(WebSocketTransaction vo) throws NotFoundException{
         auctionService.sendTransaction(vo);
     }
 }
