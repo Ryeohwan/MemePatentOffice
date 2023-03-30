@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
-import Box from "./mesh/Box";
+import * as THREE from "three";
+
 import { useSelector } from "react-redux";
 import { auctionInfo, biddingHistory } from "store/auction";
 import { RootState } from "store/configStore";
@@ -32,33 +33,36 @@ const FinishModal: React.FC = () => {
 
   // 남은 시간
   // const [remainTime, setRemainTime] = useState<number>(5);
-  const remainTime = useRef<number>(5)
+  const remainTime = useRef<number>(5);
   useEffect(() => {
     const interval = setInterval(() => {
-      const currentTime = new Date().toISOString().split("T")[1].substring(0, 5);
+      const currentTime = new Date()
+        .toISOString()
+        .split("T")[1]
+        .substring(0, 5);
       if (currentTime === finishFormat) {
-        if (!visible){
+        if (!visible) {
           setVisible(true);
-          remainTime.current -= 1
+          remainTime.current -= 1;
           // setRemainTime((prev)=>prev-1)
         }
       }
-      if (remainTime.current ===0){
-        navigate(`/meme-detail/${memeId}`)
+      if (remainTime.current === 0) {
+        // navigate(`/meme-detail/${memeId}`)
       }
     }, 1000);
     return () => clearInterval(interval);
   }, []);
-
-  // useEffect(() => {
-  //   const currentTime = new Date().toISOString().split("T")[1].substring(0, 5);
-  //   if (currentTime === finishFormat) {
-  //     setVisible(true);
-  //     setRemainTime((time) => time - 1);
-  //   }
-  //   console.log(remainTime);
-  // }, [time]);
-
+  const camera = useRef<THREE.PerspectiveCamera>(
+    new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    )
+  );
+  camera.current.position.set(-0.5, 0.5, 2.5);
+  camera.current.lookAt(0, 0.5, 0);
   return (
     <Dialog
       header="경매 마감"
@@ -73,13 +77,22 @@ const FinishModal: React.FC = () => {
         <p className={styles.nickname}>{biddingHistory[0].nickname}님</p>
         <p className={styles.cong}>축하드립니다!!</p>
         <div className={styles.canvasDiv}>
-          <Canvas className={styles.canvas} camera={{ fov: 75, near: 0.1, far: 100, position: [0, 1, 2] }}>
+          <Canvas className={styles.canvas} camera={camera.current}>
             <ambientLight />
-          <FinishModalCharacter />
+            <FinishModalCharacter />
           </Canvas>
         </div>
-        <p className={styles.remainTime}>5초 후에 종료됩니다.</p>
-        <Button>나가기</Button>
+        <div className={styles.exitContainer}>
+          <p className={styles.remainTime}>5초 후에 종료됩니다.</p>
+          <Button
+            className={styles.exitBtn}
+            onClick={() => {
+              navigate(`/meme-detail/${memeId}`);
+            }}
+          >
+            나가기
+          </Button>
+        </div>
       </div>
     </Dialog>
   );

@@ -23,7 +23,7 @@ const BiddingHistoryItem: React.FC<BiddingHistoryItemProps> = ({history}) => {
             {history.SSF}
         </div>
         <div className={styles.time}>
-            {history.time}
+            {history.time.split('T')[1]}
         </div>
     </div>
     )

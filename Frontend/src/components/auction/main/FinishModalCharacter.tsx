@@ -1,4 +1,4 @@
-import React,{useRef} from "react"
+import React,{useRef, useMemo} from "react"
 
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
@@ -17,14 +17,22 @@ const FinishModalCharacter:React.FC = () => {
     const biddingHistory = useSelector<RootState, biddingHistory[]>(
         (state) => state.auction.biddingHistory
       );
-
-    const glb = useLoader(GLTFLoader, "/auction/model/character2.glb");
+  
+  const glb = useLoader(GLTFLoader, "/auction/model/character.glb");
   const actions = useRef<action>({
     buy: null,
     notbuy: null,
   });
-  const player =glb.scene.children[0];
+  const character = useMemo(()=>{
+    const character = new THREE.Group()
+    character.add(glb.scene)
+    character.children.push(glb.scene.children[0].clone())
+    return character.children[0]
+  },[glb.scene])
+  const player = character.children[0];
+  console.log(player)
   player.position.set(0,0,0)
+  player.rotation.set(0,0,0)
   glb.scene.traverse((child) => {
     if (child.isObject3D) {
       child.castShadow = true;

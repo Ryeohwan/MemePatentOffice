@@ -1,6 +1,6 @@
 .wraper {
   display: grid;
-  grid-template-columns: 3fr 1fr 2fr;
+  grid-template-columns: 4fr 2fr 1.5fr;
   font-size: 12px;
   font-weight: bold;
   margin-bottom: 1rem;
