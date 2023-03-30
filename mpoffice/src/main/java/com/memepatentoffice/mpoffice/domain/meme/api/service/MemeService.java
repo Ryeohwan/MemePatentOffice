@@ -5,6 +5,7 @@ import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
 import com.memepatentoffice.mpoffice.db.entity.*;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CartRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.MemeCreateRequest;
+import com.memepatentoffice.mpoffice.domain.meme.api.request.MemeInfoRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.UserMemeLikeRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeResponse;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.CartRepository;
@@ -34,17 +35,27 @@ public class MemeService {
 
     private final CartRepository cartRepository;
 
-    public MemeResponse findByTitle(String title)throws NotFoundException{
+    public MemeResponse findByTitle(MemeInfoRequest memeInfoRequest)throws NotFoundException{
         //추후 중복검사 로직 추가
-        Meme meme = memeRepository.findMemeByTitle(title).orElseThrow(() -> new NotFoundException("해당하는 밈이 없습니다."));
+        System.out.println(memeInfoRequest.getTitle());
+        System.out.println(memeInfoRequest.getUserId());
+        Meme meme = memeRepository.findMemeByTitle(memeInfoRequest.getTitle()).orElseThrow(() -> new NotFoundException("해당하는 밈이 없습니다."));
         MemeResponse result = new MemeResponse().builder()
                 .id(meme.getId())
                 .content(meme.getContent())
                 .createdAt(meme.getCreatedAt())
-                .createrId(meme.getCreater().getId())
-                .ownerId(meme.getOwner().getId())
+                .createrNicklname(meme.getCreater().getNickname())
+                .ownerNickname(meme.getOwner().getNickname())
                 .title(meme.getTitle())
+                .likeCount(userMemeLikeRepository.countLike(memeInfoRequest.getUserId(),meme.getId(),MemeLike.LIKE))
+                .hateCount(userMemeLikeRepository.countLike(memeInfoRequest.getUserId(),meme.getId(),MemeLike.HATE))
                 .build();
+        if(cartRepository.existsUserMemeAuctionAlertByUserIdAndMemeId(memeInfoRequest.getUserId(),meme.getId())){
+            result.setCart(cartRepository.findUserMemeAuctionAlertByUserIdAndMemeId(memeInfoRequest.getUserId(),meme.getId()).getCart());
+        }
+        if(userMemeLikeRepository.existsUserMemeLikeByUserIdAndMemeId(memeInfoRequest.getUserId(),meme.getId())){
+            result.setMemeLike(userMemeLikeRepository.findUserMemeLikeByUserIdAndMemeId(memeInfoRequest.getUserId(),meme.getId()).getMemeLike());
+        }
         return result;
     }
 
@@ -55,8 +66,8 @@ public class MemeService {
                         .id(meme.getId())
                         .content(meme.getContent())
                         .createdAt(meme.getCreatedAt())
-                        .createrId(meme.getCreater().getId())
-                        .ownerId(meme.getOwner().getId())
+                        .createrNicklname(meme.getCreater().getNickname())
+                        .ownerNickname(meme.getOwner().getNickname())
                         .title(meme.getTitle())
                         .build()).collect(Collectors.toList());
     }
