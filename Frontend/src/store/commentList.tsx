@@ -10,6 +10,7 @@ export type commentType = {
     date: string;
     liked: number;
     best: number;
+    replyCommentCnt: number;
 }
 
 interface initialStateInterface {
@@ -29,17 +30,19 @@ const initialState: initialStateInterface = {
             date: "1일 전",
             liked: 0,
             best: 0,
+            replyCommentCnt: 0,
         },
         {
             id: 2,
             userId: 2,
             userImgUrl: "newjeans.jpg",
             userName: "5조의 햇살",
-            comment: "이거 갖고싶은 탐나는 nft인데요....",
+            comment: "아 이거 괜히 팔았다.. 다시 보니까 또 갖고 싶어.. 경매 다시 열어주시죠... 나 다시 가져올래..",
             likes: 25,
             date: "1주 전",
             liked: 0,
             best: 0,
+            replyCommentCnt: 0,
         },
     ],
     commentBestList: [
@@ -53,11 +56,10 @@ const initialState: initialStateInterface = {
             date: "3주 전",
             liked: 1,
             best: 1,
+            replyCommentCnt: 3,
         },
     ]
 };
-
-
 
 
 

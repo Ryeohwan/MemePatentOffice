@@ -1,0 +1,93 @@
+.commentItemContainer {
+    display: grid;
+    grid-template-columns: 1fr 6fr;
+    grid-gap: 10px;
+    margin: 8px 0px 8px 0px;
+}
+
+
+.commentUserImg {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    object-fit: cover;
+    margin-top: 5px;
+}
+
+.commentInfoWrapper {
+    display: grid;
+    grid-auto-rows: minmax(24px, auto);;
+}
+
+.commentHeader {
+    display: flex;
+    gap: 15px;
+    align-items: center
+}
+
+.commentUserName {
+    font-size: 14px ;
+}
+
+.commentTime {
+    font-size: 12px;
+    color: var(--disabled-gray-color);
+}
+
+.bestComment {
+    border-radius: 2px;
+    background-color: var(--point-color);
+    color: var(--white-color);
+    font-size: 11px;
+    padding: 3px;
+    margin-bottom: 2px;
+}
+
+.commentBody {
+    display: grid;
+    grid-template-columns: 7fr 1fr;
+    font-size: 13px;
+    margin: 5px 0px 5px 0px;
+}
+
+.commentText {
+    line-height: 16px;
+}
+
+.iconWrapper {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.heartIcon {
+    font-size: 20px;
+}
+
+.heartFilledIcon {
+    font-size: 20px;
+    color: var(--impossible-color);
+    border: var(--impossible-color);
+}
+
+.userReaction {
+   display: flex;
+   font-size: 12px; 
+   color: var(--disabled-gray-color);
+   gap: 15px;
+   margin-top: 4px;
+}
+
+.replyContainer {
+    font-size: 12px;
+    color: var(--disabled-gray-color);
+    display: flex;
+    gap: 1rem;
+    margin: 10px 0px 10px 0px;
+}
+
+.replyContainer hr {
+    width: 20px;
+    height: 0.5px;
+}
+

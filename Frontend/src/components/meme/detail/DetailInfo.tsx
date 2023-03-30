@@ -109,11 +109,11 @@ const DetailInfo: React.FC = () => {
 
           <div className={styles.memeOwner}>
             <div>최초 등록자</div>
-            <div className={styles.ownerName}>단발머리 부엉이</div>
+            <div className={styles.ownerName}>5조의 햇살</div>
           </div>
           <div className={styles.memeOwner}>
             <div>현재 소유자</div>
-            <div className={styles.ownerName}>5조의 햇살</div>
+            <div className={styles.ownerName}>단발머리 부엉이</div>
           </div>
           <div className={styles.heartGroup}>
             <div className={styles.heartWrapper}>

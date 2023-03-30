@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { commentListActions } from "store/commentList";
 import { RootState } from "store/configStore";
 import { commentType } from "store/commentList";
-import CommentList from "../detail/CommentList";
+import CommentList from "./CommentList";
 import NewComment from "../detail/NewComment";
 import styles from "./CommentTab.module.css";
 
