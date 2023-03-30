@@ -77,7 +77,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         log.info("[회원가입] :" + oAuth2UserInfo.toString());
 
         User user = User.builder()
-                .name(oAuth2UserInfo.getName())
+                .name(oAuth2UserInfo.getEmail().split("@")[0])
                 .email(oAuth2UserInfo.getEmail())
                 .build();
 
