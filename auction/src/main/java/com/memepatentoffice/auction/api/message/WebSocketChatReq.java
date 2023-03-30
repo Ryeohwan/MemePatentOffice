@@ -1,15 +1,17 @@
-package com.memepatentoffice.auction.api.request;
+package com.memepatentoffice.auction.api.message;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class WebSocketChatReq {
-    public Long auctionId;
-    public String nickname;
-    public String message;
+    private Long auctionId;
+    private String nickname;
+    private String message;
 
 }

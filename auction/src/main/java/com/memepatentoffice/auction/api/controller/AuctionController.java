@@ -1,7 +1,9 @@
 package com.memepatentoffice.auction.api.controller;
 
+import com.memepatentoffice.auction.api.message.WebSocketCharacter;
+import com.memepatentoffice.auction.api.message.WebSocketTransaction;
 import com.memepatentoffice.auction.api.request.AuctionCreationReq;
-import com.memepatentoffice.auction.api.request.WebSocketChatReq;
+import com.memepatentoffice.auction.api.message.WebSocketChatReq;
 import com.memepatentoffice.auction.api.service.AuctionService;
 import com.memepatentoffice.auction.common.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +27,16 @@ public class AuctionController {
     }
 
     @MessageMapping("/chat")
-    public ResponseEntity<String> sendChat(WebSocketChatReq webSocketChatReq) throws NotFoundException{
-        auctionService.sendWebSocket(webSocketChatReq);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+    public void sendChat(WebSocketChatReq req) throws NotFoundException{
+        auctionService.sendChat(req);
     }
 
+    @MessageMapping("/chat")
+    public void sendCharacter(WebSocketCharacter vo) throws NotFoundException{
+        auctionService.sendCharacter(vo);
+    }
+    @MessageMapping("/chat")
+    public void sendChat(WebSocketTransaction vo) throws NotFoundException{
+        auctionService.sendTransaction(vo);
+    }
 }
