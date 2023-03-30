@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Comment extends BaseEntity{
-
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -36,13 +35,18 @@ public class Comment extends BaseEntity{
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
     @Builder
-    public Comment(String content, User user, Meme meme, Comment parentComment, IsValid isValid){
+    public Comment(String content, User user, Meme meme, Comment parentComment, IsValid isValid , LocalDateTime createdAt){
         this.content=content;
         this.user=user;
         this.meme=meme;
         this.parentComment=parentComment;
         this.isValid=isValid;
+        this.createdAt=createdAt;
     }
 
 }
+

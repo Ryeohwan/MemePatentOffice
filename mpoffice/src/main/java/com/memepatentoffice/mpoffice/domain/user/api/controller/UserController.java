@@ -1,6 +1,7 @@
 package com.memepatentoffice.mpoffice.domain.user.api.controller;
 
 import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
+import com.memepatentoffice.mpoffice.domain.user.api.request.SocialRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserSignUpRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserUpdateRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserWithdrawRequest;
@@ -8,6 +9,7 @@ import com.memepatentoffice.mpoffice.domain.user.api.response.CountResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.response.UserResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.response.UserSignUpResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.service.UserService;
+import com.sun.xml.bind.v2.model.core.ID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -86,6 +88,15 @@ public class UserController {
 //        return ResponseEntity.ok().build();
 //    }
 
+    @GetMapping("server/{email}")
+    public ResponseEntity seakId(@PathVariable("email")String email) throws NotFoundException{
+        return ResponseEntity.status(HttpStatus.OK).body(userService.seakId(email));
+    }
 
-
+    @PostMapping("server/signup")
+    @ResponseBody
+    public ResponseEntity socialSignup (@RequestBody SocialRequest socialRequest){
+        userService.socialSignup(socialRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+    }
 }

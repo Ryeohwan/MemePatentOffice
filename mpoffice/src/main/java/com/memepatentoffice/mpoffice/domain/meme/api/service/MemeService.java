@@ -16,10 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -80,6 +78,8 @@ public class MemeService {
 
         Meme meme = memeRepository.save(memeCreateRequest.toEntity(creater, creater));
         log.info(meme.getTitle());
+        Meme meme1 = memeRepository.findMemeByTitle(meme.getTitle()).orElseThrow(()->new NotFoundException("없네요"));
+        
         return meme.getId();
     }
 

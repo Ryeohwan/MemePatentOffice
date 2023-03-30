@@ -12,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,22 +26,38 @@ public class CommentService {
     private final UserCommentLikeRepository userCommentLikeRepository;
     @Transactional
     public Long createCommenmt(CommentRequest commentRequest) throws NotFoundException {
+        System.out.println("user" + commentRequest.getUserId());
+        System.out.println("밈" + commentRequest.getMemeId());
         User user = userRepository.findById(commentRequest.getUserId())
                 .orElseThrow(()->new NotFoundException("유효하지 않은 유저입니다"));
         Meme meme = memeRepository.findById(commentRequest.getMemeId())
                 .orElseThrow(()->new NotFoundException("유효하지 않은 밈입니다"));
+        System.out.println("호출은 하니");
+        if(commentRequest.getParentCommentId() != null){
+            System.out.println("hihi");
+            Optional<Comment> parentComment = commentRepository.findById(commentRequest.getParentCommentId());
+            //optional로 user
+            Comment com = new Comment().builder()
+                    .content(commentRequest.getContent())
+                    .user(user)
+                    .meme(meme)
+                    .parentComment(parentComment.get())
+                    .isValid(IsValid.VALID)
+                    .createdAt(LocalDateTime.now())
+                    .build();
+            return commentRepository.save(com).getId();
+        }else {
+            System.out.println("없는 곳으로 오니");
+            Comment com = new Comment().builder()
+                    .content(commentRequest.getContent())
+                    .user(user)
+                    .meme(meme)
+                    .isValid(IsValid.VALID)
+                    .createdAt(LocalDateTime.now())
+                    .build();
+            return commentRepository.save(com).getId();
+        }
 
-        Comment parentComment = commentRepository.findById(commentRequest.getParentCommentSeq())
-                .orElseThrow(()->new NotFoundException("유효하지 않은 원 댓글입니다"));
-        //optional로 user
-        Comment com = new Comment().builder()
-                .content(commentRequest.getContent())
-                .user(user)
-                .meme(meme)
-                .parentComment(parentComment)
-                .isValid(commentRequest.getIsValid())
-                .build();
-        return commentRepository.save(com).getId();
     }
 
     @Transactional

@@ -25,7 +25,7 @@ public class CommentController {
     // 밈 만들기
     @PostMapping("/create")
     @ResponseBody
-    public ResponseEntity createComment(CommentRequest commentRequest) throws NotFoundException {
+    public ResponseEntity createComment(@RequestBody CommentRequest commentRequest) throws NotFoundException {
         return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createCommenmt(commentRequest));
     }
     @PostMapping("/like")  // 좋아요 기능 완료

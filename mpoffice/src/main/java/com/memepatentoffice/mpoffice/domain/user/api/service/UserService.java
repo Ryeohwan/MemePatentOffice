@@ -3,10 +3,12 @@ package com.memepatentoffice.mpoffice.domain.user.api.service;
 import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
 import com.memepatentoffice.mpoffice.db.entity.IsValid;
 import com.memepatentoffice.mpoffice.db.entity.User;
+import com.memepatentoffice.mpoffice.domain.user.api.request.SocialRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserSignUpRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserUpdateRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserWithdrawRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.response.CountResponse;
+import com.memepatentoffice.mpoffice.domain.user.api.response.IdFoundResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.response.UserResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.response.UserSignUpResponse;
 import com.memepatentoffice.mpoffice.domain.user.db.repository.UserRepository;
@@ -91,6 +93,23 @@ public class UserService {
             return false;
         }
     }
+
+    public IdFoundResponse seakId(String  email) throws NotFoundException {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("해당하는 유저가 없읍니다."));
+        IdFoundResponse result = IdFoundResponse.builder()
+                .id(user.getId())
+                .build();
+        return result;
+
+    }
+    @Transactional
+    public void socialSignup(SocialRequest social){
+        User user = User.builder()
+                .email(social.getEmail())
+                .nickname(social.getNickname())
+                .build();
+        userRepository.save(user);
+    }
 //    public Page<CommentResponse> getUserComments (Long id, int page) {
 //        PageRequest pageRequest = PageRequest.of(page,8, Sort.by(Sort.Direction.DESC, "id"));
 //        List<Comment> pages = commentRepository.findCommentsByUserId(id);
@@ -114,6 +133,8 @@ public class UserService {
 //
 //        return resultPage;
 //    }
+
+
 
 
 }
