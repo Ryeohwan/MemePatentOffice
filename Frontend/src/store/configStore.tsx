@@ -1,15 +1,17 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit';
 
-import  testReducer from 'store/test'
-import  chatReducer from 'store/chat'
-import auctionReducer from 'store/auction'
-import memeListReducer from 'store/memeList'
-import auctionListReducer from 'store/auctionList'
-import noticeReducer from 'store/notice'
-import auctionUploadReducer from 'store/auctionUpload'
-import nftHistoryReducer from 'store/nftHistory'
-import historyReducer from 'store/history'
-import memeUploadReducer from 'store/memeUpload'
+import  testReducer from 'store/test';
+import  chatReducer from 'store/chat';
+import auctionReducer from 'store/auction';
+// import memeDetailReducer from 'store/memeDetail';
+import memeListReducer from 'store/memeList';
+import auctionListReducer from 'store/auctionList';
+import noticeReducer from 'store/notice';
+import auctionUploadReducer from 'store/auctionUpload';
+import nftHistoryReducer from 'store/nftHistory';
+import historyReducer from 'store/history';
+import memeUploadReducer from 'store/memeUpload';
+import commentListReducer from 'store/commentList';
 
 const store = configureStore({
   reducer: {
@@ -18,11 +20,13 @@ const store = configureStore({
     auction: auctionReducer,
     auctionList: auctionListReducer,
     auctionUpload: auctionUploadReducer,
+    // memeDetail: memeDetailReducer,
     memeList: memeListReducer,
     memeUpload: memeUploadReducer,
     notice: noticeReducer,
     nftHistory: nftHistoryReducer,
     history: historyReducer,
+    commentList: commentListReducer,
   },
 })
 

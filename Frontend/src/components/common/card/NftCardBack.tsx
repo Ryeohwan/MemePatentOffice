@@ -13,7 +13,7 @@ const NftCardBack:React.FC<NftProps> = nft => {
     // NFT 제목과 설명, 상세 페이지 url
     const NFT_TEXT = nft.items.title;
     const NFT_DESCRIPTION = nft.items.description;
-    const NFT_DETAIL_URL = `/meme-detail/${nft.items.id}`;
+    const NFT_DETAIL_URL = `/meme-detail/${nft.items.id}/tab=trade`;
 
     // NFT 제목 글자수 슬라이싱
     const sliceTitleText = (NFT_TEXT:string) => {
