@@ -83,7 +83,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 
         return userService.registUser(UserRequest.builder()
-                .nickname(oAuth2UserInfo.getEmail().split("@")[0])
+                .nickname("MEME_" + oAuth2UserInfo.getEmail().split("@")[0])
                 .email(oAuth2UserInfo.getEmail())
                 .build());
     }
