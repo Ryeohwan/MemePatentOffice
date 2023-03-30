@@ -1,10 +1,7 @@
 package com.memepatentoffice.mpoffice.domain.meme.api.controller;
 
 import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
-import com.memepatentoffice.mpoffice.domain.meme.api.request.CartRequest;
-import com.memepatentoffice.mpoffice.domain.meme.api.request.MemeCreateListRequest;
-import com.memepatentoffice.mpoffice.domain.meme.api.request.UserMemeLikeRequest;
-import com.memepatentoffice.mpoffice.domain.meme.api.request.MemeCreateRequest;
+import com.memepatentoffice.mpoffice.domain.meme.api.request.*;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeResponse;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.MemeService;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.GcpService;
@@ -29,10 +26,9 @@ public class MemeController {
                 memeService.findAll()
         );
     }
-    @GetMapping("/{memeId}")
-    public ResponseEntity getMeme(@PathVariable String memeId) throws NotFoundException {
-        System.out.println("나불렀니?");
-        MemeResponse result = memeService.findByTitle(memeId);
+    @GetMapping("/info")
+    public ResponseEntity getMeme(@RequestBody MemeInfoRequest memeInfoRequest) throws NotFoundException {
+        MemeResponse result = memeService.findByTitle(memeInfoRequest);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
     @GetMapping("/check/{title}")
