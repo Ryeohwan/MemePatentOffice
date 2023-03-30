@@ -1,5 +1,6 @@
 package com.memepatentoffice.mpoffice.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -14,10 +15,12 @@ import javax.persistence.*;
 public class Meme extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creater_id")
+    @JsonIgnore
     private User creater;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
+    @JsonIgnore
     private User owner;
 
     @Column(name = "title")
