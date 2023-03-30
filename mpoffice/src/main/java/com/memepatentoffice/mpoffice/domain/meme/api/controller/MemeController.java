@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -41,11 +42,11 @@ public class MemeController {
     }
     @PostMapping("/create")
     @ResponseBody
-    public ResponseEntity createMeme(@RequestBody MemeCreateRequest memeCreateRequest) throws Exception{
+    public ResponseEntity createMeme(@RequestParam MemeCreateRequest memeCreateRequest, @RequestPart MultipartFile uploadFile) throws Exception{
         if( memeService.titleCheck(memeCreateRequest.getTitle()).equals("fail")){
             return ResponseEntity.ok().body("Title is already exist");
         }
-        String img = gcpService.uploadFile(memeCreateRequest.getFile());
+        String img = gcpService.uploadFile(uploadFile);
         memeCreateRequest.setImageUrl(img);
         Long id = memeService.createMeme(memeCreateRequest);
         return ResponseEntity.status(HttpStatus.OK).body(id);

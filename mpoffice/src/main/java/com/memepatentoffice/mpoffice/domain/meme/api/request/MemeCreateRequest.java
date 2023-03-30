@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Getter
 public class MemeCreateRequest {
     private String content;
-    private MultipartFile file;
     private Long createrId;
     private Long ownerId;
     private String title;
@@ -40,9 +39,6 @@ public class MemeCreateRequest {
         this.imageUrl = imageUrl;
     }
 
-    public void setFile(MultipartFile file){
-        this.file = file;
-    }
 
     public void setTokenId(int tokenId){this.tokenId = tokenId;}
     public void setContractAddress(String content){this.contractAddress = contractAddress;}

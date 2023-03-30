@@ -5,9 +5,11 @@ import com.memepatentoffice.mpoffice.db.entity.*;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentInfoRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentLikeRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentRequest;
+import com.memepatentoffice.mpoffice.domain.meme.api.response.CommentResponse;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.CommentRepository;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.MemeRepository;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.UserCommentLikeRepository;
+import com.memepatentoffice.mpoffice.domain.meme.db.repository.UserMemeLikeRepository;
 import com.memepatentoffice.mpoffice.domain.user.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ public class CommentService {
     private final UserRepository userRepository;
     private final MemeRepository memeRepository;
     private final UserCommentLikeRepository userCommentLikeRepository;
+    private final UserMemeLikeRepository userMemeLikeRepository;
     @Transactional
     public Long createCommenmt(CommentRequest commentRequest) throws NotFoundException {
         User user = userRepository.findById(commentRequest.getUserId())
@@ -72,8 +75,21 @@ public class CommentService {
         List<Comment> list = commentRepository.findCommentsByMemeId(id);
     }
 
-    public void findComment(CommentInfoRequest commentInfoRequest) throws  NotFoundException{
-        commentRepository.findCommentById(commentInfoRequest.getId()).orElseThrow(() -> new NotFoundException("해당하는 밈이 없습니다."));
+    public CommentResponse findComment(CommentInfoRequest commentInfoRequest) throws  NotFoundException{
+        Comment com = commentRepository.findCommentById(commentInfoRequest.getId()).orElseThrow(() -> new NotFoundException("해당하는 밈이 없습니다."));
+        Long userId = com.getUser().getId();
+        Long memeId = com.getMeme().getId();
+        CommentResponse result = CommentResponse.builder()
+                .profileImage(com.getUser().getProfileImage())
+                .nickname(com.getUser().getNickname())
+                .heartCnt(userMemeLikeRepository.countUserMemeLikesByUserId(userId))
+                .liked(userMemeLikeRepository.existsUserMemeLikeByUserIdAndMemeId(userId,memeId))
+                .replyCommentCnt(commentRepository.countAllByParentCommentId(com.getId()))
+                .content(com.getContent())
+                .id(com.getId())
+                .createdAt(com.getCreatedAt())
+                .build();
+        return result;
     }
 
 }
