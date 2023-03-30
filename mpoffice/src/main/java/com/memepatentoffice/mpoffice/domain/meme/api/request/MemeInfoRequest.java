@@ -9,5 +9,5 @@ import lombok.Setter;
 @Setter
 public class MemeInfoRequest {
     private Long userId;
-    private String title;
+    private Long memeId;
 }
