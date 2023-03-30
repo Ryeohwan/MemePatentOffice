@@ -12,6 +12,8 @@ import com.memepatentoffice.mpoffice.domain.meme.db.repository.UserCommentLikeRe
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.UserMemeLikeRepository;
 import com.memepatentoffice.mpoffice.domain.user.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,7 +77,8 @@ public class CommentService {
         List<Comment> list = commentRepository.findCommentsByMemeId(id);
     }
 
-    public CommentResponse findComment(CommentInfoRequest commentInfoRequest) throws  NotFoundException{
+
+    public CommentResponse findComment(CommentInfoRequest commentInfoRequest)throws NotFoundException{
         Comment com = commentRepository.findCommentById(commentInfoRequest.getId()).orElseThrow(() -> new NotFoundException("해당하는 밈이 없습니다."));
         Long userId = com.getUser().getId();
         Long memeId = com.getMeme().getId();
@@ -92,4 +95,19 @@ public class CommentService {
         return result;
     }
 
+    public Slice<Comment> findTop(Long memeId){
+        return commentRepository.findBestThreeComment(memeId);
+    }
+
+    public Slice<Comment> findLatest(Long memeId,Long id1, Long id2, Long id3, Pageable pageable){
+        return commentRepository.findLatestComment(memeId,id1,id2,id3,pageable);
+    }
+
+    public Slice<Comment> findOldest(Long memeId,Long id1, Long id2, Long id3, Pageable pageable){
+        return commentRepository.findOldestComment(memeId,id1,id2,id3,pageable);
+    }
+
+    public Slice<Comment> findPopular(Long memeId,Long id1, Long id2, Long id3, Pageable pageable){
+        return commentRepository.findPopularComment(memeId,id1,id2,id3,pageable);
+    }
 }
