@@ -32,13 +32,15 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 
-	// https://mvnrepository.com/artifact/org.springframework.data/spring-data-mongodb
-	implementation 'org.springframework.data:spring-data-mongodb'
-	// https://mvnrepository.com/artifact/org.mongodb/mongo-java-driver
-	implementation 'org.mongodb:mongo-java-driver:3.12.12'
-
 	/*websocket*/
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+	/*okhttp3*/
+	implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.11'
+	/*gson*/
+	implementation 'com.google.code.gson:gson:2.10.1'
+
+
 
 	/* swagger2 */
 	// https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter

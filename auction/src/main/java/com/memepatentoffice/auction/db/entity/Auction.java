@@ -16,25 +16,19 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
+@Builder
 @Table(name = "auction")
 public class Auction extends BaseEntity{
 
     @Column(name = "meme_id", nullable = false)
     private Long memeId;
 
-    @CreatedDate
-    @Column(name = "created_at")
-    private Timestamp createdAt;
+    @Column(name = "start_time")
+    private LocalDateTime startTime;
 
-    @Column(name = "status")
-    private Status status = Status.PROCEEDING;
-
-    public Auction(Long memeId){
-        this.memeId = memeId;
-    }
-    protected void terminate(){
-        this.status = Status.TERMINATED;
-    }
+    @Column(name = "end_time")
+    private LocalDateTime endTime;
+    @Column(name = "seller_id")
+    private Long sellerId;
 }
 

@@ -11,14 +11,16 @@ spring:
     url: jdbc:mysql://j8a305.p.ssafy.io:3072/auction-project
     username: a305
     password: dkanakf156346!!
-  data:
-    mongodb:
-      host: j8a305.p.ssafy.io
-      port: 27017
-      authentication-database: admin
-      username: a305
-      password: dkanakf156346!!
-      database: a305_mongodb
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: true
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher

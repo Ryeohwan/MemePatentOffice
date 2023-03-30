@@ -12,5 +12,6 @@ import java.time.LocalDateTime;
 public class AuctionCreationReq {
     private Long memeId;
     private LocalDateTime startDateTime;
+    private Long sellerId;
 
 }

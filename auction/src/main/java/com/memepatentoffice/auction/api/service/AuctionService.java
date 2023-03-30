@@ -1,13 +1,14 @@
 package com.memepatentoffice.auction.api.service;
 
+import com.memepatentoffice.auction.api.request.AuctionCreationReq;
+import com.memepatentoffice.auction.api.request.WebSocketChatReq;
+import com.memepatentoffice.auction.api.response.AuctionCreationResultRes;
 import com.memepatentoffice.auction.common.exception.NotFoundException;
-import com.memepatentoffice.auction.db.entity.Auction;
 
-import java.util.List;
+import java.io.IOException;
 
 public interface AuctionService {
 
-    public Long save(Long memeId);
-    public List<Auction> findAll();
-    public Auction findById(Long id) throws NotFoundException;
+    public AuctionCreationResultRes enrollAuction(AuctionCreationReq auctionCreationReq) throws NotFoundException, IOException;
+    public void sendWebSocket(WebSocketChatReq webSocketChatReq);
 }
