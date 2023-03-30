@@ -11,4 +11,5 @@ public interface MemeRepository extends JpaRepository<Meme,Long> {
     Boolean existsMemeByTitle(String title);
     @Override
     <S extends Meme> S save(S entity);
+    long count();
 }

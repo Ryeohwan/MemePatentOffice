@@ -164,4 +164,9 @@ public class MemeService {
 
         return true;
     }
+
+    public Long totalCount(){
+        Long totalCount = memeRepository.count();
+        return totalCount;
+    }
 }

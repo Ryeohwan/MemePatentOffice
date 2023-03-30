@@ -78,4 +78,10 @@ public class MemeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(cartRequest.getCart());
     }
 
+    @GetMapping("/total")
+    public ResponseEntity total(){
+        Long result = memeService.totalCount();
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
+
 }
