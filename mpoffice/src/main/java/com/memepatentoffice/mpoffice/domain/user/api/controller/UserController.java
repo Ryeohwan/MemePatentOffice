@@ -88,12 +88,12 @@ public class UserController {
 //        return ResponseEntity.ok().build();
 //    }
 
-    @GetMapping("server/{email}")
-    public ResponseEntity seakId(@PathVariable("email")String email) throws NotFoundException{
+    @GetMapping("/server/{email}")
+    public ResponseEntity seakId(@PathVariable("email") String email) throws NotFoundException{
         return ResponseEntity.status(HttpStatus.OK).body(userService.seakId(email));
     }
 
-    @PostMapping("server/signup")
+    @PostMapping("/server/signup")
     @ResponseBody
     public ResponseEntity socialSignup (@RequestBody SocialRequest socialRequest){
         userService.socialSignup(socialRequest);

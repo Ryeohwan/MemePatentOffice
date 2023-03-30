@@ -28,10 +28,10 @@ public class MemeController {
                 memeService.findAll()
         );
     }
-    @GetMapping("/{title}")
-    public ResponseEntity getMeme(@PathVariable String title) throws NotFoundException {
+    @GetMapping("/{memeId}")
+    public ResponseEntity getMeme(@PathVariable String memeId) throws NotFoundException {
         System.out.println("나불렀니?");
-        MemeResponse result = memeService.findByTitle(title);
+        MemeResponse result = memeService.findByTitle(memeId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
     @GetMapping("/check/{title}")
@@ -80,4 +80,5 @@ public class MemeController {
         memeService.addCart(cartRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(cartRequest.getCart());
     }
+
 }
