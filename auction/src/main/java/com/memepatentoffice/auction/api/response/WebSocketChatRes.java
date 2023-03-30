@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 public class WebSocketChatRes {
     private Long auctionId;
-    private String nickName;
+    private String nickname;
     private String message;
     private LocalDateTime createdAt;
 

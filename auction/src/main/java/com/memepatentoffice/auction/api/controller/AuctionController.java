@@ -24,7 +24,7 @@ public class AuctionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
 
-    @MessageMapping("/app")
+    @MessageMapping("/chat")
     public ResponseEntity<String> sendChat(WebSocketChatReq webSocketChatReq) throws NotFoundException{
         auctionService.sendWebSocket(webSocketChatReq);
         return ResponseEntity.status(HttpStatus.OK).body(null);

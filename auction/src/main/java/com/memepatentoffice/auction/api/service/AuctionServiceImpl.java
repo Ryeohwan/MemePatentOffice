@@ -29,12 +29,10 @@ public class AuctionServiceImpl implements AuctionService{
     @Override
     public void sendWebSocket(WebSocketChatReq webSocketChatReq){
         //옥션 id, 유저 id존재하는지 확인
-        String nickname="조현철";
-        log.info(nickname+": "+webSocketChatReq.getMessage());
         Long auctionId = webSocketChatReq.getAuctionId();
         WebSocketChatRes res = WebSocketChatRes.builder()
                 .auctionId(auctionId)
-                .nickName(nickname)
+                .nickname(webSocketChatReq.getNickname())
                 .message(webSocketChatReq.getMessage())
                 .createdAt(LocalDateTime.now()).build();
         simpMessageSendingOperations.convertAndSend("/sub/chat/"+auctionId, res);
