@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import  testReducer from 'store/test';
 import  chatReducer from 'store/chat';
 import auctionReducer from 'store/auction';
+// import memeDetailReducer from 'store/memeDetail';
 import memeListReducer from 'store/memeList';
 import auctionListReducer from 'store/auctionList';
 import noticeReducer from 'store/notice';
@@ -19,6 +20,7 @@ const store = configureStore({
     auction: auctionReducer,
     auctionList: auctionListReducer,
     auctionUpload: auctionUploadReducer,
+    // memeDetail: memeDetailReducer,
     memeList: memeListReducer,
     memeUpload: memeUploadReducer,
     notice: noticeReducer,
