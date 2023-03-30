@@ -62,6 +62,8 @@ public class CommentService {
 
     @Transactional
     public boolean createCommentLike(CommentLikeRequest commentLikeRequest) throws NotFoundException{
+        System.out.println(commentLikeRequest.getCommentId());
+        System.out.println(commentLikeRequest.getUserId());
         //중복 검증 로직 추가
         UserCommentLike temp = new UserCommentLike().builder()
                 .comment(commentRepository.findById(commentLikeRequest.getCommentId())
