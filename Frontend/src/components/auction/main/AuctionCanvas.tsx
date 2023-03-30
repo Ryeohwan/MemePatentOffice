@@ -16,8 +16,9 @@ import { Button } from "primereact/button";
 import ChatMain from "components/auction/main/chat/ChatMain";
 import Bidding from "components/auction/main/list/Bidding";
 import FinishModal from "components/auction/main/FinishModal";
+import { WebSocketProps } from "type";
 
-const AuctionCanvas: React.FC = () => {
+const AuctionCanvas: React.FC<WebSocketProps> = ({client, auctionId}) => {
   const width = window.innerWidth;
   const height = window.innerHeight;
   const dispatch = useDispatch();
@@ -219,7 +220,7 @@ const AuctionCanvas: React.FC = () => {
           biddingSubmitHandler={biddingSubmitHandler}
           biddingVisible={biddingVisible}
         />
-        <ChatMain />
+        <ChatMain client={client} auctionId={auctionId}/>
       </div>
       <div className={styles.fullMoniterBtn}>
         {playerState === 2 ? (
