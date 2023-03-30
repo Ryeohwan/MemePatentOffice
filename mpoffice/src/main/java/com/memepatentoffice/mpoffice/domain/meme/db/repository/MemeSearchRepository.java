@@ -1,10 +1,6 @@
 package com.memepatentoffice.mpoffice.domain.meme.db.repository;
 
-import com.memepatentoffice.mpoffice.db.entity.Meme;
-import com.memepatentoffice.mpoffice.db.entity.UserMemeLike;
-import com.memepatentoffice.mpoffice.db.entity.QUserMemeLike;
-import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeResponse;
-import com.querydsl.core.types.CollectionExpression;
+import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeListResponse;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -20,6 +16,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.memepatentoffice.mpoffice.db.entity.QMeme.meme;
+import static com.memepatentoffice.mpoffice.db.entity.QUser.user;
 
 @Repository
 @Slf4j
@@ -35,10 +32,20 @@ public class MemeSearchRepository {
     }
 
     // default - 날짜 최신 순
-    public Slice<Meme> searchMemeList(Long lastMemeId, String word, Pageable pageable) {
+    public Slice<MemeListResponse> searchMemeList(Long lastMemeId, String word, Pageable pageable) {
         log.info(word);
         log.info(String.valueOf(pageable.getPageSize()));
-        List<Meme> results = queryFactory.selectFrom(meme)
+        List<MemeListResponse> results = queryFactory.select(
+                Projections.constructor( MemeListResponse.class,
+                        meme.id,
+                        user.nickname,
+                        meme.title,
+                        meme.imageurl.as("imgUrl"),
+                        meme.content.as("description"),
+                        meme.situation.as("example")))
+                .from(meme)
+                .innerJoin(user)
+                .on(meme.id.eq(user.id))
                 .where(
                         // no-offset 페이징 처리
                         ltMemeId(lastMemeId),
@@ -66,7 +73,7 @@ public class MemeSearchRepository {
     }
 
     // 무한 스크롤 방식 처리하는 메서드
-    private Slice<Meme> checkLastPage(Pageable pageable, List<Meme> results) {
+    private Slice<MemeListResponse> checkLastPage(Pageable pageable, List<MemeListResponse> results) {
 
         boolean hasNext = false;
 
