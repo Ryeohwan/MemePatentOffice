@@ -1,21 +1,31 @@
-import React from "react";
-import { Icon } from "@iconify/react";
-import styles from "./DetailInfo.module.css";
+import React, { useEffect, useState } from "react";
+import { useParams, useLocation } from "react-router-dom";
+
 import { useDispatch } from "react-redux";
 import { auctionUploadActions } from "store/auctionUpload";
+
 import UploadModal from "components/auction/upload/UploadModal";
-import { useParams } from "react-router-dom";
+
+import styles from "./DetailInfo.module.css";
+import { Icon } from "@iconify/react";
 
 const DetailInfo: React.FC = () => {
     const dispatch = useDispatch();
+    const location = useLocation()
+    const [isFromNotice,setIsFromNotice] = useState<boolean>()
     const params = useParams()
     const memeid = parseInt(params.meme_id! ,10)
+
+    useEffect(()=>{
+      setIsFromNotice(location.state ? true : false)
+    },[])
+
     return (
       <>
         <div className={styles.memeDetailPage}>
           <div className={styles.auctionBtnWrapper}>
             <div className={styles.alarmBtn}>경매 알림 받기</div>
-            <div className={styles.auctionInfoBtn}>12월 28일 13시 경매 예정</div>
+            <div className={isFromNotice ? styles.auctionInfoBtn2 : styles.auctionInfoBtn}>12월 28일 13시 경매 예정</div>
           </div>
   
           <div className={styles.memeTitle}>

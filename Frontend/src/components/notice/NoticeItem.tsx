@@ -27,6 +27,7 @@ const NoticeItem: React.FC<NoticeItemProps> = ({ item }) => {
       navigate(`/auction/${item.id}`);
     } else if (type === "auctionEnd") {
     } else if (type === "auctionReg") {
+      navigate(`/meme-detail/${item.id}`, {state:'auctionReg'})
     } else if (type === "meme") {
       navigate(`/meme-detail/${item.id}`);
     } else {

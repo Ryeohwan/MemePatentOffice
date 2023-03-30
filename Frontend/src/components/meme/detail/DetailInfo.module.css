@@ -8,7 +8,7 @@
     padding: 15px 0px 10px 0px;
 }
 
-.alarmBtn, .auctionInfoBtn{
+.alarmBtn, .auctionInfoBtn, .auctionInfoBtn2{
     height: 35px;
     border-radius: 5px;
     color: var(--white-color);
@@ -28,6 +28,19 @@
     width: 180px;
     background-color: #d0d0d0;
 }
+
+.auctionInfoBtn2{
+    width: 180px;
+    background-color: var(--button-color);
+    animation: blink-effect 0.5s step-end 6;
+}
+
+@keyframes blink-effect {
+    50% {
+        opacity: 100%;
+        background-color: var(--point-color);
+    }
+  }
 
 .memeTitle {
     font-size: 18px;

@@ -1,14 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 import { useSelector } from "react-redux";
 import { RootState } from "store/configStore";
 import { auctionInfo } from "store/auction";
 import * as THREE from "three";
 import { useFrame, useLoader } from "react-three-fiber";
+import GifLoader from "three-gif-loader";
+import GifTexture from "three-gif-loader/lib/gif-texture";
 
 const Border: React.FC = () => {
   const texCanvas = document.createElement("canvas");
   const texContext = texCanvas.getContext("2d");
+  const nftTexture = useRef<THREE.Texture | GifTexture>();
   texCanvas.width = 100;
   texCanvas.height = 100;
   const canvasTexture = new THREE.CanvasTexture(texCanvas);
@@ -16,8 +19,17 @@ const Border: React.FC = () => {
     RootState,
     auctionInfo
   >((state) => state.auction.auctionInfo);
-
-  const nftTexture = useLoader(THREE.TextureLoader, memeImgSrc);
+  // const arrOne = memeImgSrc.split(",");
+  // const arrTwo = arrOne[0].match(/:(.*?);/);
+  // console.log(arrTwo)
+  // const mime = arrTwo![1];
+  const loader = new GifLoader();
+  nftTexture.current! = useLoader(THREE.TextureLoader, memeImgSrc);
+  // if (mime === "gif") {
+    nftTexture.current! = loader.load(memeImgSrc, (reader) => {
+      console.log(reader.numFrames());
+    });
+    // }
 
   const border = new THREE.Mesh(
     new THREE.PlaneGeometry(10, 10),
@@ -29,8 +41,8 @@ const Border: React.FC = () => {
   const NFT = new THREE.Mesh(
     new THREE.PlaneGeometry(5, 5),
     new THREE.MeshBasicMaterial({
-      map: nftTexture,
-      fog: false
+      map: nftTexture.current,
+      fog: false,
     })
   );
   const timerMaterial = new THREE.MeshBasicMaterial({

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import haku from "assets/haku.png";
+import sang from "assets/sang.gif";
 
 export type biddingHistory = {
     nickname: string,
@@ -43,9 +43,9 @@ const initialState: initialStateInterface = {
     auctionInfo:{
         memeId: 1,
         sellerNickname:"3반 김재준",
-        topPrice: 530,
-        finishTime: new Date(2023, 2, 29, 14, 25, 0, 0).toISOString(),
-        memeImgSrc: haku,
+        topPrice: 238478,
+        finishTime: new Date(2023, 2, 30, 9, 7, 0, 0).toISOString(),
+        memeImgSrc: sang,
     },
 };
 
