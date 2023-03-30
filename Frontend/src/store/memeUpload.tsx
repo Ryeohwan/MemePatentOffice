@@ -3,12 +3,13 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface initialStateInterface {  
     // state: 유해성 검사
+    // -2 : 여러번 요청해서 에러남
     // -1 : 유해성검사 안함
     // 0  : 유해성검사 통과 못함
     // 1  : 유해성검사 통과
     
     title: string;
-    titleChecked: boolean;  // 중복검사
+    titleChecked: null | boolean;  // 중복검사
     titleState: number;
 
     imgUrl: string;
@@ -25,7 +26,7 @@ interface initialStateInterface {
 
 const initialState: initialStateInterface = {
     title: "",
-    titleChecked: false,
+    titleChecked: null,
     titleState: -1,
     imgUrl: "",
     imgState: -1,
