@@ -13,6 +13,9 @@ import MemeAddBtn from "components/meme/list/MemeAddBtn";
 import styles from "./MemeListPage.module.css";
 import MemeNotFound from "components/meme/list/MemeNotFound";
 
+
+import useAxios from 'hooks/useAxios';
+
 const MemeListPage: React.FC = () => {
   const dispatch = useDispatch();
   const input = useSelector<RootState, string>((state) => state.memeList.input);
@@ -27,6 +30,21 @@ const MemeListPage: React.FC = () => {
       dispatch(memeListActions.changeInputTxt(""));
     };
   }, []);
+
+
+  // test!!!!
+  // const {data, isLoading, sendRequest} = useAxios();
+  // useEffect(() => {
+  //   sendRequest({url: `/api/mpoffice/meme/search?search=${input}`})
+  // }, [input])
+
+  // useEffect(() => {
+  //   if (data) {
+  //     console.log(data);
+  //   }
+  // }, [data])
+
+
 
   return (
     <div className={styles.pageContainer}>

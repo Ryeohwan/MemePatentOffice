@@ -214,5 +214,13 @@ const memeListSlice = createSlice({
   },
 });
 
+
+
+
+
+
+
+
+
 export const memeListActions = memeListSlice.actions;
 export default memeListSlice.reducer;

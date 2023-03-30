@@ -61,6 +61,7 @@ const useAxios = () => {
       }
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {setStatus(err.response.status)}
+      console.log(err)
     }
     setIsLoading(false);
   }, []);
