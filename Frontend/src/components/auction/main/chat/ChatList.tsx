@@ -13,7 +13,7 @@ type chat = {
   time: string;
 };
 
-interface ChatListProps {
+interface ChatListProps  {
   chatVisible : boolean
 }
 

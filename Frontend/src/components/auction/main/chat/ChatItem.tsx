@@ -14,9 +14,11 @@ interface ChatItemProps {
 
 const ChatItem: React.FC<ChatItemProps> = ({ chat }) => {
   const formatDate = (date: string) => {
-    const newDate = date.split("-");
-    const hour = newDate[3];
-    const minute = newDate[4];
+    const newDate = date.split("T");
+    const thmms = newDate[1];
+    const newTime = thmms!.split(":")
+    const hour = newTime[0]
+    const minute = newTime[1]
 
     return `${hour}:${minute}`;
   };

@@ -5,8 +5,9 @@ import ChatList from "./ChatList";
 
 import { Sidebar } from "primereact/sidebar";
 import styles from "components/auction/main/chat/ChatSideBar.module.css";
+import { WebSocketProps } from "type";
 
-interface ChatSideBarProps {
+interface ChatSideBarProps extends WebSocketProps{
   chatVisible: boolean;
   chatVisibleHandlerFalse: () => void;
 }
@@ -14,6 +15,8 @@ interface ChatSideBarProps {
 const ChatSideBar: React.FC<ChatSideBarProps> = ({
   chatVisible,
   chatVisibleHandlerFalse,
+  client,
+  auctionId
 }) => {
 
   return (
@@ -26,7 +29,7 @@ const ChatSideBar: React.FC<ChatSideBarProps> = ({
         onHide={() => chatVisibleHandlerFalse()}
       >
         <ChatList chatVisible={chatVisible}/>
-        <ChatInputText />
+        <ChatInputText client={client} auctionId={auctionId}/>
       </Sidebar>
     </>
   );
