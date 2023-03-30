@@ -84,4 +84,10 @@ public class MemeController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @GetMapping("/price")
+    public ResponseEntity tradeGraph(@RequestParam(name = "title")String title){
+        memeService.priceGraph(title);
+        return ResponseEntity.status(HttpStatus.OK).body("ok");
+    }
+
 }

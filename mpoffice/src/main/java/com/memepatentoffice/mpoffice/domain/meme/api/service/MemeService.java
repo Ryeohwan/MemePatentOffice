@@ -23,8 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-
-
 @RequiredArgsConstructor
 @Service
 @Transactional(readOnly = true)
@@ -64,7 +62,6 @@ public class MemeService {
         return result;
     }
 
-
     public List<MemeResponse> findAll(){
         return memeRepository.findAll().stream()
                 .map((meme)->MemeResponse.builder()
@@ -93,7 +90,6 @@ public class MemeService {
                 creater.setTodayMemeLike(count);
             }
         }
-
         Meme meme = memeRepository.save(memeCreateRequest.toEntity(creater, creater));
         log.info(meme.getTitle());
         Meme meme1 = memeRepository.findMemeByTitle(meme.getTitle()).orElseThrow(()->new NotFoundException("없네요"));
@@ -175,5 +171,8 @@ public class MemeService {
         return totalCount;
     }
 
+    public void priceGraph(String title){
+
+    }
 
 }
