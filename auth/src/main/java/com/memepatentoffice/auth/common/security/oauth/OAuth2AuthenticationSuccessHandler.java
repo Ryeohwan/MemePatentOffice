@@ -3,11 +3,13 @@ package com.memepatentoffice.auth.common.security.oauth;
 
 import com.memepatentoffice.auth.common.exception.BadRequestException;
 import com.memepatentoffice.auth.common.security.TokenProvider;
+import com.memepatentoffice.auth.common.security.UserPrincipal;
 import com.memepatentoffice.auth.common.security.util.CookieUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -61,11 +63,13 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
         String token = tokenProvider.createToken(authentication);
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", token)
+                .queryParam("id",userPrincipal.getId())
                 .build().toUriString();
     }
 

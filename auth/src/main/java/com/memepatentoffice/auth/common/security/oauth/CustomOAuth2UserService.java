@@ -6,7 +6,12 @@ import com.memepatentoffice.auth.common.exception.NotFoundException;
 import com.memepatentoffice.auth.common.security.UserPrincipal;
 import com.memepatentoffice.auth.common.security.oauth.provider.OAuth2UserInfo;
 import com.memepatentoffice.auth.common.security.oauth.provider.OAuth2UserInfoFactory;
+import com.memepatentoffice.auth.domain.api.request.EmailRequest;
+import com.memepatentoffice.auth.domain.api.request.UserRequest;
+import com.memepatentoffice.auth.domain.api.response.IdResponse;
+import com.memepatentoffice.auth.domain.api.service.UserService;
 import com.memepatentoffice.auth.domain.db.entity.User;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
@@ -21,7 +26,10 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+
+    private final UserService userService;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
@@ -47,45 +55,43 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         // 유저가 DB에 등록되어있는지 확인
         // < -----  서버간통신 부분 ----- >
+        IdResponse idResponse = userService.getId(EmailRequest.builder().email(oAuth2UserInfo.getEmail()).build());
+        if(idResponse.getId() == null){
+            // 디비에 해당하는 이메일의 유저가 없을때
+            idResponse = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
+        }
 
-//        Optional<User> userOptional = userRepository.findByEmail(oAuth2UserInfo.getEmail());
+        log.info(idResponse.getId().toString());
 
-        User user;
-        user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
-        user.setId(1L);
-        user.setPassword("1234567890");
+        User user = User.builder()
+                .name(oAuth2UserInfo.getName())
+                .email(oAuth2UserInfo.getEmail())
+                .password("12345")
+                .id(idResponse.getId())
+                .build();
 
-//        if(false) {
-//            // DB에 있으면 바로 로그인 진행
-//            user = userOptional.get();
-//        } else {
-//            // DB에 없으면 DB에 저장
-//            // < -----  서버간통신 부분 ----- >
-//            user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
-//            log.info("[회원가입] :" + user.toString());
-//        }
         return UserPrincipal.create(user, oAuth2User.getAttributes());
     }
 
-    private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
+    private IdResponse registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) throws BadRequestException {
         log.info("[회원가입] :" + oAuth2UserInfo.toString());
+
         User user = User.builder()
-                .provider(oAuth2UserRequest.getClientRegistration().getRegistrationId())
-                .providerId(oAuth2UserInfo.getId())
                 .name(oAuth2UserInfo.getName())
                 .email(oAuth2UserInfo.getEmail())
-                .imageUrl(oAuth2UserInfo.getImageUrl())
                 .build();
 
-        // 유저 정보를 디비에 저장
-        // < -----  서버간통신 부분 ----- >
-        return user;
+
+        return userService.registUser(UserRequest.builder()
+                .nickname(oAuth2UserInfo.getName())
+                .email(oAuth2UserInfo.getEmail())
+                .build());
     }
 
 //    private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
 //        existingUser.setName(oAuth2UserInfo.getName());
 //        existingUser.setImageUrl(oAuth2UserInfo.getImageUrl());
-//        return userRepository.save(existingUser);
+//        return userRepository.save(existingUser);d
 //    }
 
 }
