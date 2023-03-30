@@ -12,27 +12,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class CommentRequest {
-    private Long id;
-
     private Long userId;
-
     private Long memeId;
-
-    private Long parentCommentSeq;
-
+    private Long parentCommentId;
     private String content;
-
-    private IsValid isValid;
-
-    private LocalDateTime createdAt;
-
     private LocalDateTime updatedAt;
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
 }
