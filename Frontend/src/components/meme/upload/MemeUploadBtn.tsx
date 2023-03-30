@@ -12,7 +12,7 @@ import styles from "./MemeUploadBtn.module.css";
 const MemeUploadBtn: React.FC = () => {
   const dispatch = useDispatch();
   const title = useSelector<RootState, string>((state) => state.memeUpload.title);
-  const titleChecked = useSelector<RootState, boolean>((state) => state.memeUpload.titleChecked);
+  const titleChecked = useSelector<RootState, boolean|null>((state) => state.memeUpload.titleChecked);
   const titleState = useSelector<RootState, number>((state) => state.memeUpload.titleState)
   const titleMonitor = useRef<number|null>(null)
 
@@ -43,7 +43,7 @@ const MemeUploadBtn: React.FC = () => {
 
   // 텍스트 유효성 검사 함수
   const textMonitor = async (textInput: string) => {
-    console.log(textInput, '검사 보냄@')
+    console.log(textInput, '검사 보냄')
     const textParams = {
       autocorrect: "false",
       PII: "false",
