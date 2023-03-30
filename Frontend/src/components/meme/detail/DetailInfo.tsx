@@ -56,22 +56,24 @@ const DetailInfo: React.FC = () => {
 
   return (
     <>
-      {isLoading ? (
-        <p>loading중</p>
-      ) : (
-        <div className={styles.memeDetailPage}>
-          <div className={styles.auctionBtnWrapper}>
+          <div className={styles.memeDetailPage}>
+          {isLoading? (
+            <p>loading중</p>)
+            :      
+            (
+            <>
+            <div className={styles.auctionBtnWrapper}>
             <div className={styles.alarmBtn}>경매 알림 받기</div>
             <div
               className={
                 isFromNotice ? styles.auctionInfoBtn2 : styles.auctionInfoBtn
               }
-            >
+              >
               12월 28일 13시 경매 예정
             </div>
           </div>
 
-          <div className={styles.memeTitle}>
+<div className={styles.memeTitle}>
             귀여운 토토로 삼형제와 발랄한 자매 사츠키, 메이의 우당탕탕
             가족사진입니다
             {/* {data.title} */}
@@ -87,10 +89,10 @@ const DetailInfo: React.FC = () => {
               src="http://localhost:3000/totoro.jpg"
               alt=""
               className={styles.memeImg}
-            />
+              />
           </div>
 
-          <div className={styles.memeGuide}>뜻</div>
+<div className={styles.memeGuide}>뜻</div>
           <div className={styles.memeDescription}>
             나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아
             한가로운 오후를 보내고 있다.
@@ -107,7 +109,7 @@ const DetailInfo: React.FC = () => {
             오후를 보내고 있다.
           </div>
 
-          <div className={styles.memeOwner}>
+<div className={styles.memeOwner}>
             <div>최초 등록자</div>
             <div className={styles.ownerName}>5조의 햇살</div>
           </div>
@@ -125,29 +127,31 @@ const DetailInfo: React.FC = () => {
               <Icon
                 icon="ic:baseline-heart-broken"
                 className={styles.heartImoji}
-              />
+                />
               {/* <div className={styles.heartNumber}>2</div> */}
               {/* <div className={styles.heartNumber} onClick={dislikeHandler}>{dislikeCnt}</div> */}
             </div>
           </div>
           <div
-            className={styles.uploadAuctionBtn}
-            onClick={() => {
-              dispatch(
-                auctionUploadActions.controlModal({
-                  visible: true,
-                  memeid: memeid,
-                })
+          className={styles.uploadAuctionBtn}
+          onClick={() => {
+            dispatch(
+              auctionUploadActions.controlModal({
+                visible: true,
+                memeid: memeid,
+              })
               );
             }}
-          >
+            >
             이 NFT 경매 등록하러 가기
           </div>
           <UploadModal />
-        </div>
-      )}
-    </>
-  );
-};
-
-export default DetailInfo;
+          </>
+          )}
+          </div>
+          </>
+          );
+        };
+        
+        export default DetailInfo;
+        

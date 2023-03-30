@@ -73,7 +73,7 @@ const memeUploadSlice = createSlice({
     },
     resetData: (state) => {
         state.title = "";
-        state.titleChecked = false;
+        state.titleChecked = null;
         state.titleState = -1;
         state.imgUrl = "";
         state.imgState = -1;
