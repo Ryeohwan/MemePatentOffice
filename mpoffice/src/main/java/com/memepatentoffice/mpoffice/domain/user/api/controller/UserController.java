@@ -6,6 +6,7 @@ import com.memepatentoffice.mpoffice.domain.user.api.request.UserSignUpRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserUpdateRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserWithdrawRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.response.CountResponse;
+import com.memepatentoffice.mpoffice.domain.user.api.response.SignUpResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.response.UserResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.response.UserSignUpResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.service.UserService;
@@ -40,7 +41,6 @@ public class UserController {
         }
         return ResponseEntity.status(HttpStatus.CREATED).body("finish");
     }
-
 //    @ApiResponse(responseCode = "200", description = "회원정보 조회 성공", content = @Content(schema = @Schema(implementation = UserResponse.class)))
 //    @ApiResponse(responseCode = "404", description = "회원정보 조회 실패")
 //    @Operation(description = "회원정보 조회 API", summary = "회원정보 조회 API")
@@ -73,7 +73,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-
 //    @GetMapping("/comments/{id}?page={page}")
 //    public ResponseEntity getUserComments(Long id, int page){
 //        Page<CommentResponse> pages = userService.getUserComments(id,page);
@@ -96,7 +95,7 @@ public class UserController {
     @PostMapping("/server/signup")
     @ResponseBody
     public ResponseEntity socialSignup (@RequestBody SocialRequest socialRequest){
-        userService.socialSignup(socialRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        SignUpResponse result = userService.socialSignup(socialRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 }

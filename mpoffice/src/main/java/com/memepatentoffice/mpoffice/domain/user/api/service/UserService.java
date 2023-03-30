@@ -7,10 +7,7 @@ import com.memepatentoffice.mpoffice.domain.user.api.request.SocialRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserSignUpRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserUpdateRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserWithdrawRequest;
-import com.memepatentoffice.mpoffice.domain.user.api.response.CountResponse;
-import com.memepatentoffice.mpoffice.domain.user.api.response.IdFoundResponse;
-import com.memepatentoffice.mpoffice.domain.user.api.response.UserResponse;
-import com.memepatentoffice.mpoffice.domain.user.api.response.UserSignUpResponse;
+import com.memepatentoffice.mpoffice.domain.user.api.response.*;
 import com.memepatentoffice.mpoffice.domain.user.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -103,7 +100,7 @@ public class UserService {
 
     }
     @Transactional
-    public void socialSignup(SocialRequest social){
+    public SignUpResponse socialSignup(SocialRequest social){
         User user = User.builder()
                 .nickname(social.getNickname())
                 .email(social.getEmail())
@@ -112,6 +109,10 @@ public class UserService {
                 .todayMemeCount(2)
                 .build();
         userRepository.save(user);
+        SignUpResponse result = SignUpResponse.builder()
+                .id(user.getId())
+                .build();
+        return result;
     }
 //    public Page<CommentResponse> getUserComments (Long id, int page) {
 //        PageRequest pageRequest = PageRequest.of(page,8, Sort.by(Sort.Direction.DESC, "id"));
