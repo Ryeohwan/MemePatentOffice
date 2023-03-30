@@ -24,6 +24,14 @@ public class UserService {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId + " : User"));
     }
 
+    public Boolean emailDuplicatedCheck(String email){
+        if(userRepository.existsByEmail(email)){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
     public UserResponse getUserInfo(Long userId) throws NotFoundException {
         return new UserResponse(userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("해당 유저가 없습니다.")));

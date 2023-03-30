@@ -1,6 +1,7 @@
 package com.memepatentoffice.mpoffice.domain.user.api.controller;
 
 import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
+import com.memepatentoffice.mpoffice.common.Exception.UserAlreadyExistsException;
 import com.memepatentoffice.mpoffice.domain.user.api.request.SocialRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserSignUpRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserUpdateRequest;
@@ -94,8 +95,12 @@ public class UserController {
 
     @PostMapping("/server/signup")
     @ResponseBody
-    public ResponseEntity socialSignup (@RequestBody SocialRequest socialRequest){
-        SignUpResponse result = userService.socialSignup(socialRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    public ResponseEntity socialSignup (@RequestBody SocialRequest socialRequest) throws UserAlreadyExistsException{
+        if(userService.emailDuplicatedCheck(socialRequest.getEmail())){
+            SignUpResponse result = userService.socialSignup(socialRequest);
+            return ResponseEntity.status(HttpStatus.CREATED).body(result);
+        }else {
+            throw new UserAlreadyExistsException("EmailAlreadyExists");
+        }
     }
 }

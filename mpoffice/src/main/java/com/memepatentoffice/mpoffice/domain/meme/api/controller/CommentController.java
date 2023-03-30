@@ -1,6 +1,7 @@
 package com.memepatentoffice.mpoffice.domain.meme.api.controller;
 
 import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
+import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentInfoRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentLikeRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.CommentService;
@@ -33,9 +34,15 @@ public class CommentController {
     public ResponseEntity createLike(@RequestBody CommentLikeRequest commentLikeRequest) throws NotFoundException{
         return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createCommentLike(commentLikeRequest));
     }
+    @GetMapping("/info")
+    public ResponseEntity aboutComment(CommentInfoRequest commentInfoRequest)throws NotFoundException{
+        commentService.findComment(commentInfoRequest);
+        return ResponseEntity.status(HttpStatus.OK).body("temp");
+    }
     @GetMapping("/list/latest/{id}")
     public ResponseEntity latestComment(@PathVariable("id") Long id){
         return ResponseEntity.ok("result");
     }
+
 
 }
