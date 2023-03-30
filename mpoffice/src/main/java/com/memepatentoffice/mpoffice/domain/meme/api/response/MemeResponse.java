@@ -29,8 +29,8 @@ public class MemeResponse {
     private MemeLike memeLike;
     private int likeCount;
     private int hateCount;
+    private int searched;
     private String userProfileImage;
-
     public void setCart(Cart cart){
         this.cart = cart;
     }

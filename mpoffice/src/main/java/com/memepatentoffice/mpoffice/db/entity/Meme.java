@@ -37,4 +37,11 @@ public class Meme extends BaseEntity{
 
     @Column(name = "contract_address")
     private String contractAddress;
+
+    @Column(name = "searched")
+    private int searched;
+
+    public void setSearched(){
+        this.searched += 1;
+    }
 }

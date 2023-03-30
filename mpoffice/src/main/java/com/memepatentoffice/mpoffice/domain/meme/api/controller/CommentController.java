@@ -42,8 +42,9 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/list/latest/{id}")
-    public ResponseEntity latestComment(@PathVariable("id") Long id){
+    @GetMapping("/list")
+    public ResponseEntity latestComment(@RequestParam(name = "sort") String sort){
+
         return ResponseEntity.ok("result");
     }
 
