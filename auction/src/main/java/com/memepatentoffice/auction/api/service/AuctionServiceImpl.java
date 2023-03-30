@@ -1,9 +1,11 @@
 package com.memepatentoffice.auction.api.service;
 
+import com.memepatentoffice.auction.api.message.WebSocketCharacter;
+import com.memepatentoffice.auction.api.message.WebSocketTransaction;
 import com.memepatentoffice.auction.api.request.AuctionCreationReq;
-import com.memepatentoffice.auction.api.request.WebSocketChatReq;
+import com.memepatentoffice.auction.api.message.WebSocketChatReq;
 import com.memepatentoffice.auction.api.response.AuctionCreationResultRes;
-import com.memepatentoffice.auction.api.response.WebSocketChatRes;
+import com.memepatentoffice.auction.api.message.WebSocketChatRes;
 import com.memepatentoffice.auction.common.exception.NotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,15 +29,25 @@ public class AuctionServiceImpl implements AuctionService{
     private final SimpMessageSendingOperations simpMessageSendingOperations;
 
     @Override
-    public void sendWebSocket(WebSocketChatReq webSocketChatReq){
+    public void sendChat(WebSocketChatReq req){
         //옥션 id, 유저 id존재하는지 확인
-        Long auctionId = webSocketChatReq.getAuctionId();
+        Long auctionId = req.getAuctionId();
         WebSocketChatRes res = WebSocketChatRes.builder()
                 .auctionId(auctionId)
-                .nickname(webSocketChatReq.getNickname())
-                .message(webSocketChatReq.getMessage())
+                .nickname(req.getNickname())
+                .message(req.getMessage())
                 .createdAt(LocalDateTime.now()).build();
         simpMessageSendingOperations.convertAndSend("/sub/chat/"+auctionId, res);
+    }
+
+    @Override
+    public void sendCharacter(WebSocketCharacter vo) {
+        simpMessageSendingOperations.convertAndSend("/sub/character/"+vo.getAuctionId(), vo);
+    }
+
+    @Override
+    public void sendTransaction(WebSocketTransaction vo) {
+        simpMessageSendingOperations.convertAndSend("/sub/transaction/"+vo.getAuctionId(), vo);
     }
 
 //    private Gson gson = new Gson();
