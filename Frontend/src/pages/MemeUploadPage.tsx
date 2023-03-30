@@ -54,6 +54,7 @@ const MemeUploadPage: React.FC = () => {
     }
     controlCheckModal(false);
     if (data === false) {
+      alert('하루 할당량을 초과하셨습니다.')
       navigate(-1)
     }
   }, [status])

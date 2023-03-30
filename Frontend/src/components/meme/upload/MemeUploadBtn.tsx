@@ -142,7 +142,7 @@ const MemeUploadBtn: React.FC = () => {
       if (response.status) {
         const data = {
           tokenId: response.transactionIndex,
-          contractAddress: response.events.Transfer.address,
+          // contractAddress: response.events.Transfer.address,
         };
         return data;
       }
@@ -153,13 +153,14 @@ const MemeUploadBtn: React.FC = () => {
   };
 
   // back에 api 보내는 axios
-  const submitHandler = async (data: {tokenId: number, contractAddress: string}) => {
+  // const submitHandler = async (data: {tokenId: number, contractAddress: string}) => {
+  const submitHandler = async (data: {tokenId: number}) => {
     const memeCreateRequest = {
       content: info,
       createrId: JSON.parse(sessionStorage.user).userId,
       title: title, 
       tokenId: data.tokenId,
-      contractAddress: data.contractAddress,
+      // contractAddress: data.contractAddress,
     };
 
     const formData = new FormData();
@@ -271,6 +272,7 @@ const MemeUploadBtn: React.FC = () => {
         console.log('memeId: ', backRes)
         // 밈 상세로 navigate
         navigate(`/meme-detail/${backRes}/tab=trade`)
+        window.location.href = `/meme-detail/${backRes}/tab=trade`
       }
 
     } else {
