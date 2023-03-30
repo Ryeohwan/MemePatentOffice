@@ -76,14 +76,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private IdResponse registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) throws BadRequestException {
         log.info("[회원가입] :" + oAuth2UserInfo.toString());
 
-        User user = User.builder()
-                .name(oAuth2UserInfo.getEmail().split("@")[0])
-                .email(oAuth2UserInfo.getEmail())
-                .build();
-
+        String name = "MEME_" + oAuth2UserInfo.getEmail().split("@")[0];
+        int n = (name.length() >= 20)? 19: name.length();
 
         return userService.registUser(UserRequest.builder()
-                .nickname("MEME_" + oAuth2UserInfo.getEmail().split("@")[0])
+                .nickname(name.substring(0, n))
                 .email(oAuth2UserInfo.getEmail())
                 .build());
     }
