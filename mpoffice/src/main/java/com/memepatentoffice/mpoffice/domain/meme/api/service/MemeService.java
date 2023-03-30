@@ -37,9 +37,7 @@ public class MemeService {
 
     public MemeResponse findByTitle(MemeInfoRequest memeInfoRequest)throws NotFoundException{
         //추후 중복검사 로직 추가
-        System.out.println(memeInfoRequest.getTitle());
-        System.out.println(memeInfoRequest.getUserId());
-        Meme meme = memeRepository.findMemeByTitle(memeInfoRequest.getTitle()).orElseThrow(() -> new NotFoundException("해당하는 밈이 없습니다."));
+        Meme meme = memeRepository.findById(memeInfoRequest.getMemeId()).orElseThrow(() -> new NotFoundException("해당하는 밈이 없습니다."));
         MemeResponse result = new MemeResponse().builder()
                 .id(meme.getId())
                 .content(meme.getContent())
