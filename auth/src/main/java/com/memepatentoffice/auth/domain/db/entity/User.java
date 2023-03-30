@@ -22,10 +22,10 @@ public class User {
     private String email;
 
     private String password;
-
-    private String provider;
-
-    private String providerId;
+//
+//    private String provider;
+//
+//    private String providerId;
 
     // 서버간 통신 구현이 안되서 임시로 만들었다 지워야한다 필수!!!
     public void setId(Long id) {
