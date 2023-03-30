@@ -2,7 +2,7 @@ package com.memepatentoffice.auction.api.response;
 
 import java.time.LocalDateTime;
 
-public class AuctionInProgressRes {
+public class AuctionRes {
     private String imageurl;
     private String title;
     private String content;
