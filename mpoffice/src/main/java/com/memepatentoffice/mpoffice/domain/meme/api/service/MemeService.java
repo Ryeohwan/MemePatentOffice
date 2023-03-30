@@ -32,13 +32,13 @@ public class MemeService {
     private final MemeRepository memeRepository;
     private final UserMemeLikeRepository userMemeLikeRepository;
     private final UserRepository userRepository;
-
     private final CartRepository cartRepository;
 
     public MemeResponse findByTitle(Long userId, Long memeId)throws NotFoundException{
         //추후 중복검사 로직 추가
         Meme meme = memeRepository.findById(memeId).orElseThrow(() -> new NotFoundException("해당하는 밈이 없습니다."));
         User user = userRepository.findById(userId).orElseThrow(()-> new NotFoundException("해당하는 유저가 없습니다."));
+        meme.setSearched();
         MemeResponse result = new MemeResponse().builder()
                 .id(meme.getId())
                 .content(meme.getContent())
@@ -46,6 +46,7 @@ public class MemeService {
                 .createrNickname(meme.getCreater().getNickname())
                 .ownerNickname(meme.getOwner().getNickname())
                 .userProfileImage(user.getProfileImage())
+                .searched(meme.getSearched())
                 .title(meme.getTitle())
                 .likeCount(userMemeLikeRepository.countLike(userId,meme.getId(),MemeLike.LIKE))
                 .hateCount(userMemeLikeRepository.countLike(userId,meme.getId(),MemeLike.HATE))
@@ -169,4 +170,6 @@ public class MemeService {
         Long totalCount = memeRepository.count();
         return totalCount;
     }
+
+
 }
