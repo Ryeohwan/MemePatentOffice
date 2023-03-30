@@ -27,8 +27,8 @@ public class MemeController {
         );
     }
     @GetMapping("/info")
-    public ResponseEntity getMeme(MemeInfoRequest memeInfoRequest) throws NotFoundException {
-        MemeResponse result = memeService.findByTitle(memeInfoRequest);
+    public ResponseEntity getMeme(@RequestParam(name = "userId")Long userId, @RequestParam(name = "memeId")Long memeId) throws NotFoundException {
+        MemeResponse result = memeService.findByTitle(userId,memeId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
     @GetMapping("/check/{title}")
