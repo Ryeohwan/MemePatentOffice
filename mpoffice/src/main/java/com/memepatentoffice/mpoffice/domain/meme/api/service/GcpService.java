@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -20,13 +21,15 @@ public class GcpService {
     @Autowired
     private Storage storage;
 
+    UUID fileName;
     public String uploadFile(MultipartFile file) throws IOException {
-        BlobId blobId = BlobId.of("mpoffice", file.getOriginalFilename());
+        String uuid = UUID.randomUUID().toString();
+        BlobId blobId = BlobId.of("mpoffice", uuid);
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(file.getContentType()).build();
         storage.create(blobInfo, file.getInputStream());
         // 하드코딩 죄송함돠ㅠㅠ
         String front = "https://storage.googleapis.com/";
-        String buck = storage.get("mpoffice", file.getOriginalFilename()).getBucket() + "/";
+        String buck = storage.get("mpoffice", blobId.getName()).getBucket() + "/";
         String arr = blobId.getName().replaceAll(" ","%20");
         String result = front + buck + arr;
 

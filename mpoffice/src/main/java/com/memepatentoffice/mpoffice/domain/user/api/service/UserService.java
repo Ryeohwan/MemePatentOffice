@@ -94,7 +94,7 @@ public class UserService {
         }
     }
 
-    public IdFoundResponse seakId(String  email) throws NotFoundException {
+    public IdFoundResponse seakId(String email) throws NotFoundException {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("해당하는 유저가 없읍니다."));
         IdFoundResponse result = IdFoundResponse.builder()
                 .id(user.getId())
@@ -105,8 +105,11 @@ public class UserService {
     @Transactional
     public void socialSignup(SocialRequest social){
         User user = User.builder()
-                .email(social.getEmail())
                 .nickname(social.getNickname())
+                .email(social.getEmail())
+                .today(LocalDateTime.now())
+                .isValid(IsValid.VALID)
+                .todayMemeCount(2)
                 .build();
         userRepository.save(user);
     }

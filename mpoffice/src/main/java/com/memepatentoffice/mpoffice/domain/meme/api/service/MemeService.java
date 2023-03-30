@@ -47,6 +47,8 @@ public class MemeService {
                 .build();
         return result;
     }
+
+
     public List<MemeResponse> findAll(){
         return memeRepository.findAll().stream()
                 .map((meme)->MemeResponse.builder()
@@ -79,7 +81,7 @@ public class MemeService {
         Meme meme = memeRepository.save(memeCreateRequest.toEntity(creater, creater));
         log.info(meme.getTitle());
         Meme meme1 = memeRepository.findMemeByTitle(meme.getTitle()).orElseThrow(()->new NotFoundException("없네요"));
-        
+
         return meme.getId();
     }
 

@@ -17,6 +17,8 @@ public class MemeCreateRequest {
     private String title;
     private String imageUrl;
     private String situation;
+    private int tokenId;
+    private String contractAddress;
 
     public void setContent(String content) {
         this.content = content;
@@ -42,6 +44,9 @@ public class MemeCreateRequest {
         this.file = file;
     }
 
+    public void setTokenId(int tokenId){this.tokenId = tokenId;}
+    public void setContractAddress(String content){this.contractAddress = contractAddress;}
+
     public Meme toEntity(User creater, User owner){
         return Meme.builder()
                 .creater(creater)
@@ -50,16 +55,20 @@ public class MemeCreateRequest {
                 .content(content)
                 .imageurl(imageUrl)
                 .situation(situation)
+                .contractAddress(contractAddress)
+                .tokenId(tokenId)
                 .build();
     }
 
     @Builder
-    public MemeCreateRequest(String content, Long createrId, Long ownerId, String title, String imageUrl, String situation) {
+    public MemeCreateRequest(String content, Long createrId, Long ownerId, String title, String imageUrl, String situation, int tokenId, String contractAddress) {
         this.content = content;
         this.createrId = createrId;
         this.ownerId = ownerId;
         this.title = title;
         this.imageUrl = imageUrl;
         this.situation = situation;
+        this.contractAddress = contractAddress;
+        this.tokenId = tokenId;
     }
 }

@@ -20,7 +20,6 @@ public class Meme extends BaseEntity{
     @JoinColumn(name = "owner_id")
     private User owner;
 
-
     @Column(name = "title")
     private String title;
 
@@ -32,4 +31,10 @@ public class Meme extends BaseEntity{
 
     @Column(name = "situation")
     private String situation;
+
+    @Column(name = "token_id")
+    private int tokenId;
+
+    @Column(name = "contract_address")
+    private String contractAddress;
 }
