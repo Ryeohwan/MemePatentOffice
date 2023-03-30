@@ -2,12 +2,14 @@ package com.memepatentoffice.mpoffice.domain.meme.api.request;
 
 import com.memepatentoffice.mpoffice.db.entity.Meme;
 import com.memepatentoffice.mpoffice.db.entity.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class MemeCreateListRequest {
     private String content;
     private Long createrId;
