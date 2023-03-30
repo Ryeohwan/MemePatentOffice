@@ -46,7 +46,7 @@ public class MemeService {
                 .createdAt(meme.getCreatedAt())
                 .createrNickname(meme.getCreater().getNickname())
                 .ownerNickname(meme.getOwner().getNickname())
-                .userProfileImage(user.getProfileImage())
+                .memeImage(meme.getImageurl())
                 .searched(meme.getSearched())
                 .situation(meme.getSituation())
                 .title(meme.getTitle())
