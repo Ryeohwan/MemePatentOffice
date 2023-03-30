@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "store/configStore";
@@ -52,7 +52,6 @@ const Player: React.FC<PlayerProps> = ({
   const playerState = useSelector<RootState, number>(
     (state) => state.auction.playerState
   );
-  const glb = useLoader(GLTFLoader, "/auction/model/character.glb");
   const actions = useRef<action>({
     handsup: null,
     walk: null,
@@ -60,14 +59,16 @@ const Player: React.FC<PlayerProps> = ({
     standup: null,
     normal: null,
   });
-  player.current = glb.scene.children[0];
-  glb.scene.traverse((child) => {
-    if (child.isObject3D) {
-      child.castShadow = true;
-    }
-  });
-
-  const mixer = new THREE.AnimationMixer(player.current);
+  
+  const glb = useLoader(GLTFLoader, "/auction/model/character.glb");
+  const character = useMemo(()=>{
+    const character = new THREE.Group()
+    character.add(glb.scene)
+    character.children.push(glb.scene.children[0].clone())
+    return character.children[0]
+  },[glb.scene])
+  player.current = character.children[0]
+  const mixer = new THREE.AnimationMixer(player.current!);
 
   for (let i = 0; i < glb.animations.length; i++) {
     const action = mixer.clipAction(glb.animations[i]);
@@ -171,7 +172,7 @@ const Player: React.FC<PlayerProps> = ({
     }
   });
 
-  return <primitive object={glb.scene} />;
+  return <primitive object={character} />;
 };
 
 export default Player;

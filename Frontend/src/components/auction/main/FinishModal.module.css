@@ -39,3 +39,12 @@
   font-weight: bold;
   color: var(--section-line-color);
 }
+
+.exitBtn{
+  width: 6rem;
+  height:2rem
+}
+
+.exitContainer{
+  margin-top: 2rem;
+}
