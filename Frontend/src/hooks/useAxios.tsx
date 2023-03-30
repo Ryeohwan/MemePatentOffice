@@ -28,7 +28,7 @@ const useAxios = () => {
     try {
       const response = await axios(`${process.env.REACT_APP_HOST}${requestConfig.url}`, {
         method: requestConfig.method ? requestConfig.method : "GET",
-        headers: authHeader(),
+        headers: requestConfig.headers ? requestConfig.headers : authHeader(),
         data: requestConfig.data && JSON.stringify(requestConfig.data),
         params: requestConfig.params,
         
