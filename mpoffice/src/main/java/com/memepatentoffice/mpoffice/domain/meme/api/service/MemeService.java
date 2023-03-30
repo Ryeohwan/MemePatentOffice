@@ -35,9 +35,9 @@ public class MemeService {
 
     private final CartRepository cartRepository;
 
-    public MemeResponse findByTitle(MemeInfoRequest memeInfoRequest)throws NotFoundException{
+    public MemeResponse findByTitle(Long userId, Long memeId)throws NotFoundException{
         //추후 중복검사 로직 추가
-        Meme meme = memeRepository.findById(memeInfoRequest.getMemeId()).orElseThrow(() -> new NotFoundException("해당하는 밈이 없습니다."));
+        Meme meme = memeRepository.findById(memeId).orElseThrow(() -> new NotFoundException("해당하는 밈이 없습니다."));
         MemeResponse result = new MemeResponse().builder()
                 .id(meme.getId())
                 .content(meme.getContent())
@@ -45,14 +45,14 @@ public class MemeService {
                 .createrNicklname(meme.getCreater().getNickname())
                 .ownerNickname(meme.getOwner().getNickname())
                 .title(meme.getTitle())
-                .likeCount(userMemeLikeRepository.countLike(memeInfoRequest.getUserId(),meme.getId(),MemeLike.LIKE))
-                .hateCount(userMemeLikeRepository.countLike(memeInfoRequest.getUserId(),meme.getId(),MemeLike.HATE))
+                .likeCount(userMemeLikeRepository.countLike(userId,meme.getId(),MemeLike.LIKE))
+                .hateCount(userMemeLikeRepository.countLike(userId,meme.getId(),MemeLike.HATE))
                 .build();
-        if(cartRepository.existsUserMemeAuctionAlertByUserIdAndMemeId(memeInfoRequest.getUserId(),meme.getId())){
-            result.setCart(cartRepository.findUserMemeAuctionAlertByUserIdAndMemeId(memeInfoRequest.getUserId(),meme.getId()).getCart());
+        if(cartRepository.existsUserMemeAuctionAlertByUserIdAndMemeId(userId,meme.getId())){
+            result.setCart(cartRepository.findUserMemeAuctionAlertByUserIdAndMemeId(userId,meme.getId()).getCart());
         }
-        if(userMemeLikeRepository.existsUserMemeLikeByUserIdAndMemeId(memeInfoRequest.getUserId(),meme.getId())){
-            result.setMemeLike(userMemeLikeRepository.findUserMemeLikeByUserIdAndMemeId(memeInfoRequest.getUserId(),meme.getId()).getMemeLike());
+        if(userMemeLikeRepository.existsUserMemeLikeByUserIdAndMemeId(userId,meme.getId())){
+            result.setMemeLike(userMemeLikeRepository.findUserMemeLikeByUserIdAndMemeId(userId,meme.getId()).getMemeLike());
         }
         return result;
     }
