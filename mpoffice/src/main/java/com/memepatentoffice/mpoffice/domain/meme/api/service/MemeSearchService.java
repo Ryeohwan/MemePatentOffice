@@ -1,6 +1,7 @@
 package com.memepatentoffice.mpoffice.domain.meme.api.service;
 
 import com.memepatentoffice.mpoffice.db.entity.Meme;
+import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeListResponse;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeResponse;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.MemeSearchRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class MemeSearchService {
 
     private final MemeSearchRepository memeSearchRepository;
-    public Slice<Meme> getMemeList(Long lastId, Pageable pageable, String searchText) {
+    public Slice<MemeListResponse> getMemeList(Long lastId, Pageable pageable, String searchText) {
         return memeSearchRepository.searchMemeList(lastId, searchText, pageable);
     }
 

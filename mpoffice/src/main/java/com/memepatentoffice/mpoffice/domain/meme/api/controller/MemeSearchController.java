@@ -1,6 +1,7 @@
 package com.memepatentoffice.mpoffice.domain.meme.api.controller;
 
 import com.memepatentoffice.mpoffice.db.entity.Meme;
+import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeListResponse;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeResponse;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.MemeSearchService;
 import lombok.Getter;
@@ -24,7 +25,7 @@ public class MemeSearchController {
     final private MemeSearchService memeSearchService;
 
     @GetMapping("")
-    public ResponseEntity<Slice<Meme>> getMemeList(
+    public ResponseEntity<Slice<MemeListResponse>> getMemeList(
             @RequestParam(value = "idx", defaultValue = "0") long Idx,
             @RequestParam(value = "search", required = false) String searchText,
             @PageableDefault(size = 10, sort = "idx", direction = Sort.Direction.ASC) Pageable pageable) {
