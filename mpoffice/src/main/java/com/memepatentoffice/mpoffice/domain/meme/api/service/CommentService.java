@@ -2,6 +2,7 @@ package com.memepatentoffice.mpoffice.domain.meme.api.service;
 
 import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
 import com.memepatentoffice.mpoffice.db.entity.*;
+import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentInfoRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentLikeRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentRequest;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.CommentRepository;
@@ -26,15 +27,11 @@ public class CommentService {
     private final UserCommentLikeRepository userCommentLikeRepository;
     @Transactional
     public Long createCommenmt(CommentRequest commentRequest) throws NotFoundException {
-        System.out.println("user" + commentRequest.getUserId());
-        System.out.println("밈" + commentRequest.getMemeId());
         User user = userRepository.findById(commentRequest.getUserId())
                 .orElseThrow(()->new NotFoundException("유효하지 않은 유저입니다"));
         Meme meme = memeRepository.findById(commentRequest.getMemeId())
                 .orElseThrow(()->new NotFoundException("유효하지 않은 밈입니다"));
-        System.out.println("호출은 하니");
         if(commentRequest.getParentCommentId() != null){
-            System.out.println("hihi");
             Optional<Comment> parentComment = commentRepository.findById(commentRequest.getParentCommentId());
             //optional로 user
             Comment com = new Comment().builder()
@@ -47,7 +44,6 @@ public class CommentService {
                     .build();
             return commentRepository.save(com).getId();
         }else {
-            System.out.println("없는 곳으로 오니");
             Comment com = new Comment().builder()
                     .content(commentRequest.getContent())
                     .user(user)
@@ -57,9 +53,7 @@ public class CommentService {
                     .build();
             return commentRepository.save(com).getId();
         }
-
     }
-
     @Transactional
     public boolean createCommentLike(CommentLikeRequest commentLikeRequest) throws NotFoundException{
         System.out.println(commentLikeRequest.getCommentId());
@@ -74,13 +68,12 @@ public class CommentService {
         userCommentLikeRepository.save(temp);
         return true;
     }
-
     public void CommentList(Long id) throws NotFoundException{
         List<Comment> list = commentRepository.findCommentsByMemeId(id);
     }
 
-
-
-
+    public void findComment(CommentInfoRequest commentInfoRequest) throws  NotFoundException{
+        commentRepository.findCommentById(commentInfoRequest.getId()).orElseThrow(() -> new NotFoundException("해당하는 밈이 없습니다."));
+    }
 
 }
