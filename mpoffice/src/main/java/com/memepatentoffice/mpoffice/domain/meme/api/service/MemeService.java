@@ -33,7 +33,7 @@ public class MemeService {
     private final UserMemeLikeRepository userMemeLikeRepository;
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
-
+    @Transactional
     public MemeResponse findByTitle(Long userId, Long memeId)throws NotFoundException{
         //추후 중복검사 로직 추가
         Meme meme = memeRepository.findById(memeId).orElseThrow(() -> new NotFoundException("해당하는 밈이 없습니다."));
