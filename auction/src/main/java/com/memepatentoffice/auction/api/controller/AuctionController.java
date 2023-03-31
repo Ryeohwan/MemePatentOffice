@@ -1,11 +1,13 @@
 package com.memepatentoffice.auction.api.controller;
 
 import com.memepatentoffice.auction.api.message.WebSocketCharacter;
-import com.memepatentoffice.auction.api.message.WebSocketTransactionRes;
 import com.memepatentoffice.auction.api.request.AuctionCreationReq;
 import com.memepatentoffice.auction.api.message.WebSocketChatReq;
 import com.memepatentoffice.auction.api.service.AuctionService;
 import com.memepatentoffice.auction.common.exception.NotFoundException;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,19 +22,24 @@ import java.io.IOException;
 public class AuctionController {
     private final AuctionService auctionService;
 
-    @PostMapping("/")
+    @ApiOperation(value="경매 등록", notes = "경매를 예약합니다. 예약한 시간에 경매가 시작되고, 시작 후 15분에 끝납니다.")
+    @PostMapping("/enroll")
     public ResponseEntity<?> enrollAuction(@RequestBody AuctionCreationReq auctionCreationReq) throws IOException, NotFoundException{
         auctionService.enrollAuction(auctionCreationReq);
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
+    @PostMapping("/end")
+    public ResponseEntity<?> endAuction(){
+        return ResponseEntity.status(HttpStatus.OK).body(null);
+    }
 
     @MessageMapping("/chat")
-    public void sendChat(WebSocketChatReq req) throws NotFoundException{
+    public void sendChat(WebSocketChatReq req){
         auctionService.sendChat(req);
     }
 
     @MessageMapping("/character")
-    public void sendCharacter(WebSocketCharacter dto) throws NotFoundException{
+    public void sendCharacter(WebSocketCharacter dto){
         auctionService.sendCharacter(dto);
     }
 }
