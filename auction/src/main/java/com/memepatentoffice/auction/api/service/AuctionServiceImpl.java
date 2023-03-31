@@ -12,14 +12,15 @@ import com.memepatentoffice.auction.db.repository.AuctionRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
-import org.springframework.data.jpa.repository.support.QuerydslJpaRepository;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -27,41 +28,48 @@ import java.util.TimerTask;
 @Transactional
 @Slf4j
 public class AuctionServiceImpl implements AuctionService{
-    private final QuerydslJpaRepository querydslJpaRepository;
     private Gson gson = new Gson();
     private OkHttpClient client = new OkHttpClient();
     private String MPOFFICE_SERVER_URL = "https://j8a305.p.ssafy.io/api/mpoffice";
     private MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    private final Integer AUCTION_DURATION_MINUTES = 15;
+    private final Integer AUCTION_DURATION_MINUTES = 1;
 
     private final AuctionRepository auctionRepository;
     private final SimpMessageSendingOperations simpMessageSendingOperations;
 
-    public AuctionServiceImpl(AuctionRepository auctionRepository, SimpMessageSendingOperations simpMessageSendingOperations,
-                              QuerydslJpaRepository querydslJpaRepository) {
+    public AuctionServiceImpl(AuctionRepository auctionRepository,
+                              SimpMessageSendingOperations simpMessageSendingOperations) {
         this.auctionRepository = auctionRepository;
         this.simpMessageSendingOperations = simpMessageSendingOperations;
-        this.querydslJpaRepository = querydslJpaRepository;
     }
 
     @Transactional
     @Override
     public Long enrollAuction(AuctionCreationReq req) throws NotFoundException, IOException {
         //TODO: 밈 번호 유효성 검사, 판매자 유효성 검사
-        Auction auction = auctionRepository.save(Auction.builder()
+        Long auctionId = auctionRepository.save(Auction.builder()
                         .memeId(req.getMemeId())
                         .startTime(req.getStartDateTime())
                         .sellerId(req.getSellerId())
                         .status(AuctionStatus.ENROLLED)
-                .build());
+                .build()).getId();
+        Auction auction = auctionRepository.findById(auctionId).orElse(null);
         log.info(auction.toString());
+
+        ZonedDateTime startZdt = req.getStartDateTime().atZone(ZoneId.systemDefault());
+        Date startDate = Date.from(startZdt.toInstant());
+        ZonedDateTime terminateZdt = auction.getStartTime().plusMinutes(AUCTION_DURATION_MINUTES)
+                .atZone(ZoneId.systemDefault());
+        Date terminateDate = Date.from(terminateZdt.toInstant());
+
         new Timer().schedule(
                 new AuctionStarter(auction.getId()),
-                Timestamp.valueOf(auction.getStartTime())
+                //java.util.Date타입
+                startDate
         );
         new Timer().schedule(
                 new AuctionTerminater(auction.getId()),
-                Timestamp.valueOf(auction.getStartTime().plusMinutes(AUCTION_DURATION_MINUTES))
+                terminateDate
         );
         return auction.getId();
     }
@@ -96,8 +104,12 @@ public class AuctionServiceImpl implements AuctionService{
             Auction auction = auctionRepository.findById(auctionId)
                     .orElse(null);
             log.info("실행할 Auction id는 "+auction.getId()+"입니다.");
-            auction.start();
-            log.info("경매 번호 "+auction.getId()+"번 경매를 시작했습니다");
+            if(auction.start()){
+                log.info("경매 번호 "+auction.getId()+"번 경매를 시작했습니다");
+            }else{
+                log.info("경매 번호 "+auction.getId()+"번 경매를 시작이 실패해서 아직 ENROLLED상태입니다");
+            }
+
         }
     }
     @AllArgsConstructor
@@ -111,8 +123,12 @@ public class AuctionServiceImpl implements AuctionService{
             Auction auction = auctionRepository.findById(auctionId)
                     .orElse(null);
             log.info("종료할 Auction id는 "+auction.getId()+"입니다.");
-            auction.terminate();
-            log.info("경매 번호 "+auction.getId()+"번 경매를 종료했습니다");
+            if(auction.terminate()){
+                log.info("경매 번호 "+auction.getId()+"번 경매를 종료했습니다");
+            }else{
+                log.info("경매 번호 "+auction.getId()+"번 종료가 실패해서 아직 "+auction.getStatus()+" 상태입니다");
+            }
+
         }
     }
 }

@@ -9,6 +9,7 @@ import com.memepatentoffice.auction.common.exception.NotFoundException;
 //import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -19,10 +20,15 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/auction")
 @RequiredArgsConstructor
+@Slf4j
 public class AuctionController {
     private final AuctionService auctionService;
-
-    @ApiOperation(value="경매 등록", notes = "경매를 예약합니다. 예약한 시간에 경매가 시작되고, 시작 후 15분에 끝납니다.")
+    @GetMapping("/test")
+    public String getMapping(){
+        log.info("hi");
+        return "test";
+    }
+    @ApiOperation(value="경매 등록", notes = "경매를 예약합니다. 예약한 시간에 경매가 시작되고, 시작 후 1분 후에 끝납니다.")
     @PostMapping("/enroll")
     public ResponseEntity<?> enrollAuction(@RequestBody AuctionCreationReq auctionCreationReq) throws IOException, NotFoundException{
         auctionService.enrollAuction(auctionCreationReq);

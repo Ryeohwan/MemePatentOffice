@@ -1,5 +1,5 @@
 server:
-  port: 8072
+  port: 8077
   servlet:
     encoding:
       charset: UTF-8
