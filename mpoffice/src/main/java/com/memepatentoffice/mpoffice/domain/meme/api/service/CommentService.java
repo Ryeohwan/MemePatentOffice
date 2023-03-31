@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -108,6 +109,7 @@ public class CommentService {
     }
 
     public Slice<Comment> findPopular(Long memeId,Long id1, Long id2, Long id3, Pageable pageable){
+
         return commentRepository.findPopularComment(memeId,id1,id2,id3,pageable);
     }
 }
