@@ -56,7 +56,7 @@ public class MemeSearchRepository {
                         containMemeTitle(word)
                 )
                 .orderBy(meme.createdAt.desc())
-                .limit(pageable.getPageSize()+1)
+                .limit(pageable.getPageSize())
                 .fetch();
 
         // 무한 스크롤 처리
