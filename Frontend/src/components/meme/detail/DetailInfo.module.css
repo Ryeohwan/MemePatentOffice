@@ -90,7 +90,7 @@
 .heartGroup {
     display: flex;
     justify-content: space-between;
-    margin: 30px 23% 30px 23%;
+    margin: 20px 23% 30px 23%;
 }
 .heartWrapper {
     display: flex;
@@ -102,7 +102,6 @@
 .heartImoji {
     font-size: 44px;
     color: var(--section-line-color);
-    margin-bottom: 5px;
     border: 0.5px solid var(--section-line-color);
     border-radius: 100%;
     padding: 6px;

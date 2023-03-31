@@ -7,9 +7,10 @@ type NewCommentProps = {
     onAddComment: (comment: commentType) => void;
 };
 
-const NewComment:React.FC<NewCommentProps> = props => {
+const NewComment:React.FC<NewCommentProps> = ({ onAddComment }) => {
     const commentInputRef = useRef<HTMLTextAreaElement>(null);
 
+    // 댓글 입력창 높이 늘어나게
     useEffect(() => {
         const textarea = document.querySelector("textarea")
         textarea?.addEventListener("keyup", e => {
