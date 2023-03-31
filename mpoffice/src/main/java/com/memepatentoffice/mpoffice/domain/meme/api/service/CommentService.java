@@ -6,20 +6,21 @@ import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentInfoRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentLikeRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.CommentResponse;
-import com.memepatentoffice.mpoffice.domain.meme.db.repository.CommentRepository;
-import com.memepatentoffice.mpoffice.domain.meme.db.repository.MemeRepository;
-import com.memepatentoffice.mpoffice.domain.meme.db.repository.UserCommentLikeRepository;
-import com.memepatentoffice.mpoffice.domain.meme.db.repository.UserMemeLikeRepository;
+import com.memepatentoffice.mpoffice.domain.meme.db.repository.*;
 import com.memepatentoffice.mpoffice.domain.user.db.repository.UserRepository;
+import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -91,25 +92,43 @@ public class CommentService {
                 .replyCommentCnt(commentRepository.countAllByParentCommentId(com.getId()))
                 .content(com.getContent())
                 .id(com.getId())
-                .createdAt(com.getCreatedAt())
+                .createdAt(com.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                 .build();
         return result;
     }
 
-    public Slice<Comment> findTop(Long memeId){
-        return commentRepository.findBestThreeComment(memeId);
+    public Slice<CommentResponse> findTop(Long memeId){
+        Slice<Object> temp = commentRepository.findBestThreeComment(memeId);
+        Slice<CommentResponse> result = convertToDto(temp);
+        return result;
     }
 
-    public Slice<Comment> findLatest(Long memeId,Long id1, Long id2, Long id3, Pageable pageable){
-        return commentRepository.findLatestComment(memeId,id1,id2,id3,pageable);
+    public Slice<CommentResponse> findLatest(Long memeId,Long id1, Long id2, Long id3, Pageable pageable){
+        Slice<Object> temp =commentRepository.findLatestComment(memeId,id1,id2,id3,pageable);
+        Slice<CommentResponse> result = convertToDto(temp);
+        return result;
     }
 
-    public Slice<Comment> findOldest(Long memeId,Long id1, Long id2, Long id3, Pageable pageable){
-        return commentRepository.findOldestComment(memeId,id1,id2,id3,pageable);
+    public Slice<CommentResponse> convertToDto(Slice<Object> slice) {
+        List<CommentResponse> dtoList = new ArrayList<>();
+        for (Object obj : slice.getContent()) {
+            Long heartCntLong = (Long) ((Object[]) obj)[6];
+            Integer heartCnt = heartCntLong != null ? heartCntLong.intValue() : null;
+            LocalDateTime a = (LocalDateTime) ((Object[]) obj)[1];
+            String createdAt = a.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            CommentResponse dto = CommentResponse.builder()
+                    .content((String) ((Object[]) obj)[0])
+                    .createdAt(createdAt)
+                    .replyCommentCnt((int) ((Object[]) obj)[2])
+                    .id((long) ((Object[]) obj)[3])
+                    .nickname((String) ((Object[]) obj)[4])
+                    .profileImage((String) ((Object[]) obj)[5])
+                    .heartCnt(heartCnt)
+                    .liked((Boolean) ((Object[]) obj)[7])
+                    .build();
+            dtoList.add(dto);
+        }
+        return new SliceImpl<>(dtoList, slice.getPageable(), slice.hasNext());
     }
 
-    public Slice<Comment> findPopular(Long memeId,Long id1, Long id2, Long id3, Pageable pageable){
-
-        return commentRepository.findPopularComment(memeId,id1,id2,id3,pageable);
-    }
 }

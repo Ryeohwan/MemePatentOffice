@@ -19,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.NotAcceptableStatusException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -145,8 +144,6 @@ public class MemeService {
             );
             return true;
         }
-
-
     }
 
     
@@ -182,7 +179,6 @@ public class MemeService {
                             .build()
             );
         }
-
         return true;
     }
 
@@ -230,7 +226,6 @@ public class MemeService {
                 .createdAt(LocalDateTime.parse(transactionRequest.getCreatedAt(),DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                 .build();
         transactionRepository.save(transaction);
-
     }
 
 }

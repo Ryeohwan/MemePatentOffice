@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -36,7 +37,7 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             " WHERE c.meme.id = :memeId " +
             " GROUP BY c.content, c.createdAt, c.id, c.user.nickname, c.user.profileImage, liked" +
             " ORDER BY heartCnt desc ")
-    Slice<Comment> findBestThreeComment(@Param("memeId")Long memeId);
+    Slice<Object> findBestThreeComment(@Param("memeId")Long memeId);
 
     @Query("SELECT c.content, c.createdAt, \n" +
             "       COUNT(d) as replyCommentCnt, \n" +
@@ -50,7 +51,7 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             "  AND NOT EXISTS (SELECT 1 FROM Comment nc WHERE nc.id IN (:id1, :id2, :id3) AND nc.id = c.id)\n" +
             "GROUP BY c.content, c.createdAt, c.id, c.user.nickname, c.user.profileImage, liked\n" +
             "ORDER BY c.createdAt DESC")
-    Slice<Comment> findPopularComment(@Param("memeId")Long memeId, @Param("id1")Long id1, @Param("id2") Long id2, @Param("id3") Long id3, Pageable pageable);
+    Slice<Object> findPopularComment(@Param("memeId")Long memeId, @Param("id1")Long id1, @Param("id2") Long id2, @Param("id3") Long id3, Pageable pageable);
 
     @Query("SELECT c.content, c.createdAt, \n" +
             "       COUNT(d) as replyCommentCnt, \n" +
@@ -66,7 +67,7 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             "  AND (c.id != :id3 OR :id3 IS NULL)\n" +
             "GROUP BY c.content, c.createdAt, c.id, c.user.nickname, c.user.profileImage, liked\n" +
             "ORDER BY c.createdAt DESC")
-    Slice<Comment> findLatestComment(@Param("memeId")Long memeId, @Param("id1")Long id1, @Param("id2") Long id2, @Param("id3") Long id3, Pageable pageable);
+    Slice<Object> findLatestComment(@Param("memeId")Long memeId, @Param("id1")Long id1, @Param("id2") Long id2, @Param("id3") Long id3, Pageable pageable);
 
     @Query("SELECT c.content, c.createdAt, \n" +
             "       COUNT(d) as replyCommentCnt, \n" +
@@ -82,5 +83,5 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             "  AND (c.id != :id3 OR :id3 IS NULL)\n" +
             "GROUP BY c.content, c.createdAt, c.id, c.user.nickname, c.user.profileImage, liked\n" +
             "ORDER BY c.createdAt ASC")
-    Slice<Comment> findOldestComment(@Param("memeId")Long memeId, @Param("id1")Long id1, @Param("id2") Long id2, @Param("id3") Long id3, Pageable pageable);
+    Slice<Object> findOldestComment(@Param("memeId")Long memeId, @Param("id1")Long id1, @Param("id2") Long id2, @Param("id3") Long id3, Pageable pageable);
 }

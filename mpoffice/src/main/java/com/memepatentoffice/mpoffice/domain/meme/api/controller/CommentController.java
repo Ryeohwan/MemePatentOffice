@@ -57,22 +57,13 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(commentService.findTop(memeId));
     }
     @GetMapping("/list")
-    public ResponseEntity CommentList(@RequestParam(name = "type") String type,
+    public ResponseEntity CommentList(
                                       @RequestParam(name = "memeId") Long memeId,
                                       @RequestParam(required = false,name = "id1")Long id1,
                                       @RequestParam(required = false,name = "id2")Long id2,
                                       @RequestParam(required = false,name = "id3")Long id3,
                                       @PageableDefault(value = 8) Pageable pageable){
-
-        if(type.equals("latest")){
-            return ResponseEntity.status(HttpStatus.OK).body(commentService.findLatest(memeId,id1,id2,id3,pageable));
-        }else if(type.equals("oldest")){
-            return ResponseEntity.status(HttpStatus.OK).body(commentService.findOldest(memeId,id1,id2,id3,pageable));
-        }else {
-            return ResponseEntity.status(HttpStatus.OK).body(commentService.findPopular(memeId,id1,id2,id3,pageable));
-        }
-
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.findLatest(memeId,id1,id2,id3,pageable));
     }
-
 
 }
