@@ -32,12 +32,13 @@ public class MemeSearchController {
         return ResponseEntity.status(HttpStatus.OK).body(memeSearchService.getMemeList(Idx, pageable, searchText));
     }
 
-//    @GetMapping("/popular")
-//    public ResponseEntity<Slice<Meme>> getPopularMemeList(
-//            @RequestParam(value = "idx", defaultValue = "0") long Idx,
-//            @RequestParam(value = "search", required = false) String searchText,
-//            @PageableDefault(size = 10, sort = "idx", direction = Sort.Direction.ASC) Pageable pageable) {
-//        return ResponseEntity.status(HttpStatus.OK).body(memeSearchService.getPopularMemeList(Idx, pageable, searchText));
-//    }
+    @GetMapping("/popular")
+    public ResponseEntity<Slice<MemeListResponse>> getPopularMemeList(
+            @RequestParam(value = "days", defaultValue = "all") String days,
+            @RequestParam(value = "idx", defaultValue = "0") long Idx,
+            @RequestParam(value = "search", required = false) String searchText,
+            @PageableDefault(size = 10, sort = "idx", direction = Sort.Direction.ASC) Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(memeSearchService.getPopularMemeList(days, Idx, pageable, searchText));
+    }
 }
 

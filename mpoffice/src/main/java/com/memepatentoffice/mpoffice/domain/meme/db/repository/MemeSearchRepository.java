@@ -1,6 +1,7 @@
 package com.memepatentoffice.mpoffice.domain.meme.db.repository;
 
 import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeListResponse;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -13,10 +14,13 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.memepatentoffice.mpoffice.db.entity.QMeme.meme;
 import static com.memepatentoffice.mpoffice.db.entity.QUser.user;
+import static com.memepatentoffice.mpoffice.db.entity.QUserMemeLike.userMemeLike;
+import static com.querydsl.core.types.ExpressionUtils.count;
 
 @Repository
 @Slf4j
@@ -45,13 +49,49 @@ public class MemeSearchRepository {
                         meme.situation.as("example")))
                 .from(meme)
                 .innerJoin(user)
-                .on(meme.id.eq(user.id))
+                .on(meme.owner.id.eq(user.id))
                 .where(
                         // no-offset 페이징 처리
                         ltMemeId(lastMemeId),
                         containMemeTitle(word)
                 )
                 .orderBy(meme.createdAt.desc())
+                .limit(pageable.getPageSize()+1)
+                .fetch();
+
+        // 무한 스크롤 처리
+        return checkLastPage(pageable, results);
+    }
+
+
+    // 인기순 전체 검색
+    public Slice<MemeListResponse> searchPopularMemeList(String days, Long lastMemeId, String word, Pageable pageable) {
+        log.info(word);
+        log.info(String.valueOf(pageable.getPageSize()));
+        List<MemeListResponse> results = queryFactory.select(
+                        Projections.constructor( MemeListResponse.class,
+                                meme.id,
+                                user.nickname,
+                                meme.title,
+                                meme.imageurl.as("imgUrl"),
+                                meme.content.as("description"),
+                                meme.situation.as("example")))
+                .from(meme)
+                .innerJoin(user)
+                .on(meme.owner.id.eq(user.id))
+                .innerJoin(userMemeLike)
+                .on(meme.id.eq(userMemeLike.meme.id))
+
+                .where(
+                        // no-offset 페이징 처리
+                        ltMemeId(lastMemeId),
+                        containMemeTitle(word),
+                        daysMeme(days)
+
+                )
+                .groupBy(userMemeLike.meme.id)
+                .orderBy(userMemeLike.meme.id.count().desc())
+
                 .limit(pageable.getPageSize()+1)
                 .fetch();
 
@@ -72,6 +112,18 @@ public class MemeSearchRepository {
         return meme.title.contains(word);
     }
 
+    private BooleanExpression daysMeme(String days) {
+
+        if (days.equals("all")) {
+            return null;
+        } else if(days.equals("today")) {
+            return meme.createdAt.eq(LocalDateTime.now());
+        } else if(days.equals("week")) {
+            return meme.createdAt.after(LocalDateTime.now().minusWeeks(1));
+        }
+        return null;
+    }
+
     // 무한 스크롤 방식 처리하는 메서드
     private Slice<MemeListResponse> checkLastPage(Pageable pageable, List<MemeListResponse> results) {
 
@@ -82,7 +134,6 @@ public class MemeSearchRepository {
             hasNext = true;
             results.remove(pageable.getPageSize());
         }
-
         return new SliceImpl<>(results, pageable, hasNext);
     }
 }
