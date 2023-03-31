@@ -1,7 +1,7 @@
 package com.memepatentoffice.auction.api.service;
 
 import com.memepatentoffice.auction.api.message.WebSocketCharacter;
-import com.memepatentoffice.auction.api.message.WebSocketTransaction;
+import com.memepatentoffice.auction.api.message.WebSocketTransactionRes;
 import com.memepatentoffice.auction.api.request.AuctionCreationReq;
 import com.memepatentoffice.auction.api.message.WebSocketChatReq;
 import com.memepatentoffice.auction.api.response.AuctionCreationResultRes;
@@ -41,13 +41,8 @@ public class AuctionServiceImpl implements AuctionService{
     }
 
     @Override
-    public void sendCharacter(WebSocketCharacter vo) {
-        simpMessageSendingOperations.convertAndSend("/sub/character/"+vo.getAuctionId(), vo);
-    }
-
-    @Override
-    public void sendTransaction(WebSocketTransaction vo) {
-        simpMessageSendingOperations.convertAndSend("/sub/transaction/"+vo.getAuctionId(), vo);
+    public void sendCharacter(WebSocketCharacter dto) {
+        simpMessageSendingOperations.convertAndSend("/sub/character/"+dto.getAuctionId(), dto);
     }
 
 //    private Gson gson = new Gson();
