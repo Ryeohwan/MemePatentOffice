@@ -12,10 +12,13 @@ const MemeListSearch = () => {
   const input = useSelector<RootState, string>(state => state.memeList.input)
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // enter 누르고 input 값 있으면 redux input 바꾸기
+  // enter 누르고 input 값 있으면 redux list reset + input 바꾸기
   const enterHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== "Enter" || !inputRef.current) return;
     if (inputRef.current.value.trim().length === 0) return;
+    dispatch(memeListActions.changeResult(true));    // 검색결과 reset
+    dispatch(memeListActions.resetMemeNewList());
+    dispatch(memeListActions.resetMemePopularList());
     dispatch(memeListActions.changeInputTxt(inputRef.current.value.trim()));
   }
   

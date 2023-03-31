@@ -15,13 +15,15 @@ import NftCard from "components/common/card/NftCard";
 const MY_NFT: memeType[] = [
   {
     id: 1,
+    nickname: 'test',
     title: "하쿠",
-    imgUrl: haku,
+    imgUrl: "haku",
     description: "이건 하쿠다",
     example: "이건 하쿠다",
   },
   {
     id: 2,
+    nickname: 'test',
     title: "카카오",
     imgUrl: kakao,
     description: "이건 카카오 로고다",
@@ -29,6 +31,7 @@ const MY_NFT: memeType[] = [
   },
   {
     id: 3,
+    nickname: 'test',
     title: "파란 토끼",
     imgUrl: logo,
     description: "이건 MEME 로고다",

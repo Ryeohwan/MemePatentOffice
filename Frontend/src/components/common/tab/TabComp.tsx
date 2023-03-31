@@ -23,7 +23,7 @@ interface Props {
 const TabComp: React.FC<Props> = ({ items, children }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  console.log(items,children,location)
+  // console.log(items,children,location)
   const [historyArr, setHistoryArr] = useState<string[]>([]);
   const [slideDirection, setSlideDirection] = useState("");
 
