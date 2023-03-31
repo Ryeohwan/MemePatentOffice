@@ -3,6 +3,8 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "store/configStore";
 import { auctionActions } from "store/auction";
+import { WebSocketProps } from "type";
+
 
 import { Canvas } from "react-three-fiber";
 import * as THREE from "three";
@@ -16,7 +18,7 @@ import Border from "components/auction/main/mesh/Border";
 
 import styles from "components/auction/main/Scene.module.css";
 
-interface SceneProps {
+interface SceneProps extends WebSocketProps {
   canSitHandler: (state:boolean) => void;
   player: React.MutableRefObject<THREE.Object3D>;
   chairPoint: React.MutableRefObject<THREE.Mesh>;
@@ -35,7 +37,9 @@ const Scene: React.FC<SceneProps> = ({
   camera,
   biddingSubmit,
   playerPosition,
-  isSitting
+  isSitting,
+  client,
+  auctionId
 }) => {
   const dispatch = useDispatch()
   const canvas = useRef<any>();
@@ -151,6 +155,8 @@ const Scene: React.FC<SceneProps> = ({
         tableAndChairs={tableAndChairs}
         biddingSubmit={biddingSubmit}
         isSitting={isSitting}
+        client={client}
+        auctionId={auctionId}
       />
       <Box position={[0, 15, 0]} />
       <Table table={table} pushMesh={pushMesh} tableAndChairs={tableAndChairs}/>

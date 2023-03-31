@@ -16,9 +16,9 @@ const ChatItem: React.FC<ChatItemProps> = ({ chat }) => {
   const formatDate = (date: string) => {
     const newDate = date.split("T");
     const thmms = newDate[1];
-    const newTime = thmms!.split(":")
-    const hour = newTime[0]
-    const minute = newTime[1]
+    const newTime = thmms!.split(":");
+    const hour = newTime[0];
+    const minute = newTime[1];
 
     return `${hour}:${minute}`;
   };
@@ -30,7 +30,13 @@ const ChatItem: React.FC<ChatItemProps> = ({ chat }) => {
 
   return (
     // 나중에 내 아이디와 같으면 오른쪽
-    <div className={chat.id === "조명오" ? styles.myChat : styles.chatItems}>
+    <div
+      className={
+        chat.id === JSON.parse(sessionStorage.getItem("user")!).nickname
+          ? styles.myChat
+          : styles.chatItems
+      }
+    >
       <Avatar icon="pi pi-user" shape="circle" className={styles.avatar} />
       <div className={styles.chip}>
         <p>{chat.id}</p>

@@ -74,10 +74,10 @@ const Player: React.FC<PlayerProps> = ({
   
   const mixer = new THREE.AnimationMixer(player.current!);
 
-  // 애니메이션 지정
   for (let i = 0; i < glb.animations.length; i++) {
     const action = mixer.clipAction(glb.animations[i]);
     const name = action.getClip().name;
+
     if (name === "handsup") {
       action.repetitions = 1;
       action.clampWhenFinished = true;
@@ -99,7 +99,6 @@ const Player: React.FC<PlayerProps> = ({
       actions.current.walk = action;
     }
   }
-
   useEffect(() => {
     const box = new THREE.Box3().setFromObject(player.current); // object는 Object3D 객체
     box.setFromObject(player.current);
@@ -128,7 +127,6 @@ const Player: React.FC<PlayerProps> = ({
     //     status: 'STANDUP'
     //   })
     // })
-    
     if (playerState === 0) {
       if (actions.current.normal) actions.current.normal.play();
       let isIn;

@@ -5,21 +5,20 @@ import {Client} from "@stomp/stompjs";
 import AuctionCanvas from "components/auction/main/AuctionCanvas";
 import styles from "pages/AuctionPage.module.css";
 import { chatActions } from "store/chat";
+import { auctionActions } from "store/auction";
 
 const ENDPOINT = process.env.NODE_ENV!==null?"wss://j8a305.p.ssafy.io/ws":"ws://localhost:8072/ws"
-
+// const ENDPOINT = "ws://localhost:8072/ws"
 const AuctionPage: React.FC = () => {
 
-  const userId = 1 //JSON.parse(sessionStorage.getItem('user')).userId
-  const userNickName = "조현철"//JSON.parse(sessionStorage.getItem('user')).nickname
+  const userId = JSON.parse(sessionStorage.getItem('user')!).userId
+  const userNickName = JSON.parse(sessionStorage.getItem('user')!).nickname
   const {auctionId} = useParams();
   const client = useRef<Client>()
-
   const dispatch = useDispatch()
   
   
   const connect = () => {
-    console.log("connect()")
     client.current = new Client({
       //   주소
       brokerURL: ENDPOINT,
@@ -35,7 +34,6 @@ const AuctionPage: React.FC = () => {
       heartbeatOutgoing: 2000,
       // 연결
       onConnect: (frame) => {
-        console.log(frame);
         subscribe();
       },
 
@@ -71,23 +69,23 @@ const AuctionPage: React.FC = () => {
             })
           );
     });
+    client.current.subscribe(
+      `/sub/character/${auctionId}`,
+      (body) => {
+        const json_body = JSON.parse(body.body)
+        console.log(json_body)
+        dispatch(
+         auctionActions.getPlayersInfo({
+          nickname: json_body.nickname,
+          x: json_body.x,
+          y: json_body.y,
+          z: json_body.z,
+          status: json_body.status
+         }) 
+        )
+      }
+    )
     console.log(`subscribe()`)
-  };
-
-  const sendChat = () => {
-    if(!client.current?.connected){
-      console.log('sendSub: client.current is not connected')
-      return
-    }
-    client.current.publish({
-      destination: "/pub/chat",
-      body: JSON.stringify({ 
-        auctionId: auctionId,
-        userId: userId,
-        message: "Hello, world!",
-      }),
-    });
-
   };
 
   useEffect(() => {
@@ -96,13 +94,9 @@ const AuctionPage: React.FC = () => {
 
     return () => disconnect();
   }, []);
-
   return (
     <>
-      <AuctionCanvas client={client} auctionId={Number(auctionId)}/>;
-      <button onClick={sendChat} className={styles.btn}>
-        보내다
-      </button>
+      <AuctionCanvas client={client} auctionId={Number(auctionId)}/>
     </>
   );
 };
