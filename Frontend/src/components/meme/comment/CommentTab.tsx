@@ -18,14 +18,12 @@ const CommentTab:React.FC = () => {
         (state) => state.commentList.commentBestList
     );
 
-    const commentAddHandler = (comment:commentType) => {
-        dispatch(commentListActions.commentAddHander(comment))
-    };
+
 
     return (
         <div className={styles.commentTabContainer}>
             <CommentList recentComments={recentCommentList} bestComments={bestCommentList} />
-            <NewComment onAddComment={commentAddHandler}/>
+            <NewComment/>
         </div>
     );
 };

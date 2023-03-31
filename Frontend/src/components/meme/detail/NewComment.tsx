@@ -1,14 +1,23 @@
 import React, { useRef, useEffect } from "react";
-import { commentType } from "store/commentList";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "store/configStore";
+import { useParams } from "react-router-dom";
+import { commentListActions } from "store/commentList";
 import { Icon } from "@iconify/react";
 import styles from "./NewComment.module.css";
+import useAxios from "hooks/useAxios";
 
-type NewCommentProps = {
-    onAddComment: (comment: commentType) => void;
-};
 
-const NewComment:React.FC<NewCommentProps> = ({ onAddComment }) => {
+const NewComment:React.FC = () => {
+    const dispatch = useDispatch();
     const commentInputRef = useRef<HTMLTextAreaElement>(null);
+    const userId = JSON.parse(sessionStorage.user).userId;
+    const parentId = useSelector<RootState, number|null>((state) => state.commentList.nowParentId);
+    const parentName = useSelector<RootState, string|null>((state) => state.commentList.nowParentName);
+    
+    const params = useParams();
+    const memeid = parseInt(params.meme_id!, 10);
+    const {data, sendRequest} = useAxios();
 
     // 댓글 입력창 높이 늘어나게
     useEffect(() => {
@@ -23,9 +32,25 @@ const NewComment:React.FC<NewCommentProps> = ({ onAddComment }) => {
 
     const commentSubmitHandler = (e: React.FormEvent) => {
         e.preventDefault();
-        // post axios -> post axios 끝날 때 dispatch('getcomment')로 댓글 get -> 
         const enteredComment = commentInputRef.current!.value;
-        // props.onAddComment({});
+
+        // 댓글 post 보내고 작성한 댓글을 commentType 객체 하나로 response 받음
+        sendRequest({
+            url: "/api/mpoffice/meme/comment/create",
+            method: "POST",
+            data: {
+                userId: userId,
+                memeId: memeid,
+                content: enteredComment,
+                parentId: parentId,
+            },
+        });
+
+        if("likes" in data) {
+            dispatch(commentListActions.commentAddHandler(data));
+        } else {
+            dispatch(commentListActions.replyAddHandler(data));
+        };
     };
 
 
