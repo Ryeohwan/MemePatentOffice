@@ -87,7 +87,7 @@ public class MemeController {
     @ResponseBody
     public ResponseEntity cart(@RequestBody CartRequest cartRequest) throws Exception {
         memeService.addCart(cartRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(cartRequest.getCart());
+        return ResponseEntity.status(HttpStatus.CREATED).body("Done");
     }
 
     @GetMapping("/total")
