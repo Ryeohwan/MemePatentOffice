@@ -3,6 +3,7 @@ package com.memepatentoffice.mpoffice.domain.meme.api.response;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ public class CommentResponse {
     private String content;
     private int replyCommentCnt;
     private Long id;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime createdAt;
+    private String createdAt;
+
+
 }
