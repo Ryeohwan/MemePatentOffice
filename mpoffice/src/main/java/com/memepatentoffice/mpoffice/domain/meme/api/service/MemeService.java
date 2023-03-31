@@ -8,6 +8,8 @@ import com.memepatentoffice.mpoffice.domain.meme.api.request.MemeCreateRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.TransactionRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.UserMemeLikeRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeResponse;
+import com.memepatentoffice.mpoffice.domain.meme.api.response.PriceListResponse;
+import com.memepatentoffice.mpoffice.domain.meme.api.response.TransactionResponse;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.CartRepository;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.TransactionRepository;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.UserMemeLikeRepository;
@@ -17,8 +19,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.NotAcceptableStatusException;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 @RequiredArgsConstructor
@@ -40,10 +45,11 @@ public class MemeService {
         Meme meme = memeRepository.findById(memeId).orElseThrow(() -> new NotFoundException("해당하는 밈이 없습니다."));
         User user = userRepository.findById(userId).orElseThrow(()-> new NotFoundException("해당하는 유저가 없습니다."));
         meme.setSearched();
+        String iso = meme.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME);
         MemeResponse result = new MemeResponse().builder()
                 .id(meme.getId())
                 .content(meme.getContent())
-                .createdAt(meme.getCreatedAt())
+                .createdAt(iso)
                 .createrNickname(meme.getCreater().getNickname())
                 .ownerNickname(meme.getOwner().getNickname())
                 .memeImage(meme.getImageurl())
@@ -67,7 +73,7 @@ public class MemeService {
                 .map((meme)->MemeResponse.builder()
                         .id(meme.getId())
                         .content(meme.getContent())
-                        .createdAt(meme.getCreatedAt())
+                        .createdAt(meme.getCreatedAt().format(DateTimeFormatter.ISO_DATE_TIME))
                         .createrNickname(meme.getCreater().getNickname())
                         .ownerNickname(meme.getOwner().getNickname())
                         .title(meme.getTitle())
@@ -185,8 +191,28 @@ public class MemeService {
         return totalCount;
     }
 
-    public void priceGraph(String title){
-
+    public PriceListResponse priceGraph(String title) throws NotFoundException{
+        Meme meme = memeRepository.findMemeByTitle(title).orElseThrow(()-> new NotFoundException("해당하는 밈이 없습니다."));
+        List<Transaction> en = transactionRepository.findBuyerList();
+        List<TransactionResponse> buyerList = new ArrayList<>();
+        for(Transaction a : en){
+            TransactionResponse temp = TransactionResponse.builder()
+                    .nickName(userRepository.findById(a.getBuyerId()).orElseThrow(()->new NotFoundException("유효하지 않은 구매자 입니다.")).getNickname())
+                    .price(a.getPrice())
+                    .createdAt(a.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                    .build();
+            buyerList.add(temp);
+        }
+        List<Double> temp = transactionRepository.PricaRankList(meme.getId());
+        Double high = temp.get(0);
+        Double low = temp.get(temp.size()-1);
+        PriceListResponse result = PriceListResponse.builder()
+                .priceList(transactionRepository.findPriceList(meme.getId()))
+                .buyerList(buyerList)
+                .highPrice(high)
+                .lowPrice(low)
+                .build();
+        return result;
     }
 
     @Transactional
@@ -201,7 +227,7 @@ public class MemeService {
                 .sellerId(transactionRequest.getSellerId())
                 .memeId(transactionRequest.getMemeId())
                 .price(transactionRequest.getPrice())
-                .createdAt(transactionRequest.getCreatedAt())
+                .createdAt(LocalDateTime.parse(transactionRequest.getCreatedAt(),DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                 .build();
         transactionRepository.save(transaction);
 

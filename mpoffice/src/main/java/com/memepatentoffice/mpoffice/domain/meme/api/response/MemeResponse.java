@@ -20,7 +20,7 @@ public class MemeResponse {
     private Long id;
     private String title;
     private String content;
-    private LocalDateTime createdAt;
+    private String createdAt;
     private String ownerNickname;
     private String createrNickname;
     @Enumerated(EnumType.STRING)

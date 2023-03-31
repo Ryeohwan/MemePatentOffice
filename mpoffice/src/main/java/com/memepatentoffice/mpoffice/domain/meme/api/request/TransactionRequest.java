@@ -7,29 +7,18 @@ import com.google.gson.GsonBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
 @Builder
+@NoArgsConstructor
 public class TransactionRequest {
     private Long memeId;
     private Long buyerId;
     private Long sellerId;
-//    Gson gson = new GsonBuilder()
-//            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer())
-//            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer())
-//            .create();
-//
-//    // LocalDateTime을 JSON 문자열로 직렬화
-//    LocalDateTime now = LocalDateTime.now();
-//    String json = gson.toJson(now);
-//        System.out.println(json);
-//
-//    // JSON 문자열을 LocalDateTime으로 역직렬화
-//    LocalDateTime parsedDateTime = gson.fromJson(json, LocalDateTime.class);
-//        System.out.println(parsedDateTime);
-    private LocalDateTime createdAt;
+    private String createdAt;
     private Double price;
 }
