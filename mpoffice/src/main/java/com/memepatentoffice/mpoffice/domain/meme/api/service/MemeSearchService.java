@@ -18,7 +18,7 @@ public class MemeSearchService {
         return memeSearchRepository.searchMemeList(lastId, searchText, pageable);
     }
 
-//    public Slice<Meme> getPopularMemeList(Long lastId, Pageable pageable, String searchText) {
-//        return memeSearchRepository.searchPopularMemeList(lastId, searchText, pageable);
-//    }
+    public Slice<MemeListResponse> getPopularMemeList(String days, Long lastId, Pageable pageable, String searchText) {
+        return memeSearchRepository.searchPopularMemeList(days, lastId, searchText, pageable);
+    }
 }
