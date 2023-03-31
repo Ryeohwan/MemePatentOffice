@@ -32,11 +32,12 @@ public class MemeResponse {
     private int searched;
     private String situation;
     private String memeImage;
+
     public void setCart(Cart cart){
         this.cart = cart;
     }
 
-    public void setMemeLike(MemeLike like){
+    public void setMemeLike(MemeLike memeLike){
         this.memeLike = memeLike;
     }
 

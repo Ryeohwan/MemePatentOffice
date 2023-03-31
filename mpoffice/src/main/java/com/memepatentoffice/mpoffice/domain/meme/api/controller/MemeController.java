@@ -1,5 +1,14 @@
 package com.memepatentoffice.mpoffice.domain.meme.api.controller;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.google.api.Http;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
 import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.*;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeResponse;
@@ -11,6 +20,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.lang.reflect.Type;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -90,4 +102,10 @@ public class MemeController {
         return ResponseEntity.status(HttpStatus.OK).body("ok");
     }
 
+    @PostMapping("/addTransaction")
+    @ResponseBody
+    public ResponseEntity addTransaction(@RequestBody @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")TransactionRequest transactionRequest)throws NotFoundException {
+        memeService.addTransaction(transactionRequest);
+        return ResponseEntity.status(HttpStatus.OK).body("Okay");
+    }
 }
