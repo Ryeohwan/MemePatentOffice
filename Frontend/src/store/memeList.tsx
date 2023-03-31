@@ -15,7 +15,9 @@ interface initialStateInterface {
   input: string;
   period: string;
   result: boolean;
+  nextMemeNewList: true;
   loadingMemeNewList: boolean;
+  loadingMemeNewListMore: boolean;
   memeNewList: memeType[];
   loadingMemePopularList: boolean;
   memePopularList: memeType[];
@@ -26,8 +28,12 @@ const initialState: initialStateInterface = {
   input: "",
   result: true,
   period: "",
+
+  nextMemeNewList: true,
   loadingMemeNewList: false,
+  loadingMemeNewListMore: false,
   memeNewList: [],
+
   loadingMemePopularList: false,
   // memePopularList: [],
   // memeRandomList: [],
@@ -172,8 +178,17 @@ const memeListSlice = createSlice({
     changeMemeNewListLoading(state, actions) {
       state.loadingMemeNewList = actions.payload;
     },
-    getMemeNewList: (state, actions) => {
-      state.memeNewList = [...state.memeNewList, ...actions.payload];
+    changeMemeNewListLoadingMore(state, actions) {
+      state.loadingMemeNewListMore = actions.payload;
+    },
+    updateMemeNewList: (state, actions) => {
+      state.nextMemeNewList = actions.payload.hasNext;
+      if (actions.payload.lastPostId === -1) {
+        state.memeNewList = [];
+      }
+      if (actions.payload.getList) {
+        state.memeNewList = [...state.memeNewList, ...actions.payload.getList];
+      }
     },
     resetMemeNewList: (state) => {
       state.memeNewList = [];
@@ -193,27 +208,26 @@ const memeListSlice = createSlice({
   },
 });
 
-
 export const getMemeNewListAxiosThunk =
-  (input: string): AppThunk =>
+  (input: string, lastPostRef: number): AppThunk =>
   async (dispatch) => {
+    if (lastPostRef === -1) dispatch(memeListActions.changeMemeNewListLoading(true));
+    else dispatch(memeListActions.changeMemeNewListLoadingMore(true));
+
     const sendRequest = async () => {
-      dispatch(memeListActions.changeMemeNewListLoading(true));      
-      
-      const response = await axios.get(
-        `${process.env.REACT_APP_HOST}/api/mpoffice/meme/search?` +
-          new URLSearchParams({
-            search: input,
-          }),
-        {
-          headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
-            "Access-Control-Allow-Credentials": true,
-            "Content-Type": "application/json",
-          },
-          validateStatus: (status) => status === 200 || status === 401,
-        }
-      );
+      const requestUrl =
+        `${process.env.REACT_APP_HOST}/api/mpoffice/meme/search?search=${input}` + ((lastPostRef !== -1) ? `&idx=${lastPostRef}` : '');
+
+      console.log('여기 보낼거임!', requestUrl);
+
+      const response = await axios.get(requestUrl, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+          "Access-Control-Allow-Credentials": true,
+          "Content-Type": "application/json",
+        },
+        validateStatus: (status) => status === 200 || status === 401,
+      });
 
       if (response.status === 401) {
         // 로그아웃
@@ -225,19 +239,25 @@ export const getMemeNewListAxiosThunk =
 
     try {
       const res = await sendRequest();
-      console.log('res', res);
+      console.log("res", res);
       if (!res || res.empty) {
         dispatch(memeListActions.changeResult(false));
         return;
-      } else {
-        dispatch(memeListActions.changeResult(true));
       }
-      const memeList = res.content;
-      dispatch(memeListActions.getMemeNewList(memeList));
+      dispatch(memeListActions.changeResult(true));
+      dispatch(
+        memeListActions.updateMemeNewList({
+          getList: res.content,
+          lastPostId: lastPostRef,
+          hasNext: !res.last,
+        })
+      );
     } catch (err) {
       console.log(err);
     }
-    dispatch(memeListActions.changeMemeNewListLoading(false));
+    if (lastPostRef === -1)
+      dispatch(memeListActions.changeMemeNewListLoading(false));
+    else dispatch(memeListActions.changeMemeNewListLoadingMore(false));
   };
 
 export const memeListActions = memeListSlice.actions;
