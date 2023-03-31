@@ -3,8 +3,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "store/configStore";
 
 import ChatItem from "./ChatItem";
-import ScrollToTop from "components/common/elements/ScrollToTop";
 import { ScrollPanel } from "primereact/scrollpanel";
+
 import styles from "components/auction/main/chat/ChatList.module.css";
 
 type chat = {
@@ -29,8 +29,6 @@ const ChatList: React.FC<ChatListProps>= ({chatVisible}) => {
       const {scrollHeight, clientHeight} = scrollpanel
       myRef.current?.getContent().scrollTo({top:scrollHeight-clientHeight})
     }
-    // console.log(myRef.current?.getYBar())
-    // myRef.current?.getYBar().scrollTo({top:scrollHeight})
   }, [chatList,chatVisible]);
 
   return (

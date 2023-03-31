@@ -18,18 +18,7 @@ const ChatInputText: React.FC<WebSocketProps> = ({client, auctionId}) => {
       };
 
   const sendMessageHandler = (value: string) => {
-    const offset = 1000 * 60 * 60 * 9;
-    const date = new Date(new Date().getTime() + offset).toISOString();
-    const newDate = date.split("T");
-    const time = newDate[1].split(":");
-    const formatTime = `${newDate[0]}-${time[0]}-${time[1]}`;
     if (value.trim()) {
-      //리덕스에 넣기->서버로 보내기
-      // dispatch(
-      //   chatActions.sendChat({
-      //     chat: { id: "조명오", message: value, time: formatTime },
-      //   })
-      // );
       if(!client.current?.connected){
         console.log('sendSub: client.current is not connected')
         return
@@ -38,7 +27,7 @@ const ChatInputText: React.FC<WebSocketProps> = ({client, auctionId}) => {
         destination: "/pub/chat",
         body: JSON.stringify({ 
           auctionId: auctionId,
-          nickname: "조명오",//JSON.parse(sessionStorage.getItem('user')!).nickname,
+          nickname: JSON.parse(sessionStorage.getItem('user')!).nickname,
           message: value,
         }),
       });

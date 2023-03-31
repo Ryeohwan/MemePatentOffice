@@ -15,12 +15,20 @@ export type auctionInfo = {
     memeImgSrc: string,
 }
 
+export type playersInfo = {
+    nickname: string,
+    x: number,
+    y: number,
+    z: number,
+    status: string, 
+}
 
 
 interface initialStateInterface {
     biddingHistory:biddingHistory[],
     playerState: number, // 0: default, 1: moving, 2: sitting, 3:handsup, 4: standup
     auctionInfo: auctionInfo,
+    playersInfo: playersInfo[]
 }
 
 const initialState: initialStateInterface = {
@@ -47,6 +55,7 @@ const initialState: initialStateInterface = {
         finishTime: new Date(2023, 2, 30, 9, 7, 0, 0).toISOString(),
         memeImgSrc: sang,
     },
+    playersInfo: []
 };
 
 const auctionSlice = createSlice({
@@ -69,6 +78,9 @@ const auctionSlice = createSlice({
     controlPlayerState: (state, actions) => {
         state.playerState = actions.payload
     },
+    getPlayersInfo: (state, actions) => {
+        state.playersInfo = actions.payload
+    }
 },
 });
 

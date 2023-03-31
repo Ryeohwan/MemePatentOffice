@@ -194,6 +194,8 @@ const AuctionCanvas: React.FC<WebSocketProps> = ({client, auctionId}) => {
         biddingSubmit={biddingSubmit}
         playerPosition={playerPosition}
         isSitting={isSitting}
+        client={client}
+        auctionId={auctionId}
       />
       <div className={styles.buttonWrapper}>
         {/* {document.getElementById("auction") && <AuctionSlideMenu />} */}
