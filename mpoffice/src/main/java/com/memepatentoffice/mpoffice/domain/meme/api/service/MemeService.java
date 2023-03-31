@@ -105,26 +105,34 @@ public class MemeService {
     }
 
     @Transactional
-    public boolean addMemeLike(UserMemeLikeRequest userMemeLikeRequest) throws Exception{
+    public boolean addMemeLike(UserMemeLikeRequest userMemeLikeRequest) throws Exception {
         Long userId = userMemeLikeRequest.getUserId();
         Long memeId = userMemeLikeRequest.getMemeId();
 
         // 이미 있으면 좋아요나 싫어요 상태를 바꿔준다.
-        if(userMemeLikeRepository.existsUserMemeLikeByUserIdAndMemeId(userId, memeId)){
-            System.out.println("there is meme");
-            System.out.println(userMemeLikeRequest.getMemeLike());
-            UserMemeLike find = userMemeLikeRepository.findUserMemeLikeByUserIdAndMemeId(userId,memeId);
+        if (userMemeLikeRepository.existsUserMemeLikeByUserIdAndMemeId(userId, memeId)) {
+            UserMemeLike find = userMemeLikeRepository.findUserMemeLikeByUserIdAndMemeId(userId, memeId);
+            if (find.getMemeLike()==null) {
+                find.setLike(userMemeLikeRequest.getMemeLike());
+                find.setDate(LocalDateTime.now());
+                return true;
+            }
+            if (find.getMemeLike().equals(userMemeLikeRequest.getMemeLike())) {
+                find.setLike(null);
+                find.setDate(LocalDateTime.now());
+                return true;
+            }
             find.setLike(userMemeLikeRequest.getMemeLike());
             find.setDate(LocalDateTime.now());
             return true;
-        }else{
+        } else {
             // 없으면 새로 만들어준다.
             userMemeLikeRepository.save(
                     UserMemeLike.builder()
                             .user(userRepository.findById(userId)
-                                    .orElseThrow(()->new NotFoundException("유저가 없습니다")))
+                                    .orElseThrow(() -> new NotFoundException("유저가 없습니다")))
                             .meme(memeRepository.findById(memeId)
-                                    .orElseThrow(()->new NotFoundException("밈이 없습니다")))
+                                    .orElseThrow(() -> new NotFoundException("밈이 없습니다")))
                             .memeLike(userMemeLikeRequest.getMemeLike())
                             .date(LocalDateTime.now())
                             .build()
@@ -152,7 +160,11 @@ public class MemeService {
                             .orElseThrow(()-> new NotFoundException("유저가 없습니다.")).getId()
                     ,memeRepository.findById(memeId)
                             .orElseThrow(() -> new NotFoundException("밈이 없습니다.")).getId());
-            seak.setCart(cartRequest.getCart());
+            if(seak.getCart() == null){
+                seak.setCart(cartRequest.getCart());
+            }else{
+                seak.setCart(null);
+            }
         }else{
             cartRepository.save(
                     UserMemeAuctionAlert.builder()

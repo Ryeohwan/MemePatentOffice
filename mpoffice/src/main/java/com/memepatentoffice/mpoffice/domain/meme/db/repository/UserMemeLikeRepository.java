@@ -12,7 +12,6 @@ public interface UserMemeLikeRepository extends JpaRepository<UserMemeLike,Long>
     boolean existsUserMemeLikeByUserIdAndMemeId(Long userId, Long memeId);
     UserMemeLike findUserMemeLikeByUserIdAndMemeId(Long userId, Long memeId);
     int countUserMemeLikesByUserId(Long userId);
-    Boolean existsByUserIdAndMemeId(Long userId, Long memeId);
 
     // 특정 유저가 특정 밈을 좋아요나 싫어요를 했는지
     @Query("SELECT COUNT(m) FROM UserMemeLike m WHERE m.user.id = :userId AND m.meme.id = :memeId AND m.memeLike = :meme_like")
