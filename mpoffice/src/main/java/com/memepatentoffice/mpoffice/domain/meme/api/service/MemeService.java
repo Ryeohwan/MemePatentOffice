@@ -5,18 +5,16 @@ import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
 import com.memepatentoffice.mpoffice.db.entity.*;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CartRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.MemeCreateRequest;
-import com.memepatentoffice.mpoffice.domain.meme.api.request.MemeInfoRequest;
+import com.memepatentoffice.mpoffice.domain.meme.api.request.TransactionRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.UserMemeLikeRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeResponse;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.CartRepository;
+import com.memepatentoffice.mpoffice.domain.meme.db.repository.TransactionRepository;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.UserMemeLikeRepository;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.MemeRepository;
 import com.memepatentoffice.mpoffice.domain.user.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +32,8 @@ public class MemeService {
     private final UserMemeLikeRepository userMemeLikeRepository;
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
+
+    private final TransactionRepository transactionRepository;
     @Transactional
     public MemeResponse findByTitle(Long userId, Long memeId)throws NotFoundException{
         //추후 중복검사 로직 추가
@@ -50,14 +50,14 @@ public class MemeService {
                 .searched(meme.getSearched())
                 .situation(meme.getSituation())
                 .title(meme.getTitle())
-                .likeCount(userMemeLikeRepository.countLike(userId,meme.getId(),MemeLike.LIKE))
-                .hateCount(userMemeLikeRepository.countLike(userId,meme.getId(),MemeLike.HATE))
+                .likeCount(userMemeLikeRepository.countLikeOrHate(meme.getId(),MemeLike.LIKE))
+                .hateCount(userMemeLikeRepository.countLikeOrHate(meme.getId(),MemeLike.HATE))
                 .build();
-        if(cartRepository.existsUserMemeAuctionAlertByUserIdAndMemeId(userId,meme.getId())){
-            result.setCart(cartRepository.findUserMemeAuctionAlertByUserIdAndMemeId(userId,meme.getId()).getCart());
+        if(cartRepository.existsUserMemeAuctionAlertByUserIdAndMemeId(user.getId(),meme.getId())){
+            result.setCart(cartRepository.findUserMemeAuctionAlertByUserIdAndMemeId(user.getId(),meme.getId()).getCart());
         }
-        if(userMemeLikeRepository.existsUserMemeLikeByUserIdAndMemeId(userId,meme.getId())){
-            result.setMemeLike(userMemeLikeRepository.findUserMemeLikeByUserIdAndMemeId(userId,meme.getId()).getMemeLike());
+        if(userMemeLikeRepository.existsUserMemeLikeByUserIdAndMemeId(user.getId(),meme.getId())){
+            result.setMemeLike(userMemeLikeRepository.findUserMemeLikeByUserIdAndMemeId(user.getId(),meme.getId()).getMemeLike());
         }
         return result;
     }
@@ -111,6 +111,8 @@ public class MemeService {
 
         // 이미 있으면 좋아요나 싫어요 상태를 바꿔준다.
         if(userMemeLikeRepository.existsUserMemeLikeByUserIdAndMemeId(userId, memeId)){
+            System.out.println("there is meme");
+            System.out.println(userMemeLikeRequest.getMemeLike());
             UserMemeLike find = userMemeLikeRepository.findUserMemeLikeByUserIdAndMemeId(userId,memeId);
             find.setLike(userMemeLikeRequest.getMemeLike());
             find.setDate(LocalDateTime.now());
@@ -172,6 +174,24 @@ public class MemeService {
     }
 
     public void priceGraph(String title){
+
+    }
+
+    @Transactional
+    public void addTransaction(TransactionRequest transactionRequest) throws NotFoundException{
+        userRepository.findById(transactionRequest.getBuyerId()).orElseThrow(()-> new NotFoundException("해당하는 구매자가 없읍니다."));
+        userRepository.findById(transactionRequest.getSellerId()).orElseThrow(()-> new NotFoundException("해당하는 판매자가 없읍니다."));
+        memeRepository.findById(transactionRequest.getMemeId()).orElseThrow(()-> new NotFoundException("해당하는 밈이 없습니다."));
+
+        transactionRequest.getBuyerId();
+        Transaction transaction = Transaction.builder()
+                .buyerId(transactionRequest.getBuyerId())
+                .sellerId(transactionRequest.getSellerId())
+                .memeId(transactionRequest.getMemeId())
+                .price(transactionRequest.getPrice())
+                .createdAt(transactionRequest.getCreatedAt())
+                .build();
+        transactionRepository.save(transaction);
 
     }
 
