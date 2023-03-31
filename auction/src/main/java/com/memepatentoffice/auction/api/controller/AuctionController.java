@@ -1,7 +1,7 @@
 package com.memepatentoffice.auction.api.controller;
 
 import com.memepatentoffice.auction.api.message.WebSocketCharacter;
-import com.memepatentoffice.auction.api.message.WebSocketTransaction;
+import com.memepatentoffice.auction.api.message.WebSocketTransactionRes;
 import com.memepatentoffice.auction.api.request.AuctionCreationReq;
 import com.memepatentoffice.auction.api.message.WebSocketChatReq;
 import com.memepatentoffice.auction.api.service.AuctionService;
@@ -32,11 +32,7 @@ public class AuctionController {
     }
 
     @MessageMapping("/character")
-    public void sendCharacter(WebSocketCharacter vo) throws NotFoundException{
-        auctionService.sendCharacter(vo);
-    }
-    @MessageMapping("/transaction")
-    public void sendTransaction(WebSocketTransaction vo) throws NotFoundException{
-        auctionService.sendTransaction(vo);
+    public void sendCharacter(WebSocketCharacter dto) throws NotFoundException{
+        auctionService.sendCharacter(dto);
     }
 }
