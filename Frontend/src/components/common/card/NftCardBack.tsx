@@ -5,8 +5,15 @@ import { Icon } from '@iconify/react';
 import styles from "./NftCardBack.module.css";
 
 interface NftProps {
-    items: {id: number, title: string, imgUrl: string, description: string, example: string};
-};
+    items: {
+      id: number;
+      nickname: string | null;
+      title: string;
+      imgUrl: string | null
+      description: string;
+      example: string;
+    };
+  }
 
 const NftCardBack:React.FC<NftProps> = nft => {
 

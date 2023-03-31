@@ -2,19 +2,12 @@ import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/configStore";
-import { memeListActions } from "store/memeList";
+import { memeListActions, memeType } from "store/memeList";
 
 import NftCard from "components/common/card/NftCard";
 
 import styles from "./MemeListPopular.module.css";
 
-type memeList = {
-  id: number;
-  title: string;
-  imgUrl: string;
-  description: string;
-  example: string;
-};
 
 const MemeListPopular: React.FC = () => {
   const location = useLocation()
@@ -22,7 +15,7 @@ const MemeListPopular: React.FC = () => {
   const [searchParams] = useSearchParams();
 
   const dispatch = useDispatch();
-  const memeList = useSelector<RootState, memeList[]>(
+  const memeList = useSelector<RootState, memeType[]>(
     (state) => state.memeList.memePopularList
   );
   const period = useSelector<RootState, string>(state => state.memeList.period);

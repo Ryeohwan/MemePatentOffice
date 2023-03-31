@@ -1,14 +1,19 @@
+import {useEffect} from 'react';
 import SearchRankingItem from "./SearchRankingItem";
+import useAxios from 'hooks/useAxios';
 
 import styles from "./NotInputArea.module.css";
 
 const NotInputArea: React.FC = () => {
   // axios 데이터 받아오기
-  // dummy data
+  const {data: memeCnt, isLoading: cntLoading, sendRequest: cntRequest} = useAxios();
 
   // 1.등록된 밈 수  -> , 넣는걸로 custom
-  const cnt = 102223;
+  useEffect(() => {
+    cntRequest({url: `/api/mpoffice/meme/total`})
+  }, [])
 
+  // dummy
   // 2. 인기 검색어 데이터
   const items = [
     {
@@ -30,11 +35,6 @@ const NotInputArea: React.FC = () => {
       rank: 4,
       text: "멋지다 연진아",
       cnt: 220,
-    },
-    {
-      rank: 5,
-      text: "송혜교",
-      cnt: 165,
     },
     {
       rank: 5,
@@ -72,9 +72,9 @@ const NotInputArea: React.FC = () => {
   const now = new Date();
 
 
-  return (
+  return ( 
     <div className={styles.compContainer}>
-      <p className={styles.pageCnt}>등록된 밈 수 {cnt}건</p>
+      <p className={styles.pageCnt}>등록된 밈 수 {!cntLoading && `${memeCnt}건`}</p>
 
       <div className={styles.rankingCompContainer}>
         
@@ -91,14 +91,14 @@ const NotInputArea: React.FC = () => {
           {/* 왼쪽 */}
           <div className={`${styles.itemContainer} ${styles.left}`}>
             {items.slice(0, 5).map((item) => (
-              <SearchRankingItem item={item} />
+              <SearchRankingItem item={item} key={item.rank} />
             ))}
           </div>
 
           {/* 오른쪽 */}
           <div className={`${styles.itemContainer} ${styles.right}`}>
             {items.slice(6, 11).map((item) => (
-              <SearchRankingItem item={item} />
+              <SearchRankingItem item={item} key={item.rank} />
             ))}
           </div>
         </div>
