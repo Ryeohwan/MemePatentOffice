@@ -12,6 +12,8 @@ import com.google.gson.JsonSerializationContext;
 import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.*;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeResponse;
+import com.memepatentoffice.mpoffice.domain.meme.api.response.PriceListResponse;
+import com.memepatentoffice.mpoffice.domain.meme.api.response.TransactionResponse;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.MemeService;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.GcpService;
 import lombok.RequiredArgsConstructor;
@@ -97,14 +99,14 @@ public class MemeController {
     }
 
     @GetMapping("/price")
-    public ResponseEntity tradeGraph(@RequestParam(name = "title")String title){
-        memeService.priceGraph(title);
-        return ResponseEntity.status(HttpStatus.OK).body("ok");
+    public ResponseEntity tradeGraph(@RequestParam(name = "title")String title) throws NotFoundException{
+        PriceListResponse result = memeService.priceGraph(title);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @PostMapping("/addTransaction")
     @ResponseBody
-    public ResponseEntity addTransaction(@RequestBody @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")TransactionRequest transactionRequest)throws NotFoundException {
+    public ResponseEntity addTransaction(@RequestBody TransactionRequest transactionRequest)throws NotFoundException {
         memeService.addTransaction(transactionRequest);
         return ResponseEntity.status(HttpStatus.OK).body("Okay");
     }
