@@ -33,16 +33,16 @@ const MemeListPage: React.FC = () => {
 
 
   // test!!!!
-  // const {data, isLoading, sendRequest} = useAxios();
-  // useEffect(() => {
-  //   sendRequest({url: `/api/mpoffice/meme/search?search=${input}`})
-  // }, [input])
+  const {data, isLoading, sendRequest} = useAxios();
+  useEffect(() => {
+    sendRequest({url: `/api/mpoffice/meme/search?search=${input}`})
+  }, [input])
 
-  // useEffect(() => {
-  //   if (data) {
-  //     console.log(data);
-  //   }
-  // }, [data])
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+    }
+  }, [data])
 
 
 

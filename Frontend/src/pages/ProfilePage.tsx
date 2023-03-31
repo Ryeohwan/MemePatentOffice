@@ -21,6 +21,7 @@ const ProfilePage: React.FC = () => {
     nftList: [
       {
         id: 1,
+        nickname: 'test',
         title:
           "귀여운 토토로 삼형제와 발랄한 자매 사츠키, 메이의 우당탕탕 가족사진입니다",
         imgUrl: "totoro.jpg",
@@ -30,6 +31,7 @@ const ProfilePage: React.FC = () => {
       },
       {
         id: 2,
+        nickname: 'test',
         title: "누가 이렇게 예쁘게 낳았어? 엄마엄마가~",
         imgUrl: "newjeans.jpg",
         description: "뉴진스의 곡 OMG 속 가사인 oh my oh my god 가 엄마엄마가~로 들린다고 해서 시작되었다.",
@@ -38,6 +40,7 @@ const ProfilePage: React.FC = () => {
       },
       {
         id: 3,
+        nickname: 'test',
         title: "알아들었으면 끄덕여",
         imgUrl: "theglory.jpeg",
         description: "내 말 알아들었으면 끄덕여라",
@@ -46,6 +49,7 @@ const ProfilePage: React.FC = () => {
       },
       {
         id: 4,
+        nickname: 'test',
         title:
           "귀여운 토토로 삼형제와 발랄한 자매 사츠키, 메이의 우당탕탕 가족사진입니다",
         imgUrl: "totoro.jpg",
@@ -55,6 +59,7 @@ const ProfilePage: React.FC = () => {
       },
       {
         id: 5,
+        nickname: 'test',
         title: "누가 이렇게 예쁘게 낳았어? 엄마엄마가~",
         imgUrl: "newjeans.jpg",
         description: "뉴진스의 곡 OMG 속 가사인 oh my oh my god 가 엄마엄마가~로 들린다고 해서 시작되었다.",
@@ -63,6 +68,7 @@ const ProfilePage: React.FC = () => {
       },
       {
         id: 6,
+        nickname: 'test',
         title: "알아들었으면 끄덕여",
         imgUrl: "theglory.jpeg",
         description: "내 말 알아들었으면 끄덕여라",
