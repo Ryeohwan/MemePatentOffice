@@ -19,9 +19,11 @@ const DetailInfo: React.FC = () => {
   // get meme detail info
   const { data, isLoading, status, sendRequest } = useAxios();
   // post like meme
-  const { data: likeData, sendRequest: likeRequest } = useAxios();
+  const { sendRequest: likeRequest } = useAxios();
   // post dislike meme
-  const { data: dislikeData, sendRequest: dislikeRequest } = useAxios();
+  const { sendRequest: dislikeRequest } = useAxios();
+  // post cart alarm
+  const { sendRequest: alarmRequest } = useAxios();
 
   // like, dislike count
   const [likes, setLikes] = useState(0);
@@ -30,8 +32,11 @@ const DetailInfo: React.FC = () => {
   const [likeAction, setLikeAction] = useState<boolean>(false);
   const [dislikeAction, setDislikeAction] = useState<boolean>(false);
 
+  // 경매 알림 상태
+  const [cart, setCart] = useState<string>("")
+
   // 경매에 등록된 상태인지
-  const [auctionState, setAuctionState] = useState(false);
+  const [auctionState, setAuctionState] = useState<string|null>();
 
   useEffect(() => {
     setIsFromNotice(location.state ? true : false);
@@ -48,7 +53,7 @@ const DetailInfo: React.FC = () => {
   useEffect(() => {
     if (status !== 200) return;
     setAuctionState(data.auctionState);
-
+    setCart(data.cart)
     setLikes(data.likeCount);
     setDislikes(data.hateCount);
 
@@ -63,30 +68,20 @@ const DetailInfo: React.FC = () => {
     console.log("data", data);
   }, [data]);
 
-  // const likeHandler = () => {
-  //   sendRequest({
-  //     url: "/api/mpoffice/meme/like",
-  //     data: {
-  //       memeId: memeid,
-  //       userId: "",
-  //       memeLike: "LIKE",
-  //     },
-  //   });
-  //   setLikeCnt((prev) => prev + 1);
-  // };
+  const onClickGetAlarm = () => {
+    alarmRequest({
+      url: "/api/mpoffice/meme/cart",
+      method: "POST",
+      data: {
+        memeId: memeid,
+        userId: userId,
+        cart: "ADD",
+      }
+    });
+    setCart(cart === "ADD" ? "DELETE" : "ADD");
+  };
 
   const onClickLike = () => {
-    if(likeAction) {
-      likeRequest({
-        url: "/api/mpoffice/meme/like",
-        method: "POST",
-        data: {
-          memeId: memeid,
-          userId: userId,
-          memeLike: null 
-        },
-      });
-    } else {
       likeRequest({
         url: "/api/mpoffice/meme/like",
         method: "POST",
@@ -96,8 +91,6 @@ const DetailInfo: React.FC = () => {
           memeLike: "LIKE" 
         },
       });
-
-    }
 
     if (likeAction) {
       setLikes(likes - 1);
@@ -114,17 +107,6 @@ const DetailInfo: React.FC = () => {
   };
 
   const onClickDislike = () => {
-    if (dislikeAction) {
-      dislikeRequest({
-        url: "/api/mpoffice/meme/like",
-        method: "POST",
-        data: {
-          memeId: memeid,
-          userId: userId,
-          memeLike: null 
-        },
-      });
-    } else {
       dislikeRequest({
         url: "/api/mpoffice/meme/like",
         method: "POST",
@@ -134,8 +116,6 @@ const DetailInfo: React.FC = () => {
           memeLike: "HATE" 
         },
       });
-
-    }
 
     if (dislikeAction) {
       setDislikes(dislikes - 1);
@@ -157,7 +137,9 @@ const DetailInfo: React.FC = () => {
         {!isLoading && data ? (
           <>
             <div className={styles.auctionBtnWrapper}>
-              <div className={styles.alarmBtn}>경매 알림 받기</div>
+              <div className={styles.alarmBtn} onClick={onClickGetAlarm}>
+                {cart==="ADD"?"경매 알림 취소": "경매 알림 받기"}
+              </div>
               <div
                 className={
                   isFromNotice ? styles.auctionInfoBtn2 : styles.auctionInfoBtn
