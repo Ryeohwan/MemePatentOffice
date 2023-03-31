@@ -29,17 +29,25 @@ public class Auction extends BaseEntity{
     @Column(name = "status")
     private AuctionStatus status;
 
-    public void start(){
+    public boolean start(){
         if(AuctionStatus.ENROLLED.equals(this.status)){ //Enum에 equals 사용 시 내부적으로 ==비교를 하긴 함
             this.status = AuctionStatus.PROCEEDING;
+            return true;
         }
-        else log.warn("경매가 대기중이 아닌데 진행중으로 변경하려 합니다");
+        else{
+            log.warn("경매가 대기중이 아닌데 진행중으로 변경하려 합니다");
+            return false;
+        }
     }
-    public void terminate(){
+    public boolean terminate(){
         if(AuctionStatus.PROCEEDING.equals(this.status)){ //Enum에 equals 사용 시 내부적으로 ==비교를 하긴 함
             this.status = AuctionStatus.TERMINATED;
+            return true;
         }
-        else log.warn("경매가 진행중이 아닌데 끝내려고 합니다");
+        else{
+            log.warn("경매가 진행중이 아닌데 끝내려고 합니다");
+            return false;
+        }
     }
 }
 
