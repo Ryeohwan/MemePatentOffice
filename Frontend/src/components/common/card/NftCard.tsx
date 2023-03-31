@@ -8,7 +8,7 @@ interface NftProps {
     id: number;
     nickname: string;
     title: string;
-    imgUrl: string | null
+    imgUrl: string;
     description: string;
     example: string;
   };

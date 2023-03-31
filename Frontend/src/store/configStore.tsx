@@ -1,4 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
+import {Action} from 'redux';
+import { ThunkAction } from 'redux-thunk';
 
 import  testReducer from 'store/test';
 import  chatReducer from 'store/chat';
@@ -30,6 +32,15 @@ const store = configureStore({
   },
 })
 
+
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  Action<string>
+>;
+
 export default store;
 // useSelector 타입 지정
 export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch
