@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.memepatentoffice.mpoffice.db.entity.QMeme.meme;
+import static com.memepatentoffice.mpoffice.db.entity.QTransaction.transaction;
 import static com.memepatentoffice.mpoffice.db.entity.QUser.user;
 import static com.memepatentoffice.mpoffice.db.entity.QUserMemeLike.userMemeLike;
 import static com.querydsl.core.types.ExpressionUtils.count;
@@ -37,8 +38,7 @@ public class MemeSearchRepository {
 
     // default - 날짜 최신 순
     public Slice<MemeListResponse> searchMemeList(Long lastMemeId, String word, Pageable pageable) {
-        log.info(word);
-        log.info(String.valueOf(pageable.getPageSize()));
+
         List<MemeListResponse> results = queryFactory.select(
                 Projections.constructor( MemeListResponse.class,
                         meme.id,
@@ -66,8 +66,7 @@ public class MemeSearchRepository {
 
     // 인기순 전체 검색
     public Slice<MemeListResponse> searchPopularMemeList(String days, Long lastMemeId, String word, Pageable pageable) {
-        log.info(word);
-        log.info(String.valueOf(pageable.getPageSize()));
+
         List<MemeListResponse> results = queryFactory.select(
                         Projections.constructor( MemeListResponse.class,
                                 meme.id,
@@ -102,6 +101,73 @@ public class MemeSearchRepository {
         // 무한 스크롤 처리
         return checkLastPage(pageable, results);
     }
+
+    public Slice<MemeListResponse> searchExpensiveMemeList(String days, Long lastMemeId, String word, Pageable pageable) {
+
+        List<MemeListResponse> results = queryFactory.select(
+                        Projections.constructor( MemeListResponse.class,
+                                meme.id,
+                                user.nickname,
+                                meme.title,
+                                meme.imageurl.as("imgUrl"),
+                                meme.content.as("description"),
+                                meme.situation.as("example")))
+                .from(meme)
+
+                .innerJoin(user).fetchJoin()
+                .on(meme.owner.id.eq(user.id))
+                .leftJoin(transaction)
+                .on(meme.id.eq(transaction.memeId))
+
+                .where(
+                        // no-offset 페이징 처리
+
+                        ltMemeId(lastMemeId),
+                        containMemeTitle(word),
+                        daysMeme(days)
+                )
+                .groupBy(meme.id)
+                .orderBy(transaction.price.max().desc())
+
+                .limit(pageable.getPageSize()+1)
+                .fetch();
+
+        // 무한 스크롤 처리
+        return checkLastPage(pageable, results);
+    }
+
+    public Slice<MemeListResponse> searchViewsMemeList(String days, Long lastMemeId, String word, Pageable pageable) {
+
+        List<MemeListResponse> results = queryFactory.select(
+                        Projections.constructor( MemeListResponse.class,
+                                meme.id,
+                                user.nickname,
+                                meme.title,
+                                meme.imageurl.as("imgUrl"),
+                                meme.content.as("description"),
+                                meme.situation.as("example")))
+                .from(meme)
+
+                .innerJoin(user).fetchJoin()
+                .on(meme.owner.id.eq(user.id))
+
+                .where(
+                        // no-offset 페이징 처리
+                        ltMemeId(lastMemeId),
+                        containMemeTitle(word),
+                        daysMeme(days)
+                )
+
+                .orderBy(meme.searched.desc())
+                .limit(pageable.getPageSize()+1)
+                .fetch();
+
+        // 무한 스크롤 처리
+        return checkLastPage(pageable, results);
+
+    }
+
+
 
     private BooleanExpression ltMemeId(Long memeId) {
         if (memeId == 0) {
@@ -140,4 +206,6 @@ public class MemeSearchRepository {
         }
         return new SliceImpl<>(results, pageable, hasNext);
     }
+
+
 }

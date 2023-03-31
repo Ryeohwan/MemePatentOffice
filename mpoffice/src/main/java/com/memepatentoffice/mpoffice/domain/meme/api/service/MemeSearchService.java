@@ -21,4 +21,12 @@ public class MemeSearchService {
     public Slice<MemeListResponse> getPopularMemeList(String days, Long lastId, Pageable pageable, String searchText) {
         return memeSearchRepository.searchPopularMemeList(days, lastId, searchText, pageable);
     }
+
+    public Slice<MemeListResponse> getExpensiveMemeList(String days, Long lastId, Pageable pageable, String searchText) {
+        return memeSearchRepository.searchExpensiveMemeList(days, lastId, searchText, pageable);
+    }
+
+    public Slice<MemeListResponse> getViewsMemeList(String days, Long lastId, Pageable pageable, String searchText) {
+        return memeSearchRepository.searchViewsMemeList(days, lastId, searchText, pageable);
+    }
 }
