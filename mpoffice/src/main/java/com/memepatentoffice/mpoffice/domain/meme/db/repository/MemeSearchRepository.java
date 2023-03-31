@@ -48,7 +48,7 @@ public class MemeSearchRepository {
                         meme.content.as("description"),
                         meme.situation.as("example")))
                 .from(meme)
-                .innerJoin(user)
+                .innerJoin(user).fetchJoin()
                 .on(meme.owner.id.eq(user.id))
                 .where(
                         // no-offset 페이징 처리
@@ -77,20 +77,24 @@ public class MemeSearchRepository {
                                 meme.content.as("description"),
                                 meme.situation.as("example")))
                 .from(meme)
-                .innerJoin(user)
+
+                .innerJoin(user).fetchJoin()
                 .on(meme.owner.id.eq(user.id))
-                .innerJoin(userMemeLike)
+
+                .leftJoin(userMemeLike)
                 .on(meme.id.eq(userMemeLike.meme.id))
 
                 .where(
                         // no-offset 페이징 처리
+
                         ltMemeId(lastMemeId),
                         containMemeTitle(word),
                         daysMeme(days)
 
+
                 )
-                .groupBy(userMemeLike.meme.id)
-                .orderBy(userMemeLike.meme.id.count().desc())
+                .groupBy(meme.id)
+                .orderBy(meme.id.count().desc())
 
                 .limit(pageable.getPageSize()+1)
                 .fetch();
