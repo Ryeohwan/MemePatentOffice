@@ -27,7 +27,6 @@ import java.util.TimerTask;
 @Transactional
 @Slf4j
 public class AuctionServiceImpl implements AuctionService{
-    private final QuerydslJpaRepository querydslJpaRepository;
     private Gson gson = new Gson();
     private OkHttpClient client = new OkHttpClient();
     private String MPOFFICE_SERVER_URL = "https://j8a305.p.ssafy.io/api/mpoffice";
@@ -37,11 +36,10 @@ public class AuctionServiceImpl implements AuctionService{
     private final AuctionRepository auctionRepository;
     private final SimpMessageSendingOperations simpMessageSendingOperations;
 
-    public AuctionServiceImpl(AuctionRepository auctionRepository, SimpMessageSendingOperations simpMessageSendingOperations,
-                              QuerydslJpaRepository querydslJpaRepository) {
+    public AuctionServiceImpl(AuctionRepository auctionRepository,
+                              SimpMessageSendingOperations simpMessageSendingOperations) {
         this.auctionRepository = auctionRepository;
         this.simpMessageSendingOperations = simpMessageSendingOperations;
-        this.querydslJpaRepository = querydslJpaRepository;
     }
 
     @Transactional
