@@ -38,7 +38,14 @@ public class CommentController {
     @PostMapping("/create")
     @ResponseBody
     public ResponseEntity createComment(@RequestBody CommentRequest commentRequest) throws NotFoundException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createCommenmt(commentRequest));
+        if(commentRequest.getParentComment() != null){
+            System.out.println("hi this is reply");
+            return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createReply(commentRequest));
+        }else{
+            System.out.println("this is comment");
+            return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createCommenmt(commentRequest));
+        }
+
     }
     @PostMapping("/like")  // 좋아요 기능 완료
     @ResponseBody

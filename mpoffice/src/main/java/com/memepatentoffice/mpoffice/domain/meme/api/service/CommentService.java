@@ -5,7 +5,9 @@ import com.memepatentoffice.mpoffice.db.entity.*;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentInfoRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentLikeRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentRequest;
+import com.memepatentoffice.mpoffice.domain.meme.api.response.CommentCreateResponse;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.CommentResponse;
+import com.memepatentoffice.mpoffice.domain.meme.api.response.ReplyResponse;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.*;
 import com.memepatentoffice.mpoffice.domain.user.db.repository.UserRepository;
 import io.swagger.models.auth.In;
@@ -33,38 +35,62 @@ public class CommentService {
     private final UserCommentLikeRepository userCommentLikeRepository;
     private final UserMemeLikeRepository userMemeLikeRepository;
     @Transactional
-    public Long createCommenmt(CommentRequest commentRequest) throws NotFoundException {
+    public ReplyResponse createReply(CommentRequest commentRequest) throws NotFoundException {
         User user = userRepository.findById(commentRequest.getUserId())
                 .orElseThrow(()->new NotFoundException("유효하지 않은 유저입니다"));
         Meme meme = memeRepository.findById(commentRequest.getMemeId())
                 .orElseThrow(()->new NotFoundException("유효하지 않은 밈입니다"));
-        if(commentRequest.getParentCommentId() != null){
-            Optional<Comment> parentComment = commentRepository.findById(commentRequest.getParentCommentId());
-            //optional로 user
-            Comment com = new Comment().builder()
-                    .content(commentRequest.getContent())
-                    .user(user)
-                    .meme(meme)
-                    .parentComment(parentComment.get())
-                    .isValid(IsValid.VALID)
-                    .createdAt(LocalDateTime.now())
-                    .build();
-            return commentRepository.save(com).getId();
-        }else {
-            Comment com = new Comment().builder()
-                    .content(commentRequest.getContent())
-                    .user(user)
-                    .meme(meme)
-                    .isValid(IsValid.VALID)
-                    .createdAt(LocalDateTime.now())
-                    .build();
-            return commentRepository.save(com).getId();
-        }
+        Optional<Comment> parentComment = commentRepository.findById(commentRequest.getParentComment());
+        //optional로 user
+        Comment com = new Comment().builder()
+                .content(commentRequest.getContent())
+                .user(user)
+                .meme(meme)
+                .parentComment(parentComment.get())
+                .isValid(IsValid.VALID)
+                .createdAt(LocalDateTime.now())
+                .build();
+        commentRepository.save(com);
+        ReplyResponse result = ReplyResponse.builder()
+                .nickName(user.getNickname())
+                .profileImage(user.getProfileImage())
+                .content(commentRequest.getContent())
+                .createdAt(commentRequest.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                .originId(parentComment.get().getId())
+                .originNickName(parentComment.get().getUser().getNickname())
+                .build();
+        return result;
+    }
+
+    @Transactional
+    public CommentCreateResponse createCommenmt(CommentRequest commentRequest) throws NotFoundException {
+        User user = userRepository.findById(commentRequest.getUserId())
+                .orElseThrow(() -> new NotFoundException("유효하지 않은 유저입니다"));
+        Meme meme = memeRepository.findById(commentRequest.getMemeId())
+                .orElseThrow(() -> new NotFoundException("유효하지 않은 밈입니다"));
+        Comment com = new Comment().builder()
+                .content(commentRequest.getContent())
+                .user(user)
+                .meme(meme)
+                .isValid(IsValid.VALID)
+                .createdAt(LocalDateTime.now())
+                .build();
+        Comment created = commentRepository.save(com);
+        CommentCreateResponse result = CommentCreateResponse.builder()
+                .commentId(created.getId())
+                .likeCount(userMemeLikeRepository.countUserMemeLikesByUserId(user.getId()))
+                .createrId(user.getId())
+                .userProfile(user.getProfileImage())
+                .nickName(user.getNickname())
+                .content(commentRequest.getContent())
+                .createdAt(commentRequest.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                .liked(userMemeLikeRepository.existsUserMemeLikeByUserIdAndMemeId(user.getId(),meme.getId()))
+                .replyCount(commentRepository.countAllByParentCommentId(created.getId()))
+                .build();
+        return result;
     }
     @Transactional
     public boolean createCommentLike(CommentLikeRequest commentLikeRequest) throws NotFoundException{
-        System.out.println(commentLikeRequest.getCommentId());
-        System.out.println(commentLikeRequest.getUserId());
         //중복 검증 로직 추가
         UserCommentLike temp = new UserCommentLike().builder()
                 .comment(commentRepository.findById(commentLikeRequest.getCommentId())
