@@ -52,18 +52,18 @@ public class CommentService {
                 .build();
         commentRepository.save(com);
         ReplyResponse result = ReplyResponse.builder()
-                .nickName(user.getNickname())
-                .profileImage(user.getProfileImage())
-                .content(commentRequest.getContent())
-                .createdAt(commentRequest.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-                .originId(parentComment.get().getId())
-                .originNickName(parentComment.get().getUser().getNickname())
+                .userName(user.getNickname())
+                .userImgUrl(user.getProfileImage())
+                .comment(commentRequest.getContent())
+                .date(commentRequest.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                .parentId(parentComment.get().getId())
+                .parentName(parentComment.get().getUser().getNickname())
                 .build();
         return result;
     }
 
     @Transactional
-    public CommentCreateResponse createCommenmt(CommentRequest commentRequest) throws NotFoundException {
+    public CommentCreateResponse createComment(CommentRequest commentRequest) throws NotFoundException {
         User user = userRepository.findById(commentRequest.getUserId())
                 .orElseThrow(() -> new NotFoundException("유효하지 않은 유저입니다"));
         Meme meme = memeRepository.findById(commentRequest.getMemeId())
@@ -77,15 +77,15 @@ public class CommentService {
                 .build();
         Comment created = commentRepository.save(com);
         CommentCreateResponse result = CommentCreateResponse.builder()
-                .commentId(created.getId())
-                .likeCount(userMemeLikeRepository.countUserMemeLikesByUserId(user.getId()))
-                .createrId(user.getId())
-                .userProfile(user.getProfileImage())
-                .nickName(user.getNickname())
-                .content(commentRequest.getContent())
-                .createdAt(commentRequest.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                .Id(created.getId())
+                .likes(userMemeLikeRepository.countUserMemeLikesByUserId(user.getId()))
+                .userId(user.getId())
+                .userImgUrl(user.getProfileImage())
+                .userName(user.getNickname())
+                .comment(commentRequest.getContent())
+                .date(commentRequest.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                 .liked(userMemeLikeRepository.existsUserMemeLikeByUserIdAndMemeId(user.getId(),meme.getId()))
-                .replyCount(commentRepository.countAllByParentCommentId(created.getId()))
+                .replyCommentCnt(commentRepository.countAllByParentCommentId(created.getId()))
                 .build();
         return result;
     }

@@ -43,7 +43,7 @@ public class CommentController {
             return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createReply(commentRequest));
         }else{
             System.out.println("this is comment");
-            return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createCommenmt(commentRequest));
+            return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createComment(commentRequest));
         }
 
     }
