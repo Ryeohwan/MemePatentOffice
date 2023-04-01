@@ -17,7 +17,7 @@ public class CommentRequest {
     private Long userId;
     private Long memeId;
     @Nullable
-    private Long parentComment;
+    private Long parentId;
     private String content;
     private Boolean liked;
     private int likes;
