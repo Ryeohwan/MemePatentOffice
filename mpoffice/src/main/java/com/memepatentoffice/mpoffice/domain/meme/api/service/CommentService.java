@@ -76,7 +76,6 @@ public class CommentService {
                 .createdAt(LocalDateTime.now())
                 .build();
         Comment created = commentRepository.save(com);
-        List<Comment> temp = commentRepository.findBestThreeCommentList(meme.getId());
 
         CommentCreateResponse result = CommentCreateResponse.builder()
                 .Id(created.getId())
