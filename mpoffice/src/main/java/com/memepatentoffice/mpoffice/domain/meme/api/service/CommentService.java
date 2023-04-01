@@ -76,9 +76,11 @@ public class CommentService {
                 .createdAt(LocalDateTime.now())
                 .build();
         Comment created = commentRepository.save(com);
+        List<Comment> temp = commentRepository.findBestThreeCommentList(meme.getId());
+
         CommentCreateResponse result = CommentCreateResponse.builder()
                 .Id(created.getId())
-                .likes(userMemeLikeRepository.countUserMemeLikesByUserId(user.getId()))
+                .likes(userMemeLikeRepository.countUserMemeLikesByUserIdAndMemeId(user.getId(),meme.getId()))
                 .userId(user.getId())
                 .userImgUrl(user.getProfileImage())
                 .userName(user.getNickname())
@@ -88,6 +90,10 @@ public class CommentService {
                 .replyCommentCnt(commentRepository.countAllByParentCommentId(created.getId()))
                 .build();
         return result;
+    }
+
+    public int findBestThree(){
+        return 0;
     }
     @Transactional
     public boolean createCommentLike(CommentLikeRequest commentLikeRequest) throws NotFoundException{
@@ -113,7 +119,7 @@ public class CommentService {
         CommentResponse result = CommentResponse.builder()
                 .profileImage(com.getUser().getProfileImage())
                 .nickname(com.getUser().getNickname())
-                .heartCnt(userMemeLikeRepository.countUserMemeLikesByUserId(userId))
+                .heartCnt(userMemeLikeRepository.countUserMemeLikesByUserIdAndMemeId(userId,memeId))
                 .liked(userMemeLikeRepository.existsUserMemeLikeByUserIdAndMemeId(userId,memeId))
                 .replyCommentCnt(commentRepository.countAllByParentCommentId(com.getId()))
                 .content(com.getContent())
@@ -138,19 +144,24 @@ public class CommentService {
     public Slice<CommentResponse> convertToDto(Slice<Object> slice) {
         List<CommentResponse> dtoList = new ArrayList<>();
         for (Object obj : slice.getContent()) {
-            Long heartCntLong = (Long) ((Object[]) obj)[6];
-            Integer heartCnt = heartCntLong != null ? heartCntLong.intValue() : null;
-            LocalDateTime a = (LocalDateTime) ((Object[]) obj)[1];
-            String createdAt = a.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            Object[] arr = (Object[]) obj;
+            String content = (String) arr[0];
+            LocalDateTime createdAt = (LocalDateTime) arr[1];
+            Long replyCommentCnt = (Long) arr[2];
+            Long id = (Long) arr[3];
+            String nickname = (String) arr[4];
+            String profileImage = (String) arr[5];
+            Long heartCnt = (Long)arr[6];
+            Boolean liked = (Boolean) arr[7];
             CommentResponse dto = CommentResponse.builder()
-                    .content((String) ((Object[]) obj)[0])
-                    .createdAt(createdAt)
-                    .replyCommentCnt((int) ((Object[]) obj)[2])
-                    .id((long) ((Object[]) obj)[3])
-                    .nickname((String) ((Object[]) obj)[4])
-                    .profileImage((String) ((Object[]) obj)[5])
-                    .heartCnt(heartCnt)
-                    .liked((Boolean) ((Object[]) obj)[7])
+                    .content(content)
+                    .createdAt(createdAt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                    .replyCommentCnt(replyCommentCnt.intValue())
+                    .id(id)
+                    .nickname(nickname)
+                    .profileImage(profileImage)
+                    .heartCnt(heartCnt.intValue())
+                    .liked(liked)
                     .build();
             dtoList.add(dto);
         }
