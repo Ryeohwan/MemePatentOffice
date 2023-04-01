@@ -93,7 +93,7 @@ public class MemeSearchRepository {
                         containMemeTitle(word)
                 )
                 .orderBy(meme.createdAt.desc(), meme.id.desc())
-                .limit(pageable.getPageSize())
+                .limit(pageable.getPageSize()+1)
                 .fetch();
 
         // 무한 스크롤 처리
