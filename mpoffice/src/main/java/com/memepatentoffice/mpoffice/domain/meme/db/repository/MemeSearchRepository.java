@@ -36,6 +36,43 @@ public class MemeSearchRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    private BooleanExpression ltMemeId(Long memeId) {
+        if (memeId == 0) {
+            return meme.id.lt(Long.MAX_VALUE);
+        }
+        return meme.id.lt(memeId);
+    }
+    private BooleanExpression containMemeTitle(String word) {
+        if(word == null) {
+            return null;
+        }
+        return meme.title.contains(word);
+    }
+
+    private BooleanExpression daysMeme(String days) {
+
+        if (days.equals("all")) {
+            return null;
+        } else if(days.equals("today")) {
+            return meme.createdAt.eq(LocalDateTime.now());
+        } else if(days.equals("week")) {
+            return meme.createdAt.after(LocalDateTime.now().minusWeeks(1));
+        }
+        return null;
+    }
+
+    // 무한 스크롤 방식 처리하는 메서드
+    private Slice<MemeListResponse> checkLastPage(Pageable pageable, List<MemeListResponse> results) {
+
+        boolean hasNext = false;
+
+        // 조회한 결과 개수가 요청한 페이지 사이즈보다 크면 뒤에 더 있음, next = true
+        if (results.size() > pageable.getPageSize()) {
+            hasNext = true;
+            results.remove(pageable.getPageSize());
+        }
+        return new SliceImpl<>(results, pageable, hasNext);
+    }
     // default - 날짜 최신 순
     public Slice<MemeListResponse> searchMemeList(Long lastMemeId, String word, Pageable pageable) {
 
@@ -55,8 +92,8 @@ public class MemeSearchRepository {
                         ltMemeId(lastMemeId),
                         containMemeTitle(word)
                 )
-                .orderBy(meme.createdAt.desc())
-                .limit(pageable.getPageSize()+1)
+                .orderBy(meme.createdAt.desc(), meme.id.desc())
+                .limit(pageable.getPageSize())
                 .fetch();
 
         // 무한 스크롤 처리
@@ -127,8 +164,7 @@ public class MemeSearchRepository {
                         daysMeme(days)
                 )
                 .groupBy(meme.id)
-                .orderBy(transaction.price.max().desc())
-
+                .orderBy(transaction.price.max().desc(), meme.id.desc())
                 .limit(pageable.getPageSize()+1)
                 .fetch();
 
@@ -158,7 +194,7 @@ public class MemeSearchRepository {
                         daysMeme(days)
                 )
 
-                .orderBy(meme.searched.desc())
+                .orderBy(meme.searched.desc(), meme.id.desc())
                 .limit(pageable.getPageSize()+1)
                 .fetch();
 
@@ -166,46 +202,4 @@ public class MemeSearchRepository {
         return checkLastPage(pageable, results);
 
     }
-
-
-
-    private BooleanExpression ltMemeId(Long memeId) {
-        if (memeId == 0) {
-            return meme.id.lt(Long.MAX_VALUE);
-        }
-        return meme.id.lt(memeId);
-    }
-    private BooleanExpression containMemeTitle(String word) {
-        if(word == null) {
-            return null;
-        }
-        return meme.title.contains(word);
-    }
-
-    private BooleanExpression daysMeme(String days) {
-
-        if (days.equals("all")) {
-            return null;
-        } else if(days.equals("today")) {
-            return meme.createdAt.eq(LocalDateTime.now());
-        } else if(days.equals("week")) {
-            return meme.createdAt.after(LocalDateTime.now().minusWeeks(1));
-        }
-        return null;
-    }
-
-    // 무한 스크롤 방식 처리하는 메서드
-    private Slice<MemeListResponse> checkLastPage(Pageable pageable, List<MemeListResponse> results) {
-
-        boolean hasNext = false;
-
-        // 조회한 결과 개수가 요청한 페이지 사이즈보다 크면 뒤에 더 있음, next = true
-        if (results.size() > pageable.getPageSize()) {
-            hasNext = true;
-            results.remove(pageable.getPageSize());
-        }
-        return new SliceImpl<>(results, pageable, hasNext);
-    }
-
-
 }

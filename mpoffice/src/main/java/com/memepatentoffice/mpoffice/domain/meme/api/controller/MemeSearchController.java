@@ -28,7 +28,7 @@ public class MemeSearchController {
     public ResponseEntity<Slice<MemeListResponse>> getMemeList(
             @RequestParam(value = "idx", defaultValue = "0") long Idx,
             @RequestParam(value = "search", required = false) String searchText,
-            @PageableDefault(size = 10, sort = "idx", direction = Sort.Direction.ASC) Pageable pageable) {
+            @PageableDefault(size = 10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(memeSearchService.getMemeList(Idx, pageable, searchText));
     }
 
@@ -37,7 +37,7 @@ public class MemeSearchController {
             @RequestParam(value = "days", defaultValue = "all") String days,
             @RequestParam(value = "idx", defaultValue = "0") long Idx,
             @RequestParam(value = "search", required = false) String searchText,
-            @PageableDefault(size = 10, sort = "idx", direction = Sort.Direction.ASC) Pageable pageable) {
+            @PageableDefault(size = 10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(memeSearchService.getPopularMemeList(days, Idx, pageable, searchText));
     }
 
@@ -46,7 +46,7 @@ public class MemeSearchController {
             @RequestParam(value = "days", defaultValue = "all") String days,
             @RequestParam(value = "idx", defaultValue = "0") long Idx,
             @RequestParam(value = "search", required = false) String searchText,
-            @PageableDefault(size = 10, sort = "idx", direction = Sort.Direction.ASC) Pageable pageable) {
+            @PageableDefault(size = 10, sort = "idx", direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(memeSearchService.getExpensiveMemeList(days, Idx, pageable, searchText));
     }
 
@@ -55,7 +55,7 @@ public class MemeSearchController {
             @RequestParam(value = "days", defaultValue = "all") String days,
             @RequestParam(value = "idx", defaultValue = "0") long Idx,
             @RequestParam(value = "search", required = false) String searchText,
-            @PageableDefault(size = 10, sort = "idx", direction = Sort.Direction.ASC) Pageable pageable) {
+            @PageableDefault(size = 10, sort = "idx", direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.status(HttpStatus.OK).body(memeSearchService.getViewsMemeList(days, Idx, pageable, searchText));
     }
 
