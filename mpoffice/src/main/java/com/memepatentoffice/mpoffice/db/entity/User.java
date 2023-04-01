@@ -5,6 +5,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -16,6 +18,8 @@ public class User extends BaseEntity{
     @Column(name = "name", length = 20)
     private String name;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
     @Column(name = "email")
     private String email;
 

@@ -3,6 +3,7 @@ package com.memepatentoffice.mpoffice.domain.meme.api.controller;
 import com.google.api.Http;
 import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
 import com.memepatentoffice.mpoffice.db.entity.Comment;
+import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentDeleteRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentInfoRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentLikeRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentRequest;
@@ -71,6 +72,13 @@ public class CommentController {
                                       @RequestParam(required = false,name = "id3")Long id3,
                                       @PageableDefault(value = 8) Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(commentService.findLatest(memeId,id1,id2,id3,pageable));
+    }
+
+    @PostMapping("/delete")
+    @ResponseBody
+    public ResponseEntity deleteComment(@RequestBody  CommentDeleteRequest commentDeleteRequest)throws NotFoundException{
+        String result = commentService.deleteComment(commentDeleteRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
 }
