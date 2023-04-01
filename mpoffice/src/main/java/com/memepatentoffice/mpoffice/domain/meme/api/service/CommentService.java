@@ -59,7 +59,7 @@ public class CommentService {
                 .comment(commentRequest.getContent())
                 .date(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                 .parentId(parentComment.get().getId())
-                .liked(userCommentLikeRepository.existsByUserIdAndCommentId(user.getId(),com.getId()))
+                .liked(userCommentLikeRepository.existsByUserIdAndCommentId(user.getId(),parentComment.get().getId()))
                 .likes(userCommentLikeRepository.countUserCommentLikesByCommentId(com.getId()))
                 .parentName(parentComment.get().getUser().getNickname())
                 .build();
