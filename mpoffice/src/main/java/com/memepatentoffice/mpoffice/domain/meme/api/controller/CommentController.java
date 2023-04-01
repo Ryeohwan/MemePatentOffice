@@ -38,7 +38,7 @@ public class CommentController {
     @PostMapping("/create")
     @ResponseBody
     public ResponseEntity createComment(@RequestBody CommentRequest commentRequest) throws NotFoundException {
-        if(commentRequest.getParentComment() != null){
+        if(commentRequest.getParentId() != null){
             System.out.println("hi this is reply");
             return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createReply(commentRequest));
         }else{
