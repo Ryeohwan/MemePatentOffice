@@ -55,7 +55,7 @@ public class CommentService {
                 .userName(user.getNickname())
                 .userImgUrl(user.getProfileImage())
                 .comment(commentRequest.getContent())
-                .date(commentRequest.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                .date(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                 .parentId(parentComment.get().getId())
                 .parentName(parentComment.get().getUser().getNickname())
                 .build();
@@ -84,7 +84,7 @@ public class CommentService {
                 .userImgUrl(user.getProfileImage())
                 .userName(user.getNickname())
                 .comment(commentRequest.getContent())
-                .date(commentRequest.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                .date(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                 .liked(userMemeLikeRepository.existsUserMemeLikeByUserIdAndMemeId(user.getId(),meme.getId()))
                 .replyCommentCnt(commentRepository.countAllByParentCommentId(created.getId()))
                 .build();
