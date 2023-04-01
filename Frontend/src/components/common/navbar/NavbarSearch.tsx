@@ -20,7 +20,6 @@ const NavbarSearch: React.FC = () => {
   const enterHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== "Enter" || !inputRef.current) return;
     if (inputRef.current.value.trim().length === 0) return;
-    dispatch(memeListActions.changeResult(true));      // 검색결과 true reset
     dispatch(memeListActions.changeInputTxt(inputRef.current.value.trim()));
     navigate("/meme-list/type=new")
   };

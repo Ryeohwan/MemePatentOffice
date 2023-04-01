@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { RootState } from "store/configStore";
 import { useAppDispatch } from "hooks/useAppDispatch";
 import { memeType } from "store/memeList";

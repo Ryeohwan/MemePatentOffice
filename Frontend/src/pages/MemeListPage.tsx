@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "store/configStore";
 import { useAppDispatch } from "hooks/useAppDispatch";
-import { memeListActions, getMemeNewListAxiosThunk } from "store/memeList";
+import { memeListActions, getMemeNewListAxiosThunk, getMemePopularListAxiosThunk } from "store/memeList";
 
 import MemeListSearch from "components/meme/list/MemeListSearch";
 import NotInputArea from "components/meme/list/NotInputArea";
@@ -18,15 +18,16 @@ const MemeListPage: React.FC = () => {
   const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
   const input = useSelector<RootState, string>((state) => state.memeList.input);
+  const range = useSelector<RootState, string>((state) => state.memeList.range);
   const firstLoading = useSelector<RootState, boolean>((state) => state.memeList.loadingMemeList);
 
   const result = useSelector<RootState, boolean|null>((state) => state.memeList.result);
 
   // 디테일 -> 뒤로가기 했을때 데이터 살려놓으려면 고쳐야할듯....
-  // unmount시 redux에 input ""로 바꾸기
+  // unmount시 redux reset 시키기
   useEffect(() => {
     return () => {
-      dispatch(memeListActions.changeInputTxt(""));
+      dispatch(memeListActions.resetAll());
     };
   }, []);
 
@@ -35,7 +36,7 @@ const MemeListPage: React.FC = () => {
     if (!input) return;
     console.log("new list get!", input);
     appDispatch(getMemeNewListAxiosThunk(input, -1));
-    console.log('popular get 할거임')
+    // appDispatch(getMemePopularListAxiosThunk(input, range, -1))
   }, [input]);
 
 
