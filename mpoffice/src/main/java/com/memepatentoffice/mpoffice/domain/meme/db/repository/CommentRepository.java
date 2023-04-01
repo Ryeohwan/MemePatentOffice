@@ -3,6 +3,7 @@ package com.memepatentoffice.mpoffice.domain.meme.db.repository;
 import com.memepatentoffice.mpoffice.db.entity.Comment;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.CommentResponse;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -35,9 +36,10 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             " LEFT JOIN UserCommentLike l ON l.comment.id = c.id" +
             " LEFT JOIN Comment d ON c.id = d.parentComment.id " +
             " WHERE c.meme.id = :memeId " +
-            " GROUP BY c.content, c.createdAt, c.id, c.user.nickname, c.user.profileImage, liked" +
+            " GROUP BY c.content, c.id, c.user.nickname, c.user.profileImage" +
+//            " GROUP BY c.content, c.createdAt, c.id, c.user.nickname, c.user.profileImage, liked" +
             " ORDER BY heartCnt desc")
-    Slice<Object> findBestThreeComment(@Param("memeId")Long memeId);
+    Slice<Object> findBestThreeComment(@Param("memeId")Long memeId, Pageable pageable);
 
     @Query("SELECT c.content, c.createdAt, " +
             " COUNT(d) as replyCommentCnt, " +
