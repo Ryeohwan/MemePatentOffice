@@ -59,6 +59,8 @@ public class CommentService {
                 .comment(commentRequest.getContent())
                 .date(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                 .parentId(parentComment.get().getId())
+                .liked(userMemeLikeRepository.existsUserMemeLikeByUserIdAndMemeId(user.getId(),meme.getId()))
+                .likes(userCommentLikeRepository.countUserCommentLikesByCommentId(com.getId()))
                 .parentName(parentComment.get().getUser().getNickname())
                 .build();
         return result;
@@ -89,6 +91,7 @@ public class CommentService {
                 .date(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                 .liked(userMemeLikeRepository.existsUserMemeLikeByUserIdAndMemeId(user.getId(),meme.getId()))
                 .replyCommentCnt(commentRepository.countAllByParentCommentId(created.getId()))
+                .best(0)
                 .build();
         return result;
     }
