@@ -2,6 +2,7 @@ package com.memepatentoffice.mpoffice.domain.meme.api.service;
 
 import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
 import com.memepatentoffice.mpoffice.db.entity.*;
+import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentDeleteRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentInfoRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentLikeRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentRequest;
@@ -144,6 +145,25 @@ public class CommentService {
         Slice<Object> temp =commentRepository.findLatestComment(memeId,id1,id2,id3,pageable);
         Slice<CommentResponse> result = convertToDtoLatest(temp);
         return result;
+    }
+
+    @Transactional
+    public String deleteComment(CommentDeleteRequest commentDeleteRequest)throws NotFoundException{
+        User user = userRepository.findById(commentDeleteRequest.getUserId()).orElseThrow(()-> new NotFoundException("존재하지 않는유저입니다."));
+        Meme meme = memeRepository.findById(commentDeleteRequest.getMemeId()).orElseThrow(() -> new NotFoundException("존재하지 않는 밈입니다."));
+        Comment com = commentRepository.findById(commentDeleteRequest.getCommentId()).orElseThrow(() -> new NotFoundException("존재하지 않는 글입니다."));
+        List<Comment> list = commentRepository.findAllByParentCommentId(com.getId());
+
+        if(com.getUser().getId() == user.getId() && com.getMeme().getId() == meme.getId()){
+            for(Comment a: list){
+                commentRepository.delete(a);
+            }
+            commentRepository.delete(com);
+            return "delete success";
+        }else{
+            return "delete failed";
+        }
+
     }
 
     public Slice<CommentResponse> convertToDtoTop(Slice<Object> slice) {
