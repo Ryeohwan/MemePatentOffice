@@ -42,7 +42,7 @@ public class CommentService {
                 .orElseThrow(()->new NotFoundException("유효하지 않은 유저입니다"));
         Meme meme = memeRepository.findById(commentRequest.getMemeId())
                 .orElseThrow(()->new NotFoundException("유효하지 않은 밈입니다"));
-        Optional<Comment> parentComment = commentRepository.findById(commentRequest.getParentComment());
+        Optional<Comment> parentComment = commentRepository.findById(commentRequest.getParentId());
         //optional로 user
         Comment com = new Comment().builder()
                 .content(commentRequest.getContent())
@@ -59,7 +59,7 @@ public class CommentService {
                 .comment(commentRequest.getContent())
                 .date(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                 .parentId(parentComment.get().getId())
-                .liked(userCommentLikeRepository.existsByUseIdAndCommentId(user.getId(),com.getId()))
+                .liked(userCommentLikeRepository.existsByUserIdAndCommentId(user.getId(),com.getId()))
                 .likes(userCommentLikeRepository.countUserCommentLikesByCommentId(com.getId()))
                 .parentName(parentComment.get().getUser().getNickname())
                 .build();
