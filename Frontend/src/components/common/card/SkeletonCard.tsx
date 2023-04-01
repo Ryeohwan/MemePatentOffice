@@ -1,6 +1,6 @@
 import React from "react";
 
-import styles from "components/common/SkeletonCard.module.css";
+import styles from "components/common/card/SkeletonCard.module.css";
 import { Skeleton } from "primereact/skeleton";
 
 const SkeletonCard: React.FC = () => {

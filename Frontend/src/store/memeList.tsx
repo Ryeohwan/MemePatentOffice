@@ -14,27 +14,32 @@ export type memeType = {
 interface initialStateInterface {
   input: string;
   period: string;
+  loadingMemeList: boolean;
   result: boolean;
+  
   nextMemeNewList: true;
-  loadingMemeNewList: boolean;
   loadingMemeNewListMore: boolean;
   memeNewList: memeType[];
-  loadingMemePopularList: boolean;
+  
+  nextMemePopularList: true;
+  loadingMemePopularListMore: boolean;
   memePopularList: memeType[];
+  
   memeRandomList: memeType[];
 }
 
 const initialState: initialStateInterface = {
   input: "",
-  result: true,
   period: "",
+  loadingMemeList: false,
+  result: true,
 
   nextMemeNewList: true,
-  loadingMemeNewList: false,
   loadingMemeNewListMore: false,
   memeNewList: [],
 
-  loadingMemePopularList: false,
+  nextMemePopularList: true,
+  loadingMemePopularListMore: false,
   // memePopularList: [],
   // memeRandomList: [],
 
@@ -172,12 +177,13 @@ const memeListSlice = createSlice({
     changePeriod: (state, actions) => {
       state.period = actions.payload;
     },
+    changeMemeListLoading(state, actions) {
+      state.loadingMemeList = actions.payload;
+    },
     changeResult: (state, actions) => {
       state.result = actions.payload;
     },
-    changeMemeNewListLoading(state, actions) {
-      state.loadingMemeNewList = actions.payload;
-    },
+    
     changeMemeNewListLoadingMore(state, actions) {
       state.loadingMemeNewListMore = actions.payload;
     },
@@ -193,8 +199,9 @@ const memeListSlice = createSlice({
     resetMemeNewList: (state) => {
       state.memeNewList = [];
     },
-    changeMemePopularListLoading(state, actions) {
-      state.loadingMemePopularList = actions.payload;
+    
+    changeMemePopularListLoadingMore(state, actions) {
+      state.loadingMemePopularListMore = actions.payload;
     },
     getMemePopularList: (state, actions) => {
       state.memePopularList = actions.payload;
@@ -202,6 +209,7 @@ const memeListSlice = createSlice({
     resetMemePopularList: (state) => {
       state.memePopularList = [];
     },
+    
     getMemeRandomList: (state, actions) => {
       state.memeRandomList = actions.payload;
     },
@@ -211,14 +219,18 @@ const memeListSlice = createSlice({
 export const getMemeNewListAxiosThunk =
   (input: string, lastPostRef: number): AppThunk =>
   async (dispatch) => {
-    if (lastPostRef === -1) dispatch(memeListActions.changeMemeNewListLoading(true));
-    else dispatch(memeListActions.changeMemeNewListLoadingMore(true));
+    // 처음 검색인 경우
+    if (lastPostRef === -1) dispatch(memeListActions.changeMemeListLoading(true));
+    else {
+      dispatch(memeListActions.changeMemeNewListLoadingMore(true))
+      // skeleton 띄우기 위해서 임의로 시간 term 부여
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    }
 
     const sendRequest = async () => {
       const requestUrl =
         `${process.env.REACT_APP_HOST}/api/mpoffice/meme/search?search=${input}` + ((lastPostRef !== -1) ? `&idx=${lastPostRef}` : '');
 
-      console.log('여기 보낼거임!', requestUrl);
 
       const response = await axios.get(requestUrl, {
         headers: {
@@ -242,6 +254,7 @@ export const getMemeNewListAxiosThunk =
       console.log("res", res);
       if (!res || res.empty) {
         dispatch(memeListActions.changeResult(false));
+        dispatch(memeListActions.changeMemeListLoading(false));
         return;
       }
       dispatch(memeListActions.changeResult(true));
@@ -255,8 +268,7 @@ export const getMemeNewListAxiosThunk =
     } catch (err) {
       console.log(err);
     }
-    if (lastPostRef === -1)
-      dispatch(memeListActions.changeMemeNewListLoading(false));
+    if (lastPostRef === -1) dispatch(memeListActions.changeMemeListLoading(false));
     else dispatch(memeListActions.changeMemeNewListLoadingMore(false));
   };
 
