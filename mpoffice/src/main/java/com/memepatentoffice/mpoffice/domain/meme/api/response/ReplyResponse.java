@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ReplyResponse {
-    private String nickName;
-    private String profileImage;
-    private String content;
-    private String createdAt;
-    private Long originId;
-    private String originNickName;
+    private String userName;
+    private String userImgUrl;
+    private String comment;
+    private String date;
+    private Long parentId;
+    private String parentName;
 }

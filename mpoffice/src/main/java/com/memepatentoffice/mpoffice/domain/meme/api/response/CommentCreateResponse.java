@@ -11,14 +11,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 public class CommentCreateResponse {
-    private Long commentId;
-    private Long createrId;
-    private String userProfile;
-    private String nickName;
-    private String content;
-    private int likeCount;
-    private String createdAt;
+    private Long Id;
+    private Long userId;
+    private String userImgUrl;
+    private String userName;
+    private String comment;
+    private int likes;
+    private String date;
     private Boolean liked;
-    private int replyCount;
-    private Boolean isBest;
+    private int replyCommentCnt;
+    private int best;
 }
