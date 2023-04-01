@@ -1,21 +1,22 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "store/configStore";
 import { commentType } from "store/commentList";
 import CommentItem from "./CommentItem";
 import styles from "./CommentList.module.css";
 
-interface CommentProps {
-  recentComments: commentType[],
-  bestComments: commentType[],
-};
 
-
-const CommentList: React.FC<CommentProps> = ({recentComments, bestComments }) => {
-  const bestCommentList = bestComments;
-  const recentCommentList = recentComments;
+const CommentList: React.FC = () => {
+  const recentCommentList = useSelector<RootState, commentType[]>(
+    (state) => state.commentList.commentNewList
+  );
+  const bestCommentList = useSelector<RootState, commentType[]>(
+    (state) => state.commentList.commentBestList
+  );
 
   return (
     <>
-      {bestCommentList.map((comment:commentType) => {
+      {bestCommentList.map((comment: commentType) => {
         return (
           <div className={styles.commentItemWrapper}>
             <CommentItem key={comment.id} items={comment} />
@@ -23,14 +24,13 @@ const CommentList: React.FC<CommentProps> = ({recentComments, bestComments }) =>
         );
       })}
 
-      {recentCommentList.map((comment:commentType) => {
+      {recentCommentList.map((comment: commentType) => {
         return (
           <div className={styles.commentItemWrapper}>
             <CommentItem key={comment.id} items={comment} />
           </div>
-        )
+        );
       })}
-
     </>
   );
 };

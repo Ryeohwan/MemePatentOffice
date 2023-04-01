@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
+import { AppThunk } from "./configStore";
 
 export type commentType = {
   id: number;
@@ -30,6 +32,10 @@ interface initialStateInterface {
   replyCommentList: replyType[];
   nowParentId: null | number;
   nowParentName: null | string;
+  loadingNewCommentList: boolean;
+  loadingMoreNewCommentList: boolean;
+  loadingBestCommentList: boolean;
+  result: boolean;
 }
 
 const initialState: initialStateInterface = {
@@ -111,6 +117,10 @@ const initialState: initialStateInterface = {
   ],
   nowParentId: null,
   nowParentName: null,
+  loadingNewCommentList: false,
+  loadingMoreNewCommentList: false,
+  loadingBestCommentList: false,
+  result: false
 };
 
 const commentListSlice = createSlice({
@@ -150,6 +160,21 @@ const commentListSlice = createSlice({
       }
     },
 
+    changeResult(state, actions) {
+      state.result = actions.payload;
+    },
+
+    // 무한스크롤 로딩
+    changeNewCommentList(state, actions) {
+      state.loadingNewCommentList = actions.payload;
+    },
+    changeNewCommentListMore(state, actions) {
+      state.loadingMoreNewCommentList = actions.payload;
+    },
+    changeBestCommentList(state, actions) {
+      state.loadingBestCommentList = actions.payload;
+    },
+
     // 댓글 입력 시
     commentAddHandler: (state, actions) => {
       state.commentNewList = [...actions.payload, ...state.commentNewList];
@@ -176,6 +201,60 @@ const commentListSlice = createSlice({
 
   },
 });
+
+
+// export const getCommentListAxiosThunk =
+//   (input: string, lastPostRef: number): AppThunk =>
+//   async (dispatch) => {
+//     if (lastPostRef === -1) dispatch(commentListActions.changeNewCommentList(true));
+//     else dispatch(commentListActions.changeNewCommentListMore(true));
+
+//     const sendRequest = async () => {
+//       const requestUrl =
+//         `${process.env.REACT_APP_HOST}/api/mpoffice/meme/search?search=${input}` + ((lastPostRef !== -1) ? `&idx=${lastPostRef}` : '');
+
+//       console.log('여기 보낼거임!', requestUrl);
+
+//       const response = await axios.get(requestUrl, {
+//         headers: {
+//           Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+//           "Access-Control-Allow-Credentials": true,
+//           "Content-Type": "application/json",
+//         },
+//         validateStatus: (status) => status === 200 || status === 401,
+//       });
+
+//       if (response.status === 401) {
+//         // 로그아웃
+//         return false;
+//       } else {
+//         return response.data;
+//       }
+//     };
+
+//     try {
+//       const res = await sendRequest();
+//       console.log("res", res);
+//       if (!res || res.empty) {
+//         dispatch(commentListActions.changeResult(false));
+//         return;
+//       }
+//       dispatch(commentListActions.changeResult(true));
+//       dispatch(
+//         commentListActions.updateMemeNewList({
+//           getList: res.content,
+//           lastPostId: lastPostRef,
+//           hasNext: !res.last,
+//         })
+//       );
+//     } catch (err) {
+//       console.log(err);
+//     }
+//     if (lastPostRef === -1)
+//       dispatch(commentListActions.changeNewCommentList(false));
+//     else dispatch(commentListActions.changeNewCommentListMore(false));
+//   };
+
 
 export const commentListActions = commentListSlice.actions;
 export default commentListSlice.reducer;
