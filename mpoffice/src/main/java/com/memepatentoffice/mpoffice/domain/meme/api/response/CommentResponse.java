@@ -21,6 +21,6 @@ public class CommentResponse {
     private int replyCommentCnt;
     private Long id;
     private String createdAt;
-
+    private int best;
 
 }

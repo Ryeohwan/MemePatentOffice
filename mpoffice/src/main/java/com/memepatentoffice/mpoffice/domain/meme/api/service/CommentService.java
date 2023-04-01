@@ -12,9 +12,11 @@ import com.memepatentoffice.mpoffice.domain.meme.db.repository.*;
 import com.memepatentoffice.mpoffice.domain.user.db.repository.UserRepository;
 import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -129,18 +131,19 @@ public class CommentService {
     }
 
     public Slice<CommentResponse> findTop(Long memeId){
-        Slice<Object> temp = commentRepository.findBestThreeComment(memeId);
-        Slice<CommentResponse> result = convertToDto(temp);
+
+        Slice<Object> temp = commentRepository.findBestThreeComment(memeId, PageRequest.of(0,3));
+        Slice<CommentResponse> result = convertToDtoTop(temp);
         return result;
     }
 
     public Slice<CommentResponse> findLatest(Long memeId,Long id1, Long id2, Long id3, Pageable pageable){
         Slice<Object> temp =commentRepository.findLatestComment(memeId,id1,id2,id3,pageable);
-        Slice<CommentResponse> result = convertToDto(temp);
+        Slice<CommentResponse> result = convertToDtoTop(temp);
         return result;
     }
 
-    public Slice<CommentResponse> convertToDto(Slice<Object> slice) {
+    public Slice<CommentResponse> convertToDtoTop(Slice<Object> slice) {
         List<CommentResponse> dtoList = new ArrayList<>();
         for (Object obj : slice.getContent()) {
             Object[] arr = (Object[]) obj;
@@ -161,6 +164,7 @@ public class CommentService {
                     .profileImage(profileImage)
                     .heartCnt(heartCnt.intValue())
                     .liked(liked)
+                    .best(1)
                     .build();
             dtoList.add(dto);
         }
