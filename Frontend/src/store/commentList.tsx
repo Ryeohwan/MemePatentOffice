@@ -5,12 +5,12 @@ import { AppThunk } from "./configStore";
 export type commentType = {
   id: number;
   userId: number;
-  userImgUrl: string;
-  userName: string;
-  comment: string;
-  likes: number;
+  profileImage: string;
+  nickname: string;
+  content: string;
+  heartCnt: number;
   date: string;
-  liked: number;
+  liked: boolean;
   best: number;
   replyCommentCnt: number;
   parentId: null | number;
@@ -20,7 +20,7 @@ export type commentType = {
 export type replyType = {
   writerNickname: string;
   writerImg: string;
-  comment: string;
+  content: string;
   createdAt: string;
   parentId: null | number;
   parentName: null | string;
@@ -43,12 +43,12 @@ const initialState: initialStateInterface = {
     {
       id: 1,
       userId: 3,
-      userImgUrl: "theglory.jpeg",
-      userName: "호롤롤로",
-      comment: "경매 언제 열어주시나요 나 이거 증말 갖고싶어 죽겠어 ㅠ ㅠ",
-      likes: 17,
+      profileImage: "theglory.jpeg",
+      nickname: "호롤롤로",
+      content: "경매 언제 열어주시나요 나 이거 증말 갖고싶어 죽겠어 ㅠ ㅠ",
+      heartCnt: 17,
       date: "1일 전",
-      liked: 0,
+      liked: false,
       best: 0,
       replyCommentCnt: 0,
       parentId: null,
@@ -57,13 +57,13 @@ const initialState: initialStateInterface = {
     {
       id: 2,
       userId: 2,
-      userImgUrl: "newjeans.jpg",
-      userName: "5조의 햇살",
-      comment:
+      profileImage: "newjeans.jpg",
+      nickname: "5조의 햇살",
+      content:
         "아 이거 괜히 팔았다.. 다시 보니까 또 갖고 싶어.. 경매 다시 열어주시죠... 나 다시 가져올래..",
-      likes: 25,
+      heartCnt: 25,
       date: "1주 전",
-      liked: 0,
+      liked: false,
       best: 0,
       replyCommentCnt: 0,
       parentId: null,
@@ -74,13 +74,13 @@ const initialState: initialStateInterface = {
     {
       id: 3,
       userId: 1,
-      userImgUrl: "totoro.jpg",
-      userName: "단발머리 부엉이",
-      comment:
+      profileImage: "totoro.jpg",
+      nickname: "단발머리 부엉이",
+      content:
         "나는 봄 타는 단발머리 부엉이 외로워서 점심마다 산책을 가즤요. 토토로 nft 만이 나의 낙이에요 고독사 직전의 부엉이",
-      likes: 31,
+      heartCnt: 31,
       date: "3주 전",
-      liked: 1,
+      liked: true,
       best: 1,
       replyCommentCnt: 3,
       parentId: null,
@@ -92,7 +92,7 @@ const initialState: initialStateInterface = {
       writerImg: "newjeans.jpg",
       writerNickname: "5조의 햇살",
       createdAt: "1주 전",
-      comment:
+      content:
         "인정입니다 인정~~.. 토토로 졸귀입니다졸귀.. 저 이 nft 다시 가져오고 싶은데 경매 예정 없으십니까?",
       parentId: 1,
       parentName: "호롤롤로",
@@ -101,7 +101,7 @@ const initialState: initialStateInterface = {
       writerImg: "totoro.jpg",
       writerNickname: "단발머리 부엉이",
       createdAt: "5일 전",
-      comment: "알림 신청 해두시지요 .. 알림이 갈 겁니답쇼이옹",
+      content: "알림 신청 해두시지요 .. 알림이 갈 겁니답쇼이옹",
       parentId: 1,
       parentName: "호롤롤로",
     },
@@ -109,7 +109,7 @@ const initialState: initialStateInterface = {
       writerImg: "newjeans.jpg",
       writerNickname: "5조의 햇살",
       createdAt: "3시간 전",
-      comment:
+      content:
         "예.... 아 12월 28일 경매 예정이시군요 당장 알림신청 했읍니다... 다시 가져오고 말겠읍니다.",
       parentId: 1,
       parentName: "호롤롤로",
@@ -129,7 +129,7 @@ const commentListSlice = createSlice({
   reducers: {
     getCommentList: (state, actions) => {
       // 무한 스크롤 용
-      state.commentNewList = [...state.commentNewList, ...actions.payload];
+      state.commentNewList = actions.payload;
     },
     getBestCommentList: (state, actions) => {
       state.commentBestList = actions.payload;
@@ -143,18 +143,18 @@ const commentListSlice = createSlice({
       for (let i = 0; i < state.commentNewList.length; i++) {
         if (state.commentNewList[i].id === actions.payload.id) {
           state.commentNewList[i].liked =
-            state.commentNewList[i].liked === 0 ? 1 : 0;
-          state.commentNewList[i].likes +=
-            state.commentNewList[i].liked === 0 ? -1 : 1;
+            state.commentNewList[i].liked === false ? true : false;
+          state.commentNewList[i].heartCnt +=
+            state.commentNewList[i].liked === false ? 1 : -1;
           break;
         }
       }
       for (let i = 0; i < state.commentBestList.length; i++) {
         if (state.commentBestList[i].id === actions.payload.id) {
           state.commentBestList[i].liked =
-            state.commentBestList[i].liked === 0 ? 1 : 0;
-          state.commentBestList[i].likes +=
-            state.commentBestList[i].liked === 0 ? -1 : 1;
+            state.commentBestList[i].liked === false ? true : false;
+          state.commentBestList[i].heartCnt +=
+            state.commentBestList[i].liked === false ? 1 : -1;
           break;
         }
       }
@@ -203,15 +203,88 @@ const commentListSlice = createSlice({
 });
 
 
-// export const getCommentListAxiosThunk =
-//   (input: string, lastPostRef: number): AppThunk =>
+export const getCommentListAxiosThunk =
+  ( memeId: number): AppThunk =>
+  async (dispatch) => {
+
+    const sendRequest = async () => {
+      const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/list?memeId=${memeId}`;
+
+      console.log('여기 보낼거임!', requestUrl);
+
+      const response = await axios.get(requestUrl, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+          "Access-Control-Allow-Credentials": true,
+          "Content-Type": "application/json",
+        },
+        validateStatus: (status) => status === 200 || status === 401,
+      });
+
+      if (response.status === 401) {
+        // 로그아웃
+        return false;
+      } else {
+        return response.data;
+      }
+    };
+
+    try {
+      const res = await sendRequest();
+      console.log("최신순 댓글", res);
+      if (!res || res.empty) {
+        return;
+      }
+      dispatch(commentListActions.getCommentList(res.content));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+export const getBestCommentListAxiosThunk =
+  ( memeId: number): AppThunk =>
+  async (dispatch) => {
+
+    const sendRequest = async () => {
+      const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/bestList?memeId=${memeId}`;
+
+      console.log('여기 보낼거임!', requestUrl);
+
+      const response = await axios.get(requestUrl, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+          "Access-Control-Allow-Credentials": true,
+          "Content-Type": "application/json",
+        },
+        validateStatus: (status) => status === 200 || status === 401,
+      });
+
+      if (response.status === 401) {
+        // 로그아웃
+        return false;
+      } else {
+        return response.data;
+      }
+    };
+
+    try {
+      const res = await sendRequest();
+      console.log("베스트 댓글", res);
+      if (!res || res.empty) {
+        return;
+      }
+      dispatch(commentListActions.getBestCommentList(res.content));
+    } catch (err) {
+      console.log(err);
+    }
+};
+
+// export const getReplyListAxiosThunk =
+//   ( commentId: number): AppThunk =>
 //   async (dispatch) => {
-//     if (lastPostRef === -1) dispatch(commentListActions.changeNewCommentList(true));
-//     else dispatch(commentListActions.changeNewCommentListMore(true));
 
 //     const sendRequest = async () => {
-//       const requestUrl =
-//         `${process.env.REACT_APP_HOST}/api/mpoffice/meme/search?search=${input}` + ((lastPostRef !== -1) ? `&idx=${lastPostRef}` : '');
+//       const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/list?memeId=${commentId}`;
 
 //       console.log('여기 보낼거임!', requestUrl);
 
@@ -236,23 +309,12 @@ const commentListSlice = createSlice({
 //       const res = await sendRequest();
 //       console.log("res", res);
 //       if (!res || res.empty) {
-//         dispatch(commentListActions.changeResult(false));
 //         return;
 //       }
-//       dispatch(commentListActions.changeResult(true));
-//       dispatch(
-//         commentListActions.updateMemeNewList({
-//           getList: res.content,
-//           lastPostId: lastPostRef,
-//           hasNext: !res.last,
-//         })
-//       );
+//       dispatch(commentListActions.getCommentList(res.content));
 //     } catch (err) {
 //       console.log(err);
 //     }
-//     if (lastPostRef === -1)
-//       dispatch(commentListActions.changeNewCommentList(false));
-//     else dispatch(commentListActions.changeNewCommentListMore(false));
 //   };
 
 
