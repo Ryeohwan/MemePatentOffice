@@ -16,6 +16,7 @@ const MemeListSearch = () => {
   const enterHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== "Enter" || !inputRef.current) return;
     if (inputRef.current.value.trim().length === 0) return;
+    if (inputRef.current.value === input) return;
     dispatch(memeListActions.changeResult(true));    // 검색결과 reset
     dispatch(memeListActions.resetMemeNewList());
     dispatch(memeListActions.resetMemePopularList());
