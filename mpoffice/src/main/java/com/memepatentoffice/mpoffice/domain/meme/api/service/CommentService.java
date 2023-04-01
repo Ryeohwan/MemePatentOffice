@@ -142,11 +142,39 @@ public class CommentService {
 
     public Slice<CommentResponse> findLatest(Long memeId,Long id1, Long id2, Long id3, Pageable pageable){
         Slice<Object> temp =commentRepository.findLatestComment(memeId,id1,id2,id3,pageable);
-        Slice<CommentResponse> result = convertToDtoTop(temp);
+        Slice<CommentResponse> result = convertToDtoLatest(temp);
         return result;
     }
 
     public Slice<CommentResponse> convertToDtoTop(Slice<Object> slice) {
+        List<CommentResponse> dtoList = new ArrayList<>();
+        for (Object obj : slice.getContent()) {
+            Object[] arr = (Object[]) obj;
+            String content = (String) arr[0];
+            LocalDateTime createdAt = (LocalDateTime) arr[1];
+            Long replyCommentCnt = (Long) arr[2];
+            Long id = (Long) arr[3];
+            String nickname = (String) arr[4];
+            String profileImage = (String) arr[5];
+            Long heartCnt = (Long)arr[6];
+            Boolean liked = (Boolean) arr[7];
+            CommentResponse dto = CommentResponse.builder()
+                    .content(content)
+                    .createdAt(createdAt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                    .replyCommentCnt(replyCommentCnt.intValue())
+                    .id(id)
+                    .nickname(nickname)
+                    .profileImage(profileImage)
+                    .heartCnt(heartCnt.intValue())
+                    .liked(liked)
+                    .best(1)
+                    .build();
+            dtoList.add(dto);
+        }
+        return new SliceImpl<>(dtoList, slice.getPageable(), slice.hasNext());
+    }
+
+    public Slice<CommentResponse> convertToDtoLatest(Slice<Object> slice) {
         List<CommentResponse> dtoList = new ArrayList<>();
         for (Object obj : slice.getContent()) {
             Object[] arr = (Object[]) obj;
