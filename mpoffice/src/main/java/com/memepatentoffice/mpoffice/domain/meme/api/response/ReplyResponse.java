@@ -15,6 +15,8 @@ public class ReplyResponse {
     private String userImgUrl;
     private String comment;
     private String date;
+    private int likes;
+    private Boolean liked;
     private Long parentId;
     private String parentName;
 }

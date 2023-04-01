@@ -19,5 +19,7 @@ public class CommentRequest {
     @Nullable
     private Long parentComment;
     private String content;
+    private Boolean liked;
+    private int likes;
     private LocalDateTime createdAt;
 }

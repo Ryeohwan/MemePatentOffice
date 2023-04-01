@@ -25,6 +25,7 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
     Optional<Comment> findCommentById(Long id);
     int countAllByParentCommentId(Long id);
 
+
     // 여기서 베스트 3개 id 를받습니다. - 여기서 인기순 정렬한 값
 
     @Query("SELECT c.content, c.createdAt, " +
