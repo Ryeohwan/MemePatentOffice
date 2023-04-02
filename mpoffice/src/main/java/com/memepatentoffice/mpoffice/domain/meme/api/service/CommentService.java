@@ -142,10 +142,17 @@ public class CommentService {
                         .orElseThrow(()->new NotFoundException("유효하지 않은 댓글입니다")))
                 .user(userRepository.findById(commentLikeRequest.getUserId())
                                 .orElseThrow(()->new NotFoundException("유효하지 않은 유저입니다")))
-                .commentLike(CommentLike.LIKE)
                 .build();
-        userCommentLikeRepository.save(temp);
-        return true;
+        UserCommentLike check = userCommentLikeRepository.findByCommentIdAndUserId(temp.getComment().getId(), temp.getUser().getId());
+        if(check.getCommentLike() != null){
+            check.setCommentLike(null);
+            return true;
+        }else{
+            temp.setCommentLike(CommentLike.LIKE);
+            userCommentLikeRepository.save(temp);
+            return true;
+        }
+
     }
     public void CommentList(Long id) throws NotFoundException{
         List<Comment> list = commentRepository.findCommentsByMemeId(id);
