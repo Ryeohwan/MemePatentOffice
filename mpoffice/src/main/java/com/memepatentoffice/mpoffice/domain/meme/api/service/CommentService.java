@@ -56,9 +56,11 @@ public class CommentService {
         Comment saveResult = commentRepository.save(com);
         List<UserCommentLike> check = userCommentLikeRepository.findAllByCommentIdAndUserId(saveResult.getId(),saveResult.getUser().getId());
         Boolean liked = false;
+        int heartCnt = 0;
         for(UserCommentLike l : check){
             if(l.getCommentLike().equals(CommentLike.LIKE)){
                 liked = true;
+                heartCnt += 1;
             }
         }
         ReplyResponse result = ReplyResponse.builder()
@@ -71,7 +73,7 @@ public class CommentService {
                 .date(saveResult.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                 .id(saveResult.getId())
                 .liked(liked)
-                .heartCnt(userCommentLikeRepository.countUserCommentLikesByCommentId(saveResult.getId()))
+                .heartCnt(heartCnt)
                 .build();
         System.out.println(result.getLiked());
         return result;
@@ -91,17 +93,20 @@ public class CommentService {
                 .createdAt(LocalDateTime.now())
                 .build();
         Comment created = commentRepository.save(com);
+
         List<UserCommentLike> check = userCommentLikeRepository.findAllByCommentIdAndUserId(created.getId(),created.getUser().getId());
         Boolean liked = false;
+        int heartCnt = 0;
         for(UserCommentLike l : check){
             if(l.getCommentLike().equals(CommentLike.LIKE)){
                 liked = true;
+                heartCnt += 1;
             }
         }
 
         CommentCreateResponse result = CommentCreateResponse.builder()
                 .Id(created.getId())
-                .likes(userMemeLikeRepository.countUserMemeLikesByUserIdAndMemeId(user.getId(),meme.getId()))
+                .likes(heartCnt)
                 .userId(user.getId())
                 .userImgUrl(user.getProfileImage())
                 .userName(user.getNickname())
