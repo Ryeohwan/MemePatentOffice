@@ -54,15 +54,6 @@ public class CommentService {
                 .createdAt(LocalDateTime.now())
                 .build();
         Comment saveResult = commentRepository.save(com);
-        List<UserCommentLike> check = userCommentLikeRepository.findAllByCommentIdAndUserId(saveResult.getId(),saveResult.getUser().getId());
-        Boolean liked = false;
-        int heartCnt = 0;
-        for(UserCommentLike l : check){
-            if(l.getCommentLike().equals(CommentLike.LIKE)){
-                liked = true;
-                heartCnt += 1;
-            }
-        }
 
         System.out.println(saveResult.getUser().getId());
 
@@ -78,8 +69,8 @@ public class CommentService {
                 .parentId(saveResult.getParentComment().getId())
                 .date(saveResult.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                 .id(saveResult.getId())
-                .liked(liked)
-                .heartCnt(heartCnt)
+                .liked(userCommentLikeRepository.existsByUserIdAndCommentId(user.getId(),com.getId()))
+                .heartCnt(userCommentLikeRepository.countUserCommentLikesByCommentId(com.getId()))
                 .build();
         System.out.println(result.getLiked());
         return result;
@@ -100,33 +91,21 @@ public class CommentService {
                 .build();
         Comment created = commentRepository.save(com);
 
-        List<UserCommentLike> check = userCommentLikeRepository.findAllByCommentIdAndUserId(created.getId(),created.getUser().getId());
-        Boolean liked = false;
-        int heartCnt = 0;
-        for(UserCommentLike l : check){
-            if(l.getCommentLike().equals(CommentLike.LIKE)){
-                liked = true;
-                heartCnt += 1;
-            }
-        }
-
         CommentResponse result = CommentResponse.builder()
                 .id(created.getId())
                 .userId(created.getUser().getId())
                 .nickname(created.getUser().getNickname())
                 .date(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-                .liked(liked)
+                .liked(userCommentLikeRepository.existsByUserIdAndCommentId(user.getId(),com.getId()))
                 .replyCommentCnt(commentRepository.countAllByParentCommentId(created.getId()))
                 .best(0)
                 .profileImage(created.getUser().getProfileImage())
-                .heartCnt(heartCnt)
+                .heartCnt(userCommentLikeRepository.countUserCommentLikesByCommentId(created.getId()))
                 .content(created.getContent())
                 .build();
         System.out.println(result.getHeartCnt());
         System.out.println(result.getLiked());
-
         System.out.println(result.getUserId());
-
         System.out.println(result.getNickname());
         return result;
     }
@@ -143,12 +122,11 @@ public class CommentService {
                 .user(userRepository.findById(commentLikeRequest.getUserId())
                                 .orElseThrow(()->new NotFoundException("유효하지 않은 유저입니다")))
                 .build();
-        UserCommentLike check = userCommentLikeRepository.findByCommentIdAndUserId(temp.getComment().getId(), temp.getUser().getId());
-        if(check.getCommentLike() != null){
-            check.setCommentLike(null);
+        if(userCommentLikeRepository.existsByUserIdAndCommentId(temp.getUser().getId(),temp.getComment().getId())){
+            userCommentLikeRepository.delete(temp);
             return true;
         }else{
-            temp.setCommentLike(CommentLike.LIKE);
+            System.out.println("있니?");
             userCommentLikeRepository.save(temp);
             return true;
         }
@@ -159,31 +137,31 @@ public class CommentService {
     }
 
 
-    public CommentResponse findComment(CommentInfoRequest commentInfoRequest)throws NotFoundException{
-        Comment com = commentRepository.findCommentById(commentInfoRequest.getId()).orElseThrow(() -> new NotFoundException("해당하는 밈이 없습니다."));
-        Long userId = com.getUser().getId();
-        Long memeId = com.getMeme().getId();
-        List<UserCommentLike> check = userCommentLikeRepository.findAllByCommentIdAndUserId(com.getId(),userId);
-        Boolean liked = false;
-        int heartCnt = 0;
-        for(UserCommentLike l : check){
-            if(l.getCommentLike().equals(CommentLike.LIKE)){
-                liked = true;
-                heartCnt += 1;
-            }
-        }
-        CommentResponse result = CommentResponse.builder()
-                .profileImage(com.getUser().getProfileImage())
-                .nickname(com.getUser().getNickname())
-                .heartCnt(heartCnt)
-                .liked(liked)
-                .replyCommentCnt(commentRepository.countAllByParentCommentId(com.getId()))
-                .content(com.getContent())
-                .id(com.getId())
-                .date(com.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-                .build();
-        return result;
-    }
+//    public CommentResponse findComment(CommentInfoRequest commentInfoRequest)throws NotFoundException{
+//        Comment com = commentRepository.findCommentById(commentInfoRequest.getId()).orElseThrow(() -> new NotFoundException("해당하는 밈이 없습니다."));
+//        Long userId = com.getUser().getId();
+//        Long memeId = com.getMeme().getId();
+//        List<UserCommentLike> check = userCommentLikeRepository.findAllByCommentIdAndUserId(com.getId(),userId);
+//        Boolean liked = false;
+//        int heartCnt = 0;
+//        for(UserCommentLike l : check){
+//            if(l.getCommentLike().equals(CommentLike.LIKE)){
+//                liked = true;
+//                heartCnt += 1;
+//            }
+//        }
+//        CommentResponse result = CommentResponse.builder()
+//                .profileImage(com.getUser().getProfileImage())
+//                .nickname(com.getUser().getNickname())
+//                .heartCnt(heartCnt)
+//                .liked(liked)
+//                .replyCommentCnt(commentRepository.countAllByParentCommentId(com.getId()))
+//                .content(com.getContent())
+//                .id(com.getId())
+//                .date(com.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+//                .build();
+//        return result;
+//    }
 
     public Slice<CommentResponse> findTop(Long memeId){
         Slice<Object> temp = commentRepository.findBestThreeComment(memeId, PageRequest.of(0,3));
@@ -192,15 +170,15 @@ public class CommentService {
     }
 
     public Slice<CommentResponse> findLatest(Long memeId,Long id1, Long id2, Long id3, Pageable pageable){
-        Slice<Object> temp =commentRepository.findLatestComment(memeId,id1,id2,id3,pageable);
-        Slice<CommentResponse> result = convertToDtoLatest(temp);
-        return result;
+        List<Object> temp =commentRepository.findLatestComment(memeId,id1,id2,id3);
+        List<CommentResponse> result = convertToDtoLatest(temp);
+        return SliceConverter.convert(result, pageable.getPageNumber(), pageable.getPageSize());
     }
 
     public Slice<ReplyResponse> findReply(Long memeId, Long commentId ,Pageable pageable){
-        Slice<Object> temp =commentRepository.findReplyComment(memeId,commentId,pageable);
-        Slice<ReplyResponse> result = convertToDtoReply(temp);
-        return result;
+        List<Object> temp =commentRepository.findReplyComment(memeId,commentId);
+        List<ReplyResponse> result = convertToDtoReply(temp);
+        return SliceConverter.convert(result, pageable.getPageNumber(), pageable.getPageSize());
     }
     @Transactional
     public String deleteComment(CommentDeleteRequest commentDeleteRequest)throws NotFoundException{
@@ -222,7 +200,7 @@ public class CommentService {
 
     public Slice<CommentResponse> convertToDtoTop(Slice<Object> slice) {
         List<CommentResponse> dtoList = new ArrayList<>();
-        for (Object obj : slice.getContent()) {
+        for (Object obj : slice) {
             Object[] arr = (Object[]) obj;
             String content = (String) arr[0];
             LocalDateTime createdAt = (LocalDateTime) arr[1];
@@ -234,15 +212,9 @@ public class CommentService {
             Boolean liked = (Boolean) arr[7];
 
             Comment c = commentRepository.findById(id).get();
-
-            List<UserCommentLike> check = userCommentLikeRepository.findAllByCommentIdAndUserId(id,c.getUser().getId());
-            Boolean reliked = false;
-            int reheartCnt = 0;
-            for(UserCommentLike l : check){
-                if(l.getCommentLike().equals(CommentLike.LIKE)){
-                    reliked = true;
-                    reheartCnt += 1;
-                }
+            int count = 0;
+            if(userCommentLikeRepository.existsByUserIdAndCommentId(c.getUser().getId(),c.getId())){
+                count = userCommentLikeRepository.countUserCommentLikesByCommentId(c.getId());
             }
 
             CommentResponse dto = CommentResponse.builder()
@@ -253,8 +225,8 @@ public class CommentService {
                     .id(id)
                     .nickname(nickname)
                     .profileImage(profileImage)
-                    .heartCnt(reheartCnt)
-                    .liked(reliked)
+                    .heartCnt(count)
+                    .liked(liked)
                     .best(1)
                     .build();
             dtoList.add(dto);
@@ -262,9 +234,9 @@ public class CommentService {
         return new SliceImpl<>(dtoList, slice.getPageable(), slice.hasNext());
     }
 
-    public Slice<CommentResponse> convertToDtoLatest(Slice<Object> slice) {
+    public List<CommentResponse> convertToDtoLatest(List<Object> slice) {
         List<CommentResponse> dtoList = new ArrayList<>();
-        for (Object obj : slice.getContent()) {
+        for (Object obj : slice) {
             Object[] arr = (Object[]) obj;
             String content = (String) arr[0];
             LocalDateTime createdAt = (LocalDateTime) arr[1];
@@ -274,17 +246,10 @@ public class CommentService {
             String profileImage = (String) arr[5];
             Long heartCnt = (Long)arr[6];
             Boolean liked = (Boolean) arr[7];
-
             Comment c = commentRepository.findById(id).get();
-
-            List<UserCommentLike> check = userCommentLikeRepository.findAllByCommentIdAndUserId(id,c.getUser().getId());
-            Boolean reliked = false;
-            int reheartCnt = 0;
-            for(UserCommentLike l : check){
-                if(l.getCommentLike().equals(CommentLike.LIKE)){
-                    reliked = true;
-                    reheartCnt += 1;
-                }
+            int count = 0;
+            if(userCommentLikeRepository.existsByUserIdAndCommentId(c.getUser().getId(),c.getId())){
+                count = userCommentLikeRepository.countUserCommentLikesByCommentId(c.getId());
             }
 
             CommentResponse dto = CommentResponse.builder()
@@ -295,18 +260,18 @@ public class CommentService {
                     .userId(c.getUser().getId())
                     .nickname(nickname)
                     .profileImage(profileImage)
-                    .heartCnt(reheartCnt)
-                    .liked(reliked)
+                    .heartCnt(count)
+                    .liked(liked)
                     .best(0)
                     .build();
             dtoList.add(dto);
         }
-        return new SliceImpl<>(dtoList, slice.getPageable(), slice.hasNext());
+        return dtoList;
     }
 
-    public Slice<ReplyResponse> convertToDtoReply(Slice<Object> slice) {
+    public List<ReplyResponse> convertToDtoReply(List<Object> slice) {
         List<ReplyResponse> dtoList = new ArrayList<>();
-        for (Object obj : slice.getContent()) {
+        for (Object obj : slice) {
             Object[] arr = (Object[]) obj;
             String content = (String) arr[0];
             LocalDateTime createdAt = (LocalDateTime) arr[1];
@@ -315,34 +280,27 @@ public class CommentService {
             String profileImage = (String) arr[5];
             Long heartCnt = (Long)arr[6];
             Boolean liked = (Boolean) arr[7];
-            Comment check = commentRepository.findById(id).get();
-
-
-            List<UserCommentLike> findComment = userCommentLikeRepository.findAllByCommentIdAndUserId(id,check.getUser().getId());
-            Boolean reliked = false;
-            int reheartCnt = 0;
-            for(UserCommentLike l : findComment){
-                if(l.getCommentLike().equals(CommentLike.LIKE)){
-                    reliked = true;
-                    reheartCnt += 1;
-                }
+            Comment c = commentRepository.findById(id).get();
+            int count = 0;
+            if(userCommentLikeRepository.existsByUserIdAndCommentId(c.getUser().getId(),c.getId())){
+                count = userCommentLikeRepository.countUserCommentLikesByCommentId(c.getId());
             }
 
             ReplyResponse dto = ReplyResponse.builder()
                     .content(content)
                     .id(id)
-                    .heartCnt(reheartCnt)
-                    .userId(check.getUser().getId())
+                    .heartCnt(count)
+                    .userId(c.getUser().getId())
                     .profileImage(profileImage)
                     .date(createdAt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                     .nickname(nickname)
-                    .parentId(check.getParentComment().getId())
-                    .parentName(check.getParentComment().getUser().getNickname())
-                    .liked(reliked)
+                    .parentId(c.getParentComment().getId())
+                    .parentName(c.getParentComment().getUser().getNickname())
+                    .liked(liked)
                     .build();
             dtoList.add(dto);
         }
-        return new SliceImpl<>(dtoList, slice.getPageable(), slice.hasNext());
+        return dtoList;
     }
 
 }

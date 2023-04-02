@@ -53,12 +53,12 @@ public class CommentController {
     public ResponseEntity createLike(@RequestBody CommentLikeRequest commentLikeRequest) throws NotFoundException{
         return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createCommentLike(commentLikeRequest));
     }
-    @PostMapping("/info")
-    @ResponseBody
-    public ResponseEntity aboutComment(@RequestBody CommentInfoRequest commentInfoRequest)throws NotFoundException{
-        CommentResponse result = commentService.findComment(commentInfoRequest);
-        return ResponseEntity.status(HttpStatus.OK).body(result);
-    }
+//    @PostMapping("/info")
+//    @ResponseBody
+//    public ResponseEntity aboutComment(@RequestBody CommentInfoRequest commentInfoRequest)throws NotFoundException{
+//        CommentResponse result = commentService.findComment(commentInfoRequest);
+//        return ResponseEntity.status(HttpStatus.OK).body(result);
+//    }
 
     @GetMapping("/bestList")
     public ResponseEntity BestList(@RequestParam(name = "memeId") Long memeId,@PageableDefault(value = 3) Pageable pageable){
