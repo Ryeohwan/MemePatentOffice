@@ -32,7 +32,7 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             " COUNT(d) as replyCommentCnt, " +
             " c.id, c.user.nickname, c.user.profileImage, " +
             " COUNT(l) as heartCnt," +
-            " EXISTS(SELECT 1 FROM UserCommentLike l WHERE l.comment.id = c.id) as liked" +
+            " EXISTS(SELECT 1 FROM UserCommentLike ucl WHERE ucl.comment.id = c.id AND ucl.user.id = c.user.id) as liked" +
             " FROM Comment c " +
             " LEFT JOIN UserCommentLike l ON l.comment.id = c.id" +
             " LEFT JOIN Comment d ON c.id = d.parentComment.id " +
@@ -52,28 +52,14 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             " LEFT JOIN Comment d ON c.id = d.parentComment.id " +
             " WHERE c.meme.id = :memeId " +
             " GROUP BY c.content, c.createdAt, c.id, c.user.nickname, c.user.profileImage, liked" +
-            " ORDER BY heartCnt desc ")
+            " ORDER BY heartCnt,c.createdAt desc ")
     List<Comment> findBestThreeCommentList(@Param("memeId")Long memeId);
 
     @Query("SELECT c.content, c.createdAt, \n" +
             "       COUNT(d) as replyCommentCnt, \n" +
             "       c.id, c.user.nickname, c.user.profileImage, \n" +
             "       COUNT(l) as heartCnt,\n" +
-            "       EXISTS(SELECT 1 FROM UserCommentLike l WHERE l.comment.id = c.id) as liked\n" +
-            "FROM Comment c \n" +
-            "LEFT JOIN UserCommentLike l ON l.comment.id = c.id\n" +
-            "LEFT JOIN Comment d ON c.id = d.parentComment.id \n" +
-            "WHERE c.meme.id = :memeId \n" +
-            "  AND NOT EXISTS (SELECT 1 FROM Comment nc WHERE nc.id IN (:id1, :id2, :id3) AND nc.id = c.id)\n" +
-            "GROUP BY c.content, c.createdAt, c.id, c.user.nickname, c.user.profileImage, liked\n" +
-            "ORDER BY c.createdAt DESC")
-    Slice<Object> findPopularComment(@Param("memeId")Long memeId, @Param("id1")Long id1, @Param("id2") Long id2, @Param("id3") Long id3, Pageable pageable);
-
-    @Query("SELECT c.content, c.createdAt, \n" +
-            "       COUNT(d) as replyCommentCnt, \n" +
-            "       c.id, c.user.nickname, c.user.profileImage, \n" +
-            "       COUNT(l) as heartCnt,\n" +
-            "       EXISTS(SELECT 1 FROM UserCommentLike l WHERE l.comment.id = c.id) as liked\n" +
+            "       EXISTS(SELECT 1 FROM UserCommentLike ucl WHERE ucl.comment.id = c.id AND ucl.user.id = c.user.id) as liked\n" +
             "FROM Comment c \n" +
             "LEFT JOIN UserCommentLike l ON l.comment.id = c.id\n" +
             "LEFT JOIN Comment d ON c.id = d.parentComment.id \n" +
@@ -89,17 +75,16 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             "       COUNT(d) as replyCommentCnt, \n" +
             "       c.id, c.user.nickname, c.user.profileImage, \n" +
             "       COUNT(l) as heartCnt,\n" +
-            "       EXISTS(SELECT 1 FROM UserCommentLike l WHERE l.comment.id = c.id) as liked\n" +
+            "       EXISTS(SELECT 1 FROM UserCommentLike ucl WHERE ucl.comment.id = c.id AND ucl.user.id = c.user.id) as liked\n" +
             "FROM Comment c \n" +
             "LEFT JOIN UserCommentLike l ON l.comment.id = c.id\n" +
             "LEFT JOIN Comment d ON c.id = d.parentComment.id \n" +
-            "WHERE c.meme.id = :memeId \n" +
-            "  AND (c.id != :id1 OR :id1 IS NULL) \n" +
-            "  AND (c.id != :id2 OR :id2 IS NULL) \n" +
-            "  AND (c.id != :id3 OR :id3 IS NULL)\n" +
+            "WHERE c.meme.id = :memeId AND c.parentComment.id = :commentId\n" +
             "GROUP BY c.content, c.createdAt, c.id, c.user.nickname, c.user.profileImage, liked\n" +
-            "ORDER BY c.createdAt ASC")
-    Slice<Object> findOldestComment(@Param("memeId")Long memeId, @Param("id1")Long id1, @Param("id2") Long id2, @Param("id3") Long id3, Pageable pageable);
+            "ORDER BY c.createdAt DESC")
+    Slice<Object> findReplyComment(@Param("memeId")Long memeId, @Param("commentId") Long commentId, Pageable pageable);
+
+
 
     @Query("select c.id from Comment c")
     List<Long> findAllIds();

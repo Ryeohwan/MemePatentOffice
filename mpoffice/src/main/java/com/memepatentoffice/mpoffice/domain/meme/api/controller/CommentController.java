@@ -65,6 +65,7 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(commentService.findTop(memeId));
     }
     @GetMapping("/list")
+    // 최신순으로 받기
     public ResponseEntity CommentList(
                                       @RequestParam(name = "memeId") Long memeId,
                                       @RequestParam(required = false,name = "id1")Long id1,
@@ -72,6 +73,15 @@ public class CommentController {
                                       @RequestParam(required = false,name = "id3")Long id3,
                                       @PageableDefault(value = 8) Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(commentService.findLatest(memeId,id1,id2,id3,pageable));
+    }
+
+    @GetMapping("/reply")
+    // 대댓글받기
+    public ResponseEntity ReplyList(
+            @RequestParam(name = "memeId") Long memeId,
+            @RequestParam(name = "commentId") Long commentId,
+            @PageableDefault(value = 8) Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.findReply(memeId,commentId,pageable));
     }
 
     @PostMapping("/delete")
