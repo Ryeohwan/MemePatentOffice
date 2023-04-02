@@ -18,6 +18,7 @@ export type commentType = {
 };
 
 export type replyType = {
+  id: number;
   writerNickname: string;
   writerImg: string;
   content: string;
@@ -89,6 +90,7 @@ const initialState: initialStateInterface = {
   ],
   replyCommentList: [
     {
+      id: 1,
       writerImg: "newjeans.jpg",
       writerNickname: "5조의 햇살",
       createdAt: "1주 전",
@@ -98,6 +100,7 @@ const initialState: initialStateInterface = {
       parentName: "호롤롤로",
     },
     {
+      id: 2,
       writerImg: "totoro.jpg",
       writerNickname: "단발머리 부엉이",
       createdAt: "5일 전",
@@ -106,6 +109,7 @@ const initialState: initialStateInterface = {
       parentName: "호롤롤로",
     },
     {
+      id: 3,
       writerImg: "newjeans.jpg",
       writerNickname: "5조의 햇살",
       createdAt: "3시간 전",
@@ -186,10 +190,13 @@ const commentListSlice = createSlice({
 
     // 댓글 삭제
     commentDeleteHandler: (state, actions) => {
-      state.commentNewList.filter((item) => item.id !== actions.payload.id);
+      state.commentNewList = state.commentNewList.filter((item) => item.id !== actions.payload);
     },
-    // 대댓글 삭제
 
+    // 대댓글 삭제
+    replyDeleteHandler: (state, actions) => {
+      state.replyCommentList = state.replyCommentList.filter((item) => item.id !== actions.payload)
+    },
     // 대댓글 달 때 원댓 id 같이 post하기 위해
     changeNowParentId: (state, actions) => {
       state.nowParentId = actions.payload;

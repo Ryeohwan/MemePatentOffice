@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import styles from "./CommentItem.module.css";
 import { commentType, replyType } from "store/commentList";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/configStore";
 import { commentListActions } from "store/commentList";
@@ -16,6 +17,8 @@ interface CommentType {
 const CommentItem: React.FC<CommentType> = (comment) => {
   const userNickname = JSON.parse(sessionStorage.getItem('user')!).nickname;
   const userId = JSON.parse(sessionStorage.user).userId;
+  const params = useParams();
+  const memeid = parseInt(params.meme_id!, 10);
 
   const commentWriterName = comment.items.nickname;
   const commentId = comment.items.id;
@@ -30,7 +33,8 @@ const CommentItem: React.FC<CommentType> = (comment) => {
 
   const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
-  const { sendRequest } = useAxios();
+  const { sendRequest: postCommentRequest } = useAxios();
+  const { sendRequest: deleteCommentRequest } = useAxios();
   const [clickViewReply, setClickViewReply] = useState(false);
   const [heartStatus, setHeartStatus] = useState(heart);
   
@@ -43,7 +47,7 @@ const CommentItem: React.FC<CommentType> = (comment) => {
     } else {
       setHeartStatus(true);
     };
-    sendRequest({
+    postCommentRequest({
       url: `/api/mpoffice/meme/comment/like?state=${heartStatus}`,
       method: "POST",
       data: {
@@ -65,10 +69,19 @@ const CommentItem: React.FC<CommentType> = (comment) => {
     setClickViewReply(!clickViewReply);
   };
   
-  // const deleteCommentHandler = () => {
-  //   dispatch(commentListActions.commentDeleteHandler({ id: comment.items.id }));
-  // };
-  
+
+  const onClickDelete = () => {
+    deleteCommentRequest({
+      url: "/api/mpoffice/meme/comment/delete",
+      method: "POST",
+      data: {
+        userId: userId,
+        memeId: memeid,
+        commentId: commentId
+      }
+    });
+    dispatch(commentListActions.commentDeleteHandler(comment.items.id));
+  };
 
 
   return (
@@ -111,7 +124,7 @@ const CommentItem: React.FC<CommentType> = (comment) => {
           {heartNum !==0 && <div>좋아요 {heartNum}개</div>}
           <div onClick={uploadReply}>답글 달기</div>
           {userNickname === commentWriterName ? (
-            <div onClick={() => {}}>삭제</div>
+            <div onClick={onClickDelete}>삭제</div>
           ) : null}
         </div>
 
