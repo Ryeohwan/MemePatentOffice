@@ -1,54 +1,81 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/configStore";
-import { memeListActions, memeType } from "store/memeList";
+import { useAppDispatch } from "hooks/useAppDispatch";
+import { memeListActions, getMemePopularListAxiosThunk, memeType } from "store/memeList";
+import { useInView } from "react-intersection-observer";
 
+import SkeletonCard from "components/common/card/SkeletonCard";
 import NftCard from "components/common/card/NftCard";
-
 import styles from "./MemeListPopular.module.css";
 
 
 const MemeListPopular: React.FC = () => {
-  const location = useLocation()
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-
   const dispatch = useDispatch();
-  const memeList = useSelector<RootState, memeType[]>(
-    (state) => state.memeList.memePopularList
-  );
-  const period = useSelector<RootState, string>(state => state.memeList.period);
+  const appDispatch = useAppDispatch();
+  const input = useSelector<RootState, string>((state) => state.memeList.input);
+  const range = useSelector<RootState, string>(state => state.memeList.range);
+  const memeList = useSelector<RootState, memeType[]>((state) => state.memeList.memePopularList);
+  const loadingMore = useSelector<RootState, boolean>((state) => state.memeList.loadingMemePopularListMore);
+  const loadingRange = useSelector<RootState, boolean>((state) => state.memeList.loadingMemePopularListRange);
+  const hasNext = useSelector<RootState, boolean>((state) => state.memeList.nextMemePopularList);
+  const [lastMemeRef, setLastMemeRef] = useState(-1);
 
-  
-  // click하면 url 바꾸기
+  // click하면 list reset -> range 바꾸기 -> get 하기
   const changePeriodHandler = (period: string) => {
-    dispatch(memeListActions.changePeriod(period))
-    navigate(`?range=${period}`);
+    dispatch(memeListActions.resetMemePopularList());
+    dispatch(memeListActions.changeRange(period))
+    
+    console.log('range 바꼈음!')
+    appDispatch(getMemePopularListAxiosThunk(input, period, true, -1))
   }
   
-  // query 받아서 redux에 type 바꾸기
-  // 새로고침시에 query 없어짐 -> 일단 today
-  // home에서 넘어올때 다른애들 잘 되는지 확인해보기
+  console.log('여기', range)  
+
+  // 무한스크롤
+  const [ref, inView] = useInView({
+    threshold: 1,
+    delay: 300,
+  });
+
   useEffect(() => {
-    const params = new URLSearchParams(location.search)
-    const range = params.get('range')
-    console.log(range)
-    if (range) dispatch(memeListActions.changePeriod(range))
-    else dispatch(memeListActions.changePeriod('today'))
-  }, [location])
+    if (inView && lastMemeRef !== -1) {
+      appDispatch(getMemePopularListAxiosThunk(input, range, false, lastMemeRef));
+    }
+  }, [inView]);
+
+  useEffect(() => {
+    if (memeList.length > 0) {
+      setLastMemeRef(memeList[memeList.length - 1].id - 1);
+    }
+  }, [memeList]);
 
   return (
     <div className={styles.memeListPopularContainer}>
       <div className={styles.sortContainer}>
-        <div className={`${period === 'today' ? styles.active : styles.nonActive}`} onClick={() => changePeriodHandler('today')}>오늘</div>
-        <div className={`${period === 'week' ? styles.active : styles.nonActive}`} onClick={() => changePeriodHandler('week')}>1주일</div>
-        <div className={`${period === 'all' ? styles.active : styles.nonActive}`} onClick={() => changePeriodHandler('all')}>전체</div>
+        <div className={`${range === 'all' ? styles.active : styles.nonActive}`} onClick={() => changePeriodHandler('all')}>전체</div>
+        <div className={`${range === 'week' ? styles.active : styles.nonActive}`} onClick={() => changePeriodHandler('week')}>1주일</div>
+        <div className={`${range === 'today' ? styles.active : styles.nonActive}`} onClick={() => changePeriodHandler('today')}>오늘</div>
       </div>
+      
       <div className={styles.memeListCardContainer}>
+        
+        {loadingRange && (
+          <>
+            <SkeletonCard />
+            <SkeletonCard />
+          </>
+        )}
+        
         {memeList.map((meme) => {
           return <NftCard key={meme.id} items={meme} />;
         })}
+
+        {loadingMore && <SkeletonCard /> }
+
+        {/* 무한스크롤 감지 옵저버 */}
+        <div ref={hasNext ? ref : null} />
+
       </div>
     </div>
   );

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { memeListActions } from "store/memeList";
 
 import { Icon } from "@iconify/react";
 import { Sidebar } from "primereact/sidebar";
@@ -12,6 +14,7 @@ interface RoutePath {
 const NavbarHamburger: React.FC = () => {
   const { pathname } = useLocation() as RoutePath;
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // click하면 dropmenu
   const [open, setOpen] = useState<boolean>(false);
@@ -20,6 +23,13 @@ const NavbarHamburger: React.FC = () => {
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
+
+
+  // 네브바에서 밈사전으로 들어가는 경우 memeList redux reset
+  const memeListHandler = () => {
+    dispatch(memeListActions.resetAll());
+    navigate("/meme-list/type=new")
+  }
 
   const mypageHandler = () => {
     // mypage 이동하기 위한 url
@@ -76,17 +86,17 @@ const NavbarHamburger: React.FC = () => {
         <hr />
 
         <div className={styles.dropMenu}>
-          <NavLink to="/meme-list/type=new" className={styles.navLink}>
+          {/* <NavLink to="/meme-list/type=new" className={styles.navLink}>
             밈 사전
-          </NavLink>
+          </NavLink> */}
+
+          <div className={styles.navLink} onClick={memeListHandler}>
+            밈 사전
+          </div>
 
           <NavLink to="/auction-list/type=new" className={styles.navLink}>
             경매 둘러보기
           </NavLink>
-
-          {/* <NavLink to={mypageUrl} className={styles.navLink}>
-            마이페이지
-          </NavLink> */}
 
           <div onClick={accountHandler}>지갑 연결하기</div>
 

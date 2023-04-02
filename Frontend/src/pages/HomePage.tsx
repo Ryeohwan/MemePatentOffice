@@ -1,11 +1,13 @@
 // home page (/home)
-import React from "react";
+import React, { useEffect } from "react";
 import { Carousel } from "primereact/carousel";
 import { useSelector } from "react-redux";
 import { RootState } from "store/configStore";
 import { memeType } from "store/memeList";
 import { auctionType } from "store/auctionList";
+import useAxios from "hooks/useAxios";
 
+import SkeletonCard from "components/common/card/SkeletonCard";
 import NftCard from "components/common/card/NftCard";
 import NftAuctionCard from "components/common/card/NftAuctionCard";
 import HomeCarousel from "components/main/homepage/HomeCarousel";
@@ -13,70 +15,78 @@ import styles from "./HomePage.module.css";
 
 const HomePage: React.FC = () => {
   
+  // 요즘 핫한 밈
+  const {data: hotMeme, isLoading: hotMemeLoading, sendRequest: hotMemeRequest} = useAxios();
+
+  // 이번주 비싸게 팔린 밈
+  const {data: expensiveMeme, isLoading: expensiveMemeLoading, sendRequest: expensiveMemeRequest} = useAxios();
+
+  // 이번주 조회수 많은 밈
+  const {data: viewsMeme, isLoading: viewsMemeLoading, sendRequest: viewsMemeRequest} = useAxios();
+
+  // 지금 HOT 한 경매
   // dummy data
-  // 얘네 다 빼고 useAxios() 훅으로 대체
-  const memeList = [
+  const auctionPopularList = [
     {
-      id: 1,
-      nickname: 'test',
+      meme_id: 1,
+      auction_id: 1,
       title:
         "귀여운 토토로 삼형제와 발랄한 자매 사츠키, 메이의 우당탕탕 가족사진입니다",
+      time: "16시간 32분",
+      highest_bid: 430,
       imgUrl: "totoro.jpg",
-      description: "오순도순 토토로 가족",
-      example:
-        "나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. 나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. 나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. 나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. 나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. 나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. ",
     },
     {
-      id: 2,
-      nickname: 'test',
+      meme_id: 2,
+      auction_id: 3,
       title: "누가 이렇게 예쁘게 낳았어? 엄마엄마가~",
+      time: "5시간 32분",
+      highest_bid: 200,
       imgUrl: "newjeans.jpg",
-      description: "뉴진스의 곡 OMG 속 가사인 oh my oh my god 가 엄마엄마가~로 들린다고 해서 시작되었다.",
-      example:
-        "틱톡, 릴스 챌린지로 자리잡은 밈이다. 누가 이렇게 예쁘게 낳았어? 라고 질문하면 뉴진스의 OMG 노래를 부르며 엄마엄마가~ 라고 답한다.",
     },
     {
-      id: 3,
-      nickname: 'test',
+      meme_id: 3,
+      auction_id: 2,
       title: "알아들었으면 끄덕여",
+      time: "20시간 32분",
+      highest_bid: 500,
       imgUrl: "theglory.jpeg",
-      description: "내 말 알아들었으면 끄덕여라",
-      example:
-        "인기 드라마 더 글로리 속 학교 폭력 가해자 박연진이 같은 무리의 친구(?) 최혜정에게 하는 대사이다. 최혜정이 박연진 남편의 친구 무리에게 박연진의 학창 시절에 대한 이야기를 해서 박연진이 화나서 하는 대사이다.",
     },
     {
-      id: 4,
-      nickname: 'test',
+      meme_id: 4,
+      auction_id: 1,
       title:
         "귀여운 토토로 삼형제와 발랄한 자매 사츠키, 메이의 우당탕탕 가족사진입니다",
+      time: "16시간 32분",
+      highest_bid: 430,
       imgUrl: "totoro.jpg",
-      description: "오순도순 토토로 가족",
-      example:
-        "나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. 나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. 나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. 나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. 나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. 나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. ",
     },
     {
-      id: 5,
-      nickname: 'test',
+      meme_id: 5,
+      auction_id: 3,
       title: "누가 이렇게 예쁘게 낳았어? 엄마엄마가~",
+      time: "5시간 32분",
+      highest_bid: 200,
       imgUrl: "newjeans.jpg",
-      description: "뉴진스의 곡 OMG 속 가사인 oh my oh my god 가 엄마엄마가~로 들린다고 해서 시작되었다.",
-      example:
-        "틱톡, 릴스 챌린지로 자리잡은 밈이다. 누가 이렇게 예쁘게 낳았어? 라고 질문하면 뉴진스의 OMG 노래를 부르며 엄마엄마가~ 라고 답한다.",
     },
     {
-      id: 6,
-      nickname: 'test',
+      meme_id: 6,
+      auction_id: 2,
       title: "알아들었으면 끄덕여",
+      time: "20시간 32분",
+      highest_bid: 500,
       imgUrl: "theglory.jpeg",
-      description: "내 말 알아들었으면 끄덕여라",
-      example:
-        "인기 드라마 더 글로리 속 학교 폭력 가해자 박연진이 같은 무리의 친구(?) 최혜정에게 하는 대사이다. 최혜정이 박연진 남편의 친구 무리에게 박연진의 학창 시절에 대한 이야기를 해서 박연진이 화나서 하는 대사이다.",
     },
+
   ]
 
-  const auctionPopularList = useSelector<RootState, auctionType[]>(
-    (state) => state.auctionList.auctionPopularList
-  );
+  // landering 될때 data get 하기 
+  // loading 중에는 skeleton
+  useEffect(() => {
+    hotMemeRequest({url: '/api/mpoffice/meme/search/popular?days=week'})
+    expensiveMemeRequest({url: '/api/mpoffice/meme/search/expensive?days=week'})
+    viewsMemeRequest({url: '/api/mpoffice/meme/search/views?days=week'})
+  }, [])
 
   // Main Carousel에 내려보낼 props
   const MAIN_INFO = [
@@ -141,44 +151,65 @@ const HomePage: React.FC = () => {
       <div className={styles.homeMenuWrapper}>
         <div className={styles.homeMenuTitle}>요즘 HOT한 밈</div>
       </div>
-      <Carousel
-        value={memeList}
-        numVisible={3}
-        numScroll={3}
-        itemTemplate={(page) => nftCarousel(page)}
-        orientation={"horizontal"}
-        showIndicators={false}
-        circular={true}
-        responsiveOptions={responsiveOptions}
-      />
+      {hotMemeLoading && (
+        <div className={styles.skeletonWrapper}>
+          <SkeletonCard />
+        </div>          
+      )}
+      {hotMeme && !hotMemeLoading && (
+        <Carousel
+          value={hotMeme.content}
+          numVisible={3}
+          numScroll={3}
+          itemTemplate={(page) => nftCarousel(page)}
+          orientation={"horizontal"}
+          showIndicators={false}
+          circular={true}
+          responsiveOptions={responsiveOptions}
+        />
+      )}
 
       <div className={styles.homeMenuWrapper}>
         <div className={styles.homeMenuTitle}>이번 주 비싸게 팔린 밈</div>
       </div>
-      <Carousel
-        value={memeList}
-        numVisible={3}
-        numScroll={3}
-        itemTemplate={(page) => nftCarousel(page)}
-        orientation={"horizontal"}
-        showIndicators={false}
-        circular={true}
-        responsiveOptions={responsiveOptions}
-      />
+      {expensiveMemeLoading && (
+        <div className={styles.skeletonWrapper}>
+          <SkeletonCard />
+        </div>
+      )}
+      {expensiveMeme && !expensiveMemeLoading && (
+        <Carousel
+          value={expensiveMeme.content}
+          numVisible={3}
+          numScroll={3}
+          itemTemplate={(page) => nftCarousel(page)}
+          orientation={"horizontal"}
+          showIndicators={false}
+          circular={true}
+          responsiveOptions={responsiveOptions}
+        />
+      )}
 
       <div className={styles.homeMenuWrapper}>
         <div className={styles.homeMenuTitle}>이번 주 조회수 많은 밈</div>
       </div>
-      <Carousel
-        value={memeList}
-        numVisible={3}
-        numScroll={3}
-        itemTemplate={(page) => nftCarousel(page)}
-        orientation={"horizontal"}
-        showIndicators={false}
-        circular={true}
-        responsiveOptions={responsiveOptions}
-      />
+      {viewsMemeLoading && (
+        <div className={styles.skeletonWrapper}>
+          <SkeletonCard />
+        </div>
+      )}
+      {viewsMeme && !viewsMemeLoading && (
+        <Carousel
+          value={viewsMeme.content}
+          numVisible={3}
+          numScroll={3}
+          itemTemplate={(page) => nftCarousel(page)}
+          orientation={"horizontal"}
+          showIndicators={false}
+          circular={true}
+          responsiveOptions={responsiveOptions}
+        />
+      )}
 
       <hr />
 

@@ -23,7 +23,6 @@ interface Props {
 const TabComp: React.FC<Props> = ({ items, children }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  // console.log(items,children,location)
   const [historyArr, setHistoryArr] = useState<string[]>([]);
   const [slideDirection, setSlideDirection] = useState("");
 
@@ -34,22 +33,13 @@ const TabComp: React.FC<Props> = ({ items, children }) => {
 
   const clickHandler = (item: TabItem) => {
     let direction = "left";
-    if (item.path.includes("?")) {
-      direction =
-        pathArr.indexOf(decodeURIComponent(location.pathname)) > pathArr.indexOf(item.path.substring(0, item.path.indexOf('?')))
-          ? "left"
-          : "right";
-    } else {
-      direction = direction =
-        pathArr.indexOf(decodeURIComponent(location.pathname)) > pathArr.indexOf(item.path)
-          ? "left"
-          : "right";
-    };
-    // console.log(pathArr)
-    // console.log(decodeURIComponent(location.pathname),  pathArr.indexOf(location.pathname))
-    // console.log(item.path, pathArr.indexOf(item.path), item.path.substring(0, item.path.indexOf('?')))
+    direction = direction =
+      pathArr.indexOf(decodeURIComponent(location.pathname)) >
+      pathArr.indexOf(item.path)
+        ? "left"
+        : "right";
+
     setSlideDirection(direction);
-    // console.log(direction);
     setHistoryArr((prev) => [...prev, item.path]);
   };
 
