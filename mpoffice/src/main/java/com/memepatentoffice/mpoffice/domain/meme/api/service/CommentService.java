@@ -80,7 +80,7 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentCreateResponse createComment(CommentRequest commentRequest) throws NotFoundException {
+    public CommentResponse createComment(CommentRequest commentRequest) throws NotFoundException {
         User user = userRepository.findById(commentRequest.getUserId())
                 .orElseThrow(() -> new NotFoundException("유효하지 않은 유저입니다"));
         Meme meme = memeRepository.findById(commentRequest.getMemeId())
@@ -104,19 +104,17 @@ public class CommentService {
             }
         }
 
-        CommentCreateResponse result = CommentCreateResponse.builder()
-                .Id(created.getId())
-                .likes(heartCnt)
-                .userId(user.getId())
-                .userImgUrl(user.getProfileImage())
-                .userName(user.getNickname())
-                .comment(commentRequest.getContent())
+        CommentResponse result = CommentResponse.builder()
+                .userId(created.getUser().getId())
                 .date(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                 .liked(liked)
                 .replyCommentCnt(commentRepository.countAllByParentCommentId(created.getId()))
                 .best(0)
+                .profileImage(created.getUser().getProfileImage())
+                .heartCnt(heartCnt)
+                .content(created.getContent())
                 .build();
-        System.out.println(result.getLikes());
+        System.out.println(result.getHeartCnt());
         System.out.println(result.getLiked());
         return result;
     }
@@ -153,7 +151,7 @@ public class CommentService {
                 .replyCommentCnt(commentRepository.countAllByParentCommentId(com.getId()))
                 .content(com.getContent())
                 .id(com.getId())
-                .createdAt(com.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                .date(com.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                 .build();
         return result;
     }
@@ -208,7 +206,7 @@ public class CommentService {
             Boolean liked = (Boolean) arr[7];
             CommentResponse dto = CommentResponse.builder()
                     .content(content)
-                    .createdAt(createdAt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                    .date(createdAt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                     .replyCommentCnt(replyCommentCnt.intValue())
                     .id(id)
                     .nickname(nickname)
@@ -236,7 +234,7 @@ public class CommentService {
             Boolean liked = (Boolean) arr[7];
             CommentResponse dto = CommentResponse.builder()
                     .content(content)
-                    .createdAt(createdAt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                    .date(createdAt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                     .replyCommentCnt(replyCommentCnt.intValue())
                     .id(id)
                     .nickname(nickname)

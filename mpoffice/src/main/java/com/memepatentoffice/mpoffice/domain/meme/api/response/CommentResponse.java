@@ -13,14 +13,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class CommentResponse {
-    private String profileImage;
-    private String nickname;
-    private Boolean liked;
-    private int heartCnt;
-    private String content;
-    private int replyCommentCnt;
     private Long id;
-    private String createdAt;
+    private Long userId;
+    private String nickname;
+    private String profileImage;
+    private String content;
+    private String date;
+    private int heartCnt;
     private int best;
+    private int replyCommentCnt;
+    private Boolean liked;
 
 }
