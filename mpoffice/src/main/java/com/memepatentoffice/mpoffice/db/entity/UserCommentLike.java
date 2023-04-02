@@ -23,4 +23,8 @@ public class UserCommentLike {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(name = "comment_like")
+    @Enumerated(EnumType.STRING)
+    private CommentLike commentLike;
+
 }
