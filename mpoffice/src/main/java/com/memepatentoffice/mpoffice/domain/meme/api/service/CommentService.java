@@ -142,6 +142,7 @@ public class CommentService {
                         .orElseThrow(()->new NotFoundException("유효하지 않은 댓글입니다")))
                 .user(userRepository.findById(commentLikeRequest.getUserId())
                                 .orElseThrow(()->new NotFoundException("유효하지 않은 유저입니다")))
+                .commentLike(CommentLike.LIKE)
                 .build();
         userCommentLikeRepository.save(temp);
         return true;
@@ -213,7 +214,6 @@ public class CommentService {
         }else{
             return "delete failed";
         }
-
     }
 
     public Slice<CommentResponse> convertToDtoTop(Slice<Object> slice) {
@@ -228,6 +228,19 @@ public class CommentService {
             String profileImage = (String) arr[5];
             Long heartCnt = (Long)arr[6];
             Boolean liked = (Boolean) arr[7];
+
+            Comment c = commentRepository.findById(id).get();
+
+            List<UserCommentLike> check = userCommentLikeRepository.findAllByCommentIdAndUserId(id,c.getUser().getId());
+            Boolean reliked = false;
+            int reheartCnt = 0;
+            for(UserCommentLike l : check){
+                if(l.getCommentLike().equals(CommentLike.LIKE)){
+                    reliked = true;
+                    reheartCnt += 1;
+                }
+            }
+
             CommentResponse dto = CommentResponse.builder()
                     .content(content)
                     .date(createdAt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
@@ -236,7 +249,7 @@ public class CommentService {
                     .nickname(nickname)
                     .profileImage(profileImage)
                     .heartCnt(heartCnt.intValue())
-                    .liked(liked)
+                    .liked(reliked)
                     .best(1)
                     .build();
             dtoList.add(dto);
