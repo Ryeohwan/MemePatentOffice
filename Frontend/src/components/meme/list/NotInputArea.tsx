@@ -26,15 +26,15 @@ const NotInputArea: React.FC = () => {
     },
     {
       rank: 3,
-      text: "폼 미쳤다",
+      text: "test임니다 test임니다 test임니다 test임니다",
     },
     {
       rank: 4,
-      text: "멋지다 연진아",
+      text: "테스트임니다 테스트임니다 테스트임니다 테스트임니다",
     },
     {
       rank: 5,
-      text: "송혜교",
+      text: "테스트임니다테스트임니다테스트임니다테스트임니다테스트임니다",
     },
     {
       rank: 6,
@@ -61,7 +61,10 @@ const NotInputArea: React.FC = () => {
 
 
   const now = new Date();
-
+  const month = (now.getMonth() +1).toString().padStart(2, "0")
+  const day = (now.getDate()).toString().padStart(2, "0")
+  const hour = (now.getHours()).toString().padStart(2, "0")
+  const minute = (now.getMinutes()).toString().padStart(2, "0")
 
   return ( 
     <div className={styles.compContainer}>
@@ -72,7 +75,7 @@ const NotInputArea: React.FC = () => {
         <div className={styles.rankingHeader}>
           <p className={styles.headerTxt}>인기 검색어</p>
           <div className={styles.headerTime}>
-            {now.getMonth()+1}.{now.getDate()}   {now.getHours()}:{now.getMinutes()}   기준
+            {month}.{day}   {hour}:{minute} 기준
           </div>
         </div>
 

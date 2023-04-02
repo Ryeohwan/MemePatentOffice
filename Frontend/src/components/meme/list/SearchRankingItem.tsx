@@ -32,7 +32,7 @@ const SearchRankingItem: React.FC<Props> = ({item}) => {
       
       <span className={styles.textItem}>
         <span onClick={() => clickhandler(item.text)}>
-          {item.text}
+          {item.text.length > 15 ? item.text.substring(0, 15) + '...' : item.text}
         </span>
       </span>
     </div>
