@@ -110,9 +110,6 @@ public class CommentService {
             }
         }
 
-
-
-
         CommentResponse result = CommentResponse.builder()
                 .id(created.getId())
                 .userId(created.getUser().getId())

@@ -1,20 +1,16 @@
 package com.memepatentoffice.mpoffice.domain.user.api.request;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserWithdrawRequest {
-    private final Long id;
-
-    private final String withdrawalReason;
-
-    @Builder
-    public UserWithdrawRequest(Long id, String withdrawalReason) {
-        this.id = id;
-        this.withdrawalReason = withdrawalReason;
-    }
-
+    private Long userId;
 
 }

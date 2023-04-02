@@ -23,5 +23,7 @@ public class CommentResponse {
     private int best;
     private int replyCommentCnt;
     private Boolean liked;
+    private Long parentId;
+    private String parentName;
 
 }

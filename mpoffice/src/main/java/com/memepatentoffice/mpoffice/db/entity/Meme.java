@@ -13,12 +13,12 @@ import javax.persistence.*;
 @Builder
 @EntityListeners(AuditingEntityListener.class)
 public class Meme extends BaseEntity{
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "creater_id")
     @JsonIgnore
     private User creater;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_id")
     @JsonIgnore
     private User owner;
