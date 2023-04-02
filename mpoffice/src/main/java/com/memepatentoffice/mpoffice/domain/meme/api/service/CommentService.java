@@ -142,6 +142,7 @@ public class CommentService {
                         .orElseThrow(()->new NotFoundException("유효하지 않은 댓글입니다")))
                 .user(userRepository.findById(commentLikeRequest.getUserId())
                                 .orElseThrow(()->new NotFoundException("유효하지 않은 유저입니다")))
+                .commentLike(CommentLike.LIKE)
                 .build();
         userCommentLikeRepository.save(temp);
         return true;
