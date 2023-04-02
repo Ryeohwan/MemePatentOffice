@@ -7,14 +7,21 @@ import { useInView } from "react-intersection-observer";
 
 import SkeletonCard from "components/common/card/SkeletonCard";
 import NftCard from "components/common/card/NftCard";
+import { ScrollTop } from "primereact/scrolltop";
 import styles from "./MemeListNew.module.css";
 
 const MemeListNew: React.FC = () => {
   const appDispatch = useAppDispatch();
   const input = useSelector<RootState, string>((state) => state.memeList.input);
-  const memeList = useSelector<RootState, memeType[]>((state) => state.memeList.memeNewList);
-  const loadingMore = useSelector<RootState, boolean>((state) => state.memeList.loadingMemeNewListMore);
-  const hasNext = useSelector<RootState, boolean>((state) => state.memeList.nextMemeNewList);
+  const memeList = useSelector<RootState, memeType[]>(
+    (state) => state.memeList.memeNewList
+  );
+  const loadingMore = useSelector<RootState, boolean>(
+    (state) => state.memeList.loadingMemeNewListMore
+  );
+  const hasNext = useSelector<RootState, boolean>(
+    (state) => state.memeList.nextMemeNewList
+  );
   const [lastMemeRef, setLastMemeRef] = useState(-1);
 
   // 무한스크롤
@@ -35,7 +42,6 @@ const MemeListNew: React.FC = () => {
     }
   }, [memeList]);
 
-
   return (
     <>
       <div className={styles.memeListNewContainer}>
@@ -43,10 +49,26 @@ const MemeListNew: React.FC = () => {
           return <NftCard key={meme.id} items={meme} />;
         })}
 
-        {loadingMore && <SkeletonCard /> }
+        {loadingMore && <SkeletonCard />}
 
         {/* 무한스크롤 감지 옵저버 */}
         <div ref={hasNext ? ref : null} />
+
+        <ScrollTop
+          target="parent"
+          threshold={100}
+          icon="pi pi-arrow-up text-base"
+          style={{
+            position: "fixed",
+            marginLeft: "0",
+            bottom: "10%",
+            right: "16px",
+            background: "var(--button-color)",
+            width: "44px",
+            height: "44px",
+          }}
+        />
+        
       </div>
     </>
   );

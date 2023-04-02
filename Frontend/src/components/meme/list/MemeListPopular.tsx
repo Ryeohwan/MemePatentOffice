@@ -7,6 +7,7 @@ import { useInView } from "react-intersection-observer";
 
 import SkeletonCard from "components/common/card/SkeletonCard";
 import NftCard from "components/common/card/NftCard";
+import { ScrollTop } from "primereact/scrolltop";
 import styles from "./MemeListPopular.module.css";
 
 
@@ -64,6 +65,9 @@ const MemeListPopular: React.FC = () => {
           <>
             <SkeletonCard />
             <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
           </>
         )}
         
@@ -77,6 +81,22 @@ const MemeListPopular: React.FC = () => {
         <div ref={hasNext ? ref : null} />
 
       </div>
+
+      <ScrollTop
+          target="parent"
+          threshold={100}
+          icon="pi pi-arrow-up text-base"
+          style={{
+            position: "fixed",
+            marginLeft: "0",
+            bottom: "10%",
+            right: "16px",
+            background: "var(--button-color)",
+            width: "44px",
+            height: "44px",
+          }}
+        />
+
     </div>
   );
 };
