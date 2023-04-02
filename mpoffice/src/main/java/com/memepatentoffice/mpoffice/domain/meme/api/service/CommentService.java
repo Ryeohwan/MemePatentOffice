@@ -163,7 +163,6 @@ public class CommentService {
         Comment com = commentRepository.findCommentById(commentInfoRequest.getId()).orElseThrow(() -> new NotFoundException("해당하는 밈이 없습니다."));
         Long userId = com.getUser().getId();
         Long memeId = com.getMeme().getId();
-
         List<UserCommentLike> check = userCommentLikeRepository.findAllByCommentIdAndUserId(com.getId(),userId);
         Boolean liked = false;
         int heartCnt = 0;
@@ -173,8 +172,6 @@ public class CommentService {
                 heartCnt += 1;
             }
         }
-
-
         CommentResponse result = CommentResponse.builder()
                 .profileImage(com.getUser().getProfileImage())
                 .nickname(com.getUser().getNickname())
@@ -252,10 +249,11 @@ public class CommentService {
                     .content(content)
                     .date(createdAt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                     .replyCommentCnt(replyCommentCnt.intValue())
+                    .userId(c.getUser().getId())
                     .id(id)
                     .nickname(nickname)
                     .profileImage(profileImage)
-                    .heartCnt(heartCnt.intValue())
+                    .heartCnt(reheartCnt)
                     .liked(reliked)
                     .best(1)
                     .build();
@@ -276,15 +274,29 @@ public class CommentService {
             String profileImage = (String) arr[5];
             Long heartCnt = (Long)arr[6];
             Boolean liked = (Boolean) arr[7];
+
+            Comment c = commentRepository.findById(id).get();
+
+            List<UserCommentLike> check = userCommentLikeRepository.findAllByCommentIdAndUserId(id,c.getUser().getId());
+            Boolean reliked = false;
+            int reheartCnt = 0;
+            for(UserCommentLike l : check){
+                if(l.getCommentLike().equals(CommentLike.LIKE)){
+                    reliked = true;
+                    reheartCnt += 1;
+                }
+            }
+
             CommentResponse dto = CommentResponse.builder()
                     .content(content)
                     .date(createdAt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                     .replyCommentCnt(replyCommentCnt.intValue())
                     .id(id)
+                    .userId(c.getUser().getId())
                     .nickname(nickname)
                     .profileImage(profileImage)
-                    .heartCnt(heartCnt.intValue())
-                    .liked(liked)
+                    .heartCnt(reheartCnt)
+                    .liked(reliked)
                     .best(0)
                     .build();
             dtoList.add(dto);
