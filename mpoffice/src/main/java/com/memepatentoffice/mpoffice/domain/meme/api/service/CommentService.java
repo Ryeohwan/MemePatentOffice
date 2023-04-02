@@ -147,6 +147,11 @@ public class CommentService {
         return result;
     }
 
+    public Slice<CommentResponse> findReply(Long memeId, Long commentId ,Pageable pageable){
+        Slice<Object> temp =commentRepository.findReplyComment(memeId,commentId,pageable);
+        Slice<CommentResponse> result = convertToDtoLatest(temp);
+        return result;
+    }
     @Transactional
     public String deleteComment(CommentDeleteRequest commentDeleteRequest)throws NotFoundException{
         User user = userRepository.findById(commentDeleteRequest.getUserId()).orElseThrow(()-> new NotFoundException("존재하지 않는유저입니다."));
@@ -215,7 +220,7 @@ public class CommentService {
                     .profileImage(profileImage)
                     .heartCnt(heartCnt.intValue())
                     .liked(liked)
-                    .best(1)
+                    .best(0)
                     .build();
             dtoList.add(dto);
         }
