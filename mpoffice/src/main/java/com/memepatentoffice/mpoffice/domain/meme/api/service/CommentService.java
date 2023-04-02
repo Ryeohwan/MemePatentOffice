@@ -139,7 +139,6 @@ public class CommentService {
     }
 
     public Slice<CommentResponse> findTop(Long memeId){
-
         Slice<Object> temp = commentRepository.findBestThreeComment(memeId, PageRequest.of(0,3));
         Slice<CommentResponse> result = convertToDtoTop(temp);
         return result;
@@ -242,6 +241,7 @@ public class CommentService {
             String profileImage = (String) arr[5];
             Long heartCnt = (Long)arr[6];
             Boolean liked = (Boolean) arr[7];
+            Comment check = commentRepository.findById(id).get();
             ReplyResponse dto = ReplyResponse.builder()
                     .comment(content)
                     .likes(heartCnt.intValue())
@@ -249,6 +249,9 @@ public class CommentService {
                     .liked(liked)
                     .userName(nickname)
                     .date(createdAt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                    .parentName(check.getParentComment().getUser().getNickname())
+                    .parentId(check.getParentComment().getId())
+
                     .build();
             dtoList.add(dto);
         }
