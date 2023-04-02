@@ -53,15 +53,15 @@ public class CommentService {
                 .isValid(IsValid.VALID)
                 .createdAt(LocalDateTime.now())
                 .build();
-        commentRepository.save(com);
+        Comment saveResult = commentRepository.save(com);
         ReplyResponse result = ReplyResponse.builder()
                 .userName(user.getNickname())
                 .userImgUrl(user.getProfileImage())
                 .comment(commentRequest.getContent())
                 .date(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                 .parentId(parentComment.get().getId())
-                .liked(userCommentLikeRepository.existsByUserIdAndCommentId(user.getId(),parentComment.get().getId()))
-                .likes(userCommentLikeRepository.countUserCommentLikesByCommentId(com.getId()))
+                .liked(userCommentLikeRepository.existsByUserIdAndCommentId(user.getId(),saveResult.getId()))
+                .likes(userCommentLikeRepository.countUserCommentLikesByCommentId(saveResult.getId()))
                 .parentName(parentComment.get().getUser().getNickname())
                 .build();
         return result;
@@ -147,9 +147,9 @@ public class CommentService {
         return result;
     }
 
-    public Slice<CommentResponse> findReply(Long memeId, Long commentId ,Pageable pageable){
+    public Slice<ReplyResponse> findReply(Long memeId, Long commentId ,Pageable pageable){
         Slice<Object> temp =commentRepository.findReplyComment(memeId,commentId,pageable);
-        Slice<CommentResponse> result = convertToDtoLatest(temp);
+        Slice<ReplyResponse> result = convertToDtoReply(temp);
         return result;
     }
     @Transactional
@@ -221,6 +221,30 @@ public class CommentService {
                     .heartCnt(heartCnt.intValue())
                     .liked(liked)
                     .best(0)
+                    .build();
+            dtoList.add(dto);
+        }
+        return new SliceImpl<>(dtoList, slice.getPageable(), slice.hasNext());
+    }
+
+    public Slice<ReplyResponse> convertToDtoReply(Slice<Object> slice) {
+        List<ReplyResponse> dtoList = new ArrayList<>();
+        for (Object obj : slice.getContent()) {
+            Object[] arr = (Object[]) obj;
+            String content = (String) arr[0];
+            LocalDateTime createdAt = (LocalDateTime) arr[1];
+            Long id = (Long) arr[3];
+            String nickname = (String) arr[4];
+            String profileImage = (String) arr[5];
+            Long heartCnt = (Long)arr[6];
+            Boolean liked = (Boolean) arr[7];
+            ReplyResponse dto = ReplyResponse.builder()
+                    .comment(content)
+                    .likes(heartCnt.intValue())
+                    .userImgUrl(profileImage)
+                    .liked(liked)
+                    .userName(nickname)
+                    .date(createdAt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                     .build();
             dtoList.add(dto);
         }
