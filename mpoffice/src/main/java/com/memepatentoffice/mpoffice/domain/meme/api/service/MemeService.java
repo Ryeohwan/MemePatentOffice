@@ -7,9 +7,7 @@ import com.memepatentoffice.mpoffice.domain.meme.api.request.CartRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.MemeCreateRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.TransactionRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.UserMemeLikeRequest;
-import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeResponse;
-import com.memepatentoffice.mpoffice.domain.meme.api.response.PriceListResponse;
-import com.memepatentoffice.mpoffice.domain.meme.api.response.TransactionResponse;
+import com.memepatentoffice.mpoffice.domain.meme.api.response.*;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.CartRepository;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.TransactionRepository;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.UserMemeLikeRepository;
@@ -17,6 +15,8 @@ import com.memepatentoffice.mpoffice.domain.meme.db.repository.MemeRepository;
 import com.memepatentoffice.mpoffice.domain.user.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
@@ -228,4 +229,116 @@ public class MemeService {
         transactionRepository.save(transaction);
     }
 
+    public List<MemeListResponse> randomMeme(){
+        Random random = new Random();
+        Long check = memeRepository.count();
+        List<MemeListResponse> result = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            Long randNum = random.nextLong(check.intValue())+1;
+            Meme a = memeRepository.findById(randNum).get();
+            MemeListResponse temp = MemeListResponse.builder()
+                    .description(a.getContent())
+                    .example(a.getSituation())
+                    .imgUrl(a.getImageurl())
+                    .id(a.getId())
+                    .nickname(a.getCreater().getNickname())
+                    .title(a.getTitle())
+                    .build();
+            result.add(temp);
+        }
+        return result;
+    }
+
+    public List<MemeListResponse> findMemes(Long userId){
+        List<Meme> list = memeRepository.findAllByOwnerId(userId);
+        List<MemeListResponse> result = new ArrayList<>();
+        for(Meme a : list){
+            MemeListResponse temp = MemeListResponse.builder()
+                    .description(a.getContent())
+                    .example(a.getSituation())
+                    .imgUrl(a.getImageurl())
+                    .id(a.getId())
+                    .nickname(a.getCreater().getNickname())
+                    .title(a.getTitle())
+                    .build();
+            result.add(temp);
+        }
+        return result;
+    }
+
+    public List<MemeListResponse> findLiked(Long userId){
+        List<UserMemeLike> all = userMemeLikeRepository.findAllByUserId(userId);
+        List<MemeListResponse> result = new ArrayList<>();
+        for(UserMemeLike a: all){
+            if(a.getMemeLike() != null && a.getMemeLike().equals(MemeLike.LIKE)){
+                MemeListResponse temp = MemeListResponse.builder()
+                        .description(a.getMeme().getContent())
+                        .example(a.getMeme().getSituation())
+                        .imgUrl(a.getMeme().getImageurl())
+                        .id(a.getMeme().getId())
+                        .nickname(a.getUser().getNickname())
+                        .title(a.getMeme().getTitle())
+                        .build();
+                result.add(temp);
+            }
+        }
+        return result;
+    }
+
+    public List<MemeListResponse> findCarted(Long userId){
+        List<UserMemeAuctionAlert> all = cartRepository.findAllByUserId(userId);
+        List<MemeListResponse> result = new ArrayList<>();
+        for(UserMemeAuctionAlert a:all){
+            if(a.getCart() != null && a.getCart().equals(Cart.ADD)){
+                MemeListResponse temp = MemeListResponse.builder()
+                        .description(a.getMeme().getContent())
+                        .example(a.getMeme().getSituation())
+                        .imgUrl(a.getMeme().getImageurl())
+                        .id(a.getMeme().getId())
+                        .nickname(a.getUser().getNickname())
+                        .title(a.getMeme().getTitle())
+                        .build();
+                result.add(temp);
+            }
+        }
+        return result;
+    }
+
+    public List<MyHistoryList> buyedList(Long userId){
+        List<Transaction> list = transactionRepository.findAllByBuyerId(userId);
+        List<MyHistoryList> result = new ArrayList<>();
+        for(Transaction a : list){
+            Meme temp = memeRepository.findById(a.getMemeId()).get();
+            User u = userRepository.findById(a.getSellerId()).get();
+            MyHistoryList c = MyHistoryList.builder()
+                    .id(temp.getId())
+                    .title(temp.getTitle())
+                    .seller(u.getNickname())
+                    .price(a.getPrice())
+                    .imgSrc(temp.getImageurl())
+                    .date(a.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                    .build();
+            result.add(c);
+        }
+        return result;
+    }
+
+    public List<MyHistoryList> selledList(Long userId){
+        List<Transaction> list = transactionRepository.findAllBySellerId(userId);
+        List<MyHistoryList> result = new ArrayList<>();
+        for(Transaction a : list){
+            Meme temp = memeRepository.findById(a.getMemeId()).get();
+            User u = userRepository.findById(a.getBuyerId()).get();
+            MyHistoryList c = MyHistoryList.builder()
+                    .id(temp.getId())
+                    .title(temp.getTitle())
+                    .seller(u.getNickname())
+                    .price(a.getPrice())
+                    .imgSrc(temp.getImageurl())
+                    .date(a.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                    .build();
+            result.add(c);
+        }
+        return result;
+    }
 }

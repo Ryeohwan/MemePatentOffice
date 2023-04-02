@@ -34,14 +34,15 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userSignUpResponse);
     }
 
-    @PostMapping("/signupList")
-    @ResponseBody
-    public ResponseEntity createUserList(@RequestBody List<UserSignUpRequest> list) {
-        for(UserSignUpRequest a : list){
-            userService.createUser(a);
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).body("finish");
-    }
+//    @PostMapping("/signupList")
+//    @ResponseBody
+//    public ResponseEntity createUserList(@RequestBody List<UserSignUpRequest> list) {
+//        for(UserSignUpRequest a : list){
+//            userService.createUser(a);
+//        }
+//        return ResponseEntity.status(HttpStatus.CREATED).body("finish");
+//    }
+
 //    @ApiResponse(responseCode = "200", description = "회원정보 조회 성공", content = @Content(schema = @Schema(implementation = UserResponse.class)))
 //    @ApiResponse(responseCode = "404", description = "회원정보 조회 실패")
 //    @Operation(description = "회원정보 조회 API", summary = "회원정보 조회 API")
@@ -49,6 +50,18 @@ public class UserController {
     public ResponseEntity getUser(@PathVariable("id") Long id) throws NotFoundException {
         UserResponse userResponse = userService.getUserInfo(id);
         return ResponseEntity.ok().body(userResponse);
+    }
+
+    @GetMapping("/emailCheck/{email}")
+    public ResponseEntity emailCheck(@PathVariable("email") String email) {
+        Boolean emailChecked = userService.emailDuplicatedCheck(email);
+        return ResponseEntity.status(HttpStatus.OK).body(emailChecked);
+    }
+
+    @GetMapping("/nickName/{nickName}")
+    public ResponseEntity nickNameCheck(@PathVariable("nickName") String nickName) {
+        Boolean nickNameChecked = userService.nickNameDuplicatedCheck(nickName);
+        return ResponseEntity.status(HttpStatus.OK).body(nickNameChecked);
     }
 
 //    @ApiResponse(responseCode = "200", description = "회원정보 수정 성공", content = @Content(schema = @Schema(implementation = UserResponse.class)))

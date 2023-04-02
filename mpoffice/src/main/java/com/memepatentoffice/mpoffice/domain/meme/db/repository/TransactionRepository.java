@@ -15,4 +15,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     @Query("SELECT t from Transaction t order by t.createdAt desc ")
     List<Transaction> findBuyerList();
+
+    List<Transaction> findAllByBuyerId(Long userId);
+    List<Transaction> findAllBySellerId(Long userId);
 }

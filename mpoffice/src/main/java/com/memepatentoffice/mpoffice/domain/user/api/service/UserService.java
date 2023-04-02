@@ -32,6 +32,14 @@ public class UserService {
         }
     }
 
+    public Boolean nickNameDuplicatedCheck(String nickName){
+        if(userRepository.existsByNickname(nickName)){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
     public UserResponse getUserInfo(Long userId) throws NotFoundException {
         return new UserResponse(userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("해당 유저가 없습니다.")));

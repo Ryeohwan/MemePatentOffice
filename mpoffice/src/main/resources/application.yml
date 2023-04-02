@@ -41,5 +41,7 @@ cloud:
                 location: classpath:robust-metrics-380604-8e932ce5312a.json
 
 app:
+    business:
+        url: https://j8a305.p.ssafy.io/api/auction
     cors:
         allowedOrigins: http://localhost:3000
