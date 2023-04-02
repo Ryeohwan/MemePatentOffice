@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "store/configStore";
 import { useAppDispatch } from "hooks/useAppDispatch";
-import { memeType } from "store/memeList";
-import { getMemeNewListAxiosThunk } from "store/memeList";
+import { getMemeNewListAxiosThunk, memeType } from "store/memeList";
 import { useInView } from "react-intersection-observer";
 
 import SkeletonCard from "components/common/card/SkeletonCard";
@@ -25,7 +24,6 @@ const MemeListNew: React.FC = () => {
   });
 
   useEffect(() => {
-    console.log(inView, lastMemeRef);
     if (inView && lastMemeRef !== -1) {
       appDispatch(getMemeNewListAxiosThunk(input, lastMemeRef));
     }

@@ -1,6 +1,7 @@
 // meme list page (/meme-list)
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import {useLocation } from 'react-router-dom';
 
 import { RootState } from "store/configStore";
 import { useAppDispatch } from "hooks/useAppDispatch";
@@ -15,29 +16,42 @@ import styles from "./MemeListPage.module.css";
 
 
 const MemeListPage: React.FC = () => {
+
+  const location = useLocation();
+
   const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
   const input = useSelector<RootState, string>((state) => state.memeList.input);
   const range = useSelector<RootState, string>((state) => state.memeList.range);
   const firstLoading = useSelector<RootState, boolean>((state) => state.memeList.loadingMemeList);
 
-  const result = useSelector<RootState, boolean|null>((state) => state.memeList.result);
+  const newResult = useSelector<RootState, boolean|null>((state) => state.memeList.newListResult);
+  const popularResult = useSelector<RootState, boolean|null>((state) => state.memeList.popularListResult);
 
   // 디테일 -> 뒤로가기 했을때 데이터 살려놓으려면 고쳐야할듯....
   // unmount시 redux reset 시키기
-  useEffect(() => {
-    return () => {
-      dispatch(memeListActions.resetAll());
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     dispatch(memeListActions.resetAll());
+  //   };
+  // }, []);
 
-  // input 변경시 get axios dispatch (lastPost = -1 시작 의미), 둘다 보냄
+
+  console.log('여기 page')
+  console.log(location)
+
+  // input 변경시 new get axios dispatch (lastPost = -1 시작 의미) new / popular 둘다
   useEffect(() => {
     if (!input) return;
-    console.log("new list get!", input);
     appDispatch(getMemeNewListAxiosThunk(input, -1));
-    // appDispatch(getMemePopularListAxiosThunk(input, range, -1))
+    appDispatch(getMemePopularListAxiosThunk(input, range, false, -1))
   }, [input]);
+
+  // input 또는 range 변경시 popular get (lastPost = -1 시작 의미)
+  useEffect(() => {
+    if (!input) return;
+    appDispatch(getMemePopularListAxiosThunk(input, range, true, -1))
+  }, [range])
 
 
   return (
@@ -68,7 +82,7 @@ const MemeListPage: React.FC = () => {
       )}
 
       {/* 검색 결과 true인 경우  */}
-      {input && !firstLoading && result && (
+      {input && !firstLoading && newResult && popularResult && (
         <>
           {/* 검색 결과 tab */}
           <MemeListTabComp />
@@ -76,7 +90,7 @@ const MemeListPage: React.FC = () => {
       )}
      
      {/* 검색 결과 false인 경우 -> random 밈 몇개 띄워주기 */}
-      {input && !firstLoading && result === false &&  (
+      {input && !firstLoading && (newResult === false || popularResult === false) &&  (
         <>
           <MemeNotFound />
         </>
