@@ -64,6 +64,8 @@ public class CommentService {
                 .likes(userCommentLikeRepository.countUserCommentLikesByCommentId(saveResult.getId()))
                 .parentName(parentComment.get().getUser().getNickname())
                 .build();
+        System.out.println(result.getLiked());
+        System.out.println(result.getLikes());
         return result;
     }
 
@@ -94,6 +96,8 @@ public class CommentService {
                 .replyCommentCnt(commentRepository.countAllByParentCommentId(created.getId()))
                 .best(0)
                 .build();
+        System.out.println(result.getLikes());
+        System.out.println(result.getLiked());
         return result;
     }
 
