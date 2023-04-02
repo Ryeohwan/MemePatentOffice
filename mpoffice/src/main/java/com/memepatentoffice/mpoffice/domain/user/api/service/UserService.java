@@ -78,10 +78,9 @@ public class UserService {
     }
     @Transactional
     public void withdrawUser(UserWithdrawRequest userWithdrawRequest) throws NotFoundException {
-        User user = userRepository.findById(userWithdrawRequest.getId())
+        User user = userRepository.findById(userWithdrawRequest.getUserId())
                 .orElseThrow(()->new NotFoundException("해당하는 유저가 없읍니다.."));
-        user.setWithdrawalReason(userWithdrawRequest.getWithdrawalReason());
-        user.setIsValid(IsValid.InVALID);
+        userRepository.delete(user);
     }
 
     public Boolean userCount(String nickName) throws NotFoundException{

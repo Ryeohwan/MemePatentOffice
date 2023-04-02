@@ -20,6 +20,7 @@ public class User extends BaseEntity{
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
+
     @Column(name = "email")
     private String email;
 
