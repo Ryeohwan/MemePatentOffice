@@ -62,7 +62,7 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             "       COUNT(d) as replyCommentCnt, \n" +
             "       c.id, c.user.nickname, c.user.profileImage, \n" +
             "       COUNT(l) as heartCnt,\n" +
-            "       EXISTS(SELECT 1 FROM UserCommentLike ucl WHERE ucl.comment.id = c.id AND ucl.user.id = c.user.id) as liked\n" +
+            "       EXISTS(SELECT 1 FROM UserCommentLike ucl WHERE ucl.comment.id = c.id AND ucl.user.id = c.user.id ) as liked\n" +
             "FROM Comment c \n" +
             "LEFT JOIN UserCommentLike l ON l.comment.id = c.id\n" +
             "LEFT JOIN Comment d ON c.id = d.parentComment.id \n" +
