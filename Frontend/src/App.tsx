@@ -40,7 +40,7 @@ import SaleAnimal from "blockchain/blockchain-routes/Sales";
 
 import AuthRoute from "components/common/AuthRoute";
 const App: React.FC = () => {
-  const [windowSize, setWindowSize] = useState<boolean>(window.innerWidth >400 ? true: false)
+  const [windowSize, setWindowSize] = useState<boolean>(window.innerWidth >420 ? true: false)
   window.addEventListener('resize', ()=>{
     if (window.innerWidth > 420) {
       setWindowSize(true)
