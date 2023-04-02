@@ -5,7 +5,9 @@ import com.memepatentoffice.mpoffice.db.entity.Meme;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface MemeRepository extends JpaRepository<Meme,Long> {
@@ -13,5 +15,5 @@ public interface MemeRepository extends JpaRepository<Meme,Long> {
     Boolean existsMemeByTitle(String title);
     @Override
     <S extends Meme> S save(S entity);
-    long count();
+    List<Meme> findAllByOwnerId(Long userId);
 }

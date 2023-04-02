@@ -103,10 +103,7 @@ public class CommentService {
                 .heartCnt(userCommentLikeRepository.countUserCommentLikesByCommentId(created.getId()))
                 .content(created.getContent())
                 .build();
-        System.out.println(result.getHeartCnt());
-        System.out.println(result.getLiked());
-        System.out.println(result.getUserId());
-        System.out.println(result.getNickname());
+
         return result;
     }
 

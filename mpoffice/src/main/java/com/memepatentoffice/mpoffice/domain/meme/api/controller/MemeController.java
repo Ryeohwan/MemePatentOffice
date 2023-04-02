@@ -1,30 +1,19 @@
 package com.memepatentoffice.mpoffice.domain.meme.api.controller;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.google.api.Http;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
 import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.*;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeResponse;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.PriceListResponse;
-import com.memepatentoffice.mpoffice.domain.meme.api.response.TransactionResponse;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.MemeService;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.GcpService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.lang.reflect.Type;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -109,5 +98,35 @@ public class MemeController {
     public ResponseEntity addTransaction(@RequestBody TransactionRequest transactionRequest)throws NotFoundException {
         memeService.addTransaction(transactionRequest);
         return ResponseEntity.status(HttpStatus.OK).body("Okay");
+    }
+
+    @GetMapping("/random")
+    public ResponseEntity getRandom(){
+        return ResponseEntity.status(HttpStatus.OK).body(memeService.randomMeme());
+    }
+
+    @GetMapping("/memeList")
+    public ResponseEntity getMemeList(@RequestParam Long userId){
+        return ResponseEntity.status(HttpStatus.OK).body(memeService.findMemes(userId));
+    }
+
+    @GetMapping("/likedMeme")
+    public ResponseEntity getLikedMeme(@RequestParam Long userId){
+        return ResponseEntity.status(HttpStatus.OK).body(memeService.findLiked(userId));
+    }
+
+    @GetMapping("/getCarted")
+    public ResponseEntity getCartedMeme(@RequestParam Long userId){
+        return ResponseEntity.status(HttpStatus.OK).body(memeService.findCarted(userId));
+    }
+
+    @GetMapping("/buyedMeme")
+    public ResponseEntity getBuyedMeme(@RequestParam Long userId){
+        return ResponseEntity.status(HttpStatus.OK).body(memeService.buyedList(userId));
+    }
+
+    @GetMapping("/selledMeme")
+    public ResponseEntity getSelledMeme(@RequestParam Long userId){
+        return ResponseEntity.status(HttpStatus.OK).body(memeService.selledList(userId));
     }
 }

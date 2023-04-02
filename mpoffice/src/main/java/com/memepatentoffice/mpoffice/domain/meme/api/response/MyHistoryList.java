@@ -7,11 +7,11 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @Builder
-public class MemeListResponse {
+public class MyHistoryList {
     private Long id;
-    private String nickname;
     private String title;
-    private String imgUrl;
-    private String description;
-    private String example;
+    private String seller;
+    private Double price;
+    private String imgSrc;
+    private String date;
 }
