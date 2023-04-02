@@ -1,11 +1,15 @@
 package com.memepatentoffice.mpoffice.domain.meme.db.repository;
 
+import com.memepatentoffice.mpoffice.db.entity.MemeLike;
+import com.memepatentoffice.mpoffice.db.entity.QUserMemeLike;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeListResponse;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.NullExpression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +46,27 @@ public class MemeSearchRepository {
         }
         return meme.id.lt(memeId);
     }
+    private BooleanExpression ltPopularMemeId(Long memeId) {
+        QUserMemeLike subUserMemeLike = userMemeLike;
+
+        if (memeId == 0) {
+            return null;
+        }
+
+         Long result = queryFactory.select(subUserMemeLike.meme.id.count())
+                .from(subUserMemeLike)
+                .where(subUserMemeLike.meme.id.eq(memeId))
+                .groupBy(subUserMemeLike.meme.id)
+                .fetchOne();
+        System.out.println(result);
+
+        if(result == null) {
+            return meme.id.count().eq(1L);
+        } else {
+            return meme.id.count().loe(result);
+        }
+    }
+
     private BooleanExpression containMemeTitle(String word) {
         if(word == null) {
             return null;
@@ -149,14 +174,15 @@ public class MemeSearchRepository {
                 .where(
                         // no-offset 페이징 처리
                         ltMemeId(lastMemeId),
-                        containMemeTitle(word)
+                        containMemeTitle(word),
                         // 좋아요
-//                        userMemeLike.memeLike.eq(MemeLike.LIKE)
-
+                        userMemeLike.memeLike.eq(MemeLike.LIKE).or(
+                                userMemeLike.memeLike.isNull()
+                        )
                 )
                 .groupBy(meme.id)
+                .having( ltPopularMemeId(lastMemeId) )
                 .orderBy(
-//                        (days.equals("all") ? null : userMemeLike.date.max().desc()),
                         daysMemeLike(days),
                         meme.id.count().desc(),
                         meme.id.desc()
