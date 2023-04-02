@@ -32,7 +32,7 @@ const NewComment: React.FC = () => {
   const commentSubmitHandler = (e: React.FormEvent) => {
     e.preventDefault();
     const enteredComment = commentInputRef.current!.value;
-    console.log(parentId)
+    console.log(parentId, userId, memeid, enteredComment);
     sendRequest({
       url: "/api/mpoffice/meme/comment/create",
       method: "POST",
@@ -43,15 +43,8 @@ const NewComment: React.FC = () => {
         parentId: parentId,
       },
     });
-
-    // // 댓글 post 후 받은 response가 답글이면 리덕스의 답글리스트에, 댓글이면 댓글리스트에
-    // if("likes" in data) {
-    //     dispatch(commentListActions.commentAddHandler(data));
-    // } else {
-    //     dispatch(commentListActions.replyAddHandler(data));
-    // };
   };
-  
+
   // 리덕스에서 가져온 parentId, parentName이 null이면 답글다는 중 컴포넌트 안 띄움
   useEffect(() => {
     if (parentId !== null) {
@@ -90,9 +83,15 @@ const NewComment: React.FC = () => {
   useEffect(() => {
     console.log(data);
     if (data) {
-        commentInputRef.current!.value = "";
-        setUploadState(false);
-    };
+      commentInputRef.current!.value = "";
+      setUploadState(false);
+    }
+    // 댓글 post 후 받은 response가 답글이면 리덕스의 답글리스트에, 댓글이면 댓글리스트에
+    // if (data.parentId === null) {
+    //   dispatch(commentListActions.commentAddHandler(data));
+    // } else {
+    //   dispatch(commentListActions.replyAddHandler(data));
+    // }
   }, [data]);
 
   return (
@@ -104,7 +103,11 @@ const NewComment: React.FC = () => {
               {parentName} 님에게 답글 남기는 중
             </div>
             <div className={styles.cancelBtnWrapper}>
-              <Icon icon="ph:x" className={styles.cancelBtn} onClick={onClickCancelReply}/>
+              <Icon
+                icon="ph:x"
+                className={styles.cancelBtn}
+                onClick={onClickCancelReply}
+              />
             </div>
           </div>
         )}

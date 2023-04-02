@@ -17,20 +17,10 @@ export type commentType = {
   parentName: null | string;
 };
 
-export type replyType = {
-  id: number;
-  writerNickname: string;
-  writerImg: string;
-  content: string;
-  createdAt: string;
-  parentId: null | number;
-  parentName: null | string;
-};
-
 interface initialStateInterface {
   commentNewList: commentType[];
   commentBestList: commentType[];
-  replyCommentList: replyType[];
+  replyCommentList: commentType[];
   nowParentId: null | number;
   nowParentName: null | string;
   loadingNewCommentList: boolean;
@@ -40,85 +30,9 @@ interface initialStateInterface {
 }
 
 const initialState: initialStateInterface = {
-  commentNewList: [
-    {
-      id: 1,
-      userId: 3,
-      profileImage: "theglory.jpeg",
-      nickname: "호롤롤로",
-      content: "경매 언제 열어주시나요 나 이거 증말 갖고싶어 죽겠어 ㅠ ㅠ",
-      heartCnt: 17,
-      date: "1일 전",
-      liked: false,
-      best: 0,
-      replyCommentCnt: 0,
-      parentId: null,
-      parentName: null,
-    },
-    {
-      id: 2,
-      userId: 2,
-      profileImage: "newjeans.jpg",
-      nickname: "5조의 햇살",
-      content:
-        "아 이거 괜히 팔았다.. 다시 보니까 또 갖고 싶어.. 경매 다시 열어주시죠... 나 다시 가져올래..",
-      heartCnt: 25,
-      date: "1주 전",
-      liked: false,
-      best: 0,
-      replyCommentCnt: 0,
-      parentId: null,
-      parentName: null,
-    },
-  ],
-  commentBestList: [
-    {
-      id: 3,
-      userId: 1,
-      profileImage: "totoro.jpg",
-      nickname: "단발머리 부엉이",
-      content:
-        "나는 봄 타는 단발머리 부엉이 외로워서 점심마다 산책을 가즤요. 토토로 nft 만이 나의 낙이에요 고독사 직전의 부엉이",
-      heartCnt: 31,
-      date: "3주 전",
-      liked: true,
-      best: 1,
-      replyCommentCnt: 3,
-      parentId: null,
-      parentName: null,
-    },
-  ],
-  replyCommentList: [
-    {
-      id: 1,
-      writerImg: "newjeans.jpg",
-      writerNickname: "5조의 햇살",
-      createdAt: "1주 전",
-      content:
-        "인정입니다 인정~~.. 토토로 졸귀입니다졸귀.. 저 이 nft 다시 가져오고 싶은데 경매 예정 없으십니까?",
-      parentId: 1,
-      parentName: "호롤롤로",
-    },
-    {
-      id: 2,
-      writerImg: "totoro.jpg",
-      writerNickname: "단발머리 부엉이",
-      createdAt: "5일 전",
-      content: "알림 신청 해두시지요 .. 알림이 갈 겁니답쇼이옹",
-      parentId: 1,
-      parentName: "호롤롤로",
-    },
-    {
-      id: 3,
-      writerImg: "newjeans.jpg",
-      writerNickname: "5조의 햇살",
-      createdAt: "3시간 전",
-      content:
-        "예.... 아 12월 28일 경매 예정이시군요 당장 알림신청 했읍니다... 다시 가져오고 말겠읍니다.",
-      parentId: 1,
-      parentName: "호롤롤로",
-    },
-  ],
+  commentNewList: [],
+  commentBestList: [],
+  replyCommentList: [],
   nowParentId: null,
   nowParentName: null,
   loadingNewCommentList: false,
@@ -286,43 +200,44 @@ export const getBestCommentListAxiosThunk =
     }
 };
 
-// export const getReplyListAxiosThunk =
-//   ( commentId: number): AppThunk =>
-//   async (dispatch) => {
+export const getReplyListAxiosThunk =
+  ( memeId: number, commentId: number 
+    ): AppThunk =>
+  async (dispatch) => {
 
-//     const sendRequest = async () => {
-//       const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/list?memeId=${commentId}`;
+    const sendRequest = async () => {
+      const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/reply?memeId=${memeId}&commentId=${commentId}`;
 
-//       console.log('여기 보낼거임!', requestUrl);
+      console.log('대댓글리스트 조회!', requestUrl);
 
-//       const response = await axios.get(requestUrl, {
-//         headers: {
-//           Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
-//           "Access-Control-Allow-Credentials": true,
-//           "Content-Type": "application/json",
-//         },
-//         validateStatus: (status) => status === 200 || status === 401,
-//       });
+      const response = await axios.get(requestUrl, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+          "Access-Control-Allow-Credentials": true,
+          "Content-Type": "application/json",
+        },
+        validateStatus: (status) => status === 200 || status === 401,
+      });
 
-//       if (response.status === 401) {
-//         // 로그아웃
-//         return false;
-//       } else {
-//         return response.data;
-//       }
-//     };
+      if (response.status === 401) {
+        // 로그아웃
+        return false;
+      } else {
+        return response.data;
+      }
+    };
 
-//     try {
-//       const res = await sendRequest();
-//       console.log("res", res);
-//       if (!res || res.empty) {
-//         return;
-//       }
-//       dispatch(commentListActions.getCommentList(res.content));
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };
+    try {
+      const res = await sendRequest();
+      console.log("대댓글", res);
+      if (!res || res.empty) {
+        return;
+      }
+      dispatch(commentListActions.getReplyCommentList(res.content));
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
 
 export const commentListActions = commentListSlice.actions;
