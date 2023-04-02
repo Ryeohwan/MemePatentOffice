@@ -19,7 +19,6 @@ public interface UserCommentLikeRepository extends JpaRepository<UserCommentLike
 
 //    @Query("SELECT u.comment FROM UserCommentLike u WHERE u.comment.id = :commentId GROUP BY u.comment ORDER BY COUNT(u) DESC LIMIT 3")
 //    List<Comment> countCommentLikes(@Param("commentId") Long commentId);
-    Integer countUserCommentLikesByCommentId(Long commentId);
 
 
 }
