@@ -316,16 +316,29 @@ public class CommentService {
             Long heartCnt = (Long)arr[6];
             Boolean liked = (Boolean) arr[7];
             Comment check = commentRepository.findById(id).get();
+
+
+            List<UserCommentLike> findComment = userCommentLikeRepository.findAllByCommentIdAndUserId(id,check.getUser().getId());
+            Boolean reliked = false;
+            int reheartCnt = 0;
+            for(UserCommentLike l : findComment){
+                if(l.getCommentLike().equals(CommentLike.LIKE)){
+                    reliked = true;
+                    reheartCnt += 1;
+                }
+            }
+
             ReplyResponse dto = ReplyResponse.builder()
                     .content(content)
                     .id(id)
-                    .heartCnt(heartCnt.intValue())
+                    .heartCnt(reheartCnt)
+                    .userId(check.getUser().getId())
                     .profileImage(profileImage)
                     .date(createdAt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                     .nickname(nickname)
                     .parentId(check.getParentComment().getId())
                     .parentName(check.getParentComment().getUser().getNickname())
-                    .liked(liked)
+                    .liked(reliked)
                     .build();
             dtoList.add(dto);
         }
