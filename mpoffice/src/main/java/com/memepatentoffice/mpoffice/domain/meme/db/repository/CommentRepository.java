@@ -42,6 +42,9 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             " ORDER BY heartCnt desc")
     Slice<Object> findBestThreeComment(@Param("memeId")Long memeId, Pageable pageable);
 
+
+
+
     @Query("SELECT c.content, c.createdAt, " +
             " COUNT(d) as replyCommentCnt, " +
             " c.id, c.user.nickname, c.user.profileImage, " +
@@ -81,7 +84,7 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             "LEFT JOIN Comment d ON c.id = d.parentComment.id \n" +
             "WHERE c.meme.id = :memeId AND c.parentComment.id = :commentId\n" +
             "GROUP BY c.content, c.createdAt, c.id, c.user.nickname, c.user.profileImage, liked\n" +
-            "ORDER BY c.createdAt DESC")
+            "ORDER BY c.createdAt asc" )
     Slice<Object> findReplyComment(@Param("memeId")Long memeId, @Param("commentId") Long commentId, Pageable pageable);
 
 
