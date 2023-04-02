@@ -110,7 +110,7 @@ const initialState: initialStateInterface = {
   ],
 };
 
-// 무한스크롤 하면서 수정해야할듯
+
 const memeListSlice = createSlice({
   name: "memeList",
   initialState: initialState,

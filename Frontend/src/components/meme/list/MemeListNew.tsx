@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { RootState } from "store/configStore";
 import { useAppDispatch } from "hooks/useAppDispatch";
+import { RootState } from "store/configStore";
 import { getMemeNewListAxiosThunk, memeType } from "store/memeList";
 import { useInView } from "react-intersection-observer";
 

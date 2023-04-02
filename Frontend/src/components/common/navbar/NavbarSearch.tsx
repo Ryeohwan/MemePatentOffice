@@ -1,14 +1,19 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch } from "hooks/useAppDispatch";
+import { memeListActions, getMemeNewListAxiosThunk, getMemePopularListAxiosThunk } from "store/memeList";
+import { RootState } from "store/configStore";
 
 import SearchComp from "../elements/SearchComp";
-import { memeListActions } from "store/memeList";
-
 import { Icon } from "@iconify/react";
 import styles from "./NavbarSearch.module.css";
 
+
 const NavbarSearch: React.FC = () => {
+  const appDispatch = useAppDispatch();
+  const range = useSelector<RootState, string>((state) => state.memeList.range);
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -16,11 +21,16 @@ const NavbarSearch: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // enter 누르면 redux input 바꾸기 -> memeList page 이동
+  // enter 누르면 redux input 바꾸기 -> get해오기 -> memeList page 이동
   const enterHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== "Enter" || !inputRef.current) return;
     if (inputRef.current.value.trim().length === 0) return;
     dispatch(memeListActions.changeInputTxt(inputRef.current.value.trim()));
+    
+    console.log('input 바꼈음!')
+    appDispatch(getMemeNewListAxiosThunk(inputRef.current.value.trim(), -1));
+    appDispatch(getMemePopularListAxiosThunk(inputRef.current.value.trim(), range, false, -1))
+    
     navigate("/meme-list/type=new")
   };
 

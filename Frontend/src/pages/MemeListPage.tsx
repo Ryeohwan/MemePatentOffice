@@ -1,11 +1,8 @@
 // meme list page (/meme-list)
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {useLocation } from 'react-router-dom';
 
 import { RootState } from "store/configStore";
 import { useAppDispatch } from "hooks/useAppDispatch";
-import { memeListActions, getMemeNewListAxiosThunk, getMemePopularListAxiosThunk } from "store/memeList";
 
 import MemeListSearch from "components/meme/list/MemeListSearch";
 import NotInputArea from "components/meme/list/NotInputArea";
@@ -16,15 +13,8 @@ import styles from "./MemeListPage.module.css";
 
 
 const MemeListPage: React.FC = () => {
-
-  const location = useLocation();
-
-  const dispatch = useDispatch();
-  const appDispatch = useAppDispatch();
   const input = useSelector<RootState, string>((state) => state.memeList.input);
-  const range = useSelector<RootState, string>((state) => state.memeList.range);
   const firstLoading = useSelector<RootState, boolean>((state) => state.memeList.loadingMemeList);
-
   const newResult = useSelector<RootState, boolean|null>((state) => state.memeList.newListResult);
   const popularResult = useSelector<RootState, boolean|null>((state) => state.memeList.popularListResult);
 
@@ -37,21 +27,20 @@ const MemeListPage: React.FC = () => {
   // }, []);
 
 
-  console.log('여기 page')
-  console.log(location)
-
   // input 변경시 new get axios dispatch (lastPost = -1 시작 의미) new / popular 둘다
-  useEffect(() => {
-    if (!input) return;
-    appDispatch(getMemeNewListAxiosThunk(input, -1));
-    appDispatch(getMemePopularListAxiosThunk(input, range, false, -1))
-  }, [input]);
+  // useEffect(() => {
+  //   if (!input) return;
+  //   console.log('input 바겼음!')
+  //   appDispatch(getMemeNewListAxiosThunk(input, -1));
+  //   appDispatch(getMemePopularListAxiosThunk(input, range, false, -1))
+  // }, [input]);
 
   // input 또는 range 변경시 popular get (lastPost = -1 시작 의미)
-  useEffect(() => {
-    if (!input) return;
-    appDispatch(getMemePopularListAxiosThunk(input, range, true, -1))
-  }, [range])
+  // useEffect(() => {
+  //   if (!input) return;
+  //   console.log('raneg 바꼈음!')
+  //   appDispatch(getMemePopularListAxiosThunk(input, range, true, -1))
+  // }, [range])
 
 
   return (

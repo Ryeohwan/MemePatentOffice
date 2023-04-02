@@ -21,10 +21,13 @@ const MemeListPopular: React.FC = () => {
   const hasNext = useSelector<RootState, boolean>((state) => state.memeList.nextMemePopularList);
   const [lastMemeRef, setLastMemeRef] = useState(-1);
 
-  // click하면 url 바꾸고 redux에 type 바꾸기
+  // click하면 list reset -> range 바꾸기 -> get 하기
   const changePeriodHandler = (period: string) => {
     dispatch(memeListActions.resetMemePopularList());
     dispatch(memeListActions.changeRange(period))
+    
+    console.log('range 바꼈음!')
+    appDispatch(getMemePopularListAxiosThunk(input, period, true, -1))
   }
   
   console.log('여기', range)  
