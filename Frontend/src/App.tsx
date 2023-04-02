@@ -38,6 +38,8 @@ import BlockChain from "blockchain/blockchain-routes/BlockChain";
 import Animals from "blockchain/blockchain-routes/Animals";
 import SaleAnimal from "blockchain/blockchain-routes/Sales";
 
+import AuthRoute from "components/common/AuthRoute";
+
 const App: React.FC = () => {
   return (
     <div className="App">
@@ -51,61 +53,67 @@ const App: React.FC = () => {
 
           <Route path="" element={<LandingPage />} />
           <Route path="/oauth2/redirect" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/main" element={<HomePage />} />
+          <Route
+            path="/main"
+            element={
+              <AuthRoute>
+                <HomePage />
+              </AuthRoute>
+            }
+          />
 
-          <Route path="/meme-upload" element={<MemeUploadPage />} />
-          <Route path="/meme-list/*" element={<MemeListPage />} />
-          <Route path="/meme-detail/:meme_id/*" element={<MemeDetailPage />} />
+          <Route path="/meme-upload" element={<AuthRoute><MemeUploadPage /></AuthRoute>} />
+          <Route path="/meme-list/*" element={<AuthRoute><MemeListPage /></AuthRoute>} />
+          <Route path="/meme-detail/:meme_id/*" element={<AuthRoute><MemeDetailPage /></AuthRoute>} />
 
-          <Route path="/auction-list/*" element={<AuctionListPage />} />
-          <Route path="/auction/:auctionId/*" element={<AuctionPage />} />
+          <Route path="/auction-list/*" element={<AuthRoute><AuctionListPage /></AuthRoute>} />
+          <Route path="/auction/:auctionId/*" element={<AuthRoute><AuctionPage /></AuthRoute>} />
 
-          <Route path="/profile/:nickname/*" element={<ProfilePage />} />
+          <Route path="/profile/:nickname/*" element={<AuthRoute><ProfilePage /></AuthRoute>} />
 
-          <Route path="/setting" element={<SettingPage />} />
+          <Route path="/setting" element={<AuthRoute><SettingPage /></AuthRoute>} />
 
-          <Route path="/setting/user-edit" element={<UserEditPage />} />
+          <Route path="/setting/user-edit" element={<AuthRoute><UserEditPage /></AuthRoute>} />
           <Route
             path="/setting/user-edit/profile"
-            element={<ProfileEditPage />}
+            element={<AuthRoute><ProfileEditPage /></AuthRoute>}
           />
-          <Route path="/setting/user-edit/image" element={<ImageEditPage />} />
+          <Route path="/setting/user-edit/image" element={<AuthRoute><ImageEditPage /></AuthRoute>} />
           <Route
             path="/setting/user-edit/withdrawl"
-            element={<WithdrawlPage />}
+            element={<AuthRoute><WithdrawlPage /></AuthRoute>}
           />
 
-          <Route path="/setting/history" element={<HistoryPage />} />
+          <Route path="/setting/history" element={<AuthRoute><HistoryPage /></AuthRoute>} />
           <Route
             path="/setting/history/comment"
-            element={<CommentHistoryPage />}
+            element={<AuthRoute><CommentHistoryPage /></AuthRoute>}
           />
-          <Route path="/setting/history/nft-like" element={<NftLikePage />} />
+          <Route path="/setting/history/nft-like" element={<AuthRoute><NftLikePage /></AuthRoute>} />
           <Route
             path="/setting/history/nft-notification"
-            element={<NftNotificationPage />}
+            element={<AuthRoute><NftNotificationPage /></AuthRoute>}
           />
 
           <Route
             path="/setting/auction-history"
-            element={<AuctionHistoryPage />}
+            element={<AuthRoute><AuctionHistoryPage /></AuthRoute>}
           />
           <Route
             path="/setting/auction-history/purchase"
-            element={<PurchaseSaleHistoryPage />}
+            element={<AuthRoute><PurchaseSaleHistoryPage /></AuthRoute>}
           />
           <Route
             path="/setting/auction-history/sale"
-            element={<PurchaseSaleHistoryPage />}
+            element={<AuthRoute><PurchaseSaleHistoryPage /></AuthRoute>}
           />
 
           <Route
             path="/setting/notification"
-            element={<NotificationSettingPage />}
+            element={<AuthRoute><NotificationSettingPage /></AuthRoute>}
           />
 
-          <Route path="/notification-list" element={<NotificationListPage />} />
+          <Route path="/notification-list" element={<AuthRoute><NotificationListPage /></AuthRoute>} />
 
           <Route path="/not-found" element={<NotFoundPage />} />
           <Route path="*" element={<NotFoundPage />} />

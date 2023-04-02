@@ -8,9 +8,11 @@ import { useFrame, useLoader } from "react-three-fiber";
 import GifLoader from "three-gif-loader";
 import GifTexture from "three-gif-loader/lib/gif-texture";
 
+
 const Border: React.FC = () => {
-  const texCanvas = document.createElement("canvas");
-  const texContext = texCanvas.getContext("2d");
+  // const texCanvas = document.createElement("canvas")
+  const texCanvas = document.createElement("canvas") as HTMLCanvasElement
+  const texContext = texCanvas.getContext("2d")
   const nftTexture = useRef<THREE.Texture | GifTexture>();
   texCanvas.width = 100;
   texCanvas.height = 100;
@@ -23,10 +25,10 @@ const Border: React.FC = () => {
   // const arrTwo = arrOne[0].match(/:(.*?);/);
   // console.log(arrTwo)
   // const mime = arrTwo![1];
-  const loader = new GifLoader();
+  // const loader = new GifLoader();
   nftTexture.current! = useLoader(THREE.TextureLoader, memeImgSrc);
   // if (mime === "gif") {
-  nftTexture.current! = loader.load(memeImgSrc, (reader) => {});
+  // nftTexture.current! = loader.load(memeImgSrc, (reader) => {});
   // }
 
   const border = new THREE.Mesh(
@@ -70,10 +72,10 @@ const Border: React.FC = () => {
 
     return [diff, `${hours}:${minutes}:${seconds}`];
   };
-  useEffect(() => {
-    if (texContext) {
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (texContext) {
+  //   }
+  // }, []);
 
   useFrame(() => {
     canvasTexture.needsUpdate = true;
@@ -87,7 +89,7 @@ const Border: React.FC = () => {
       let timerProps = getRemainTime();
       let diff = timerProps[0];
       let timerView = timerProps[1];
-      if (diff <= 3 * 60) {
+      if (diff as number <= 3 * 60) {
         texContext.fillStyle = "red"; // 물감
       } else {
         texContext.fillStyle = "white"; // 물감
@@ -102,7 +104,7 @@ const Border: React.FC = () => {
   return (
     <>
       <primitive castShadow object={border} />
-      <primitive object={NFT} />
+      <primitive object={NFT}/>
       <primitive object={timer} />
     </>
   );

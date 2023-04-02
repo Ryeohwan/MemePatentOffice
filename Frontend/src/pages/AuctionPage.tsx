@@ -6,10 +6,13 @@ import AuctionCanvas from "components/auction/main/AuctionCanvas";
 import styles from "pages/AuctionPage.module.css";
 import { chatActions } from "store/chat";
 import { auctionActions } from "store/auction";
-
-const ENDPOINT = process.env.NODE_ENV!==null?"wss://j8a305.p.ssafy.io/ws":"ws://localhost:8072/ws"
-// const ENDPOINT = "ws://localhost:8072/ws"
+import { playersInfo } from "store/auction";
+// const ENDPOINT = process.env.NODE_ENV!==null?"wss://j8a305.p.ssafy.io/ws":"ws://localhost:8072/ws"
+const ENDPOINT = "ws://localhost:8072/ws"
 const AuctionPage: React.FC = () => {
+  // const characters= useRef<playersInfo[]>([])
+  const [characters,setCharacters]= useState<playersInfo[]>([])
+  const [userNum,setUserNum] = useState<number>(0)
 
   const userId = JSON.parse(sessionStorage.getItem('user')!).userId
   const userNickName = JSON.parse(sessionStorage.getItem('user')!).nickname
@@ -24,9 +27,9 @@ const AuctionPage: React.FC = () => {
       brokerURL: ENDPOINT,
 
       //   연결 확인
-      debug: function (str) {
-        console.log(str);
-      },
+      // debug: function (str) {
+      //   console.log(str);
+      // },
 
       // 재연결 시도
       reconnectDelay: 3000,
@@ -59,7 +62,7 @@ const AuctionPage: React.FC = () => {
       `/sub/chat/${auctionId}`, 
       (body) => {
         const json_body = JSON.parse(body.body)
-        console.log(json_body)
+        // console.log(json_body)
         dispatch(
             chatActions.sendChat({
               chat: { 
@@ -73,16 +76,17 @@ const AuctionPage: React.FC = () => {
       `/sub/character/${auctionId}`,
       (body) => {
         const json_body = JSON.parse(body.body)
-        console.log(json_body)
-        dispatch(
-         auctionActions.getPlayersInfo({
-          nickname: json_body.nickname,
-          x: json_body.x,
-          y: json_body.y,
-          z: json_body.z,
-          status: json_body.status
-         }) 
-        )
+        const character = characters.find((c) => c.nickname === json_body.nickname) 
+        if(character) {
+          character.x = json_body.x
+          character.y = json_body.y
+          character.z = json_body.z
+          character.status = json_body.status
+        }
+        else{
+          setCharacters((prev) => [...prev, json_body])
+          setUserNum((prev)=>prev+1)
+        }
       }
     )
     console.log(`subscribe()`)
@@ -96,7 +100,7 @@ const AuctionPage: React.FC = () => {
   }, []);
   return (
     <>
-      <AuctionCanvas client={client} auctionId={Number(auctionId)}/>
+      <AuctionCanvas client={client} auctionId={Number(auctionId)} characters={characters} userNum={userNum}/>
     </>
   );
 };
