@@ -155,11 +155,23 @@ public class CommentService {
         Comment com = commentRepository.findCommentById(commentInfoRequest.getId()).orElseThrow(() -> new NotFoundException("해당하는 밈이 없습니다."));
         Long userId = com.getUser().getId();
         Long memeId = com.getMeme().getId();
+
+        List<UserCommentLike> check = userCommentLikeRepository.findAllByCommentIdAndUserId(com.getId(),userId);
+        Boolean liked = false;
+        int heartCnt = 0;
+        for(UserCommentLike l : check){
+            if(l.getCommentLike().equals(CommentLike.LIKE)){
+                liked = true;
+                heartCnt += 1;
+            }
+        }
+
+
         CommentResponse result = CommentResponse.builder()
                 .profileImage(com.getUser().getProfileImage())
                 .nickname(com.getUser().getNickname())
-                .heartCnt(userMemeLikeRepository.countUserMemeLikesByUserIdAndMemeId(userId,memeId))
-                .liked(userMemeLikeRepository.existsUserMemeLikeByUserIdAndMemeId(userId,memeId))
+                .heartCnt(heartCnt)
+                .liked(liked)
                 .replyCommentCnt(commentRepository.countAllByParentCommentId(com.getId()))
                 .content(com.getContent())
                 .id(com.getId())
