@@ -3,6 +3,11 @@
     justify-content: space-between;
 }
 
+.skeletonWrapper {
+    display: flex;
+    justify-content: center;
+}
+
 .homeMenuTitle {
     margin: 25px 15px 15px 15px;
     font-size: 18px;
