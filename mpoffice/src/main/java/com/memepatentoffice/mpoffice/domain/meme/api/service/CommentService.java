@@ -54,18 +54,26 @@ public class CommentService {
                 .createdAt(LocalDateTime.now())
                 .build();
         Comment saveResult = commentRepository.save(com);
+        List<UserCommentLike> check = userCommentLikeRepository.findAllByCommentIdAndUserId(saveResult.getId(),saveResult.getUser().getId());
+        Boolean liked = false;
+        for(UserCommentLike l : check){
+            if(l.getCommentLike().equals(CommentLike.LIKE)){
+                liked = true;
+            }
+        }
         ReplyResponse result = ReplyResponse.builder()
-                .userName(user.getNickname())
-                .userImgUrl(user.getProfileImage())
-                .comment(commentRequest.getContent())
-                .date(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-                .parentId(parentComment.get().getId())
-                .liked(userCommentLikeRepository.existsByUserIdAndCommentId(user.getId(),saveResult.getId()))
-                .likes(userCommentLikeRepository.countUserCommentLikesByCommentId(saveResult.getId()))
-                .parentName(parentComment.get().getUser().getNickname())
+                .content(saveResult.getContent())
+                .best(0)
+                .profileImage(saveResult.getUser().getProfileImage())
+                .nickname(saveResult.getUser().getNickname())
+                .parentName(saveResult.getParentComment().getUser().getNickname())
+                .parentId(saveResult.getParentComment().getId())
+                .date(saveResult.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                .id(saveResult.getId())
+                .liked(liked)
+                .heartCnt(userCommentLikeRepository.countUserCommentLikesByCommentId(saveResult.getId()))
                 .build();
         System.out.println(result.getLiked());
-        System.out.println(result.getLikes());
         return result;
     }
 
@@ -83,6 +91,13 @@ public class CommentService {
                 .createdAt(LocalDateTime.now())
                 .build();
         Comment created = commentRepository.save(com);
+        List<UserCommentLike> check = userCommentLikeRepository.findAllByCommentIdAndUserId(created.getId(),created.getUser().getId());
+        Boolean liked = false;
+        for(UserCommentLike l : check){
+            if(l.getCommentLike().equals(CommentLike.LIKE)){
+                liked = true;
+            }
+        }
 
         CommentCreateResponse result = CommentCreateResponse.builder()
                 .Id(created.getId())
@@ -92,7 +107,7 @@ public class CommentService {
                 .userName(user.getNickname())
                 .comment(commentRequest.getContent())
                 .date(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-                .liked(userMemeLikeRepository.existsUserMemeLikeByUserIdAndMemeId(user.getId(),meme.getId()))
+                .liked(liked)
                 .replyCommentCnt(commentRepository.countAllByParentCommentId(created.getId()))
                 .best(0)
                 .build();
@@ -243,15 +258,15 @@ public class CommentService {
             Boolean liked = (Boolean) arr[7];
             Comment check = commentRepository.findById(id).get();
             ReplyResponse dto = ReplyResponse.builder()
-                    .comment(content)
-                    .likes(heartCnt.intValue())
-                    .userImgUrl(profileImage)
-                    .liked(liked)
-                    .userName(nickname)
+                    .content(content)
+                    .id(id)
+                    .heartCnt(heartCnt.intValue())
+                    .profileImage(profileImage)
                     .date(createdAt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-                    .parentName(check.getParentComment().getUser().getNickname())
+                    .nickname(nickname)
                     .parentId(check.getParentComment().getId())
-
+                    .parentName(check.getParentComment().getUser().getNickname())
+                    .liked(liked)
                     .build();
             dtoList.add(dto);
         }

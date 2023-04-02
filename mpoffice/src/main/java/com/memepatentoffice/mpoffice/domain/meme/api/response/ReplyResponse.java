@@ -11,11 +11,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ReplyResponse {
-    private String userName;
-    private String userImgUrl;
-    private String comment;
+    private Long id;
+    private Long userId;
+    private String nickname;
+    private String profileImage;
+    private String content;
     private String date;
-    private int likes;
+    private int heartCnt;
+    private int best;
+    private int replyCommentCnt;
     private Boolean liked;
     private Long parentId;
     private String parentName;
