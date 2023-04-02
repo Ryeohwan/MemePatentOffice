@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "store/configStore";
@@ -9,7 +9,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { useLoader, useFrame } from "react-three-fiber";
 
-interface PlayerProps extends WebSocketProps{
+interface PlayerProps extends WebSocketProps {
   clickPosition: React.MutableRefObject<THREE.Vector3>;
   playerPosition: React.MutableRefObject<THREE.Vector3>;
   chairPoints: React.MutableRefObject<THREE.Mesh[]>;
@@ -62,21 +62,29 @@ const Player: React.FC<PlayerProps> = ({
     standup: null,
     normal: null,
   });
-  
   const glb = useLoader(GLTFLoader, "/auction/model/character.glb");
-  const character = useMemo(()=>{
-    const character = new THREE.Group()
-    character.add(glb.scene)
-    character.children.push(glb.scene.children[0].clone())
-    return character.children[0]
-  },[glb.scene])
-  player.current = character.children[0]
-  
-  const mixer = new THREE.AnimationMixer(player.current!);
+  const character = useMemo(() => {
+    
+    return glb.scene.clone()
+  }, [glb]);
+  console.log(glb)
+  const animations = useMemo(() => {
+    const animations = glb.animations.map((clip) => clip.clone());
+    return animations;
+  }, []);
+  // const character = new THREE.Group()
+  // character.add(glb.scene)
+  // character.children.push(glb.scene.children[0].clone())
+  // return character.children[0]
+  player.current = character.children[0];
+  // player.current = glb.scene.children[0]
+  // console.log(player.current)
+  const mixer = new THREE.AnimationMixer(character.children[0]);
+  // const mixer = new THREE.AnimationMixer(glb.scene.children[0]);
 
   // 애니메이션 지정
-  for (let i = 0; i < glb.animations.length; i++) {
-    const action = mixer.clipAction(glb.animations[i]);
+  for (let i = 0; i < animations.length; i++) {
+    const action = mixer.clipAction(animations[i]);
     const name = action.getClip().name;
     if (name === "handsup") {
       action.repetitions = 1;
@@ -117,6 +125,8 @@ const Player: React.FC<PlayerProps> = ({
 
   useFrame((state, delta) => {
     mixer.update(delta);
+    // console.log(character.children[0].position)
+    // console.log(character.children[0])
     // client.current?.publish({
     //   destination: "/pub/character",
     //   body: JSON.stringify({
@@ -128,7 +138,7 @@ const Player: React.FC<PlayerProps> = ({
     //     status: 'STANDUP'
     //   })
     // })
-    
+
     if (playerState === 0) {
       if (actions.current.normal) actions.current.normal.play();
       let isIn;
@@ -139,7 +149,7 @@ const Player: React.FC<PlayerProps> = ({
         ) {
           if (!hasChange.current) {
             canSitHandler(true);
-            hasChange.current=true
+            hasChange.current = true;
           }
           chairPoint.current = chair;
           isIn = true;
@@ -188,8 +198,15 @@ const Player: React.FC<PlayerProps> = ({
       }
     }
   });
+  console.log(character);
+  console.log(glb.scene);
+  return (
+    <>
+      {/* <primitive object={glb.scene} /> */}
+          <primitive object={character} />
 
-  return <primitive object={character} />;
+    </>
+  );
 };
 
 export default Player;

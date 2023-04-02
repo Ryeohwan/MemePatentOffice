@@ -51,6 +51,11 @@ const NavbarHamburger: React.FC = () => {
     }
   };
 
+  const logoutHandler = () => {
+    sessionStorage.clear()
+    navigate('/')
+  }
+
   return (
     <>
       <Icon
@@ -89,7 +94,7 @@ const NavbarHamburger: React.FC = () => {
             마이페이지
           </div>
 
-          <p className={styles.navLink}>로그아웃</p>
+          <p className={styles.navLink} onClick={logoutHandler}>로그아웃</p>
         </div>
       </Sidebar>
     </>
