@@ -22,7 +22,6 @@ public class SliceConverter {
         int fromIndex = page * size;
         int toIndex = Math.min(fromIndex + size, list.size());
         List<T> content = list.subList(fromIndex, toIndex);
-
         return new SliceImpl<>(content, PageRequest.of(page, size, sort), list.size() > toIndex);
     }
 

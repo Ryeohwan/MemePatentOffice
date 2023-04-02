@@ -22,41 +22,24 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
     @Query("SELECT e FROM Comment e JOIN UserCommentLike e2 " +
             "where e.id = e2.comment.id ORDER BY e.createdAt ASC")
     List<Comment> findCommentsByMemeId(Long id);
-    Optional<Comment> findCommentById(Long id);
     int countAllByParentCommentId(Long id);
 
 
     // 여기서 베스트 3개 id 를받습니다. - 여기서 인기순 정렬한 값
-
     @Query("SELECT c.content, c.createdAt, " +
             " COUNT(d) as replyCommentCnt, " +
             " c.id, c.user.nickname, c.user.profileImage, " +
-            " COUNT(l) as heartCnt," +
-            " EXISTS(SELECT 1 FROM UserCommentLike ucl WHERE ucl.comment.id = c.id AND ucl.user.id = c.user.id) as liked" +
+            " COUNT(l) as heartCnt ," +
+            " EXISTS(SELECT 1 FROM UserCommentLike ucl WHERE ucl.comment.id = c.id  AND ucl.user.id = c.user.id) as liked  " +
             " FROM Comment c " +
             " LEFT JOIN UserCommentLike l ON l.comment.id = c.id" +
             " LEFT JOIN Comment d ON c.id = d.parentComment.id " +
             " WHERE c.meme.id = :memeId " +
-            " GROUP BY c.content, c.id, c.user.nickname, c.user.profileImage" +
+            " GROUP BY c.content, c.id, c.user.nickname, c.user.profileImage, liked " +
+            " having COUNT(l) > 0" +
 //            " GROUP BY c.content, c.createdAt, c.id, c.user.nickname, c.user.profileImage, liked" +
-            " ORDER BY heartCnt desc")
+            " ORDER BY heartCnt desc " )
     Slice<Object> findBestThreeComment(@Param("memeId")Long memeId, Pageable pageable);
-
-
-
-
-    @Query("SELECT c.content, c.createdAt, " +
-            " COUNT(d) as replyCommentCnt, " +
-            " c.id, c.user.nickname, c.user.profileImage, " +
-            " COUNT(l) as heartCnt," +
-            " EXISTS(SELECT 1 FROM UserCommentLike l WHERE l.comment.id = c.id) as liked" +
-            " FROM Comment c " +
-            " LEFT JOIN UserCommentLike l ON l.comment.id = c.id" +
-            " LEFT JOIN Comment d ON c.id = d.parentComment.id " +
-            " WHERE c.meme.id = :memeId " +
-            " GROUP BY c.content, c.createdAt, c.id, c.user.nickname, c.user.profileImage, liked" +
-            " ORDER BY heartCnt,c.createdAt desc ")
-    List<Comment> findBestThreeCommentList(@Param("memeId")Long memeId);
 
     @Query("SELECT c.content, c.createdAt, \n" +
             "       COUNT(d) as replyCommentCnt, \n" +
@@ -72,7 +55,7 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             "  AND (c.id != :id3 OR :id3 IS NULL)\n" +
             "GROUP BY c.content, c.createdAt, c.id, c.user.nickname, c.user.profileImage, liked\n" +
             "ORDER BY c.createdAt DESC")
-    Slice<Object> findLatestComment(@Param("memeId")Long memeId, @Param("id1")Long id1, @Param("id2") Long id2, @Param("id3") Long id3, Pageable pageable);
+    List<Object> findLatestComment(@Param("memeId")Long memeId, @Param("id1")Long id1, @Param("id2") Long id2, @Param("id3") Long id3);
 
     @Query("SELECT c.content, c.createdAt, \n" +
             "       COUNT(d) as replyCommentCnt, \n" +
@@ -85,7 +68,7 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             "WHERE c.meme.id = :memeId AND c.parentComment.id = :commentId\n" +
             "GROUP BY c.content, c.createdAt, c.id, c.user.nickname, c.user.profileImage, liked\n" +
             "ORDER BY c.createdAt asc" )
-    Slice<Object> findReplyComment(@Param("memeId")Long memeId, @Param("commentId") Long commentId, Pageable pageable);
+    List<Object> findReplyComment(@Param("memeId")Long memeId, @Param("commentId") Long commentId);
 
 
 

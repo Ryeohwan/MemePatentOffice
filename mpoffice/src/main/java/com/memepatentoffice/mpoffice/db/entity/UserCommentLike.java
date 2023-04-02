@@ -22,12 +22,4 @@ public class UserCommentLike {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-    @Column(name = "comment_like")
-    @Enumerated(EnumType.STRING)
-    private CommentLike commentLike;
-
-    public void setCommentLike(CommentLike commentLike) {
-        this.commentLike = commentLike;
-    }
 }
