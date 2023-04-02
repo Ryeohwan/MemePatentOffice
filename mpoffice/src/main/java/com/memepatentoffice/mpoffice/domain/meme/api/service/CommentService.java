@@ -63,9 +63,15 @@ public class CommentService {
                 heartCnt += 1;
             }
         }
+
+        System.out.println(saveResult.getUser().getId());
+
+        System.out.println(saveResult.getUser().getNickname());
+
         ReplyResponse result = ReplyResponse.builder()
                 .content(saveResult.getContent())
                 .best(0)
+                .userId(saveResult.getUser().getId())
                 .profileImage(saveResult.getUser().getProfileImage())
                 .nickname(saveResult.getUser().getNickname())
                 .parentName(saveResult.getParentComment().getUser().getNickname())
@@ -104,8 +110,13 @@ public class CommentService {
             }
         }
 
+
+
+
         CommentResponse result = CommentResponse.builder()
+                .id(created.getId())
                 .userId(created.getUser().getId())
+                .nickname(created.getUser().getNickname())
                 .date(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                 .liked(liked)
                 .replyCommentCnt(commentRepository.countAllByParentCommentId(created.getId()))
@@ -116,6 +127,10 @@ public class CommentService {
                 .build();
         System.out.println(result.getHeartCnt());
         System.out.println(result.getLiked());
+
+        System.out.println(result.getUserId());
+
+        System.out.println(result.getNickname());
         return result;
     }
 
