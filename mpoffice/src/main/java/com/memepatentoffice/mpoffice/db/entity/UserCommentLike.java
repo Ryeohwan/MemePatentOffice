@@ -27,4 +27,7 @@ public class UserCommentLike {
     @Enumerated(EnumType.STRING)
     private CommentLike commentLike;
 
+    public void setCommentLike(CommentLike commentLike) {
+        this.commentLike = commentLike;
+    }
 }
