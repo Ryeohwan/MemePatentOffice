@@ -64,6 +64,9 @@ const MemeListPopular: React.FC = () => {
           <>
             <SkeletonCard />
             <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
           </>
         )}
         

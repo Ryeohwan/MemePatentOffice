@@ -18,33 +18,27 @@ const NotInputArea: React.FC = () => {
   const items = [
     {
       rank: 1,
-      text: "폼 미쳤다",
-      cnt: 765,
+      text: "a",
     },
     {
       rank: 2,
-      text: "더글로리",
-      cnt: 521,
+      text: "test",
     },
     {
       rank: 3,
       text: "폼 미쳤다",
-      cnt: 422,
     },
     {
       rank: 4,
       text: "멋지다 연진아",
-      cnt: 220,
     },
     {
       rank: 5,
       text: "송혜교",
-      cnt: 165,
     },
     {
       rank: 6,
       text: "송혜교",
-      cnt: 165,
     },
     {
       rank: 7,
@@ -54,17 +48,14 @@ const NotInputArea: React.FC = () => {
     {
       rank: 8,
       text: "송혜교",
-      cnt: 165,
     },
     {
       rank: 9,
       text: "송혜교",
-      cnt: 165,
     },
     {
       rank: 10,
       text: "송혜교",
-      cnt: 165,
     },
   ];
 
@@ -97,7 +88,7 @@ const NotInputArea: React.FC = () => {
 
           {/* 오른쪽 */}
           <div className={`${styles.itemContainer} ${styles.right}`}>
-            {items.slice(6, 11).map((item) => (
+            {items.slice(5, 11).map((item) => (
               <SearchRankingItem item={item} key={item.rank} />
             ))}
           </div>
