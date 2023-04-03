@@ -1,27 +1,51 @@
 import React from "react";
+import useAxios from "hooks/useAxios";
+import { useDispatch } from "react-redux";
+import { commentListActions } from "store/commentList";
 import styles from "./ReplyCommentItem.module.css";
+import ElapsedText from "components/common/elements/ElapsedText";
 
 interface ReplyCommentItemProps {
     writerImg: string;
     writerNickname: string;
     createdAt: string;
     content: string;
+    userNickname: string;
+    userId: number;
+    memeid: number;
+    id: number;
 };
 
 
-const ReplyCommentItem:React.FC<ReplyCommentItemProps> = ({ writerImg, writerNickname, createdAt, content }) => {
-  const writerImgUrl = "http://localhost:3000/" + writerImg;
-  
+const ReplyCommentItem:React.FC<ReplyCommentItemProps> = ({ writerImg, writerNickname, createdAt, content, userNickname, userId, memeid, id }) => {
+  const {sendRequest} = useAxios();
+  const dispatch = useDispatch();
+  const elapsedText = ElapsedText(createdAt);
+
+  const deleteReplyHandler = () => {
+    sendRequest({
+      url: "/api/mpoffice/meme/comment/delete",
+      method: "POST",
+      data: {
+        userId: userId,
+        memeId: memeid,
+        commentId: id
+      }
+    });
+    console.log("대댓글 id ", id)
+    dispatch(commentListActions.replyDeleteHandler(id));
+  };
+
   return (
     <div className={styles.commentItemContainer}>
       <div className={styles.userImgWrapper}>
-        <img src={writerImgUrl} alt="" className={styles.commentUserImg} />
+        <img src={writerImg} alt="" className={styles.commentUserImg} />
       </div>
 
       <div className={styles.commentInfoWrapper}>
         <div className={styles.commentHeader}>
           <div className={styles.commentUserName}>{writerNickname}</div>
-          <div className={styles.commentTime}>{createdAt}</div>
+          <div className={styles.commentTime}>{elapsedText}</div>
         </div>
 
         <div className={styles.commentBody}>
@@ -29,11 +53,7 @@ const ReplyCommentItem:React.FC<ReplyCommentItemProps> = ({ writerImg, writerNic
         </div>
 
         <div className={styles.userReaction}>
-          <div>답글 달기</div>
-          {"단발머리 부엉이" === writerNickname ? (
-            // <div onClick={deleteCommentHandler}>삭제</div>
-            <div>삭제</div>
-          ) : null}
+          {userNickname === writerNickname && <div onClick={deleteReplyHandler}>삭제</div>}
         </div>
       </div>
     </div>
