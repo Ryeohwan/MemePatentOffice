@@ -123,6 +123,7 @@ public class UserService {
         User user = User.builder()
                 .nickname(social.getNickname())
                 .email(social.getEmail())
+                .profileImage("https://storage.googleapis.com/mpoffice/logo2.png")
                 .today(LocalDateTime.now())
                 .isValid(IsValid.VALID)
                 .todayMemeCount(2)

@@ -10,7 +10,9 @@ import javax.annotation.Nullable;
 @Getter
 @NoArgsConstructor
 public class UserUpdateRequest {
+    @Nullable
     private Long id;
+    @Nullable
     private String nickname;
     private String userImage;
     @Builder

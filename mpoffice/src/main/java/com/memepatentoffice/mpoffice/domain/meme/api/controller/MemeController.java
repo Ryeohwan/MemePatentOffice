@@ -131,4 +131,9 @@ public class MemeController {
     public ResponseEntity getSelledMeme(@RequestParam Long userId){
         return ResponseEntity.status(HttpStatus.OK).body(memeService.selledList(userId));
     }
+
+    @GetMapping("/{memeId}")
+    public ResponseEntity getMemeInfo(@PathVariable Long memeId) throws  NotFoundException{
+        return ResponseEntity.status(HttpStatus.OK).body(memeService.findById(memeId));
+    }
 }
