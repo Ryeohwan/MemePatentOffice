@@ -1,39 +1,26 @@
 // 프로필사진 수정 page (/setting/user-edit/image)
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import useAxios from "hooks/useAxios";
 
-import logo from "assets/logo.png";
 import { Avatar } from "primereact/avatar";
 import { Divider } from "primereact/divider";
 
 import "pages/setting/Setting.css";
 import styles from "pages/setting/ImageEditPage.module.css";
 
-
-
-// 더미 데이터 -> Axios 받아와서 수정
-import auction from "assets/auction.png";
-import haku from "assets/haku.png";
-import kakao from "assets/kakao.png";
-const myNFT = [
-  {
-    id: 1,
-    imgSrc: haku,
-  },
-  {
-    id: 2,
-    imgSrc: kakao,
-  },
-  {
-    id: 3,
-    imgSrc: auction,
-  },
-];
+const LOGO_IMG_URL = "https://storage.googleapis.com/mpoffice/Logo.png"
 
 const ImageEditPage: React.FC = () => {
   const navigate = useNavigate()
   const [selectedImg, setSelectedImg] = useState<number>(-1);
   const [selectedImgSrc, setSelectedImgSrc] = useState<string | null>(null);
+
+  const {data, isLoading, sendRequest} = useAxios();
+
+  useEffect(() => {
+    sendRequest({url: `/api/mpoffice/meme/memeList?userId=${JSON.parse(sessionStorage.user).userId}`})
+  }, [])
 
   const submitHandler = () => {
     if(selectedImgSrc){
@@ -57,10 +44,10 @@ const ImageEditPage: React.FC = () => {
           <Avatar
             onClick={() => {
               selectedImg === 0 ? setSelectedImg(-1) : setSelectedImg(0);
-              selectedImg === 0 ? setSelectedImgSrc(null) : setSelectedImgSrc(logo);
+              selectedImg === 0 ? setSelectedImgSrc(null) : setSelectedImgSrc(LOGO_IMG_URL);
             }}
             className={selectedImg === 0 ? styles.selected : styles.avatar}
-            image={logo}
+            image={LOGO_IMG_URL}
             shape="circle"
           />
         </div>
@@ -69,16 +56,16 @@ const ImageEditPage: React.FC = () => {
           <p>내 NFT</p>
           <div className={styles.myNftList}>
 
-          {myNFT.map((item, index) => {
+          {!isLoading && data && data.map((item: {id: number; imgUrl: string}) => {
             return (
               <Avatar
-              key={index}
-              image={item.imgSrc}
+              key={item.id}
+              image={item.imgUrl}
               onClick={() => {
                 selectedImg === item.id
                 ? setSelectedImg(-1)
                 : setSelectedImg(item.id);
-                selectedImg === item.id ? setSelectedImgSrc(null) : setSelectedImgSrc(item.imgSrc);
+                selectedImg === item.id ? setSelectedImgSrc(null) : setSelectedImgSrc(item.imgUrl);
               }}
               className={
                 selectedImg === item.id ? styles.selected : styles.avatar

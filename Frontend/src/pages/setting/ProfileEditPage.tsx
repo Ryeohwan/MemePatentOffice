@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import NicknameInput from "components/settings/edit/NicknameInput";
+import useAxios from "hooks/useAxios";
 import AddBtn from "components/common/elements/AddBtn";
 import { Divider } from "primereact/divider";
 import { Avatar } from "primereact/avatar";
@@ -13,7 +14,7 @@ import styles from "pages/setting/ProfileEditPage.module.css";
 const ProfileEditPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const porfileImg = location.state
+  const porfileImg = location.state 
     ? location.state.imgSrc
     : JSON.parse(sessionStorage.user).imgUrl;
 
@@ -24,13 +25,36 @@ const ProfileEditPage: React.FC = () => {
     setNickname(e.target.value);
   };
 
+  // user update api
+  const {status, isLoading, sendRequest} = useAxios();
+
   // 회원정보 수정
   const submitHandler = () => {
     if (nicknameLoading || !nicknameState) return;
-    console.log('submit!')
-    console.log(porfileImg);
-    console.log(nickname);
+    console.log('submit!');
+        
+    sendRequest({
+      url: `/api/mpoffice/user/update`,
+      method: "POST",
+      data: {
+        id: JSON.parse(sessionStorage.user).userId,
+        nickname: nickname ? nickname : JSON.parse(sessionStorage.user).nickname,
+        userImage: porfileImg
+      }
+    })
   };
+
+  // 수정 완료되면 session에 값 바꾸기
+  useEffect(() => {
+    if (!isLoading && status === 200) {
+      const user = JSON.parse(sessionStorage.user)
+      user.imgUrl = porfileImg
+      user.nickname = (nickname && nickname.length > 0) ? nickname : user.nickname
+      alert("회원정보가 수정되었습니다.")
+      sessionStorage.setItem("user", JSON.stringify(user))
+      setNickname("");
+    }
+  }, [status, isLoading])
 
   return (
     <div className="wrapper">

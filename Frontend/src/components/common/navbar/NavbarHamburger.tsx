@@ -37,7 +37,7 @@ const NavbarHamburger: React.FC = () => {
       JSON.parse(sessionStorage.getItem("user")!).nickname
     }/tab=nft`;
 
-    if (pathname.includes("profile")) {
+    if (pathname.includes("profile") && !pathname.includes("setting")) {
       window.location.href = mypageUrl;
     } else {
       navigate(mypageUrl);
