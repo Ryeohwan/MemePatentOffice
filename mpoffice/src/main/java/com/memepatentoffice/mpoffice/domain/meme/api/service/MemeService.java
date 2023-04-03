@@ -98,6 +98,7 @@ public class MemeService {
                 creater.setToday(LocalDateTime.now());
             }
         }
+
         Meme meme = memeRepository.save(memeCreateRequest.toEntity(creater, creater));
         log.info(meme.getTitle());
         Meme meme1 = memeRepository.findMemeByTitle(meme.getTitle()).orElseThrow(()->new NotFoundException("없네요"));
