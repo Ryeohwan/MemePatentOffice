@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BidReq {
-    private String userId;
-
     private Long auctionId;
-
+    private Long userId;
     private Long askingprice;
 }
