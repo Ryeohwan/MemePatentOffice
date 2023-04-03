@@ -1,11 +1,17 @@
 package com.memepatentoffice.auction.db.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "bids")
 public class Bid extends BaseEntity{
 
@@ -20,7 +26,7 @@ public class Bid extends BaseEntity{
 
     @CreatedDate
     @Column(name = "created_at")
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 
 
 }
