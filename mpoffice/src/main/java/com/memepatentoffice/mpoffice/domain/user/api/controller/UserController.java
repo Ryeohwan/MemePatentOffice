@@ -122,7 +122,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity getUserInfo(Long userId) throws  NotFoundException{
+    public ResponseEntity getUserInfo(@PathVariable Long userId) throws  NotFoundException{
             return  ResponseEntity.status(HttpStatus.OK).body(userService.getUserInfo(userId));
     }
 
