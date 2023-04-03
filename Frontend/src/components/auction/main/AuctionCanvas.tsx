@@ -34,6 +34,7 @@ const AuctionCanvas: React.FC<Characters> = ({
   const [isFull, setIsFull] = useState<Boolean>(false);
   const [visible, setVisible] = useState<Boolean>(false);
   const player = useRef<THREE.Object3D>(new THREE.Object3D());
+  const chairPoints = useRef<Array<THREE.Mesh>>([]);
   const chairPoint = useRef<THREE.Mesh>(new THREE.Mesh());
   const playerAnimation = useRef<THREE.AnimationAction | undefined>();
   const playerPosition = useRef<THREE.Vector3>(new THREE.Vector3());
@@ -63,6 +64,11 @@ const AuctionCanvas: React.FC<Characters> = ({
   );
   const [biddingVisible, setBiddingVisible] = useState<boolean>(false);
   const [fullScreen, setFullScreen] = useState(false);
+  
+  const [playerStatus, setPlayerState] = useState<number>(0);
+  const changeHandler = () => {
+    setPlayerState((prev)=>prev+1)
+  }
   // useEffect(() => {
   //   const elem = document.getElementById("auction");
   //   if (elem) {
@@ -130,6 +136,9 @@ const AuctionCanvas: React.FC<Characters> = ({
     );
     isSitting.current = false;
     canSitHandler(false);
+    setTimeout(() => {
+      dispatch(auctionActions.controlPlayerState(5));
+    }, 1200);
   };
 
   const standUpHandler = () => {
@@ -164,7 +173,7 @@ const AuctionCanvas: React.FC<Characters> = ({
 
     setTimeout(() => {
       dispatch(auctionActions.controlPlayerState(0));
-    }, 1500);
+    }, 1200);
   };
 
   const fullMoniter = () => {
@@ -197,6 +206,8 @@ const AuctionCanvas: React.FC<Characters> = ({
         auctionId={auctionId}
         characters={characters}
         userNum={userNum}
+        chairPoints={chairPoints}
+        changeHandler={changeHandler}
       />
       <div className={styles.buttonWrapper}>
         {/* {document.getElementById("auction") && <AuctionSlideMenu />} */}

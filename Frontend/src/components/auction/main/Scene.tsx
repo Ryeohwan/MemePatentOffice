@@ -28,13 +28,16 @@ interface SceneProps extends WebSocketProps {
   >;
   playerPosition: React.MutableRefObject<THREE.Vector3>;
   isSitting: React.MutableRefObject<boolean>;
-  // characters: React.MutableRefObject<playersInfo[]>;
   characters: React.MutableRefObject<playersInfo[]>
   userNum: number;
+  chairPoints: React.MutableRefObject<THREE.Mesh[]>;
+  changeHandler:()=>void
+
 }
 
 const Scene: React.FC<SceneProps> = ({
   canSitHandler,
+  changeHandler,
   player,
   chairPoint,
   playerAnimation,
@@ -45,6 +48,7 @@ const Scene: React.FC<SceneProps> = ({
   auctionId,
   characters,
   userNum,
+  chairPoints,
 }) => {
   const dispatch = useDispatch();
   const canvas = useRef<any>();
@@ -58,7 +62,6 @@ const Scene: React.FC<SceneProps> = ({
   const raycaster = useRef<THREE.Raycaster>(new THREE.Raycaster());
   const mouse = useRef<THREE.Vector2>(new THREE.Vector2());
   const clickPosition = useRef<THREE.Vector3>(new THREE.Vector3());
-  const chairPoints = useRef<Array<THREE.Mesh>>([]);
   const [players, setPlayers] = useState<playersInfo[]>([]);
 
   useEffect(() => {
@@ -174,6 +177,7 @@ const Scene: React.FC<SceneProps> = ({
         isSitting={isSitting}
         client={client}
         auctionId={auctionId}
+        characters={characters}
       />
       <Box position={[0, 15, 0]} />
       <Table
@@ -189,7 +193,7 @@ const Scene: React.FC<SceneProps> = ({
       <Auctioneer />
       <Border />
       {players.map((info)=>{
-        return <Players info={info} userNum={userNum} characters={characters}/> 
+        return <Players info={info} userNum={userNum} characters={characters} changeHandler={changeHandler}/> 
       })}
     </Canvas>
   );

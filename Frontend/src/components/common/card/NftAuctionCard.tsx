@@ -1,18 +1,38 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { auctionType } from "store/auctionList";
 import styles from "./NftAuctionCard.module.css";
 
 interface AuctionProps {
-    items: {meme_id: number, auction_id: number, title: string, time: string, highest_bid: number, imgUrl: string};
+    items: auctionType;
+};
+
+const getRemainTime = (targetTime: number) => {
+  const date = Math.floor(+new Date() / 1000);
+  let diff;
+  if (targetTime < date) {
+    diff = 0;
+  } else {
+    diff = targetTime - date;
+  }
+  const remainTime = new Date(0);
+  remainTime.setSeconds(diff);
+
+  const hours = remainTime.getUTCHours().toString().padStart(2, "0");
+  const minutes = remainTime.getUTCMinutes().toString().padStart(2, "0");
+  const seconds = remainTime.getUTCSeconds().toString().padStart(2, "0");
+
+  return `${hours}:${minutes}:${seconds}`;
 };
 
 const NftAuctionCard:React.FC<AuctionProps> = nft => {
-    const auctionImg = "http://localhost:3000/" + nft.items.imgUrl;
+    const auctionImg = nft.items.imgUrl;
     const auctionMemeTitle = nft.items.title;
-    const auctionTime = nft.items.time;
-    const highestBid = nft.items.highest_bid;
-    const memeDetailUrl = `/meme-detail/${nft.items.meme_id}/tab=trade`;
-    const auctionDetailUrl = `/auction/${nft.items.auction_id}`;
+    const targetTime = Math.floor(+new Date(nft.items.finishTime) / 1000);
+    const auctionTime = getRemainTime(targetTime);
+    const highestBid = nft.items.highestBid;
+    const memeDetailUrl = `/meme-detail/${nft.items.memeId}/tab=trade`;
+    const auctionDetailUrl = `/auction/${nft.items.auctionId}`;
 
     // NFT 제목 글자수 슬라이싱
     const slicingText = (NFT_TEXT:string) => {

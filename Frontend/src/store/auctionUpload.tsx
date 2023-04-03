@@ -1,17 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// 나중에 지울거 더미 데이터를 위해 임시
-//--------------------------------
-import haku from "assets/haku.png";
-import kakao from "assets/kakao.png";
-import logo from "assets/logo.png";
-import auction from "assets/auction.png"
-import check from "assets/icon_check.png"
-// ------------------------------
 export type memeList = {
   id: number;
   title: string;
-  imgSrc: string;
+  imgUrl: string;
 };
 
 export type submitMeme = {
@@ -22,19 +14,11 @@ export type submitMeme = {
 
 interface initialStateInterface {
   isVisible: boolean;
-  memeList: memeList[];
   submitMeme: submitMeme;
 }
 
 const initialState: initialStateInterface = {
   isVisible: false,
-  memeList: [
-    { id: 1, title: "하쿠", imgSrc: haku },
-    { id: 2, title: "카카오", imgSrc: kakao },
-    { id: 3, title: "파란 토끼", imgSrc: logo },
-    { id: 4, title: "망치", imgSrc: auction },
-    { id: 5, title: "체크 밈 ㅎㅎ", imgSrc: check },
-  ],
   submitMeme: { id: null, auctionDate: null, lowPrice: null },
 };
 
@@ -66,3 +50,4 @@ const auctionUploadSlice = createSlice({
 
 export const auctionUploadActions = auctionUploadSlice.actions;
 export default auctionUploadSlice.reducer;
+

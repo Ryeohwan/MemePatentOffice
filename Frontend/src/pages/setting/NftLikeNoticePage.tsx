@@ -9,6 +9,7 @@ import "pages/setting/Setting.css";
 import useAxios from "hooks/useAxios";
 import NftCard from "components/common/card/NftCard";
 import { Skeleton } from "primereact/skeleton";
+import SkeletonCard from "components/common/card/SkeletonCard";
 
 const NftLikePage: React.FC = () => {
   const location = useLocation();
@@ -30,16 +31,14 @@ const NftLikePage: React.FC = () => {
           : "좋아하는 NFT"}
       </p>
       <Divider className="divider" />
-      {isLoading ? (
-        <>
-          <Skeleton></Skeleton>
-          <Skeleton></Skeleton>
-          <Skeleton></Skeleton>
-          <Skeleton></Skeleton>
-        </>
-      ) : (
-        <>
-          <div className={styles.body}>
+      <div className={styles.body}>
+        {isLoading ? (
+          <>
+            <SkeletonCard />
+            <SkeletonCard />
+          </>
+        ) : (
+          <>
             {myList &&
               myList.length > 0 &&
               myList.map((item: memeType) => {
@@ -47,9 +46,9 @@ const NftLikePage: React.FC = () => {
                   <NftCard key={`${item.title}-${item.id}`} items={item} />
                 );
               })}
-          </div>
-        </>
-      )}
+          </>
+        )}
+      </div>
     </div>
   );
 };

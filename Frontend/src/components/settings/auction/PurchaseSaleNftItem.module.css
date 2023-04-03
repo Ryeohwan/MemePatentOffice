@@ -11,6 +11,7 @@
     height: 100% !important;
     width:30% !important;
     margin-right: 10%;
+    object-fit: cover;
 }
 
 .memetitle{

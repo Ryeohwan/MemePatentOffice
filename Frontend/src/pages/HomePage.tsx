@@ -28,58 +28,60 @@ const HomePage: React.FC = () => {
   // dummy data
   const auctionPopularList = [
     {
-      meme_id: 1,
-      auction_id: 1,
+      memeId: 1,
+      auctionId: 1,
       title:
         "귀여운 토토로 삼형제와 발랄한 자매 사츠키, 메이의 우당탕탕 가족사진입니다",
       time: "16시간 32분",
-      highest_bid: 430,
+      highestBid: 430,
       imgUrl: "totoro.jpg",
     },
     {
-      meme_id: 2,
-      auction_id: 3,
+      memeId: 2,
+      auctionId: 3,
       title: "누가 이렇게 예쁘게 낳았어? 엄마엄마가~",
       time: "5시간 32분",
-      highest_bid: 200,
+      highestBid: 200,
       imgUrl: "newjeans.jpg",
     },
     {
-      meme_id: 3,
-      auction_id: 2,
+      memeId: 3,
+      auctionId: 2,
       title: "알아들었으면 끄덕여",
       time: "20시간 32분",
-      highest_bid: 500,
+      highestBid: 500,
       imgUrl: "theglory.jpeg",
     },
     {
-      meme_id: 4,
-      auction_id: 1,
+      memeId: 4,
+      auctionId: 1,
       title:
         "귀여운 토토로 삼형제와 발랄한 자매 사츠키, 메이의 우당탕탕 가족사진입니다",
       time: "16시간 32분",
-      highest_bid: 430,
+      highestBid: 430,
       imgUrl: "totoro.jpg",
     },
     {
-      meme_id: 5,
-      auction_id: 3,
+      memeId: 5,
+      auctionId: 3,
       title: "누가 이렇게 예쁘게 낳았어? 엄마엄마가~",
       time: "5시간 32분",
-      highest_bid: 200,
+      highestBid: 200,
       imgUrl: "newjeans.jpg",
     },
     {
-      meme_id: 6,
-      auction_id: 2,
+      memeId: 6,
+      auctionId: 2,
       title: "알아들었으면 끄덕여",
       time: "20시간 32분",
-      highest_bid: 500,
+      highestBid: 500,
       imgUrl: "theglory.jpeg",
     },
 
   ]
 
+
+  
   // landering 될때 data get 하기 
   // loading 중에는 skeleton
   useEffect(() => {

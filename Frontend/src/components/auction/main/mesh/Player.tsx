@@ -2,15 +2,17 @@ import React, { useEffect, useMemo, useRef } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "store/configStore";
-import auction, { auctionActions } from "store/auction";
+import { auctionActions } from "store/auction";
 import { WebSocketProps } from "type";
 
-import { clone} from 'three/examples/jsm/utils/SkeletonUtils'
+import { clone } from "three/examples/jsm/utils/SkeletonUtils";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { useLoader, useFrame } from "react-three-fiber";
+import { playersInfo } from "store/auction";
 
 interface PlayerProps extends WebSocketProps {
+  characters: React.MutableRefObject<playersInfo[]>;
   clickPosition: React.MutableRefObject<THREE.Vector3>;
   playerPosition: React.MutableRefObject<THREE.Vector3>;
   chairPoints: React.MutableRefObject<THREE.Mesh[]>;
@@ -35,6 +37,7 @@ export type action = {
 };
 
 const Player: React.FC<PlayerProps> = ({
+  characters,
   clickPosition,
   playerPosition,
   player,
@@ -50,7 +53,9 @@ const Player: React.FC<PlayerProps> = ({
   client,
 }) => {
   const dispatch = useDispatch();
-  const status = useSelector<RootState, string>((state)=>state.auction.status)
+  const status = useSelector<RootState, string>(
+    (state) => state.auction.status
+  );
   const hasChange = useRef<boolean>(false);
   const playerState = useSelector<RootState, number>(
     (state) => state.auction.playerState
@@ -65,13 +70,10 @@ const Player: React.FC<PlayerProps> = ({
   });
 
   const gltf = useLoader(GLTFLoader, "/auction/model/character.glb");
-  const character = useMemo(()=>{
-    return clone(gltf.scene)
-  },[gltf])
+  const character = useMemo(() => {
+    return clone(gltf.scene);
+  }, [gltf]);
 
-  // const {nodes} = useGraph(character)
-  // console.log(nodes)
-  // const cube = nodes.Cube as THREE.SkinnedMesh
   const animations = useMemo(() => {
     const animations = gltf.animations.map((clip) => clip.clone());
     return animations;
@@ -129,19 +131,20 @@ const Player: React.FC<PlayerProps> = ({
       destination: "/pub/character",
       body: JSON.stringify({
         auctionId: auctionId,
-        nickname: JSON.parse(sessionStorage.getItem('user')!).nickname,
+        nickname: JSON.parse(sessionStorage.getItem("user")!).nickname,
         x: player.current.position.x,
         y: player.current.position.y,
         z: player.current.position.z,
         rotation_x: player.current.rotation.x,
         rotation_y: player.current.rotation.y,
         rotation_z: player.current.rotation.z,
-        status: status
-      })
-    })
-    
+        status: status,
+      }),
+    });
+
     if (playerState === 0) {
-      if(status !== "DEFAULT") dispatch(auctionActions.changeStatus("DEFAULT"))
+      if (status !== "DEFAULT")
+        dispatch(auctionActions.changeStatus("DEFAULT"));
       if (actions.current.normal) actions.current.normal.play();
       let isIn;
       chairPoints.current.forEach((chair) => {
@@ -149,8 +152,21 @@ const Player: React.FC<PlayerProps> = ({
           Math.abs(player.current.position.x - chair.position.x) < 0.6 &&
           Math.abs(player.current.position.z - chair.position.z) < 0.6
         ) {
+          if (
+            characters.current.find((c) => {
+              return (
+                c.x === chair.position.x - 0.3 &&
+                c.y === chair.position.y + 0.8 &&
+                c.z === chair.position.z + 0.8
+                );
+              })
+              ) {
+                console.log(1)
+                canSitHandler(false)
+                return
+              }
           if (!hasChange.current) {
-            canSitHandler(true);
+              canSitHandler(true);
             hasChange.current = true;
           }
           chairPoint.current = chair;
@@ -165,7 +181,7 @@ const Player: React.FC<PlayerProps> = ({
         canSitHandler(false);
       }
     } else if (playerState === 1) {
-      if(status !== "WALK") dispatch(auctionActions.changeStatus("WALK"))
+      if (status !== "WALK") dispatch(auctionActions.changeStatus("WALK"));
       if (actions.current.normal) actions.current.normal.stop();
       if (actions.current.walk) actions.current.walk.play();
       const angle = Math.atan2(
@@ -183,35 +199,29 @@ const Player: React.FC<PlayerProps> = ({
       camera.current.position.x = cameraPosition.x + player.current.position.x;
       camera.current.position.z = cameraPosition.z + player.current.position.z;
     } else if (playerState === 2) {
-      if(status !== "SITDOWN") dispatch(auctionActions.changeStatus("SITDOWN"))
+      if (status !== "SITDOWN")
+        dispatch(auctionActions.changeStatus("SITDOWN"));
       clickPosition.current = player.current.position.clone();
       actions.current.walk?.stop();
-      actions.current.normal?.stop()
+      actions.current.normal?.stop();
       actions.current.sitdown?.play();
-      setTimeout(()=>{
-        dispatch(auctionActions.controlPlayerState(5))
-
-      },1200)
+      setTimeout(() => {
+        dispatch(auctionActions.controlPlayerState(5));
+      }, 1200);
       if (actions.current.standup)
         playerAnimation.current = actions.current.standup;
-    } else if(playerState === 3){
-      dispatch(auctionActions.changeStatus("STANDUP"))
-      actions.current.standup?.play()
-    } else if(playerState === 4){
-      dispatch(auctionActions.changeStatus("HANDSUP"))
-      actions.current.handsup?.play()
-    } else if(playerState === 5){
-      if(status!=="SITDOWN") dispatch(auctionActions.changeStatus("SITDOWN"))
-    }
-    if (playerState !== 2) {
-      if (actions.current.sitdown) {
-        playerAnimation.current = actions.current.sitdown;
-      }
+    } else if (playerState === 3) {
+      dispatch(auctionActions.changeStatus("STANDUP"));
+      actions.current.standup?.play();
+    } else if (playerState === 4) {
+      dispatch(auctionActions.changeStatus("HANDSUP"));
+      actions.current.handsup?.play();
+    } else if (playerState === 5) {
+      if (status !== "SITDOWN")
+        dispatch(auctionActions.changeStatus("SITDOWN"));
     }
   });
-    return (
-    <primitive object={character}/>
-  );
+  return <primitive object={character} />;
 };
 
 export default Player;
