@@ -232,6 +232,7 @@ public class MemeService {
     public List<MemeListResponse> randomMeme(){
         int check = memeRepository.countAll();
         List<MemeListResponse> result = new ArrayList<>();
+        //why
         for (int i = 0; i < 5; i++) {
             int rand = (int)(Math.random()*check)+1;
             Long randNum = Long.valueOf(rand);
