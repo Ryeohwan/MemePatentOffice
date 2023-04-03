@@ -22,13 +22,12 @@ const Border: React.FC = () => {
     auctionInfo
   >((state) => state.auction.auctionInfo);
   // const arrOne = memeImgSrc.split(",");
-  // const arrTwo = arrOne[0].match(/:(.*?);/);
-  // console.log(arrTwo)
+  // const arrTwo = arrOne[0]!.match(/:(.*?);/);
   // const mime = arrTwo![1];
-  // const loader = new GifLoader();
+  const loader = new GifLoader();
   nftTexture.current! = useLoader(THREE.TextureLoader, memeImgSrc);
   // if (mime === "gif") {
-  // nftTexture.current! = loader.load(memeImgSrc, (reader) => {});
+  nftTexture.current! = loader.load(memeImgSrc, (reader) => {});
   // }
 
   const border = new THREE.Mesh(

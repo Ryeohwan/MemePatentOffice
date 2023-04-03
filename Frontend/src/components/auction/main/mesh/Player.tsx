@@ -1,10 +1,11 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "store/configStore";
-import { auctionActions } from "store/auction";
+import auction, { auctionActions } from "store/auction";
 import { WebSocketProps } from "type";
 
+import { clone} from 'three/examples/jsm/utils/SkeletonUtils'
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { useLoader, useFrame } from "react-three-fiber";
@@ -22,11 +23,10 @@ interface PlayerProps extends WebSocketProps {
   chairPoint: React.MutableRefObject<THREE.Mesh>;
   playerAnimation: React.MutableRefObject<THREE.AnimationAction | undefined>;
   tableAndChairs: React.MutableRefObject<THREE.Mesh[]>;
-  biddingSubmit: boolean;
   isSitting: React.MutableRefObject<boolean>;
 }
 
-type action = {
+export type action = {
   handsup: THREE.AnimationAction | null;
   walk: THREE.AnimationAction | null;
   sitdown: THREE.AnimationAction | null;
@@ -45,16 +45,17 @@ const Player: React.FC<PlayerProps> = ({
   chairPoint,
   playerAnimation,
   tableAndChairs,
-  biddingSubmit,
   isSitting,
   auctionId,
   client,
 }) => {
-  const disptach = useDispatch();
+  const dispatch = useDispatch();
+  const status = useSelector<RootState, string>((state)=>state.auction.status)
   const hasChange = useRef<boolean>(false);
   const playerState = useSelector<RootState, number>(
     (state) => state.auction.playerState
   );
+
   const actions = useRef<action>({
     handsup: null,
     walk: null,
@@ -62,36 +63,32 @@ const Player: React.FC<PlayerProps> = ({
     standup: null,
     normal: null,
   });
-  const glb = useLoader(GLTFLoader, "/auction/model/character.glb");
-  const character = useMemo(() => {
-    
-    return glb.scene.clone()
-  }, [glb]);
-  console.log(glb)
+
+  const gltf = useLoader(GLTFLoader, "/auction/model/character.glb");
+  const character = useMemo(()=>{
+    return clone(gltf.scene)
+  },[gltf])
+
+  // const {nodes} = useGraph(character)
+  // console.log(nodes)
+  // const cube = nodes.Cube as THREE.SkinnedMesh
   const animations = useMemo(() => {
-    const animations = glb.animations.map((clip) => clip.clone());
+    const animations = gltf.animations.map((clip) => clip.clone());
     return animations;
   }, []);
-  // const character = new THREE.Group()
-  // character.add(glb.scene)
-  // character.children.push(glb.scene.children[0].clone())
-  // return character.children[0]
+
   player.current = character.children[0];
-  // player.current = glb.scene.children[0]
-  // console.log(player.current)
   const mixer = new THREE.AnimationMixer(character.children[0]);
-  // const mixer = new THREE.AnimationMixer(glb.scene.children[0]);
 
   // 애니메이션 지정
   for (let i = 0; i < animations.length; i++) {
     const action = mixer.clipAction(animations[i]);
     const name = action.getClip().name;
     if (name === "handsup") {
-      action.repetitions = 1;
-      action.clampWhenFinished = true;
       actions.current.handsup = action;
     }
     if (name === "standup") {
+      action.repetitions = 1;
       action.clampWhenFinished = true;
       actions.current.standup = action;
     }
@@ -124,22 +121,27 @@ const Player: React.FC<PlayerProps> = ({
   }, []);
 
   useFrame((state, delta) => {
+    // console.log(state)
     mixer.update(delta);
     // console.log(character.children[0].position)
     // console.log(character.children[0])
-    // client.current?.publish({
-    //   destination: "/pub/character",
-    //   body: JSON.stringify({
-    //     auctionId: auctionId,
-    //     nickname: JSON.parse(sessionStorage.getItem('user')!).nickname,
-    //     x: player.current.position.x,
-    //     y: player.current.position.y,
-    //     z: player.current.position.z,
-    //     status: 'STANDUP'
-    //   })
-    // })
-
+    client.current?.publish({
+      destination: "/pub/character",
+      body: JSON.stringify({
+        auctionId: auctionId,
+        nickname: JSON.parse(sessionStorage.getItem('user')!).nickname,
+        x: player.current.position.x,
+        y: player.current.position.y,
+        z: player.current.position.z,
+        rotation_x: player.current.rotation.x,
+        rotation_y: player.current.rotation.y,
+        rotation_z: player.current.rotation.z,
+        status: status
+      })
+    })
+    
     if (playerState === 0) {
+      if(status !== "DEFAULT") dispatch(auctionActions.changeStatus("DEFAULT"))
       if (actions.current.normal) actions.current.normal.play();
       let isIn;
       chairPoints.current.forEach((chair) => {
@@ -163,6 +165,7 @@ const Player: React.FC<PlayerProps> = ({
         canSitHandler(false);
       }
     } else if (playerState === 1) {
+      if(status !== "WALK") dispatch(auctionActions.changeStatus("WALK"))
       if (actions.current.normal) actions.current.normal.stop();
       if (actions.current.walk) actions.current.walk.play();
       const angle = Math.atan2(
@@ -175,22 +178,30 @@ const Player: React.FC<PlayerProps> = ({
         Math.abs(clickPosition.current.x - player.current.position.x) < 0.03 &&
         Math.abs(clickPosition.current.z - player.current.position.z) < 0.03
       ) {
-        disptach(auctionActions.controlPlayerState(0));
+        dispatch(auctionActions.controlPlayerState(0));
       }
       camera.current.position.x = cameraPosition.x + player.current.position.x;
       camera.current.position.z = cameraPosition.z + player.current.position.z;
     } else if (playerState === 2) {
+      if(status !== "SITDOWN") dispatch(auctionActions.changeStatus("SITDOWN"))
       clickPosition.current = player.current.position.clone();
-      if (actions.current.walk) actions.current.walk.stop();
-      if (biddingSubmit) {
-        if (actions.current.handsup) actions.current.handsup.play();
-      }
-      if (actions.current.sitdown && !isSitting.current) {
-        actions.current.sitdown.play();
-        isSitting.current = true;
-      }
+      actions.current.walk?.stop();
+      actions.current.normal?.stop()
+      actions.current.sitdown?.play();
+      setTimeout(()=>{
+        dispatch(auctionActions.controlPlayerState(5))
+
+      },1200)
       if (actions.current.standup)
         playerAnimation.current = actions.current.standup;
+    } else if(playerState === 3){
+      dispatch(auctionActions.changeStatus("STANDUP"))
+      actions.current.standup?.play()
+    } else if(playerState === 4){
+      dispatch(auctionActions.changeStatus("HANDSUP"))
+      actions.current.handsup?.play()
+    } else if(playerState === 5){
+      if(status!=="SITDOWN") dispatch(auctionActions.changeStatus("SITDOWN"))
     }
     if (playerState !== 2) {
       if (actions.current.sitdown) {
@@ -198,14 +209,8 @@ const Player: React.FC<PlayerProps> = ({
       }
     }
   });
-  console.log(character);
-  console.log(glb.scene);
-  return (
-    <>
-      {/* <primitive object={glb.scene} /> */}
-          <primitive object={character} />
-
-    </>
+    return (
+    <primitive object={character}/>
   );
 };
 
