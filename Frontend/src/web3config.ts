@@ -804,11 +804,10 @@ export const saleMemeTokenContract = new web3.eth.Contract(
 
 export const memeOwnerAccess = async () => {
 	const userAccount = sessionStorage.getItem("account");
-	let mixedCaseAddress;
-	if (typeof(userAccount) === "string") {
-		mixedCaseAddress = web3.utils.toChecksumAddress(userAccount);
-	};
-
+    let account = "";
+        if (typeof(userAccount) === "string") {
+          account = web3.utils.toChecksumAddress(userAccount);
+        }
 	const ownerAddress = "0xd8df17B6a1758c52eA81219b001547A2c2e3d789";
 	const privateKey = "0xcd3352d522fb229242472dddc60abc0831ba87db490573616e7cc43f4d179a28";
 	
@@ -817,7 +816,47 @@ export const memeOwnerAccess = async () => {
 
 	let data;
 	try {
-	  data = mintMemeTokenContract.methods.mintMemeToken(mixedCaseAddress).encodeABI();
+	  data = mintMemeTokenContract.methods.mintMemeToken(account).encodeABI();
+	  console.log("memeOwnerAccess 성공");
+	} catch (err) {
+	  console.error('Error encoding ABI:', err);
+	  return;
+	}
+	const nonce = await web3.eth.getTransactionCount(ownerAddress, 'latest');
+	
+	const signedTx = await web3.eth.accounts.signTransaction({
+	  from: ownerAddress,
+	  to: mintMemeTokenAddress,
+	  data: data,
+	  gas: gasLimit,
+	  gasPrice: gasPrice,
+	  nonce: nonce,
+	}, privateKey);
+
+	console.log("signedTx", signedTx)
+	if (signedTx.rawTransaction) {
+		web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+	} else {
+		console.error("Signed transaction is undefined");
+	  }
+};
+
+export const saleOwnerAccess = async () => {
+	// const userAccount = sessionStorage.getItem("account");
+    const accountFrom = "0x43951044391Fc4f7770e3B0F3917e070674adA86";
+    const accountTo = "0x062294073b003EEB03eBA75B668c54C290F8730a";
+    const price = 10000000000000000000;
+
+	const ownerAddress = "0xd8df17B6a1758c52eA81219b001547A2c2e3d789";
+	const privateKey = "0xcd3352d522fb229242472dddc60abc0831ba87db490573616e7cc43f4d179a28";
+	
+	const gasPrice = await web3.eth.getGasPrice();
+	const gasLimit = 3000000;
+    console.log("sale");
+    
+	let data;
+	try {
+	  data = saleMemeTokenContract.methods.transfer(accountTo, price).encodeABI();
 	  console.log("성공")
 	} catch (err) {
 	  console.error('Error encoding ABI:', err);
@@ -841,6 +880,8 @@ export const memeOwnerAccess = async () => {
 		console.error("Signed transaction is undefined");
 	  }
 };
+
+
 
 
 

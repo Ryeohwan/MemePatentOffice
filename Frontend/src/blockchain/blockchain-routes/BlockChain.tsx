@@ -1,6 +1,6 @@
 import BlockChainPage from "blockchain/blockchain-middler/BlockChainPage";
 import React, { useState, useEffect } from "react";
-import { memeOwnerAccess } from "web3config";
+import { memeOwnerAccess, saleOwnerAccess } from "web3config";
 
 const BlockChain: React.FC = () => {
   const [account, setAccount] = useState("");
@@ -23,6 +23,7 @@ const BlockChain: React.FC = () => {
   useEffect(() => {
     getAccount();
     memeOwnerAccess();
+    saleOwnerAccess();
     console.log("세션에서 가져온", userAccount)
   }, []);
 
