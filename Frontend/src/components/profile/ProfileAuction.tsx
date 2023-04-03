@@ -15,7 +15,7 @@ const ProfileAuction: React.FC<Props> = ({ auctionList }) => {
       {auctionList.length === 0 && <div>진행중인 경매가 없습니다.</div>}
 
       {auctionList.map((auction) => {
-        return <NftAuctionCard key={auction.meme_id} items={auction} />;
+        return <NftAuctionCard key={auction.memeId} items={auction} />;
       })}
     </div>
   );
