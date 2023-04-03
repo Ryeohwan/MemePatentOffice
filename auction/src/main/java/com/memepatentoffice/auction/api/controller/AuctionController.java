@@ -32,7 +32,7 @@ public class AuctionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(null);
     }
     @GetMapping("/list")
-    public ResponseEntity<?> getList(@RequestParam String sort){
+    public ResponseEntity<?> getList(@RequestParam String sort) throws NotFoundException{
         List<AuctionRes> auctionList = null;
         if("popular".equals(sort)){
             auctionList = auctionService.findAllByHit();
