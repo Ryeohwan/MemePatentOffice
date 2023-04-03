@@ -24,8 +24,7 @@ public class BidServiceImpl implements BidService {
         if(!auctionRepository.existsById(bidReq.getAuctionId())) throw new NotFoundException("유효하지 않은 auction ID입니다");
         if(!isp.existsUserById(bidReq.getUserId())) throw new NotFoundException("유효하지 않은 판매자 아이디입니다");
 
-        //TODO: 현재 가격보다 높은지 검사
-        Bid currentTopBid = bidRepository.findTopByCreatedAtDesc();
+        Bid currentTopBid = bidRepository.findTopByOrderByCreatedAtDesc();
         if(!(bidReq.getAskingprice() > currentTopBid.getAskingprice())){
             throw new BiddingException("제안하는 가격이 현재 호가보다 낮아서 안됩니다");
         }
