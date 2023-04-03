@@ -71,11 +71,11 @@ public class CommentController {
     public ResponseEntity CommentList(
                                       @RequestParam(name = "memeId") Long memeId,
                                       @RequestParam(name = "userId") Long userId,
-                                      @RequestParam(required = false,name = "id1")Long id1,
-                                      @RequestParam(required = false,name = "id2")Long id2,
-                                      @RequestParam(required = false,name = "id3")Long id3,
-                                      @PageableDefault(value = 8) Pageable pageable){
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.findLatest(memeId,userId,id1,id2,id3,pageable));
+                                      @RequestParam(required = false,name = "idx")int idx){
+        Long id1 = commentService.findTop(memeId,userId).getContent().get(0).getId();
+        Long id2 = commentService.findTop(memeId,userId).getContent().get(1).getId();
+        Long id3 = commentService.findTop(memeId,userId).getContent().get(2).getId();
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.findLatest(memeId,userId,id1,id2,id3,idx));
     }
 
     @GetMapping("/reply")
@@ -84,8 +84,8 @@ public class CommentController {
             @RequestParam(name = "memeId") Long memeId,
             @RequestParam(name = "userId") Long userId,
             @RequestParam(name = "commentId") Long commentId,
-            @PageableDefault(value = 8) Pageable pageable){
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.findReply(memeId,userId,commentId,pageable));
+            @RequestParam(name = "idx") int idx){
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.findReply(memeId,userId,commentId,idx));
     }
 
     @PostMapping("/delete")
