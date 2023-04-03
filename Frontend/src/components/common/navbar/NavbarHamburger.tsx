@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 import { memeListActions } from "store/memeList";
 
 import { Icon } from "@iconify/react";
 import { Sidebar } from "primereact/sidebar";
 import styles from "./NavbarHamburger.module.css";
+import { web3 } from "web3config";
 
 interface RoutePath {
   pathname: string;
@@ -24,12 +25,11 @@ const NavbarHamburger: React.FC = () => {
     setOpen(false);
   }, [pathname]);
 
-
   // 네브바에서 밈사전으로 들어가는 경우 memeList redux reset
   const memeListHandler = () => {
     dispatch(memeListActions.resetAll());
-    navigate("/meme-list/type=new")
-  }
+    navigate("/meme-list/type=new");
+  };
 
   const mypageHandler = () => {
     // mypage 이동하기 위한 url
@@ -50,7 +50,10 @@ const NavbarHamburger: React.FC = () => {
         const accounts = await window.ethereum.request({
           method: "eth_requestAccounts",
         });
-        const account = accounts[0];
+        let account = "";
+        if (typeof(accounts[0]) === "string") {
+          account = web3.utils.toChecksumAddress(accounts[0]);
+        }
         sessionStorage.setItem("account", account);
         alert("지갑 연결 성공!");
       } else {
@@ -62,9 +65,9 @@ const NavbarHamburger: React.FC = () => {
   };
 
   const logoutHandler = () => {
-    sessionStorage.clear()
-    navigate('/')
-  }
+    sessionStorage.clear();
+    navigate("/");
+  };
 
   return (
     <>
@@ -104,7 +107,9 @@ const NavbarHamburger: React.FC = () => {
             마이페이지
           </div>
 
-          <p className={styles.navLink} onClick={logoutHandler}>로그아웃</p>
+          <p className={styles.navLink} onClick={logoutHandler}>
+            로그아웃
+          </p>
         </div>
       </Sidebar>
     </>

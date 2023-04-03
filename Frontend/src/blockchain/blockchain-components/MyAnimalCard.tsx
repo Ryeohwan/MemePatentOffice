@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { saleAnimalTokenContract, web3 } from "web3config";
+import { saleMemeTokenContract, web3 } from "web3config";
 import AnimalCard from "./AnimalCard";
 
 export interface IMyAnimalCard {
@@ -30,7 +30,7 @@ const MyAnimalCard: React.FC<MyAnimalCardProps> = ({
   const onClickSell = async () => {
     try {
       if (!account || !saleStatus) return;
-      const response = await saleAnimalTokenContract.methods
+      const response = await saleMemeTokenContract.methods
         .setForSaleAnimalToken(
           animalTokenId,
           web3.utils.toWei(sellPrice, "ether")
