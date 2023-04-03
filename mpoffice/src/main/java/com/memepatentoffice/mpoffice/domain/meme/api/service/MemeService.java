@@ -251,7 +251,7 @@ public class MemeService {
     }
 
     public List<MemeListResponse> findMemes(Long userId){
-        List<Meme> list = memeRepository.findAllByOwnerId(userId);
+        List<Meme> list = memeRepository.findAllByOwnerIdOrderByCreatedAtDesc(userId);
         List<MemeListResponse> result = new ArrayList<>();
         for(Meme a : list){
             MemeListResponse temp = MemeListResponse.builder()

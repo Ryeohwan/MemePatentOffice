@@ -17,5 +17,5 @@ public interface MemeRepository extends JpaRepository<Meme,Long> {
     int countAll();
     @Override
     <S extends Meme> S save(S entity);
-    List<Meme> findAllByOwnerId(Long userId);
+    List<Meme> findAllByOwnerIdOrderByCreatedAtDesc(Long userId);
 }

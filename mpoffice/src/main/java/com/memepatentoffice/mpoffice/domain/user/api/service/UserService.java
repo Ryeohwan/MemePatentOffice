@@ -3,6 +3,7 @@ package com.memepatentoffice.mpoffice.domain.user.api.service;
 import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
 import com.memepatentoffice.mpoffice.db.entity.IsValid;
 import com.memepatentoffice.mpoffice.db.entity.User;
+import com.memepatentoffice.mpoffice.domain.meme.api.service.GcpService;
 import com.memepatentoffice.mpoffice.domain.user.api.request.SocialRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserSignUpRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserUpdateRequest;
@@ -12,7 +13,9 @@ import com.memepatentoffice.mpoffice.domain.user.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Service
@@ -20,6 +23,7 @@ import java.time.LocalDateTime;
 @Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
+    private  final GcpService gcpService;
     private User findUser(Long userId) throws NotFoundException {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId + " : User"));
     }
@@ -73,14 +77,14 @@ public class UserService {
     }
 
     @Transactional
-    public Long updateUser(UserUpdateRequest userUpdateRequest) throws NotFoundException{
+    public Long updateUser(UserUpdateRequest userUpdateRequest) throws NotFoundException, IOException {
         User user = userRepository.findById(userUpdateRequest.getId())
                 .orElseThrow(()-> new NotFoundException("해당하는 유저가 없습니다."));
         if(userUpdateRequest.getNickname() != null){
             user.setNickname(userUpdateRequest.getNickname());
         }
-        if(userUpdateRequest.getProfileImage() != null) {
-            user.setProfileImage(userUpdateRequest.getProfileImage());
+        if(userUpdateRequest.getUserImage() != null) {
+            user.setProfileImage(userUpdateRequest.getUserImage());
         }
         return user.getId();
     }
