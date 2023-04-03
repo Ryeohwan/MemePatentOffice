@@ -45,4 +45,10 @@ public class InterServiceCommunicationProvider {
     public Optional<String> findMemeById(Long memeId){
         return getResponsefromOtherServer(MPOFFICE_SERVER_URL+"/api/mpoffice/meme?memeId="+memeId);
     }
+    public boolean existsUserById(Long userId){
+        return findUserById(userId).isPresent();
+    }
+    public boolean existsMemeById(Long memeId){
+        return findMemeById(memeId).isPresent();
+    }
 }
