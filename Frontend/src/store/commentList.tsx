@@ -134,10 +134,10 @@ const commentListSlice = createSlice({
 export const getCommentListAxiosThunk =
   (memeId: number, lastPostRef: number): AppThunk =>
   async (dispatch) => { 
-    
+
     const sendRequest = async () => {
       const userId = JSON.parse(sessionStorage.user).userId;
-      const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/list?memeId=${memeId}&userId=${userId}${lastPostRef !== -1 ? `&idx=${lastPostRef}` : ""}`;
+      const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/list?memeId=${memeId}&userId=${userId}${lastPostRef !== -1 ?`&idx=${lastPostRef}` : ""}`;
 
       console.log("여기 보낼거임!", requestUrl);
 
