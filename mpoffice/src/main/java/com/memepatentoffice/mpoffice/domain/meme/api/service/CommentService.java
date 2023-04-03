@@ -16,6 +16,7 @@ import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.data.querydsl.QPageRequest;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -164,7 +165,8 @@ public class CommentService {
         return result;
     }
 
-    public Slice<CommentResponse> findLatest(Long memeId,Long userId, Long id1, Long id2, Long id3, int idx){
+    public Slice<CommentResponse> findLatest(Long memeId, Long userId,Long id1, Long id2, Long id3, int idx){
+
         List<Object> temp =commentRepository.findLatestComment(memeId,userId,id1,id2,id3);
         List<CommentResponse> result = convertToDtoLatest(temp);
         return SliceConverter.convert(result, idx, 8, Sort.unsorted());
