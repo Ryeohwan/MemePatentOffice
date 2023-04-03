@@ -2,14 +2,19 @@ package com.memepatentoffice.mpoffice.domain.user.api.request;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.annotation.Nullable;
 
 @Getter
+@NoArgsConstructor
 public class UserUpdateRequest {
-    private final Long id;
+    private Long id;
 
-    private final String nickname;
-
-    private final String profileImage;
+    @Nullable
+    private String nickname;
+    @Nullable
+    private String profileImage;
 
 
     @Builder
