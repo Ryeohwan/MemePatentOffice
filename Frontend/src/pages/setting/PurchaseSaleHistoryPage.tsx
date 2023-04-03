@@ -8,7 +8,7 @@ import { Divider } from "primereact/divider";
 
 import styles from "pages/setting/AuctionHistory.module.css";
 import "pages/setting/Setting.css";
-import SkeletonCard from "components/common/card/SkeletonCard";
+import { Skeleton } from "primereact/skeleton";
 
 type myHistoryList = {
   id: number;
@@ -32,7 +32,7 @@ const PurchaseHistoryPage: React.FC = () => {
   useEffect(() => {
     sendRequest({ url: `/api/mpoffice/meme/${sendUrl}` });
   }, []);
-console.log(myHistoryList)
+  console.log(myHistoryList);
   return (
     <div className="wrapper">
       {/* 구매한, 판매한 구분 */}
@@ -42,40 +42,51 @@ console.log(myHistoryList)
         <p className="pageName">내가 판매한 NFT</p>
       )}
       <Divider className="divider" />
-      {isLoading ? (
-        <>
-          <SkeletonCard />
-          <SkeletonCard />
-        </>
-      ) : (
-        <div className={styles.bodyContainer}>
-          {myHistoryList &&
-            myHistoryList.length > 0 &&
-            myHistoryList.map((item: myHistoryList, index: number) => {
-              const formatDate = item.date.split("T")[0];
-              if (dateList.current.includes(formatDate)) {
-                return (
-                  <PurchaseSaleNftItem
-                    key={`${item.id}-${index}`}
-                    item={item}
-                  />
-                );
-              } else {
-                dateList.current.push(formatDate);
-                return (
-                  <div key={`${item.id}-${index}`}>
-                    {dateList.current.length > 1 && <Divider/>}
-                    <p className={styles.date} key={`${item.date}-${item.id}`}>{formatDate}</p>
+      <div className={styles.bodyContainer}>
+        {isLoading ? (
+          <>
+            <Skeleton height="5rem"/>
+            <Skeleton height="5rem"/>
+            <Skeleton height="5rem"/>
+            <Skeleton height="5rem"/>
+            <Skeleton height="5rem"/>
+            <Skeleton height="5rem"/>
+          </>
+        ) : (
+          <div className={styles.dataContainer}>
+            {myHistoryList &&
+              myHistoryList.length > 0 &&
+              myHistoryList.map((item: myHistoryList, index: number) => {
+                const formatDate = item.date.split("T")[0];
+                if (dateList.current.includes(formatDate)) {
+                  return (
                     <PurchaseSaleNftItem
                       key={`${item.id}-${index}`}
                       item={item}
                     />
-                  </div>
-                );
-              }
-            })}
-        </div>
-      )}
+                  );
+                } else {
+                  dateList.current.push(formatDate);
+                  return (
+                    <div key={`${item.id}-${index}`}>
+                      {dateList.current.length > 1 && <Divider />}
+                      <p
+                        className={styles.date}
+                        key={`${item.date}-${item.id}`}
+                      >
+                        {formatDate}
+                      </p>
+                      <PurchaseSaleNftItem
+                        key={`${item.id}-${index}`}
+                        item={item}
+                      />
+                    </div>
+                  );
+                }
+              })}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
