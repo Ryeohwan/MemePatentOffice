@@ -87,10 +87,10 @@ public class MemeService {
 
         if(creater.getToday().isBefore(LocalDateTime.now())){
                 // 하루가 지났니
-                creater.setTodayMemeLike(2);
+                creater.setTodayMemeLike(1);
                 creater.setToday(LocalDateTime.now());
         }else{
-            if(creater.getTodayMemeCount() < 1){
+            if(creater.getTodayMemeCount() < 0){
                 throw new MemeCreateCountException("하루 제한 2회를 넘었습니다...");
             }else{
                 int count = creater.getTodayMemeCount() -1 ;
