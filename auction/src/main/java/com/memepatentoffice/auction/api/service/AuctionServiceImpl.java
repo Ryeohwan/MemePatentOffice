@@ -11,6 +11,7 @@ import com.memepatentoffice.auction.common.util.InterServiceCommunicationProvide
 import com.memepatentoffice.auction.db.entity.Auction;
 import com.memepatentoffice.auction.db.entity.type.AuctionStatus;
 import com.memepatentoffice.auction.db.repository.AuctionRepository;
+import com.memepatentoffice.auction.db.repository.BidRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -28,8 +29,7 @@ import java.util.stream.Collectors;
 @Transactional
 @Slf4j
 public class AuctionServiceImpl implements AuctionService{
-    private final String MPOFFICE_SERVER_URL = "https://j8a305.p.ssafy.io/api/mpoffice";
-    private final Integer AUCTION_DURATION_MINUTES = 60*24;
+    private final BidRepository bidRepository;
 
     private final AuctionRepository auctionRepository;
     private final SimpMessageSendingOperations simpMessageSendingOperations;
@@ -37,10 +37,12 @@ public class AuctionServiceImpl implements AuctionService{
 
     public AuctionServiceImpl(AuctionRepository auctionRepository,
                               SimpMessageSendingOperations simpMessageSendingOperations,
-                              InterServiceCommunicationProvider interServiceCommunicationProvider) {
+                              InterServiceCommunicationProvider interServiceCommunicationProvider,
+                              BidRepository bidRepository) {
         this.auctionRepository = auctionRepository;
         this.simpMessageSendingOperations = simpMessageSendingOperations;
         this.isp = interServiceCommunicationProvider;
+        this.bidRepository = bidRepository;
     }
 
     @Transactional
@@ -50,28 +52,29 @@ public class AuctionServiceImpl implements AuctionService{
         if(!isp.existsUserById(req.getSellerId())) throw new NotFoundException("유효하지 않은 판매자 아이디입니다");
 
         log.info(req.toString());
-        Long auctionId = auctionRepository.save(Auction.builder()
+        Auction auction = auctionRepository.save(Auction.builder()
                         .memeId(req.getMemeId())
                         .startTime(req.getStartDateTime())
                         .sellerId(req.getSellerId())
                         .status(AuctionStatus.ENROLLED)
-                .build()).getId();
+                .build());
 
-        ZonedDateTime startZdt = req.getStartDateTime().atZone(ZoneId.systemDefault());
+        ZonedDateTime startZdt = auction.getStartTime()
+                .atZone(ZoneId.systemDefault());
         Date startDate = Date.from(startZdt.toInstant());
-        ZonedDateTime terminateZdt = req.getStartDateTime().plusMinutes(AUCTION_DURATION_MINUTES)
+        ZonedDateTime terminateZdt = auction.getFinishTime()
                 .atZone(ZoneId.systemDefault());
         Date terminateDate = Date.from(terminateZdt.toInstant());
 
         new Timer().schedule(
-                new AuctionStarter(auctionId),
+                new AuctionStarter(auction.getId()),
                 startDate
         );
         new Timer().schedule(
-                new AuctionTerminater(auctionId),
+                new AuctionTerminater(auction.getId()),
                 terminateDate
         );
-        return auctionId;
+        return auction.getId();
     }
 
 
@@ -96,17 +99,17 @@ public class AuctionServiceImpl implements AuctionService{
                     String title = jsonObject.getString("title");
                     String imageurl = jsonObject.getString("memeImage");
                     int hit = jsonObject.getInt("searched");
-                    isp.findMemeById(auction.getSellerId()).orElseThrow(()->new NotFoundException("유효하지 않은 판매자 아이디입니다"));
-                    jsonObject = new JSONObject(respBody);
-                    String sellerNickName = jsonObject.getString("nickname");
 
-                    log.info("title: "+title+", sellerNickName: "+sellerNickName+", hit: "+hit);
-
+                    Long highestBid = bidRepository.highestBid(auction.getId())
+                            .orElse(0L);
+                    log.info(auction.toString());
                     return AuctionRes.builder()
-                            .imageurl(imageurl)
+                            .memeId(auction.getMemeId())
+                            .auctionId(auction.getId())
                             .title(title)
-                            .sellerNickName(sellerNickName)
-                            .startTime(auction.getStartTime())
+                            .finishTime(auction.getFinishTime())
+                            .highestBid(highestBid)
+                            .imgUrl(imageurl)
                             .hit(hit)
                             .build();
                 }))
@@ -115,8 +118,8 @@ public class AuctionServiceImpl implements AuctionService{
     }
 
     @Override
-    public List<AuctionRes> findAllByStartDate() throws RuntimeException{
-        return auctionRepository.findAllProceedingByStartDate().stream()
+    public List<AuctionRes> findAllProceedingByFinishTimeLatest() throws RuntimeException{
+        return auctionRepository.findAllProceedingByFinishTimeLatest().stream()
                 .map(auction -> streamExceptionHandler(()->{
                     String respBody = isp.findMemeById(auction.getMemeId()).orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
                     JSONObject jsonObject = new JSONObject(respBody);
@@ -124,16 +127,41 @@ public class AuctionServiceImpl implements AuctionService{
                     String imageurl = jsonObject.getString("memeImage");
                     int hit = jsonObject.getInt("searched");
 
-                    respBody = isp.findUserById(auction.getSellerId()).orElseThrow(()->new NotFoundException("유효하지 않은 판매자 아이디입니다"));
-                    jsonObject = new JSONObject(respBody);
-                    String sellerNickName = jsonObject.getString("nickname");
-
-                    log.info("title: "+title+"sellerNickName: "+sellerNickName);
+                    Long highestBid = bidRepository.highestBid(auction.getId())
+                            .orElse(0L);
 
                     return AuctionRes.builder()
-                            .imageurl(imageurl)
+                            .memeId(auction.getMemeId())
+                            .auctionId(auction.getId())
                             .title(title)
-                            .sellerNickName(sellerNickName)
+                            .finishTime(auction.getFinishTime())
+                            .highestBid(highestBid)
+                            .imgUrl(imageurl)
+                            .hit(hit)
+                            .build();
+                })).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AuctionRes> findAllProceedingByFinishTimeOldest() throws RuntimeException{
+        return auctionRepository.findAllProceedingByFinishTimeOldest().stream()
+                .map(auction -> streamExceptionHandler(()->{
+                    String respBody = isp.findMemeById(auction.getMemeId()).orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
+                    JSONObject jsonObject = new JSONObject(respBody);
+                    String title = jsonObject.getString("title");
+                    String imageurl = jsonObject.getString("memeImage");
+                    int hit = jsonObject.getInt("searched");
+
+                    Long highestBid = bidRepository.highestBid(auction.getId())
+                            .orElse(0L);
+
+                    return AuctionRes.builder()
+                            .memeId(auction.getMemeId())
+                            .auctionId(auction.getId())
+                            .title(title)
+                            .finishTime(auction.getFinishTime())
+                            .highestBid(highestBid)
+                            .imgUrl(imageurl)
                             .hit(hit)
                             .build();
                 })).collect(Collectors.toList());

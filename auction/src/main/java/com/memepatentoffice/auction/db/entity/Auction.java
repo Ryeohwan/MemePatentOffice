@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Builder
 @Slf4j
 @ToString
@@ -30,6 +29,17 @@ public class Auction extends BaseEntity{
     @Column(name = "status")
     private AuctionStatus status;
 
+    private static final Integer AUCTION_DURATION_MINUTES = 60*24;
+    @Builder
+    public Auction(Long memeId, LocalDateTime startTime, Long sellerId, AuctionStatus status) {
+        this.memeId = memeId;
+        this.startTime = startTime;
+        this.sellerId = sellerId;
+        this.status = status;
+    }
+    public LocalDateTime getFinishTime(){
+        return this.startTime.plusMinutes(Auction.AUCTION_DURATION_MINUTES);
+    }
     public boolean start(){
         if(AuctionStatus.ENROLLED.equals(this.status)){ //Enum에 equals 사용 시 내부적으로 ==비교를 하긴 함
             this.status = AuctionStatus.PROCEEDING;

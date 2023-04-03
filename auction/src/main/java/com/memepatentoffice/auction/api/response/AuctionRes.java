@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 public class AuctionRes {
-    private String imageurl;
+    private Long memeId;
+    private Long auctionId;
     private String title;
-    private String sellerNickName;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private Long currentMaxPrice;
+    private LocalDateTime finishTime;
+    private Long highestBid;
+    private String imgUrl;
     private int hit;
 }

@@ -14,7 +14,8 @@ public interface AuctionService {
     Long enrollAuction(AuctionCreationReq auctionCreationReq) throws NotFoundException, IOException;
     void sendChat(WebSocketChatReq req);
     List<AuctionRes> findAllByHit() throws NotFoundException;
-    List<AuctionRes> findAllByStartDate() throws NotFoundException;
+    List<AuctionRes> findAllProceedingByFinishTimeLatest() throws NotFoundException;
+    List<AuctionRes> findAllProceedingByFinishTimeOldest() throws NotFoundException;
 
     void sendCharacter(WebSocketCharacter dto);
 }
