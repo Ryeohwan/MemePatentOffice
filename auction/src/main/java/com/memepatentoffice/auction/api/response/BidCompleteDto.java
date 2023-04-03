@@ -2,7 +2,7 @@ package com.memepatentoffice.auction.api.response;
 
 import java.time.LocalDateTime;
 
-public class BidRes {
+public class BidCompleteDto {
     public Long memeId;
     public Long userId;
     public Long hammerPrice;
