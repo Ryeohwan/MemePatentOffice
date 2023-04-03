@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { memeUploadActions } from "store/memeUpload";
 import { RootState } from "store/configStore";
-import { mintAnimalTokenContract } from "web3config";
+import { mintMemeTokenContract } from "web3config";
 
 import SubmitBtn from "components/common/elements/SubmitBtn";
 import CheckingModal from "components/auction/upload/CheckingModal";
@@ -135,8 +135,8 @@ const MemeUploadBtn: React.FC = () => {
 
     try {
       if (!account) return false;
-      const response = await mintAnimalTokenContract.methods
-        .mintAnimalToken()
+      const response = await mintMemeTokenContract.methods
+        .mintMemeToken()
         .send({ from: account });
       console.log(response);
       if (response.status) {

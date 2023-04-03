@@ -2,40 +2,40 @@ import Layout from "blockchain/blockchain-components/Layout";
 import { IMyAnimalCard } from "blockchain/blockchain-components/MyAnimalCard";
 import SaleAnimalCard from "blockchain/blockchain-components/SaleAnimalCard";
 import React, { useState, useEffect } from "react";
-import { mintAnimalTokenContract, saleAnimalTokenContract } from "web3config";
+import { mintMemeTokenContract, saleMemeTokenContract } from "web3config";
 
 interface SaleAnimalProps {
   account: string;
 }
 
 const SaleAnimal: React.FC<SaleAnimalProps> = ({ account }) => {
-  const [saleAnimalCardArray, setsaleAnimalCardArray] =
+  const [saleMemeCardArray, setSaleMemeCardArray] =
     useState<IMyAnimalCard[]>();
 
   const getOnSaleAnimalTokens = async () => {
     try {
-      const onSaleAnimalTokenArrayLength = await saleAnimalTokenContract.methods
+      const onSaleAnimalTokenArrayLength = await saleMemeTokenContract.methods
         .getOnSaleAnimalTokenArrayLength()
         .call();
       let tempOnSaleArray: IMyAnimalCard[] = [];
 
       for (let i = 0; i < parseInt(onSaleAnimalTokenArrayLength, 10); i++) {
-        const animalTokenId = await saleAnimalTokenContract.methods
+        const animalTokenId = await saleMemeTokenContract.methods
           .onSaleAnimalTokenArray(i)
           .call();
 
-        const animalType = await mintAnimalTokenContract.methods
+        const animalType = await mintMemeTokenContract.methods
           .animalTypes(animalTokenId)
           .call();
 
-        const animalPrice = await saleAnimalTokenContract.methods
+        const animalPrice = await saleMemeTokenContract.methods
           .animalTokenPrices(animalTokenId)
           .call();
 
         tempOnSaleArray.push({ animalTokenId, animalType, animalPrice });
       }
 
-      setsaleAnimalCardArray(tempOnSaleArray);
+      setSaleMemeCardArray(tempOnSaleArray);
     } catch (e) {
       console.log(e);
     }
@@ -46,14 +46,14 @@ const SaleAnimal: React.FC<SaleAnimalProps> = ({ account }) => {
   }, []);
 
   useEffect(() => {
-    console.log(saleAnimalCardArray);
-  }, [saleAnimalCardArray]);
+    console.log(saleMemeCardArray);
+  }, [saleMemeCardArray]);
 
   return (
     <div>
       <Layout />
-      {saleAnimalCardArray &&
-        saleAnimalCardArray.map((v, i) => {
+      {saleMemeCardArray &&
+        saleMemeCardArray.map((v, i) => {
           return (
             <SaleAnimalCard
               key={i}

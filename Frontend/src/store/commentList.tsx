@@ -116,6 +116,18 @@ const commentListSlice = createSlice({
         }
       }
     },
+    resetCommentList: (state) => {
+      state.commentNewList = [];
+      state.commentBestList = [];
+      state.replyCommentList = [];
+      state.nowParentId = null;
+      state.nowParentName = null;
+      
+      state.nextCommentNewList = true;
+      state.loadingNewCommentList = false;
+      state.loadingMoreNewCommentList = false;
+      state.loadingBestCommentList = false;
+    },
   },
 });
 
@@ -167,6 +179,7 @@ export const getBestCommentListAxiosThunk =
   (memeId: number): AppThunk =>
   async (dispatch) => {
     const sendRequest = async () => {
+      
       const userId = JSON.parse(sessionStorage.user).userId;
       const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/bestList?memeId=${memeId}&userId=${userId}`;
 

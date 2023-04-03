@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { RootState } from "store/configStore";
 import { useAppDispatch } from "hooks/useAppDispatch";
-import {commentType,getCommentListAxiosThunk,getBestCommentListAxiosThunk} from "store/commentList";
+import {commentType,getCommentListAxiosThunk,getBestCommentListAxiosThunk, commentListActions} from "store/commentList";
 import CommentItem from "./CommentItem";
 import styles from "./CommentList.module.css";
 import NoComment from "./NoComment";
@@ -11,17 +11,16 @@ import { useInView } from "react-intersection-observer";
 
 const CommentList: React.FC = () => {
   const appDispatch = useAppDispatch();
+  const dispatch = useDispatch();
   const [lastCommentRef, setLastCommentRef] = useState(-1);
-
+  const params = useParams();
+  const memeid = parseInt(params.meme_id!, 10);
   // 무한 스크롤
   const [ref, inView] = useInView({
     threshold: 1,
     delay: 300,
   })
 
-  const params = useParams();
-  const memeid = parseInt(params.meme_id!, 10);
-  
   const recentCommentList = useSelector<RootState, commentType[]>(
     (state) => state.commentList.commentNewList
   );
@@ -36,6 +35,10 @@ const CommentList: React.FC = () => {
   useEffect(() => {
     appDispatch(getCommentListAxiosThunk(memeid, -1));
     appDispatch(getBestCommentListAxiosThunk(memeid));
+    return (
+      // unmount 시 배열 초기화
+      () => {dispatch(commentListActions.resetCommentList())}
+    );
   }, []);
 
 

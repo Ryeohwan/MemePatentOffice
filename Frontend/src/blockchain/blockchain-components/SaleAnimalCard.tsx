@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { mintAnimalTokenContract, saleAnimalTokenAddress, saleAnimalTokenContract, web3 } from "web3config";
+import { mintMemeTokenContract, saleMemeTokenContract, web3 } from "web3config";
 import AnimalCard from "./AnimalCard";
 
 interface SaleAnimalCardProps {
@@ -13,7 +13,7 @@ const SaleAnimalCard:React.FC<SaleAnimalCardProps> = ({ animalType, animalPrice,
     const [ isBuyable, setIsBuyable ] = useState<boolean>(false);
     const getAnimalTokenOwner = async () => {
         try {
-            const response = await mintAnimalTokenContract.methods.ownerOf(animalTokenId).call();
+            const response = await mintMemeTokenContract.methods.ownerOf(animalTokenId).call();
             console.log(response);
             console.log(account);
             
@@ -27,7 +27,7 @@ const SaleAnimalCard:React.FC<SaleAnimalCardProps> = ({ animalType, animalPrice,
     };
     const onClickBuy = async() => {
         try {
-            const response = await saleAnimalTokenContract.methods.purchaseAnimalToken(animalTokenId).send({from: account, value: animalPrice});
+            const response = await saleMemeTokenContract.methods.purchaseAnimalToken(animalTokenId).send({from: account, value: animalPrice});
             if (response.status) {
                 getOnSaleAnimalTokens();
             }
