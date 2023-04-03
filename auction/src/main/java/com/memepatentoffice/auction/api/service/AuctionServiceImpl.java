@@ -6,6 +6,8 @@ import com.memepatentoffice.auction.api.message.WebSocketChatReq;
 import com.memepatentoffice.auction.api.message.WebSocketChatRes;
 import com.memepatentoffice.auction.api.response.AuctionRes;
 import com.memepatentoffice.auction.common.exception.NotFoundException;
+import com.memepatentoffice.auction.common.util.ExceptionSupplier;
+import com.memepatentoffice.auction.common.util.InterServiceCommunicationProvider;
 import com.memepatentoffice.auction.db.entity.Auction;
 import com.memepatentoffice.auction.db.entity.type.AuctionStatus;
 import com.memepatentoffice.auction.db.repository.AuctionRepository;
@@ -16,6 +18,7 @@ import org.json.JSONObject;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.io.IOException;
 import java.util.*;
@@ -28,24 +31,26 @@ import java.util.stream.Collectors;
 @Transactional
 @Slf4j
 public class AuctionServiceImpl implements AuctionService{
-    private final OkHttpClient client = new OkHttpClient();
     private final String MPOFFICE_SERVER_URL = "https://j8a305.p.ssafy.io/api/mpoffice";
-    private final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private final Integer AUCTION_DURATION_MINUTES = 60*24;
 
     private final AuctionRepository auctionRepository;
     private final SimpMessageSendingOperations simpMessageSendingOperations;
+    private final InterServiceCommunicationProvider isp;
 
     public AuctionServiceImpl(AuctionRepository auctionRepository,
-                              SimpMessageSendingOperations simpMessageSendingOperations) {
+                              SimpMessageSendingOperations simpMessageSendingOperations,
+                              InterServiceCommunicationProvider interServiceCommunicationProvider) {
         this.auctionRepository = auctionRepository;
         this.simpMessageSendingOperations = simpMessageSendingOperations;
+        this.isp = interServiceCommunicationProvider;
     }
 
     @Transactional
     @Override
     public Long enrollAuction(AuctionCreationReq req) throws NotFoundException, IOException {
         //TODO: 밈 번호 유효성 검사, 판매자 유효성 검사
+        if(!isp.existsMemeById(req.getMemeId())) throw new NotFoundException()
         log.info(req.toString());
         Long auctionId = auctionRepository.save(Auction.builder()
                         .memeId(req.getMemeId())
@@ -87,16 +92,19 @@ public class AuctionServiceImpl implements AuctionService{
     }
 
     @Override
-    public List<AuctionRes> findAllByHit() {
+    public List<AuctionRes> findAllByHit(){
         return auctionRepository.findAllProceeding().stream()
-                .map((auction)->{
-                    String respBody = getResponsefromOtherServer(MPOFFICE_SERVER_URL+"/api/mpoffice/meme?memeId="+auction.getMemeId());
+                .map(auction -> streamExceptionHandler(()->{
+                    String respBody = isp.findMemeById(auction.getMemeId());
+                    if(respBody==null) throw new NotFoundException("유효하지 않은 밈 아이디입니다");
+
                     JSONObject jsonObject = new JSONObject(respBody);
                     String title = jsonObject.getString("title");
                     String imageurl = jsonObject.getString("memeImage");
                     int hit = jsonObject.getInt("searched");
 
-                    respBody = getResponsefromOtherServer(MPOFFICE_SERVER_URL+"/api/mpoffice/user/info/"+auction.getSellerId());
+                    respBody = isp.getResponsefromOtherServer(MPOFFICE_SERVER_URL+"/api/mpoffice/user/info/"+auction.getSellerId());
+                    if(respBody==null) throw new NotFoundException("유효하지 않은 유저 id입니다");
                     jsonObject = new JSONObject(respBody);
                     String sellerNickName = jsonObject.getString("nickname");
 
@@ -109,7 +117,7 @@ public class AuctionServiceImpl implements AuctionService{
                             .startTime(auction.getStartTime())
                             .hit(hit)
                             .build();
-                })
+                }))
                 .sorted(Comparator.comparing(AuctionRes::getHit).reversed())
                 .collect(Collectors.toList());
     }
@@ -117,14 +125,14 @@ public class AuctionServiceImpl implements AuctionService{
     @Override
     public List<AuctionRes> findAllByStartDate() throws RuntimeException{
         return auctionRepository.findAllProceedingByStartDate().stream()
-                .map((auction)->{
-                    String respBody = getResponsefromOtherServer(MPOFFICE_SERVER_URL+"/api/mpoffice/meme?memeId="+auction.getMemeId());
+                .map(auction -> streamExceptionHandler(()->{
+                    String respBody = isp.getResponsefromOtherServer(MPOFFICE_SERVER_URL+"/api/mpoffice/meme?memeId="+auction.getMemeId());
                     JSONObject jsonObject = new JSONObject(respBody);
                     String title = jsonObject.getString("title");
                     String imageurl = jsonObject.getString("memeImage");
                     int hit = jsonObject.getInt("searched");
 
-                    respBody = getResponsefromOtherServer(MPOFFICE_SERVER_URL+"/api/mpoffice/user/info/"+auction.getSellerId());
+                    respBody = isp.getResponsefromOtherServer(MPOFFICE_SERVER_URL+"/api/mpoffice/user/info/"+auction.getSellerId());
                     jsonObject = new JSONObject(respBody);
                     String sellerNickName = jsonObject.getString("nickname");
 
@@ -136,7 +144,7 @@ public class AuctionServiceImpl implements AuctionService{
                             .sellerNickName(sellerNickName)
                             .hit(hit)
                             .build();
-                }).collect(Collectors.toList());
+                })).collect(Collectors.toList());
     }
 
     @Override
@@ -147,18 +155,7 @@ public class AuctionServiceImpl implements AuctionService{
     public void sendCurrentPrice(Long auctionId){
 
     }
-    public String getResponsefromOtherServer(String url){
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-        try(Response response = client.newCall(request).execute()){
-            String respBody = response.body().string();
-            log.info(respBody);
-            return respBody;
-        }catch (IOException ex){
-            throw new RuntimeException(ex);
-        }
-    }
+
 
     @AllArgsConstructor
     class AuctionStarter extends TimerTask {
@@ -198,6 +195,13 @@ public class AuctionServiceImpl implements AuctionService{
                 log.info("경매 번호 "+auction.getId()+"번 경매 종료가 실패해서 아직 PROCEEDING 상태입니다");
             }
 
+        }
+    }
+    public static <T> T streamExceptionHandler(ExceptionSupplier<T> z){
+        try{
+            return z.get();
+        }catch (Exception e){
+            throw new RuntimeException(e);
         }
     }
 }
