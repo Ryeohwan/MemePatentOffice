@@ -8,9 +8,7 @@ import NftCard from "components/common/card/NftCard";
 import styles from "components/meme/list/MemeNotFound.module.css";
 
 const MemeNotFound: React.FC = () => {
-  const randomMemeList = useSelector<RootState, memeType[]>(
-    (state) => state.memeList.memeRandomList
-  );
+  const randomMemeList = useSelector<RootState, memeType[]>((state) => state.memeList.memeRandomList);
   return (
     <div className={styles.container}>
       <div className={styles.textDiv}>

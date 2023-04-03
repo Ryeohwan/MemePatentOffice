@@ -18,33 +18,27 @@ const NotInputArea: React.FC = () => {
   const items = [
     {
       rank: 1,
-      text: "폼 미쳤다",
-      cnt: 765,
+      text: "a",
     },
     {
       rank: 2,
-      text: "더글로리",
-      cnt: 521,
+      text: "test",
     },
     {
       rank: 3,
-      text: "폼 미쳤다",
-      cnt: 422,
+      text: "test임니다 test임니다 test임니다 test임니다",
     },
     {
       rank: 4,
-      text: "멋지다 연진아",
-      cnt: 220,
+      text: "테스트임니다 테스트임니다 테스트임니다 테스트임니다",
     },
     {
       rank: 5,
-      text: "송혜교",
-      cnt: 165,
+      text: "테스트임니다테스트임니다테스트임니다테스트임니다테스트임니다",
     },
     {
       rank: 6,
       text: "송혜교",
-      cnt: 165,
     },
     {
       rank: 7,
@@ -54,23 +48,23 @@ const NotInputArea: React.FC = () => {
     {
       rank: 8,
       text: "송혜교",
-      cnt: 165,
     },
     {
       rank: 9,
       text: "송혜교",
-      cnt: 165,
     },
     {
       rank: 10,
       text: "송혜교",
-      cnt: 165,
     },
   ];
 
 
   const now = new Date();
-
+  const month = (now.getMonth() +1).toString().padStart(2, "0")
+  const day = (now.getDate()).toString().padStart(2, "0")
+  const hour = (now.getHours()).toString().padStart(2, "0")
+  const minute = (now.getMinutes()).toString().padStart(2, "0")
 
   return ( 
     <div className={styles.compContainer}>
@@ -81,7 +75,7 @@ const NotInputArea: React.FC = () => {
         <div className={styles.rankingHeader}>
           <p className={styles.headerTxt}>인기 검색어</p>
           <div className={styles.headerTime}>
-            {now.getMonth()+1}.{now.getDate()}   {now.getHours()}:{now.getMinutes()}   기준
+            {month}.{day}   {hour}:{minute} 기준
           </div>
         </div>
 
@@ -97,7 +91,7 @@ const NotInputArea: React.FC = () => {
 
           {/* 오른쪽 */}
           <div className={`${styles.itemContainer} ${styles.right}`}>
-            {items.slice(6, 11).map((item) => (
+            {items.slice(5, 11).map((item) => (
               <SearchRankingItem item={item} key={item.rank} />
             ))}
           </div>

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from 'react-redux'
+import { memeListActions } from "store/memeList";
 import { useNavigate } from "react-router-dom";
 import styles from "components/main/homepage/HomeCarousel.module.css";
 
@@ -12,6 +14,8 @@ interface HomeCarouselProps {
 }
 
 const HomeCarousel: React.FC<HomeCarouselProps> = ({ info }) => {
+  const dispatch = useDispatch();
+  
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const navigate = useNavigate();
 
@@ -28,6 +32,10 @@ const HomeCarousel: React.FC<HomeCarouselProps> = ({ info }) => {
   }, []);
 
   const navigateHandler = (url: string) => {
+    // 밈 사전으로 들어갈떄 redux reset
+    if (url === "/meme-list/type=new") {
+      dispatch(memeListActions.resetAll());
+    }
     navigate(url);
   };
 

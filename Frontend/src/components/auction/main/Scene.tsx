@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "store/configStore";
 import { auctionActions } from "store/auction";
 import { WebSocketProps } from "type";
-
+import { playersInfo } from "store/auction";
 
 import { Canvas } from "react-three-fiber";
 import * as THREE from "three";
@@ -15,18 +15,23 @@ import Chair from "components/auction/main/mesh/Chair";
 import Table from "components/auction/main/mesh/Table";
 import Auctioneer from "components/auction/main/mesh/AuctioneerChar";
 import Border from "components/auction/main/mesh/Border";
-
 import styles from "components/auction/main/Scene.module.css";
+import Players from "./mesh/Players";
 
 interface SceneProps extends WebSocketProps {
-  canSitHandler: (state:boolean) => void;
+  canSitHandler: (state: boolean) => void;
   player: React.MutableRefObject<THREE.Object3D>;
   chairPoint: React.MutableRefObject<THREE.Mesh>;
   playerAnimation: React.MutableRefObject<THREE.AnimationAction | undefined>;
-  camera: React.MutableRefObject<THREE.OrthographicCamera|THREE.PerspectiveCamera>;
-  biddingSubmit: boolean
+  camera: React.MutableRefObject<
+    THREE.OrthographicCamera | THREE.PerspectiveCamera
+  >;
+  biddingSubmit: boolean;
   playerPosition: React.MutableRefObject<THREE.Vector3>;
-  isSitting: React.MutableRefObject<boolean>
+  isSitting: React.MutableRefObject<boolean>;
+  // characters: React.MutableRefObject<playersInfo[]>;
+  characters: playersInfo[]
+  userNum: number;
 }
 
 const Scene: React.FC<SceneProps> = ({
@@ -39,23 +44,35 @@ const Scene: React.FC<SceneProps> = ({
   playerPosition,
   isSitting,
   client,
-  auctionId
+  auctionId,
+  characters,
+  userNum,
 }) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const canvas = useRef<any>();
-  const playerState = useSelector<RootState, number>(state => state.auction.playerState)
+  const playerState = useSelector<RootState, number>(
+    (state) => state.auction.playerState
+  );
   const [meshes, setMeshes] = useState<THREE.Mesh[]>([]);
-  const tableAndChairs = useRef<THREE.Mesh[]>([])
+  const tableAndChairs = useRef<THREE.Mesh[]>([]);
   const table = useRef<THREE.Object3D>(new THREE.Object3D());
   const chairs = useRef<Array<THREE.Mesh>>([]);
   const raycaster = useRef<THREE.Raycaster>(new THREE.Raycaster());
   const mouse = useRef<THREE.Vector2>(new THREE.Vector2());
   const clickPosition = useRef<THREE.Vector3>(new THREE.Vector3());
   const chairPoints = useRef<Array<THREE.Mesh>>([]);
-
+  const [players, setPlayers] = useState<playersInfo[]>([]);
+  useEffect(() => {
+    const info = characters.filter((player) => {
+      return (
+        player.nickname !== JSON.parse(sessionStorage.getItem("user")!).nickname
+      );
+    });
+    setPlayers(info);
+  }, [userNum]);
+  // console.log(characters)
   // 카메라
   const cameraPosition = new THREE.Vector3(35, 20, 80);
-  
 
   useEffect(() => {
     if (document.querySelector("#three-canvas")) {
@@ -65,14 +82,13 @@ const Scene: React.FC<SceneProps> = ({
   // 이벤트
   const createdHandler = () => {
     camera.current.position.set(
-      cameraPosition.x+13,
-      cameraPosition.y+10,
-      cameraPosition.z+29
+      cameraPosition.x + 13,
+      cameraPosition.y + 10,
+      cameraPosition.z + 29
     );
     camera.current.zoom = 30;
-    camera.current.lookAt(13,10,29)
+    camera.current.lookAt(13, 10, 29);
     camera.current.updateProjectionMatrix();
-
   };
 
   const pushMesh = (mesh: THREE.Mesh) => {
@@ -114,7 +130,7 @@ const Scene: React.FC<SceneProps> = ({
     if (playerState !== 2) {
       calculateMousePosition(e);
       raycasting();
-      dispatch(auctionActions.controlPlayerState(1))
+      dispatch(auctionActions.controlPlayerState(1));
     }
   };
   return (
@@ -159,10 +175,21 @@ const Scene: React.FC<SceneProps> = ({
         auctionId={auctionId}
       />
       <Box position={[0, 15, 0]} />
-      <Table table={table} pushMesh={pushMesh} tableAndChairs={tableAndChairs}/>
-      <Chair chairs={chairs} chairPoints={chairPoints} tableAndChairs={tableAndChairs}/>
+      <Table
+        table={table}
+        pushMesh={pushMesh}
+        tableAndChairs={tableAndChairs}
+      />
+      <Chair
+        chairs={chairs}
+        chairPoints={chairPoints}
+        tableAndChairs={tableAndChairs}
+      />
       <Auctioneer />
       <Border />
+      {userNum && players.map((info)=>{
+        return <Players info={info} userNum={userNum}/>
+      })}
     </Canvas>
   );
 };

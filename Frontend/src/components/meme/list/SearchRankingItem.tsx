@@ -1,5 +1,7 @@
-import {useDispatch} from 'react-redux'
-import { memeListActions } from 'store/memeList'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from "store/configStore";
+import { useAppDispatch } from "hooks/useAppDispatch";
+import { memeListActions, getMemeNewListAxiosThunk, getMemePopularListAxiosThunk } from "store/memeList";
 
 import styles from './SearchRankingItem.module.css';
 
@@ -12,9 +14,14 @@ interface Props {
 
 const SearchRankingItem: React.FC<Props> = ({item}) => {
   const dispatch = useDispatch()
+  const appDispatch = useAppDispatch();
+  const range = useSelector<RootState, string>((state) => state.memeList.range);
 
   const clickhandler = (text: string) => {
     dispatch(memeListActions.changeInputTxt(text))
+    console.log('input 바꼈음!')
+    appDispatch(getMemeNewListAxiosThunk(text, -1));
+    appDispatch(getMemePopularListAxiosThunk(text, range, false, -1))
   }
 
   return (
@@ -25,7 +32,7 @@ const SearchRankingItem: React.FC<Props> = ({item}) => {
       
       <span className={styles.textItem}>
         <span onClick={() => clickhandler(item.text)}>
-          {item.text}
+          {item.text.length > 15 ? item.text.substring(0, 15) + '...' : item.text}
         </span>
       </span>
     </div>
