@@ -8,15 +8,13 @@ import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentLikeRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.CommentCreateResponse;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.CommentResponse;
+import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeListResponse;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.ReplyResponse;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.*;
 import com.memepatentoffice.mpoffice.domain.user.db.repository.UserRepository;
 import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.domain.*;
 import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -166,16 +164,16 @@ public class CommentService {
         return result;
     }
 
-    public Slice<CommentResponse> findLatest(Long memeId,Long userId, Long id1, Long id2, Long id3, Pageable pageable){
+    public Slice<CommentResponse> findLatest(Long memeId,Long userId, Long id1, Long id2, Long id3, int idx){
         List<Object> temp =commentRepository.findLatestComment(memeId,userId,id1,id2,id3);
         List<CommentResponse> result = convertToDtoLatest(temp);
-        return SliceConverter.convert(result, pageable.getPageNumber(), pageable.getPageSize());
+        return SliceConverter.convert(result, idx, 8, Sort.unsorted());
     }
 
-    public Slice<ReplyResponse> findReply(Long memeId, Long userId,Long commentId ,Pageable pageable){
+    public Slice<ReplyResponse> findReply(Long memeId, Long userId,Long commentId ,int idx){
         List<Object> temp =commentRepository.findReplyComment(memeId,userId,commentId);
         List<ReplyResponse> result = convertToDtoReply(temp);
-        return SliceConverter.convert(result, pageable.getPageNumber(), pageable.getPageSize());
+        return SliceConverter.convert(result, idx, 8, Sort.unsorted());
     }
     @Transactional
     public String deleteComment(CommentDeleteRequest commentDeleteRequest)throws NotFoundException{
@@ -275,11 +273,11 @@ public class CommentService {
             Object[] arr = (Object[]) obj;
             String content = (String) arr[0];
             LocalDateTime createdAt = (LocalDateTime) arr[1];
-            Long id = (Long) arr[3];
-            String nickname = (String) arr[4];
-            String profileImage = (String) arr[5];
-            Long heartCnt = (Long)arr[6];
-            Boolean liked = (Boolean) arr[7];
+            Long id = (Long) arr[2];
+            String nickname = (String) arr[3];
+            String profileImage = (String) arr[4];
+            Long heartCnt = (Long)arr[5];
+            Boolean liked = (Boolean) arr[6];
             Comment c = commentRepository.findById(id).get();
             int count = 0;
             if(userCommentLikeRepository.existsByUserIdAndCommentId(c.getUser().getId(),c.getId())){
@@ -303,4 +301,15 @@ public class CommentService {
         return dtoList;
     }
 
+    private Slice<CommentResponse> checkLastPage(Pageable pageable, List<CommentResponse> results) {
+
+        boolean hasNext = false;
+
+        // 조회한 결과 개수가 요청한 페이지 사이즈보다 크면 뒤에 더 있음, next = true
+        if (results.size() > pageable.getPageSize()) {
+            hasNext = true;
+            results.remove(pageable.getPageSize());
+        }
+        return new SliceImpl<>(results, pageable, hasNext);
+    }
 }

@@ -19,7 +19,7 @@ public class SliceConverter {
      * @return        변환된 Slice
      */
     public static <T> Slice<T> convert(List<T> list, int page, int size, Sort sort) {
-        int fromIndex = page * size;
+        int fromIndex = page;
         int toIndex = Math.min(fromIndex + size, list.size());
         List<T> content = list.subList(fromIndex, toIndex);
         return new SliceImpl<>(content, PageRequest.of(page, size, sort), list.size() > toIndex);
