@@ -1,51 +1,53 @@
-.header{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: end;
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: end;
 }
 
-.confirm{
-    color: var(--point-color);
+.confirm {
+  color: var(--point-color);
 }
 
-.bodyWrapper{
-    height: 100%;
-    margin-top: 15%;
-    display: flex;
-    flex-direction: column;
+.bodyWrapper {
+  height: 100%;
+  margin-top: 15%;
+  display: flex;
+  flex-direction: column;
 }
-.profileImg{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    width:100%;
-    position: relative;
+.profileImg {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: relative;
 }
 
-.avatar{
-    height:10rem !important;
-    width: 10rem !important;
-    border: 1px var(--section-line-color) solid;
+.avatar {
+  height: 10rem !important;
+  width: 10rem !important;
+  border: 1px var(--section-line-color) solid;
 }
 
 .avatar > img {
-    object-fit: cover;
-    width: 80% !important;
-    height: 80% !important;
+  object-fit: cover;
+  width: 80% !important;
+  height: 80% !important;
 }
 
-.btnContainer{
-    height:2rem;
-    width:2rem;
-    position:absolute;
-    top:80%;
-    left:60%;
+.btnContainer {
+  height: 2rem;
+  width: 2rem;
+  position: absolute;
+  top: 80%;
+  left: 60%;
 }
 
-.nickname{
-    margin-top: 10%;
-    display: flex;
-    flex-direction: column;
+.nicknameWrapper {
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
 }
+
+
