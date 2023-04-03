@@ -85,8 +85,9 @@ public class MemeService {
         User creater = userRepository.findById(memeCreateRequest.getCreaterId())
                 .orElseThrow(()->new NotFoundException("존재하지 않는 유저입니다"));
 
-        if(creater.getToday().getDayOfMonth() < LocalDateTime.now().getDayOfMonth()){
-                creater.setTodayMemeLike(1);
+        if(creater.getToday().isBefore(LocalDateTime.now())){
+                // 하루가 지났니
+                creater.setTodayMemeLike(2);
                 creater.setToday(LocalDateTime.now());
         }else{
             if(creater.getTodayMemeCount() < 1){
@@ -94,6 +95,7 @@ public class MemeService {
             }else{
                 int count = creater.getTodayMemeCount() -1 ;
                 creater.setTodayMemeLike(count);
+                creater.setToday(LocalDateTime.now());
             }
         }
         Meme meme = memeRepository.save(memeCreateRequest.toEntity(creater, creater));
