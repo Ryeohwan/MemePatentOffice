@@ -186,7 +186,9 @@ public class CommentService {
 
         if(com.getUser().getId() == user.getId() && com.getMeme().getId() == meme.getId()){
             for(Comment a: list){
-                commentRepository.delete(a);
+                if(a.getMeme().getId() == com.getMeme().getId()){
+                    commentRepository.delete(a);
+                }
             }
             commentRepository.delete(com);
             return "delete success";
