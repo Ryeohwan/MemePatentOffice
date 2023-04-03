@@ -13,6 +13,8 @@ import java.util.Optional;
 public interface MemeRepository extends JpaRepository<Meme,Long> {
     Optional<Meme> findMemeByTitle(String title);
     Boolean existsMemeByTitle(String title);
+    @Query("SELECT count (m) from Meme m")
+    int countAll();
     @Override
     <S extends Meme> S save(S entity);
     List<Meme> findAllByOwnerId(Long userId);
