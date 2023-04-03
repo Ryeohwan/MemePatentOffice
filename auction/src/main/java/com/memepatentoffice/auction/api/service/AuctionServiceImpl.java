@@ -13,12 +13,10 @@ import com.memepatentoffice.auction.db.entity.type.AuctionStatus;
 import com.memepatentoffice.auction.db.repository.AuctionRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.*;
 import org.json.JSONObject;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.io.IOException;
 import java.util.*;
@@ -50,7 +48,6 @@ public class AuctionServiceImpl implements AuctionService{
     @Override
     public Long enrollAuction(AuctionCreationReq req) throws NotFoundException, IOException {
         //TODO: 밈 번호 유효성 검사, 판매자 유효성 검사
-        if(!isp.existsMemeById(req.getMemeId())) throw new NotFoundException()
         log.info(req.toString());
         Long auctionId = auctionRepository.save(Auction.builder()
                         .memeId(req.getMemeId())
@@ -80,7 +77,7 @@ public class AuctionServiceImpl implements AuctionService{
 
     @Override
     public void sendChat(WebSocketChatReq req){
-        //옥션 id, 유저 id존재하는지 확인
+        //TODO: 옥션 id, 유저 id존재하는지 확인
         Long auctionId = req.getAuctionId();
         WebSocketChatRes res = WebSocketChatRes.builder()
                 .auctionId(auctionId)
@@ -95,16 +92,14 @@ public class AuctionServiceImpl implements AuctionService{
     public List<AuctionRes> findAllByHit(){
         return auctionRepository.findAllProceeding().stream()
                 .map(auction -> streamExceptionHandler(()->{
-                    String respBody = isp.findMemeById(auction.getMemeId());
-                    if(respBody==null) throw new NotFoundException("유효하지 않은 밈 아이디입니다");
+                    String respBody = isp.findMemeById(auction.getMemeId()).orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
 
                     JSONObject jsonObject = new JSONObject(respBody);
                     String title = jsonObject.getString("title");
                     String imageurl = jsonObject.getString("memeImage");
                     int hit = jsonObject.getInt("searched");
 
-                    respBody = isp.getResponsefromOtherServer(MPOFFICE_SERVER_URL+"/api/mpoffice/user/info/"+auction.getSellerId());
-                    if(respBody==null) throw new NotFoundException("유효하지 않은 유저 id입니다");
+                    isp.findMemeById(auction.getMemeId()).orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
                     jsonObject = new JSONObject(respBody);
                     String sellerNickName = jsonObject.getString("nickname");
 
@@ -126,13 +121,13 @@ public class AuctionServiceImpl implements AuctionService{
     public List<AuctionRes> findAllByStartDate() throws RuntimeException{
         return auctionRepository.findAllProceedingByStartDate().stream()
                 .map(auction -> streamExceptionHandler(()->{
-                    String respBody = isp.getResponsefromOtherServer(MPOFFICE_SERVER_URL+"/api/mpoffice/meme?memeId="+auction.getMemeId());
+                    String respBody = isp.findMemeById(auction.getMemeId()).orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
                     JSONObject jsonObject = new JSONObject(respBody);
                     String title = jsonObject.getString("title");
                     String imageurl = jsonObject.getString("memeImage");
                     int hit = jsonObject.getInt("searched");
 
-                    respBody = isp.getResponsefromOtherServer(MPOFFICE_SERVER_URL+"/api/mpoffice/user/info/"+auction.getSellerId());
+                    respBody = isp.findUserById(auction.getSellerId()).orElseThrow(()->new NotFoundException("유효하지 않은 판매자 아이디입니다"));
                     jsonObject = new JSONObject(respBody);
                     String sellerNickName = jsonObject.getString("nickname");
 
@@ -153,7 +148,7 @@ public class AuctionServiceImpl implements AuctionService{
     }
 
     public void sendCurrentPrice(Long auctionId){
-
+        //TODO: 옥션방에 들어오는 사람들에게 5초에 한번씩 웹소켓 쏴주기 
     }
 
 
