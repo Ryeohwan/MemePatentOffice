@@ -34,6 +34,7 @@ const AuctionCanvas: React.FC<Characters> = ({
   const [isFull, setIsFull] = useState<Boolean>(false);
   const [visible, setVisible] = useState<Boolean>(false);
   const player = useRef<THREE.Object3D>(new THREE.Object3D());
+  const chairPoints = useRef<Array<THREE.Mesh>>([]);
   const chairPoint = useRef<THREE.Mesh>(new THREE.Mesh());
   const playerAnimation = useRef<THREE.AnimationAction | undefined>();
   const playerPosition = useRef<THREE.Vector3>(new THREE.Vector3());
@@ -197,6 +198,7 @@ const AuctionCanvas: React.FC<Characters> = ({
         auctionId={auctionId}
         characters={characters}
         userNum={userNum}
+        chairPoints={chairPoints}
       />
       <div className={styles.buttonWrapper}>
         {/* {document.getElementById("auction") && <AuctionSlideMenu />} */}
