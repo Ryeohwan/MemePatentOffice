@@ -1,17 +1,17 @@
 package com.memepatentoffice.auction.api.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class AuctionCreationReq {
     private Long memeId;
     private LocalDateTime startDateTime;
     private Long sellerId;
+    private Long startingPrice;
 
 }
