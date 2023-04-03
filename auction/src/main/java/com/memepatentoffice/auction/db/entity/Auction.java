@@ -26,6 +26,7 @@ public class Auction extends BaseEntity{
     private LocalDateTime startTime;
     @Column(name = "seller_id")
     private Long sellerId;
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private AuctionStatus status;
 
