@@ -230,11 +230,7 @@ public class MemeService {
     }
 
     public List<MemeListResponse> randomMeme(){
-        Random random = new Random();
-
         int check = memeRepository.countAll();
-
-
         List<MemeListResponse> result = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             int rand = (int)(Math.random()*check)+1;
