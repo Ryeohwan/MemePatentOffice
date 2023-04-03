@@ -64,6 +64,11 @@ const AuctionCanvas: React.FC<Characters> = ({
   );
   const [biddingVisible, setBiddingVisible] = useState<boolean>(false);
   const [fullScreen, setFullScreen] = useState(false);
+  
+  const [playerStatus, setPlayerState] = useState<number>(0);
+  const changeHandler = () => {
+    setPlayerState((prev)=>prev+1)
+  }
   // useEffect(() => {
   //   const elem = document.getElementById("auction");
   //   if (elem) {
@@ -131,6 +136,9 @@ const AuctionCanvas: React.FC<Characters> = ({
     );
     isSitting.current = false;
     canSitHandler(false);
+    setTimeout(() => {
+      dispatch(auctionActions.controlPlayerState(5));
+    }, 1200);
   };
 
   const standUpHandler = () => {
@@ -165,7 +173,7 @@ const AuctionCanvas: React.FC<Characters> = ({
 
     setTimeout(() => {
       dispatch(auctionActions.controlPlayerState(0));
-    }, 1500);
+    }, 1200);
   };
 
   const fullMoniter = () => {
@@ -199,6 +207,7 @@ const AuctionCanvas: React.FC<Characters> = ({
         characters={characters}
         userNum={userNum}
         chairPoints={chairPoints}
+        changeHandler={changeHandler}
       />
       <div className={styles.buttonWrapper}>
         {/* {document.getElementById("auction") && <AuctionSlideMenu />} */}

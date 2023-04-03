@@ -220,11 +220,6 @@ const Player: React.FC<PlayerProps> = ({
       if (status !== "SITDOWN")
         dispatch(auctionActions.changeStatus("SITDOWN"));
     }
-    if (playerState !== 2) {
-      if (actions.current.sitdown) {
-        playerAnimation.current = actions.current.sitdown;
-      }
-    }
   });
   return <primitive object={character} />;
 };

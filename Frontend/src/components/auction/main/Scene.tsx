@@ -31,11 +31,13 @@ interface SceneProps extends WebSocketProps {
   characters: React.MutableRefObject<playersInfo[]>
   userNum: number;
   chairPoints: React.MutableRefObject<THREE.Mesh[]>;
+  changeHandler:()=>void
 
 }
 
 const Scene: React.FC<SceneProps> = ({
   canSitHandler,
+  changeHandler,
   player,
   chairPoint,
   playerAnimation,
@@ -191,7 +193,7 @@ const Scene: React.FC<SceneProps> = ({
       <Auctioneer />
       <Border />
       {players.map((info)=>{
-        return <Players info={info} userNum={userNum} characters={characters}/> 
+        return <Players info={info} userNum={userNum} characters={characters} changeHandler={changeHandler}/> 
       })}
     </Canvas>
   );
