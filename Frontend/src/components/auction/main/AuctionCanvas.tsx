@@ -18,7 +18,12 @@ import Bidding from "components/auction/main/list/Bidding";
 import FinishModal from "components/auction/main/FinishModal";
 import { Characters } from "type";
 
-const AuctionCanvas: React.FC<Characters> = ({client, auctionId, characters, userNum}) => {
+const AuctionCanvas: React.FC<Characters> = ({
+  client,
+  auctionId,
+  characters,
+  userNum,
+}) => {
   const width = window.innerWidth;
   const height = window.innerHeight;
   const dispatch = useDispatch();
@@ -57,7 +62,6 @@ const AuctionCanvas: React.FC<Characters> = ({client, auctionId, characters, use
     new THREE.PerspectiveCamera(75, width / height, 0.1, 1000)
   );
   const [biddingVisible, setBiddingVisible] = useState<boolean>(false);
-  const [biddingSubmit, setBiddingSubmit] = useState<boolean>(false);
   const [fullScreen, setFullScreen] = useState(false);
   // useEffect(() => {
   //   const elem = document.getElementById("auction");
@@ -72,20 +76,20 @@ const AuctionCanvas: React.FC<Characters> = ({client, auctionId, characters, use
   //   return () => {
   //     if (document.fullscreenElement)
   //     document.exitFullscreen();
-      // dispatch(auctionActions.closeAuction())
-      // dispatch(chatActions.closeAuction())
+  // dispatch(auctionActions.closeAuction())
+  // dispatch(chatActions.closeAuction())
   //   };
   // }, []);
 
-  const biddingHandler = (state:boolean) => {
+  const biddingHandler = (state: boolean) => {
     setBiddingVisible(state);
   };
   const biddingSubmitHandler = () => {
     setBiddingVisible(false);
-    setBiddingSubmit(true);
+    dispatch(auctionActions.controlPlayerState(4));
     setTimeout(() => {
-      setBiddingSubmit(false);
-    }, 2500);
+      dispatch(auctionActions.controlPlayerState(5));
+    }, 2000);
   };
 
   const canSitHandler = useCallback((state: boolean) => {
@@ -93,7 +97,6 @@ const AuctionCanvas: React.FC<Characters> = ({client, auctionId, characters, use
   }, []);
 
   const sitDownHandler = () => {
-    isSitting.current = false;
     dispatch(auctionActions.controlPlayerState(2));
     cameraPoint.current = camera.current.position.clone();
     cameraRotation.current = [
@@ -112,7 +115,6 @@ const AuctionCanvas: React.FC<Characters> = ({client, auctionId, characters, use
     camera.current = playerCamera.current.clone();
     player.current.lookAt(0, 1, -30);
     player.current.rotation.y = 0;
-    if (playerAnimation.current) playerAnimation.current.play();
     gsap.fromTo(
       player.current.position,
       {
@@ -126,14 +128,12 @@ const AuctionCanvas: React.FC<Characters> = ({client, auctionId, characters, use
         duration: 1,
       }
     );
-
-    if (playerAnimation.current) {
-      playerAnimation.current.play();
-    }
+    isSitting.current = false;
     canSitHandler(false);
   };
 
   const standUpHandler = () => {
+    dispatch(auctionActions.controlPlayerState(3));
     setIsFull(false);
     camera.current = bigCamera;
     camera.current.zoom = 30;
@@ -149,22 +149,22 @@ const AuctionCanvas: React.FC<Characters> = ({client, auctionId, characters, use
         x: chairPoint.current.position.x,
         y: playerPosition.current.y,
         z: chairPoint.current.position.z - 0.8,
-        duration: 2,
+        duration: 1,
       }
     );
     gsap.to(camera.current.position, {
       x: cameraPoint.current.x,
       y: cameraPoint.current.y,
       z: cameraPoint.current.z,
-      duration: 2,
+      duration: 1,
     });
     camera.current.rotation.x = cameraRotation.current[0];
     camera.current.rotation.y = cameraRotation.current[1];
     camera.current.rotation.z = cameraRotation.current[2];
-    if (playerAnimation.current) {
-      playerAnimation.current.play();
-    }
-    setTimeout(()=>{dispatch(auctionActions.controlPlayerState(0))},1500)
+
+    setTimeout(() => {
+      dispatch(auctionActions.controlPlayerState(0));
+    }, 1500);
   };
 
   const fullMoniter = () => {
@@ -191,7 +191,6 @@ const AuctionCanvas: React.FC<Characters> = ({client, auctionId, characters, use
         chairPoint={chairPoint}
         playerAnimation={playerAnimation}
         camera={camera}
-        biddingSubmit={biddingSubmit}
         playerPosition={playerPosition}
         isSitting={isSitting}
         client={client}
@@ -209,9 +208,9 @@ const AuctionCanvas: React.FC<Characters> = ({client, auctionId, characters, use
             onClick={sitDownHandler}
           />
         )}
-        {playerState === 2 && (
+        {playerState===5 && (
           <>
-            <Button icon="pi pi-dollar" onClick={()=>biddingHandler(true)} />
+            <Button icon="pi pi-dollar" onClick={() => biddingHandler(true)} />
             <Button
               label="일어나"
               className={styles.sitBtn}
@@ -224,10 +223,10 @@ const AuctionCanvas: React.FC<Characters> = ({client, auctionId, characters, use
           biddingSubmitHandler={biddingSubmitHandler}
           biddingVisible={biddingVisible}
         />
-        <ChatMain client={client} auctionId={auctionId}/>
+        <ChatMain client={client} auctionId={auctionId} />
       </div>
       <div className={styles.fullMoniterBtn}>
-        {playerState === 2 ? (
+        {playerState===5 ? (
           isFull ? (
             <Button onClick={() => notFullMoniter()}>확대</Button>
           ) : (

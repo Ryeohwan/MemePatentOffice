@@ -6,6 +6,6 @@ export interface WebSocketProps{
 }
 
 export interface Characters extends WebSocketProps{
-  characters: playersInfo[]
+  characters: React.MutableRefObject<playersInfo[]>
   userNum: number
 }

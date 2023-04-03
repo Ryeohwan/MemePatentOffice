@@ -11,7 +11,7 @@ import { playersInfo } from "store/auction";
 const ENDPOINT = "ws://localhost:8072/ws"
 const AuctionPage: React.FC = () => {
   // const characters= useRef<playersInfo[]>([])
-  const [characters,setCharacters]= useState<playersInfo[]>([])
+  const characters= useRef<playersInfo[]>([])
   const [userNum,setUserNum] = useState<number>(0)
 
   const userId = JSON.parse(sessionStorage.getItem('user')!).userId
@@ -20,7 +20,9 @@ const AuctionPage: React.FC = () => {
   const client = useRef<Client>()
   const dispatch = useDispatch()
   
-  
+  useEffect(()=>{
+    dispatch(auctionActions.openAuction())
+  },[])
   const connect = () => {
     client.current = new Client({
       //   주소
@@ -50,7 +52,21 @@ const AuctionPage: React.FC = () => {
 
   // 연결 끊기
   const disconnect = () => {
-    console.log("연결이 끊어졌습니다.");
+    client.current?.publish({
+      destination: "/pub/character",
+      body: JSON.stringify({
+        auctionId: auctionId,
+        nickname: JSON.parse(sessionStorage.getItem('user')!).nickname,
+        x: -100,
+        y: -100,
+        z: -100,
+        rotation_x: 0,
+        rotation_y: 0,
+        rotation_z: 0,
+        status: "DEFAULT"
+      })
+    })
+    client.current?.deactivate()
   };
 
   const subscribe = () => {
@@ -76,15 +92,19 @@ const AuctionPage: React.FC = () => {
       `/sub/character/${auctionId}`,
       (body) => {
         const json_body = JSON.parse(body.body)
-        const character = characters.find((c) => c.nickname === json_body.nickname) 
+        // const character = characters.find((c) => c.nickname === json_body.nickname) 
+        const character = characters.current.find((c) => c.nickname===json_body.nickname) 
         if(character) {
           character.x = json_body.x
           character.y = json_body.y
           character.z = json_body.z
+          character.rotation_x = json_body.rotation_x
+          character.rotation_y = json_body.rotation_y
+          character.rotation_z = json_body.rotation_z
           character.status = json_body.status
         }
         else{
-          setCharacters((prev) => [...prev, json_body])
+          characters.current.push(json_body)
           setUserNum((prev)=>prev+1)
         }
       }
@@ -96,7 +116,9 @@ const AuctionPage: React.FC = () => {
       // dispatch(auctionActions.getAuctionInfo()) // redux에 있는 api 실행
     connect();
 
-    return () => disconnect();
+    return () => {
+      disconnect();
+    }
   }, []);
   return (
     <>

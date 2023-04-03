@@ -26,11 +26,10 @@ interface SceneProps extends WebSocketProps {
   camera: React.MutableRefObject<
     THREE.OrthographicCamera | THREE.PerspectiveCamera
   >;
-  biddingSubmit: boolean;
   playerPosition: React.MutableRefObject<THREE.Vector3>;
   isSitting: React.MutableRefObject<boolean>;
   // characters: React.MutableRefObject<playersInfo[]>;
-  characters: playersInfo[]
+  characters: React.MutableRefObject<playersInfo[]>
   userNum: number;
 }
 
@@ -40,7 +39,6 @@ const Scene: React.FC<SceneProps> = ({
   chairPoint,
   playerAnimation,
   camera,
-  biddingSubmit,
   playerPosition,
   isSitting,
   client,
@@ -62,14 +60,16 @@ const Scene: React.FC<SceneProps> = ({
   const clickPosition = useRef<THREE.Vector3>(new THREE.Vector3());
   const chairPoints = useRef<Array<THREE.Mesh>>([]);
   const [players, setPlayers] = useState<playersInfo[]>([]);
+
   useEffect(() => {
-    const info = characters.filter((player) => {
+    const info = characters.current.filter((player) => {
       return (
         player.nickname !== JSON.parse(sessionStorage.getItem("user")!).nickname
       );
     });
     setPlayers(info);
   }, [userNum]);
+
   // console.log(characters)
   // 카메라
   const cameraPosition = new THREE.Vector3(35, 20, 80);
@@ -95,6 +95,7 @@ const Scene: React.FC<SceneProps> = ({
     setMeshes((prev) => [...prev, mesh]);
   };
 
+  // console.log(characters)
   const checkIntersects = () => {
     const intersects = raycaster.current.intersectObjects(meshes);
     for (const item of intersects) {
@@ -127,11 +128,12 @@ const Scene: React.FC<SceneProps> = ({
   };
 
   const mouseUpHandler = (e: React.MouseEvent) => {
-    if (playerState !== 2) {
-      calculateMousePosition(e);
+    if (playerState===2 || playerState ===5 ) return
+    
+    calculateMousePosition(e);
       raycasting();
       dispatch(auctionActions.controlPlayerState(1));
-    }
+    
   };
   return (
     <Canvas
@@ -169,7 +171,6 @@ const Scene: React.FC<SceneProps> = ({
         chairPoint={chairPoint}
         playerAnimation={playerAnimation}
         tableAndChairs={tableAndChairs}
-        biddingSubmit={biddingSubmit}
         isSitting={isSitting}
         client={client}
         auctionId={auctionId}
@@ -187,8 +188,8 @@ const Scene: React.FC<SceneProps> = ({
       />
       <Auctioneer />
       <Border />
-      {userNum && players.map((info)=>{
-        return <Players info={info} userNum={userNum}/>
+      {players.map((info)=>{
+        return <Players info={info} userNum={userNum} characters={characters}/> 
       })}
     </Canvas>
   );

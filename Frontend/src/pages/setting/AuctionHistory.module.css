@@ -1,3 +1,9 @@
 .date{
     text-align: start;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.bodyContainer {
+    padding:16px;
 }

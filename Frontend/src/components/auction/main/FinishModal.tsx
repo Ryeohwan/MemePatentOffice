@@ -74,25 +74,33 @@ const FinishModal: React.FC = () => {
     >
       {/* 경매 끝났을 때 최고가 닉네임 띄우기 */}
       <div className={styles.wrapper}>
-        <p className={styles.nickname}>{biddingHistory[0].nickname}님</p>
-        <p className={styles.cong}>축하드립니다!!</p>
-        <div className={styles.canvasDiv}>
-          <Canvas className={styles.canvas} camera={camera.current}>
-            <ambientLight />
-            <FinishModalCharacter />
-          </Canvas>
-        </div>
-        <div className={styles.exitContainer}>
-          <p className={styles.remainTime}>5초 후에 종료됩니다.</p>
-          <Button
-            className={styles.exitBtn}
-            onClick={() => {
-              navigate(`/meme-detail/${memeId}`);
-            }}
-          >
-            나가기
-          </Button>
-        </div>
+        {biddingHistory.length === 0? (
+          <>
+            <p>경매가 종료되었습니다.</p>
+          </>
+        ) : (
+          <>
+            <p className={styles.nickname}>{biddingHistory[0].nickname}님</p>
+            <p className={styles.cong}>축하드립니다!!</p>
+            <div className={styles.canvasDiv}>
+              <Canvas className={styles.canvas} camera={camera.current}>
+                <ambientLight />
+                <FinishModalCharacter />
+              </Canvas>
+            </div>
+            <div className={styles.exitContainer}>
+              <p className={styles.remainTime}>5초 후에 종료됩니다.</p>
+              <Button
+                className={styles.exitBtn}
+                onClick={() => {
+                  navigate(`/meme-detail/${memeId}`);
+                }}
+              >
+                나가기
+              </Button>
+            </div>
+          </>
+        )}
       </div>
     </Dialog>
   );
