@@ -23,7 +23,7 @@ public class Comment extends BaseEntity{
     @JoinColumn(name = "meme_id")
     private Meme meme;
 
-    @OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY )
     @JoinColumn(name = "parent_comment_id")
     private Comment parentComment;
 
