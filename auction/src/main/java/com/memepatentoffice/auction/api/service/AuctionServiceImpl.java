@@ -93,13 +93,11 @@ public class AuctionServiceImpl implements AuctionService{
         return auctionRepository.findAllProceeding().stream()
                 .map(auction -> streamExceptionHandler(()->{
                     String respBody = isp.findMemeById(auction.getMemeId()).orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
-
                     JSONObject jsonObject = new JSONObject(respBody);
                     String title = jsonObject.getString("title");
                     String imageurl = jsonObject.getString("memeImage");
                     int hit = jsonObject.getInt("searched");
-
-                    isp.findMemeById(auction.getMemeId()).orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
+                    isp.findMemeById(auction.getSellerId()).orElseThrow(()->new NotFoundException("유효하지 않은 판매자 아이디입니다"));
                     jsonObject = new JSONObject(respBody);
                     String sellerNickName = jsonObject.getString("nickname");
 
@@ -148,7 +146,7 @@ public class AuctionServiceImpl implements AuctionService{
     }
 
     public void sendCurrentPrice(Long auctionId){
-        //TODO: 옥션방에 들어오는 사람들에게 5초에 한번씩 웹소켓 쏴주기 
+        //TODO: 옥션방에 들어오는 사람들에게 5초에 한번씩 웹소켓 쏴주기
     }
 
 
