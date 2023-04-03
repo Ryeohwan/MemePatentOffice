@@ -23,10 +23,11 @@ interface initialStateInterface {
   replyCommentList: commentType[];
   nowParentId: null | number;
   nowParentName: null | string;
+
+  nextCommentNewList: boolean;
   loadingNewCommentList: boolean;
   loadingMoreNewCommentList: boolean;
   loadingBestCommentList: boolean;
-  result: boolean;
 }
 
 const initialState: initialStateInterface = {
@@ -35,40 +36,31 @@ const initialState: initialStateInterface = {
   replyCommentList: [],
   nowParentId: null,
   nowParentName: null,
+
+  nextCommentNewList: true,
   loadingNewCommentList: false,
   loadingMoreNewCommentList: false,
   loadingBestCommentList: false,
-  result: false,
 };
 
 const commentListSlice = createSlice({
   name: "commentList",
   initialState: initialState,
   reducers: {
-    getCommentList: (state, actions) => {
-      // 무한 스크롤 용
-      state.commentNewList = actions.payload;
+    updateNewCommentList: (state, actions) => {
+      state.nextCommentNewList = actions.payload.hasNext;
+      if (actions.payload.lastPostRef === -1) {
+        state.commentNewList = []
+      }
+      if (actions.payload.getList) {
+        state.commentNewList = [...state.commentNewList, ...actions.payload.getList]
+      }
     },
     getBestCommentList: (state, actions) => {
       state.commentBestList = actions.payload;
     },
     getReplyCommentList: (state, actions) => {
       state.replyCommentList = actions.payload;
-    },
-
-    changeResult(state, actions) {
-      state.result = actions.payload;
-    },
-
-    // 무한스크롤 로딩
-    changeNewCommentList(state, actions) {
-      state.loadingNewCommentList = actions.payload;
-    },
-    changeNewCommentListMore(state, actions) {
-      state.loadingMoreNewCommentList = actions.payload;
-    },
-    changeBestCommentList(state, actions) {
-      state.loadingBestCommentList = actions.payload;
     },
 
     // 댓글 입력 시
@@ -93,6 +85,7 @@ const commentListSlice = createSlice({
         (item) => item.id !== actions.payload
       );
     },
+
     // 대댓글 달 때 원댓 id 같이 post하기 위해
     changeNowParentId: (state, actions) => {
       state.nowParentId = actions.payload;
@@ -127,11 +120,12 @@ const commentListSlice = createSlice({
 });
 
 export const getCommentListAxiosThunk =
-  (memeId: number): AppThunk =>
-  async (dispatch) => {
+  (memeId: number, lastPostRef: number): AppThunk =>
+  async (dispatch) => { 
+    
     const sendRequest = async () => {
       const userId = JSON.parse(sessionStorage.user).userId;
-      const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/list?memeId=${memeId}&userId=${userId}`;
+      const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/list?memeId=${memeId}&userId=${userId}${lastPostRef !== -1 ? `&idx=${lastPostRef}` : ""}`;
 
       console.log("여기 보낼거임!", requestUrl);
 
@@ -158,7 +152,12 @@ export const getCommentListAxiosThunk =
       if (!res || res.empty) {
         return;
       }
-      dispatch(commentListActions.getCommentList(res.content));
+      // dispatch(commentListActions.getCommentList(res.content));
+      dispatch(commentListActions.updateNewCommentList({
+        getList: res.content,
+        lastPostId : lastPostRef,
+        hasNext: !res.last,
+      }))
     } catch (err) {
       console.log(err);
     }
