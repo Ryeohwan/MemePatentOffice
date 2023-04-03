@@ -27,12 +27,14 @@ const NewComment: React.FC = () => {
   const params = useParams();
   const memeid = parseInt(params.meme_id!, 10);
   const { data: postCommentResponseData, sendRequest: postCommentRequest } = useAxios();
+  
+  const textarea = document.getElementById("my-textarea");
+
 
   // 댓글 post
   const commentSubmitHandler = (e: React.FormEvent) => {
     e.preventDefault();
     const enteredComment = commentInputRef.current!.value;
-    console.log(nowParentId, userId, memeid, enteredComment);
     postCommentRequest({
       url: "/api/mpoffice/meme/comment/create",
       method: "POST",
@@ -49,6 +51,8 @@ const NewComment: React.FC = () => {
   const onClickCancelReply = () => {
     dispatch(commentListActions.changeNowParentId(null));
     dispatch(commentListActions.changeNowParentName(null));
+    // focus
+    textarea!.focus();
   };
 
   useEffect(() => {
@@ -75,6 +79,8 @@ const NewComment: React.FC = () => {
   useEffect(() => {
     if (nowParentId !== null) {
       setReplyStatus(true);
+      // focus
+      textarea!.focus();
     } else {
       setReplyStatus(false);
     }
@@ -118,6 +124,7 @@ const NewComment: React.FC = () => {
         <div className={styles.commentContainer}>
           <div className={styles.commentInputWrapper}>
             <textarea
+              id="my-textarea"
               className={styles.commentInput}
               ref={commentInputRef}
               required
@@ -129,6 +136,7 @@ const NewComment: React.FC = () => {
                 className={styles.submitBtn}
                 icon="ph:arrow-circle-up-fill"
                 onClick={commentSubmitHandler}
+                
               />
             ) : (
               <Icon

@@ -3,6 +3,7 @@ import useAxios from "hooks/useAxios";
 import { useDispatch } from "react-redux";
 import { commentListActions } from "store/commentList";
 import styles from "./ReplyCommentItem.module.css";
+import ElapsedText from "components/common/elements/ElapsedText";
 
 interface ReplyCommentItemProps {
     writerImg: string;
@@ -19,7 +20,7 @@ interface ReplyCommentItemProps {
 const ReplyCommentItem:React.FC<ReplyCommentItemProps> = ({ writerImg, writerNickname, createdAt, content, userNickname, userId, memeid, id }) => {
   const {sendRequest} = useAxios();
   const dispatch = useDispatch();
-
+  const elapsedText = ElapsedText(createdAt);
 
   const deleteReplyHandler = () => {
     sendRequest({
@@ -31,6 +32,7 @@ const ReplyCommentItem:React.FC<ReplyCommentItemProps> = ({ writerImg, writerNic
         commentId: id
       }
     });
+    console.log("대댓글 id ", id)
     dispatch(commentListActions.replyDeleteHandler(id));
   };
 
@@ -43,7 +45,7 @@ const ReplyCommentItem:React.FC<ReplyCommentItemProps> = ({ writerImg, writerNic
       <div className={styles.commentInfoWrapper}>
         <div className={styles.commentHeader}>
           <div className={styles.commentUserName}>{writerNickname}</div>
-          <div className={styles.commentTime}>{createdAt}</div>
+          <div className={styles.commentTime}>{elapsedText}</div>
         </div>
 
         <div className={styles.commentBody}>

@@ -10,6 +10,7 @@ import { getReplyListAxiosThunk } from "store/commentList";
 import ReplyCommentItem from "./ReplyComentItem";
 import useAxios from "hooks/useAxios";
 import { useAppDispatch } from "hooks/useAppDispatch";
+import ElapsedText from "components/common/elements/ElapsedText";
 
 interface CommentType {
   items: commentType;
@@ -36,29 +37,23 @@ const CommentItem: React.FC<CommentType> = (comment) => {
   const replyCommentList = useSelector<RootState, commentType[]>(
     (state) => state.commentList.replyCommentList
   );
-  const heartNum = useSelector<RootState, number>(
-    (state) => state.commentList.nowHeartCnt
-  );
-
+  const heartNum = comment.items.heartCnt;
+  const elapsedText = ElapsedText(comment.items.date)
   const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
   const { sendRequest: postCommentRequest } = useAxios();
   const { sendRequest: deleteCommentRequest } = useAxios();
   const [clickViewReply, setClickViewReply] = useState(false);
-  const [heartStatus, setHeartStatus] = useState(heart);
+  // const [heartStatus, setHeartStatus] = useState(heart);
 
   // 좋아요 눌렀을 때 내가 이미 좋아한 댓글이면 좋아요 취소, 아니면 좋아요 => 좋아요 개수 -1, +1
   const handleHeart = () => {
     // 좋아요 토글
-    setHeartStatus(!heartStatus);
+    // setHeartStatus(!heartStatus);
     // 좋아하면 +1, 취소면 -1
-    if (heartStatus) {
-      dispatch(commentListActions.changeNowHeartCnt(heartNum - 1));
-    } else {
-      dispatch(commentListActions.changeNowHeartCnt(heartNum + 1));
-    }
+    dispatch(commentListActions.toggleLike(commentId));
     postCommentRequest({
-      url: `/api/mpoffice/meme/comment/like?state=${heartStatus}`,
+      url: `/api/mpoffice/meme/comment/like?state=${heart}`,
       method: "POST",
       data: {
         commentId: commentId,
@@ -66,11 +61,6 @@ const CommentItem: React.FC<CommentType> = (comment) => {
       },
     });
   };
-
-  // 렌더링 즉시 좋아요 개수 바꿈
-  useEffect(() => {
-    dispatch(commentListActions.changeNowHeartCnt(comment.items.heartCnt));
-  }, []);
 
   // 답글달기 클릭하면 redux의 parentId, parentName 바꿈
   const uploadReply = () => {
@@ -94,6 +84,7 @@ const CommentItem: React.FC<CommentType> = (comment) => {
         commentId: commentId,
       },
     });
+    console.log("원댓글 id ",commentId)
     dispatch(commentListActions.commentDeleteHandler(commentId));
   };
 
@@ -108,14 +99,14 @@ const CommentItem: React.FC<CommentType> = (comment) => {
           <div className={styles.commentUserName}>{commentWriterName}</div>
 
           {/* 날짜 형식 바꾸고 넣기 */}
-          <div className={styles.commentTime}>3주 전</div>
+          <div className={styles.commentTime}>{elapsedText}</div>
           {best === 1 && <div className={styles.bestComment}>Best</div>}
         </div>
 
         <div className={styles.commentBody}>
           <div className={styles.commentText}>{commentText}</div>
           <div className={styles.iconWrapper} onClick={handleHeart}>
-            {heartStatus ? (
+            {heart ? (
               <Icon
                 icon="clarity:heart-solid"
                 className={styles.heartFilledIcon}

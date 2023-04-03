@@ -33,7 +33,9 @@ const CommentList: React.FC = () => {
   return (
     <>
       {recentCommentList.length === 0 && bestCommentList.length===0 ? (
-        <NoComment />
+        <div className={styles.noCommentContainer}>
+          <NoComment />
+        </div>
       ) : (
         <>
           {bestCommentList.map((comment: commentType) => {

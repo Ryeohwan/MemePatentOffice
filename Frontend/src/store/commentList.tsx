@@ -27,7 +27,6 @@ interface initialStateInterface {
   loadingMoreNewCommentList: boolean;
   loadingBestCommentList: boolean;
   result: boolean;
-  nowHeartCnt: number;
 }
 
 const initialState: initialStateInterface = {
@@ -40,7 +39,6 @@ const initialState: initialStateInterface = {
   loadingMoreNewCommentList: false,
   loadingBestCommentList: false,
   result: false,
-  nowHeartCnt: 0,
 };
 
 const commentListSlice = createSlice({
@@ -79,17 +77,21 @@ const commentListSlice = createSlice({
     },
     // 대댓글 입력 시
     replyAddHandler: (state, actions) => {
-        state.replyCommentList = [ ...state.replyCommentList, actions.payload];
+      state.replyCommentList = [...state.replyCommentList, actions.payload];
     },
 
     // 댓글 삭제
     commentDeleteHandler: (state, actions) => {
-      state.commentNewList = state.commentNewList.filter((item) => item.id !== actions.payload);
+      state.commentNewList = state.commentNewList.filter(
+        (item) => item.id !== actions.payload
+      );
     },
 
     // 대댓글 삭제
     replyDeleteHandler: (state, actions) => {
-      state.replyCommentList = state.replyCommentList.filter((item) => item.id !== actions.payload)
+      state.replyCommentList = state.replyCommentList.filter(
+        (item) => item.id !== actions.payload
+      );
     },
     // 대댓글 달 때 원댓 id 같이 post하기 위해
     changeNowParentId: (state, actions) => {
@@ -97,25 +99,41 @@ const commentListSlice = createSlice({
     },
     // 대댓글 달 때 보여줄 원댓 작성자 닉네임
     changeNowParentName: (state, actions) => {
-        state.nowParentName = actions.payload;
+      state.nowParentName = actions.payload;
     },
 
-    // 좋아요 시 좋아요 개수 바꾸기
-    changeNowHeartCnt: (state, actions) => {
-      state.nowHeartCnt = actions.payload;
-    }
+    // 댓글 좋아요, 좋아요 취소
+    toggleLike: (state, actions) => {
+      for (let i = 0; i < state.commentNewList.length; i++) {
+        if (state.commentNewList[i].id === actions.payload) {
+          state.commentNewList[i].heartCnt +=
+            state.commentNewList[i].liked === false ? 1 : -1;
+          state.commentNewList[i].liked =
+            state.commentNewList[i].liked === false ? true : false;
+          break;
+        }
+      }
+      for (let i = 0; i < state.commentBestList.length; i++) {
+        if (state.commentBestList[i].id === actions.payload) {
+          state.commentBestList[i].heartCnt +=
+            state.commentBestList[i].liked === false ? 1 : -1;
+          state.commentBestList[i].liked =
+            state.commentBestList[i].liked === false ? true : false;
+          break;
+        }
+      }
+    },
   },
 });
 
-
 export const getCommentListAxiosThunk =
-  ( memeId: number): AppThunk =>
+  (memeId: number): AppThunk =>
   async (dispatch) => {
-
     const sendRequest = async () => {
-      const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/list?memeId=${memeId}`;
+      const userId = JSON.parse(sessionStorage.user).userId;
+      const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/list?memeId=${memeId}&userId=${userId}`;
 
-      console.log('여기 보낼거임!', requestUrl);
+      console.log("여기 보낼거임!", requestUrl);
 
       const response = await axios.get(requestUrl, {
         headers: {
@@ -147,13 +165,13 @@ export const getCommentListAxiosThunk =
   };
 
 export const getBestCommentListAxiosThunk =
-  ( memeId: number): AppThunk =>
+  (memeId: number): AppThunk =>
   async (dispatch) => {
-
     const sendRequest = async () => {
-      const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/bestList?memeId=${memeId}`;
+      const userId = JSON.parse(sessionStorage.user).userId;
+      const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/bestList?memeId=${memeId}&userId=${userId}`;
 
-      console.log('여기 보낼거임!', requestUrl);
+      console.log("여기 보낼거임!", requestUrl);
 
       const response = await axios.get(requestUrl, {
         headers: {
@@ -182,17 +200,15 @@ export const getBestCommentListAxiosThunk =
     } catch (err) {
       console.log(err);
     }
-};
+  };
 
 export const getReplyListAxiosThunk =
-  ( memeId: number, commentId: number 
-    ): AppThunk =>
+  (memeId: number, commentId: number): AppThunk =>
   async (dispatch) => {
-
     const sendRequest = async () => {
       const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/reply?memeId=${memeId}&commentId=${commentId}`;
 
-      console.log('대댓글리스트 조회!', requestUrl);
+      console.log("대댓글리스트 조회!", requestUrl);
 
       const response = await axios.get(requestUrl, {
         headers: {
@@ -222,7 +238,6 @@ export const getReplyListAxiosThunk =
       console.log(err);
     }
   };
-
 
 export const commentListActions = commentListSlice.actions;
 export default commentListSlice.reducer;
