@@ -234,7 +234,7 @@ public class MemeService {
         Long check = memeRepository.count();
         List<MemeListResponse> result = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            Long randNum = random.nextLong(check.intValue())+1;
+            Long randNum = random.nextLong(check.intValue())+1L;
             Meme a = memeRepository.findById(randNum).get();
             MemeListResponse temp = MemeListResponse.builder()
                     .description(a.getContent())
