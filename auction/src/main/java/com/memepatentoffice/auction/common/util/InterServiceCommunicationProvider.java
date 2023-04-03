@@ -32,7 +32,7 @@ public class InterServiceCommunicationProvider {
                 return Optional.of(respBody);
             }
             else{
-                log.info("InterServiceCommunicationProvider returned "+response.code()+" by "+url);
+                log.error("InterServiceCommunicationProvider returned "+response.code()+" by "+url);
                 return Optional.empty();
             }
         }catch (IOException ex){
@@ -40,10 +40,10 @@ public class InterServiceCommunicationProvider {
         }
     }
     public Optional<String> findUserById(Long userId){
-        return getResponsefromOtherServer(MPOFFICE_SERVER_URL+"/api/mpoffice/user/info/"+userId);
+        return getResponsefromOtherServer(MPOFFICE_SERVER_URL+"/user/"+userId);
     }
     public Optional<String> findMemeById(Long memeId){
-        return getResponsefromOtherServer(MPOFFICE_SERVER_URL+"/api/mpoffice/meme?memeId="+memeId);
+        return getResponsefromOtherServer(MPOFFICE_SERVER_URL+"/meme/"+memeId);
     }
     public boolean existsUserById(Long userId){
         return findUserById(userId).isPresent();
