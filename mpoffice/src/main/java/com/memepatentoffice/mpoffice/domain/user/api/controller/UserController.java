@@ -2,6 +2,7 @@ package com.memepatentoffice.mpoffice.domain.user.api.controller;
 
 import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
 import com.memepatentoffice.mpoffice.common.Exception.UserAlreadyExistsException;
+import com.memepatentoffice.mpoffice.domain.meme.api.service.GcpService;
 import com.memepatentoffice.mpoffice.domain.user.api.request.SocialRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserSignUpRequest;
 import com.memepatentoffice.mpoffice.domain.user.api.request.UserUpdateRequest;
@@ -16,7 +17,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,6 +27,7 @@ import java.util.List;
 @RequestMapping("api/mpoffice/user")
 @RestController
 public class UserController {
+    private final GcpService gcpService;
     private final UserService userService;
 
 //    @ApiResponse(responseCode = "200", description = "회원가입 성공", content = @Content(schema = @Schema(implementation = UserSignUpResponse.class)))
@@ -69,7 +73,11 @@ public class UserController {
 //    @Operation(description = "회원정보 수정 API", summary = "회원정보 수정 API")
     @PostMapping("/update")
     @ResponseBody
-    public ResponseEntity updateUser(@RequestBody UserUpdateRequest userUpdateRequest) throws NotFoundException {
+    public ResponseEntity updateUser(@RequestPart UserUpdateRequest userUpdateRequest ,@RequestParam(required = false, name = "profileImage") MultipartFile profileImage) throws NotFoundException, IOException {
+        if(!profileImage.isEmpty()){
+            String img = gcpService.uploadFile(profileImage);
+            userUpdateRequest.setUserImage(img);
+        }
         Long id = userService.updateUser(userUpdateRequest);
         return ResponseEntity.status(HttpStatus.OK).body(id);
     }
