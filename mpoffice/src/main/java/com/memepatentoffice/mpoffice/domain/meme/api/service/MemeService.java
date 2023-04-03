@@ -342,4 +342,20 @@ public class MemeService {
         }
         return result;
     }
+
+    public MemeResponse findById(Long memeId) throws NotFoundException{
+        Meme a = memeRepository.findById(memeId).orElseThrow(()-> new NotFoundException("해당하는 밈이 없읍ㄴ디ㅏ...."));
+
+        MemeResponse result = MemeResponse.builder()
+                .id(a.getId())
+                .memeImage(a.getImageurl())
+                .content(a.getContent())
+                .createdAt(a.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                .searched(a.getSearched())
+                .ownerNickname(a.getOwner().getNickname())
+                .situation(a.getSituation())
+                .title(a.getTitle())
+                .build();
+        return result;
+    }
 }

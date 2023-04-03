@@ -61,32 +61,36 @@ public class CommentController {
 //    }
 
     @GetMapping("/bestList")
-    public ResponseEntity BestList(@RequestParam(name = "memeId") Long memeId,@PageableDefault(value = 3) Pageable pageable){
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.findTop(memeId));
+    public ResponseEntity BestList(@RequestParam(name = "memeId") Long memeId,
+                                   @RequestParam(name = "userId") Long userId,
+                                   @PageableDefault(value = 3) Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.findTop(memeId,userId));
     }
     @GetMapping("/list")
     // 최신순으로 받기
     public ResponseEntity CommentList(
                                       @RequestParam(name = "memeId") Long memeId,
+                                      @RequestParam(name = "userId") Long userId,
                                       @RequestParam(required = false,name = "id1")Long id1,
                                       @RequestParam(required = false,name = "id2")Long id2,
                                       @RequestParam(required = false,name = "id3")Long id3,
                                       @PageableDefault(value = 8) Pageable pageable){
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.findLatest(memeId,id1,id2,id3,pageable));
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.findLatest(memeId,userId,id1,id2,id3,pageable));
     }
 
     @GetMapping("/reply")
     // 대댓글받기
     public ResponseEntity ReplyList(
             @RequestParam(name = "memeId") Long memeId,
+            @RequestParam(name = "userId") Long userId,
             @RequestParam(name = "commentId") Long commentId,
             @PageableDefault(value = 8) Pageable pageable){
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.findReply(memeId,commentId,pageable));
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.findReply(memeId,userId,commentId,pageable));
     }
 
     @PostMapping("/delete")
     @ResponseBody
-    public ResponseEntity deleteComment(@RequestBody  CommentDeleteRequest commentDeleteRequest)throws NotFoundException{
+    public ResponseEntity deleteComment(@RequestBody CommentDeleteRequest commentDeleteRequest)throws NotFoundException{
         String result = commentService.deleteComment(commentDeleteRequest);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }

@@ -160,20 +160,20 @@ public class CommentService {
 //        return result;
 //    }
 
-    public Slice<CommentResponse> findTop(Long memeId){
-        Slice<Object> temp = commentRepository.findBestThreeComment(memeId, PageRequest.of(0,3));
+    public Slice<CommentResponse> findTop(Long memeId,Long userId){
+        Slice<Object> temp = commentRepository.findBestThreeComment(memeId, userId,PageRequest.of(0,3));
         Slice<CommentResponse> result = convertToDtoTop(temp);
         return result;
     }
 
-    public Slice<CommentResponse> findLatest(Long memeId,Long id1, Long id2, Long id3, Pageable pageable){
-        List<Object> temp =commentRepository.findLatestComment(memeId,id1,id2,id3);
+    public Slice<CommentResponse> findLatest(Long memeId,Long userId, Long id1, Long id2, Long id3, Pageable pageable){
+        List<Object> temp =commentRepository.findLatestComment(memeId,userId,id1,id2,id3);
         List<CommentResponse> result = convertToDtoLatest(temp);
         return SliceConverter.convert(result, pageable.getPageNumber(), pageable.getPageSize());
     }
 
-    public Slice<ReplyResponse> findReply(Long memeId, Long commentId ,Pageable pageable){
-        List<Object> temp =commentRepository.findReplyComment(memeId,commentId);
+    public Slice<ReplyResponse> findReply(Long memeId, Long userId,Long commentId ,Pageable pageable){
+        List<Object> temp =commentRepository.findReplyComment(memeId,userId,commentId);
         List<ReplyResponse> result = convertToDtoReply(temp);
         return SliceConverter.convert(result, pageable.getPageNumber(), pageable.getPageSize());
     }

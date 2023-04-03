@@ -120,4 +120,10 @@ public class UserController {
             throw new UserAlreadyExistsException("EmailAlreadyExists");
         }
     }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity getUserInfo(Long userId) throws  NotFoundException{
+            return  ResponseEntity.status(HttpStatus.OK).body(userService.getUserInfo(userId));
+    }
+
 }
