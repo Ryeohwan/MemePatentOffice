@@ -7,10 +7,12 @@ import styles from "./NotInputArea.module.css";
 const NotInputArea: React.FC = () => {
   // axios 데이터 받아오기
   const {data: memeCnt, isLoading: cntLoading, sendRequest: cntRequest} = useAxios();
+  const {data: searchRanking, isLoading: rankingLoading, sendRequest: rankingRequest} = useAxios();
 
   // 1.등록된 밈 수  -> , 넣는걸로 custom
   useEffect(() => {
     cntRequest({url: `/api/mpoffice/meme/total`})
+    // rankingRequest({url: })
   }, [])
 
   // dummy
@@ -68,7 +70,7 @@ const NotInputArea: React.FC = () => {
 
   return ( 
     <div className={styles.compContainer}>
-      <p className={styles.pageCnt}>등록된 밈 수 {!cntLoading && `${memeCnt}건`}</p>
+      <p className={styles.pageCnt}>등록된 밈 수 {!cntLoading && memeCnt && `${memeCnt}건`}</p>
 
       <div className={styles.rankingCompContainer}>
         

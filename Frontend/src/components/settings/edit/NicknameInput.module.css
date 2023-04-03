@@ -1,7 +1,3 @@
-.titleInputContainer {
-  margin: 20px 0;
-}
-
 .inputContainer {
   border: 1px solid var(--section-line-color);
   border-radius: 6px;
@@ -9,13 +5,14 @@
   height: 50px;
   padding: 1% 2%;
   display: flex;
+  margin-top: 0.5rem;
 }
 
 .inputBox {
   border: none;
   width: 95%;
   height: 100%;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .inputBox:focus {
@@ -23,7 +20,7 @@
 }
 
 .inputBox::placeholder {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--disabled-gray-color);
 }
 

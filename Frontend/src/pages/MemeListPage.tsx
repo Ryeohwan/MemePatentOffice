@@ -1,8 +1,6 @@
 // meme list page (/meme-list)
-import { useDispatch, useSelector } from "react-redux";
-
+import { useSelector } from "react-redux";
 import { RootState } from "store/configStore";
-import { useAppDispatch } from "hooks/useAppDispatch";
 
 import MemeListSearch from "components/meme/list/MemeListSearch";
 import NotInputArea from "components/meme/list/NotInputArea";

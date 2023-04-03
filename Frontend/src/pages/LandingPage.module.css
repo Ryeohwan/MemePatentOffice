@@ -12,15 +12,15 @@
 }
 
 .logowrapper > span {
-  margin-top: 30%;
-  margin-bottom: 10%;
+  margin-top: 45%;
+  margin-bottom: 3%;
   width: 50%;
   height: 30%;
 }
 
 .logowrapper > span > img {
   width: 100%;
-  height: 100%;
+  height: 95%;
 }
 
 .logowrapper > button {
@@ -47,8 +47,8 @@
 
 .logowrapper > p {
   font-weight: bolder;
-  font-size: 20px;
-  color: var(--point-color);
+  font-size: 24px;
+  color: var(--navy-color);
 }
 
 .logowrapper > button {
