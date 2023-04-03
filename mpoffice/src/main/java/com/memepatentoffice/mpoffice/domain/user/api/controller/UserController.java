@@ -73,7 +73,7 @@ public class UserController {
 //    @Operation(description = "회원정보 수정 API", summary = "회원정보 수정 API")
     @PostMapping("/update")
     @ResponseBody
-    public ResponseEntity updateUser(@RequestBody UserUpdateRequest userUpdateRequest) throws NotFoundException, IOException {
+    public ResponseEntity updateUser(@RequestBody UserUpdateRequest userUpdateRequest) throws NotFoundException {
         Long id = userService.updateUser(userUpdateRequest);
         return ResponseEntity.status(HttpStatus.OK).body(id);
     }

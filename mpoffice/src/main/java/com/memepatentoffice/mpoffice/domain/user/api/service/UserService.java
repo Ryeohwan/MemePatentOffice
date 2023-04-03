@@ -77,7 +77,7 @@ public class UserService {
     }
 
     @Transactional
-    public Long updateUser(UserUpdateRequest userUpdateRequest) throws NotFoundException, IOException {
+    public Long updateUser(UserUpdateRequest userUpdateRequest) throws NotFoundException {
         User user = userRepository.findById(userUpdateRequest.getId())
                 .orElseThrow(()-> new NotFoundException("해당하는 유저가 없습니다."));
         if(userUpdateRequest.getNickname() != null){
