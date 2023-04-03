@@ -245,6 +245,7 @@ public class CommentService {
             String profileImage = (String) arr[5];
             Long heartCnt = (Long)arr[6];
             Boolean liked = (Boolean) arr[7];
+
             Comment c = commentRepository.findById(id).get();
             int count = 0;
             if(userCommentLikeRepository.existsByUserIdAndCommentId(c.getUser().getId(),c.getId())){
