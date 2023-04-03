@@ -49,6 +49,8 @@ public class MemeController {
         memeCreateRequest.setImageUrl(img);
         Long id = memeService.createMeme(memeCreateRequest);
         return ResponseEntity.status(HttpStatus.OK).body(id);
+        
+        // 갑자기 문제가 생겼다 말았다함
     }
     @PostMapping("/createList")
     @ResponseBody
