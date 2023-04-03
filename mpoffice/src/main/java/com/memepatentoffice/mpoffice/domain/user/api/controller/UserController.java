@@ -73,11 +73,7 @@ public class UserController {
 //    @Operation(description = "회원정보 수정 API", summary = "회원정보 수정 API")
     @PostMapping("/update")
     @ResponseBody
-    public ResponseEntity updateUser(@RequestPart UserUpdateRequest userUpdateRequest ,@RequestParam(required = false, name = "profileImage") MultipartFile profileImage) throws NotFoundException, IOException {
-        if(!profileImage.isEmpty()){
-            String img = gcpService.uploadFile(profileImage);
-            userUpdateRequest.setUserImage(img);
-        }
+    public ResponseEntity updateUser(@RequestBody UserUpdateRequest userUpdateRequest) throws NotFoundException {
         Long id = userService.updateUser(userUpdateRequest);
         return ResponseEntity.status(HttpStatus.OK).body(id);
     }
