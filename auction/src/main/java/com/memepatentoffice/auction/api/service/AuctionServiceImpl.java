@@ -18,7 +18,6 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -46,8 +45,10 @@ public class AuctionServiceImpl implements AuctionService{
 
     @Transactional
     @Override
-    public Long enrollAuction(AuctionCreationReq req) throws NotFoundException, IOException {
-        //TODO: 밈 번호 유효성 검사, 판매자 유효성 검사
+    public Long enrollAuction(AuctionCreationReq req) throws NotFoundException{
+        if(!isp.existsMemeById(req.getMemeId())) throw new NotFoundException("유효하지 않은 밈 아이디입니다");
+        if(!isp.existsUserById(req.getSellerId())) throw new NotFoundException("유효하지 않은 판매자 아이디입니다");
+
         log.info(req.toString());
         Long auctionId = auctionRepository.save(Auction.builder()
                         .memeId(req.getMemeId())
@@ -64,7 +65,6 @@ public class AuctionServiceImpl implements AuctionService{
 
         new Timer().schedule(
                 new AuctionStarter(auctionId),
-                //java.util.Date타입
                 startDate
         );
         new Timer().schedule(
@@ -77,7 +77,6 @@ public class AuctionServiceImpl implements AuctionService{
 
     @Override
     public void sendChat(WebSocketChatReq req){
-        //TODO: 옥션 id, 유저 id존재하는지 확인
         Long auctionId = req.getAuctionId();
         WebSocketChatRes res = WebSocketChatRes.builder()
                 .auctionId(auctionId)
