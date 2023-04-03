@@ -17,7 +17,7 @@ const NewComment: React.FC = () => {
   const [replyStatus, setReplyStatus] = useState(false);
 
   const userId = JSON.parse(sessionStorage.user).userId;
-  const parentId = useSelector<RootState, number | null>(
+  const nowParentId = useSelector<RootState, number | null>(
     (state) => state.commentList.nowParentId
   );
   const parentName = useSelector<RootState, string | null>(
@@ -26,33 +26,24 @@ const NewComment: React.FC = () => {
 
   const params = useParams();
   const memeid = parseInt(params.meme_id!, 10);
-  const { data, sendRequest } = useAxios();
+  const { data: postCommentResponseData, sendRequest: postCommentRequest } = useAxios();
 
   // 댓글 post
   const commentSubmitHandler = (e: React.FormEvent) => {
     e.preventDefault();
     const enteredComment = commentInputRef.current!.value;
-    console.log(parentId, userId, memeid, enteredComment);
-    sendRequest({
+    console.log(nowParentId, userId, memeid, enteredComment);
+    postCommentRequest({
       url: "/api/mpoffice/meme/comment/create",
       method: "POST",
       data: {
         userId: userId,
         memeId: memeid,
         content: enteredComment,
-        parentId: parentId,
+        parentId: nowParentId,
       },
     });
   };
-
-  // 리덕스에서 가져온 parentId, parentName이 null이면 답글다는 중 컴포넌트 안 띄움
-  useEffect(() => {
-    if (parentId !== null) {
-      setReplyStatus(true);
-    } else {
-      setReplyStatus(false);
-    }
-  }, [parentId]);
 
   // 답글달기 취소 누르면 parentId, parentName null로 바꿈
   const onClickCancelReply = () => {
@@ -80,19 +71,32 @@ const NewComment: React.FC = () => {
     });
   }, []);
 
+  // 리덕스에서 가져온 parentId, parentName이 null이면 답글다는 중 컴포넌트 안 띄움
   useEffect(() => {
-    console.log(data);
-    if (data) {
-      commentInputRef.current!.value = "";
-      setUploadState(false);
+    if (nowParentId !== null) {
+      setReplyStatus(true);
+    } else {
+      setReplyStatus(false);
     }
-    // 댓글 post 후 받은 response가 답글이면 리덕스의 답글리스트에, 댓글이면 댓글리스트에
-    // if (data.parentId === null) {
-    //   dispatch(commentListActions.commentAddHandler(data));
-    // } else {
-    //   dispatch(commentListActions.replyAddHandler(data));
-    // }
-  }, [data]);
+  }, [nowParentId]);
+
+  // 댓글 작성 후 받은 post response => redux
+  useEffect(() => {
+    console.log("댓글 작성하고 받은 데이터", postCommentResponseData);
+    if (postCommentResponseData) {
+      commentInputRef.current!.value = "";
+      setReplyStatus(false);
+      setUploadState(false);
+      dispatch(commentListActions.changeNowParentId(null));
+      dispatch(commentListActions.changeNowParentName(null));
+      // 댓글 post 후 받은 response가 답글이면 리덕스의 답글리스트에, 댓글이면 댓글리스트에
+      if (postCommentResponseData.parentId === null) {
+        dispatch(commentListActions.commentAddHandler(postCommentResponseData));
+      } else if (postCommentResponseData.parentId !== null ){
+        dispatch(commentListActions.replyAddHandler(postCommentResponseData));
+      }
+    }
+  }, [postCommentResponseData]);
 
   return (
     <div className={styles.newCommentContainer}>

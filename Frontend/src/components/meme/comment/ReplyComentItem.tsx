@@ -51,7 +51,6 @@ const ReplyCommentItem:React.FC<ReplyCommentItemProps> = ({ writerImg, writerNic
         </div>
 
         <div className={styles.userReaction}>
-          <div>답글 달기</div>
           {userNickname === writerNickname && <div onClick={deleteReplyHandler}>삭제</div>}
         </div>
       </div>

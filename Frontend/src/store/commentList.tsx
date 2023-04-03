@@ -27,6 +27,7 @@ interface initialStateInterface {
   loadingMoreNewCommentList: boolean;
   loadingBestCommentList: boolean;
   result: boolean;
+  nowHeartCnt: number;
 }
 
 const initialState: initialStateInterface = {
@@ -38,7 +39,8 @@ const initialState: initialStateInterface = {
   loadingNewCommentList: false,
   loadingMoreNewCommentList: false,
   loadingBestCommentList: false,
-  result: false
+  result: false,
+  nowHeartCnt: 0,
 };
 
 const commentListSlice = createSlice({
@@ -54,28 +56,6 @@ const commentListSlice = createSlice({
     },
     getReplyCommentList: (state, actions) => {
       state.replyCommentList = actions.payload;
-    },
-
-    // 댓글 좋아요, 좋아요 취소
-    toggleLike: (state, actions) => {
-      for (let i = 0; i < state.commentNewList.length; i++) {
-        if (state.commentNewList[i].id === actions.payload.id) {
-          state.commentNewList[i].liked =
-            state.commentNewList[i].liked === false ? true : false;
-          state.commentNewList[i].heartCnt +=
-            state.commentNewList[i].liked === false ? 1 : -1;
-          break;
-        }
-      }
-      for (let i = 0; i < state.commentBestList.length; i++) {
-        if (state.commentBestList[i].id === actions.payload.id) {
-          state.commentBestList[i].liked =
-            state.commentBestList[i].liked === false ? true : false;
-          state.commentBestList[i].heartCnt +=
-            state.commentBestList[i].liked === false ? 1 : -1;
-          break;
-        }
-      }
     },
 
     changeResult(state, actions) {
@@ -95,11 +75,11 @@ const commentListSlice = createSlice({
 
     // 댓글 입력 시
     commentAddHandler: (state, actions) => {
-      state.commentNewList = [...actions.payload, ...state.commentNewList];
+      state.commentNewList = [actions.payload, ...state.commentNewList];
     },
     // 대댓글 입력 시
     replyAddHandler: (state, actions) => {
-        state.replyCommentList = [ ...state.replyCommentList, ...actions.payload];
+        state.replyCommentList = [ ...state.replyCommentList, actions.payload];
     },
 
     // 댓글 삭제
@@ -120,6 +100,10 @@ const commentListSlice = createSlice({
         state.nowParentName = actions.payload;
     },
 
+    // 좋아요 시 좋아요 개수 바꾸기
+    changeNowHeartCnt: (state, actions) => {
+      state.nowHeartCnt = actions.payload;
+    }
   },
 });
 

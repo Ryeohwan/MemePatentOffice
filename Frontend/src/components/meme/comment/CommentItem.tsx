@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import styles from "./CommentItem.module.css";
-import { commentType } from "store/commentList";
+import commentList, { commentType } from "store/commentList";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/configStore";
@@ -16,7 +16,7 @@ interface CommentType {
 }
 
 const CommentItem: React.FC<CommentType> = (comment) => {
-  const userNickname = JSON.parse(sessionStorage.getItem('user')!).nickname;
+  const userNickname = JSON.parse(sessionStorage.getItem("user")!).nickname;
   const userId = JSON.parse(sessionStorage.user).userId;
   const params = useParams();
   const memeid = parseInt(params.meme_id!, 10);
@@ -25,15 +25,20 @@ const CommentItem: React.FC<CommentType> = (comment) => {
   const commentId = comment.items.id;
   const writerProfileImg = comment.items.profileImage;
   const date = new Date(comment.items.date);
-  const commentDate = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
-//   date = new Date('2013-03-10T02:00:00Z');
-// date.getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
+  const commentDate =
+    date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+  // date = new Date('2013-03-10T02:00:00Z');
+  // date.getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate();
   const commentText = comment.items.content;
   const heart = comment.items.liked;
-  const heartNum = comment.items.heartCnt;
   const best = comment.items.best;
   const replyCnt = comment.items.replyCommentCnt;
-  const replyCommentList = useSelector<RootState, commentType[]>((state) => state.commentList.replyCommentList);
+  const replyCommentList = useSelector<RootState, commentType[]>(
+    (state) => state.commentList.replyCommentList
+  );
+  const heartNum = useSelector<RootState, number>(
+    (state) => state.commentList.nowHeartCnt
+  );
 
   const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
@@ -44,34 +49,41 @@ const CommentItem: React.FC<CommentType> = (comment) => {
 
   // 좋아요 눌렀을 때 내가 이미 좋아한 댓글이면 좋아요 취소, 아니면 좋아요 => 좋아요 개수 -1, +1
   const handleHeart = () => {
+    // 좋아요 토글
     setHeartStatus(!heartStatus);
-  };
-  
-  useEffect(() => {
-    dispatch(commentListActions.toggleLike({ id: comment.items.id }));
-    console.log(heartStatus)
+    // 좋아하면 +1, 취소면 -1
+    if (heartStatus) {
+      dispatch(commentListActions.changeNowHeartCnt(heartNum - 1));
+    } else {
+      dispatch(commentListActions.changeNowHeartCnt(heartNum + 1));
+    }
     postCommentRequest({
       url: `/api/mpoffice/meme/comment/like?state=${heartStatus}`,
       method: "POST",
       data: {
         commentId: commentId,
-        userId: userId
-      }
+        userId: userId,
+      },
     });
-  }, [heartStatus]);
+  };
+
+  // 렌더링 즉시 좋아요 개수 바꿈
+  useEffect(() => {
+    dispatch(commentListActions.changeNowHeartCnt(comment.items.heartCnt));
+  }, []);
 
   // 답글달기 클릭하면 redux의 parentId, parentName 바꿈
   const uploadReply = () => {
     dispatch(commentListActions.changeNowParentId(commentId));
     dispatch(commentListActions.changeNowParentName(commentWriterName));
   };
-  
+
   // 답글 더보기 눌렀을 때 답글 가져옴
   const onClickViewReply = () => {
     appDispatch(getReplyListAxiosThunk(memeid, commentId));
     setClickViewReply(!clickViewReply);
   };
-  
+
   const onClickDelete = () => {
     deleteCommentRequest({
       url: "/api/mpoffice/meme/comment/delete",
@@ -79,12 +91,11 @@ const CommentItem: React.FC<CommentType> = (comment) => {
       data: {
         userId: userId,
         memeId: memeid,
-        commentId: commentId
-      }
+        commentId: commentId,
+      },
     });
-    dispatch(commentListActions.commentDeleteHandler(comment.items.id));
+    dispatch(commentListActions.commentDeleteHandler(commentId));
   };
-
 
   return (
     <div className={styles.commentItemContainer}>
@@ -95,7 +106,6 @@ const CommentItem: React.FC<CommentType> = (comment) => {
       <div className={styles.commentInfoWrapper}>
         <div className={styles.commentHeader}>
           <div className={styles.commentUserName}>{commentWriterName}</div>
-
 
           {/* 날짜 형식 바꾸고 넣기 */}
           <div className={styles.commentTime}>3주 전</div>
@@ -111,23 +121,20 @@ const CommentItem: React.FC<CommentType> = (comment) => {
                 className={styles.heartFilledIcon}
               />
             ) : (
-              <Icon
-                icon="clarity:heart-line"
-                className={styles.heartIcon}
-              />
+              <Icon icon="clarity:heart-line" className={styles.heartIcon} />
             )}
           </div>
         </div>
 
         <div className={styles.userReaction}>
-          {heartNum !==0 && <div>좋아요 {heartNum}개</div>}
+          {heartNum !== 0 && <div>좋아요 {heartNum}개</div>}
           <div onClick={uploadReply}>답글 달기</div>
           {userNickname === commentWriterName ? (
             <div onClick={onClickDelete}>삭제</div>
           ) : null}
         </div>
 
-        {replyCnt !== 0 && (
+        {replyCnt !== 0 ? (
           <div>
             {!clickViewReply ? (
               <div className={styles.replyContainer}>
@@ -146,8 +153,34 @@ const CommentItem: React.FC<CommentType> = (comment) => {
                 </div>
                 {replyCommentList.map((item) => {
                   return (
+                    <>
+                      {item.parentId === commentId && (
+                        <ReplyCommentItem
+                          key={item.id}
+                          writerImg={item.profileImage}
+                          writerNickname={item.nickname}
+                          createdAt={item.date}
+                          content={item.content}
+                          userNickname={userNickname}
+                          userId={userId}
+                          memeid={memeid}
+                          id={item.id}
+                        />
+                      )}
+                    </>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        ) : (
+          <div>
+            {replyCommentList.map((item) => {
+              return (
+                <>
+                  {item.parentId === commentId && (
                     <ReplyCommentItem
-                      key={commentId}
+                      key={item.id}
                       writerImg={item.profileImage}
                       writerNickname={item.nickname}
                       createdAt={item.date}
@@ -157,10 +190,10 @@ const CommentItem: React.FC<CommentType> = (comment) => {
                       memeid={memeid}
                       id={item.id}
                     />
-                  );
-                })}
-              </div>
-            )}
+                  )}
+                </>
+              );
+            })}
           </div>
         )}
       </div>
