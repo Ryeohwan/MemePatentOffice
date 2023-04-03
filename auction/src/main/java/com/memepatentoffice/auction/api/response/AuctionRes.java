@@ -1,14 +1,18 @@
 package com.memepatentoffice.auction.api.response;
 
+import lombok.Builder;
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
+@Builder
+@Getter
 public class AuctionRes {
     private String imageurl;
     private String title;
-    private String content;
-    private String creatorName;
-    private String sellerName;
+    private String sellerNickName;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private Long price;
+    private Long currentMaxPrice;
+    private int hit;
 }

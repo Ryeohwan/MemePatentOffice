@@ -26,6 +26,7 @@ public class Auction extends BaseEntity{
     private LocalDateTime startTime;
     @Column(name = "seller_id")
     private Long sellerId;
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private AuctionStatus status;
 
@@ -36,6 +37,7 @@ public class Auction extends BaseEntity{
         }
         else{
             log.warn("경매가 대기중이 아닌데 진행중으로 변경하려 합니다");
+            log.warn("현재 상태: "+this.status.toString());
             return false;
         }
     }
@@ -46,6 +48,7 @@ public class Auction extends BaseEntity{
         }
         else{
             log.warn("경매가 진행중이 아닌데 끝내려고 합니다");
+            log.warn("현재 상태"+this.status.toString());
             return false;
         }
     }
