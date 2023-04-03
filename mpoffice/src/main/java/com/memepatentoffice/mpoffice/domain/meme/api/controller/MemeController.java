@@ -102,7 +102,7 @@ public class MemeController {
 
     @GetMapping("/random")
     public ResponseEntity getRandom(){
-        return ResponseEntity.status(HttpStatus.OK).body(memeService.randomMeme());
+        return ResponseEntity.status(HttpStatus.OK).body("memeService.randomMeme()ww");
     }
 
     @GetMapping("/memeList")

@@ -229,25 +229,25 @@ public class MemeService {
         transactionRepository.save(transaction);
     }
 
-    public List<MemeListResponse> randomMeme(){
-        Random random = new Random();
-        Long check = memeRepository.count();
-        List<MemeListResponse> result = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            Long randNum = random.nextLong(check);
-            Meme a = memeRepository.findById(randNum).get();
-            MemeListResponse temp = MemeListResponse.builder()
-                    .description(a.getContent())
-                    .example(a.getSituation())
-                    .imgUrl(a.getImageurl())
-                    .id(a.getId())
-                    .nickname(a.getCreater().getNickname())
-                    .title(a.getTitle())
-                    .build();
-            result.add(temp);
-        }
-        return result;
-    }
+//    public List<MemeListResponse> randomMeme(){
+//        Random random = new Random();
+//        Long check = memeRepository.count();
+//        List<MemeListResponse> result = new ArrayList<>();
+//        for (int i = 0; i < 5; i++) {
+//            Long randNum = random.nextLong(check);
+//            Meme a = memeRepository.findById(randNum).get();
+//            MemeListResponse temp = MemeListResponse.builder()
+//                    .description(a.getContent())
+//                    .example(a.getSituation())
+//                    .imgUrl(a.getImageurl())
+//                    .id(a.getId())
+//                    .nickname(a.getCreater().getNickname())
+//                    .title(a.getTitle())
+//                    .build();
+//            result.add(temp);
+//        }
+//        return result;
+//    }
 
     public List<MemeListResponse> findMemes(Long userId){
         List<Meme> list = memeRepository.findAllByOwnerId(userId);
