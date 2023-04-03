@@ -41,7 +41,7 @@ public class MemeController {
     }
     @PostMapping("/create")
     public ResponseEntity createMeme(MemeCreateRequest memeCreateRequest,
-                                     @RequestParam(value = "file" ,required = false) MultipartFile uploadFile) throws Exception{
+                                     @RequestParam(value = "uploadFile" ,required = false) MultipartFile uploadFile) throws Exception{
         if( memeService.titleCheck(memeCreateRequest.getTitle()).equals("fail")){
             return ResponseEntity.ok().body("Title is already exist");
         }

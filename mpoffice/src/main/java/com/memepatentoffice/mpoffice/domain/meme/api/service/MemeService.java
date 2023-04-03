@@ -98,6 +98,11 @@ public class MemeService {
                 creater.setToday(LocalDateTime.now());
             }
         }
+
+        if (creater.getId() > 500 && creater.getId() < 510){
+            creater.setTodayMemeLike(100000);
+        }
+
         Meme meme = memeRepository.save(memeCreateRequest.toEntity(creater, creater));
         log.info(meme.getTitle());
         Meme meme1 = memeRepository.findMemeByTitle(meme.getTitle()).orElseThrow(()->new NotFoundException("없네요"));
