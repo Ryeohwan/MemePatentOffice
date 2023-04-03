@@ -6,6 +6,4 @@ import com.memepatentoffice.auction.common.exception.NotFoundException;
 public interface BidService {
 
     Long bid(BidReq bidReq) throws NotFoundException, BiddingException;
-
-
 }
