@@ -14,7 +14,7 @@ const Navbar: React.FC = () => {
     <nav className={styles.navbar}>
         <NavLink to="/main" className={`${styles.navLink} ${styles.logoContainer}`}>
             <img src={logo} alt="logo" className={styles.logoImg} />
-            <p className={styles.logoTxt}>MEME</p>
+            <p className={styles.logoTxt}>밈 특허청</p>
         </NavLink>
 
       <div className={styles.rightContainer}>
