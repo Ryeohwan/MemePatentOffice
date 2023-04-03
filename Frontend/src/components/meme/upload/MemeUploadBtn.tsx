@@ -157,6 +157,7 @@ const MemeUploadBtn: React.FC = () => {
   const submitHandler = async (data: {tokenId: number}) => {
     const memeCreateRequest = {
       content: info,
+      situation: situation,
       createrId: JSON.parse(sessionStorage.user).userId,
       title: title, 
       tokenId: data.tokenId,
