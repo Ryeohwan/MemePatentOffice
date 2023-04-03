@@ -28,17 +28,19 @@ public class AuctionController {
     @ApiOperation(value="경매 등록", notes = "경매를 예약합니다. 예약한 시간에 경매가 시작되고, 시작 후 1분 후에 끝납니다.")
     @PostMapping("/enroll")
     public ResponseEntity<?> enrollAuction(@RequestBody AuctionCreationReq auctionCreationReq) throws IOException, NotFoundException{
-        auctionService.enrollAuction(auctionCreationReq);
-        return ResponseEntity.status(HttpStatus.CREATED).body(null);
+        return ResponseEntity.status(HttpStatus.CREATED).body(auctionService.enrollAuction(auctionCreationReq));
     }
     @GetMapping("/list")
-    public ResponseEntity<?> getList(@RequestParam String sort){
+    public ResponseEntity<?> getList(@RequestParam String sort) throws NotFoundException{
         List<AuctionRes> auctionList = null;
         if("popular".equals(sort)){
             auctionList = auctionService.findAllByHit();
         }
         else if("latest".equals(sort)){
-            auctionList = auctionService.findAllByStartDate();
+            auctionList = auctionService.findAllProceedingByFinishTimeLatest();
+        }
+        else if("oldest".equals(sort)){
+            auctionList = auctionService.findAllProceedingByFinishTimeOldest();
         }
         return ResponseEntity.status(HttpStatus.OK).body(auctionList);
     }
