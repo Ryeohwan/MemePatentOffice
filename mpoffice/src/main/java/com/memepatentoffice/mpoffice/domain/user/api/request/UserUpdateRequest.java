@@ -11,9 +11,7 @@ import javax.annotation.Nullable;
 @NoArgsConstructor
 public class UserUpdateRequest {
     private Long id;
-    @Nullable
     private String nickname;
-    @Nullable
     private String userImage;
     @Builder
     public UserUpdateRequest(Long id, String nickname, String userImage) {
