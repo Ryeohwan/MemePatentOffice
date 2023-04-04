@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BidRepository extends JpaRepository<Bid, Long> {
-    Bid findTopByOrderByCreatedAtDesc();
 
     Optional<Bid> findTopByAuctionIdOrderByAskingpriceDesc(@Param("auctionId")Long auctionId);
 
