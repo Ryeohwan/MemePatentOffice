@@ -166,7 +166,7 @@ public class CommentService {
     }
 
     public Slice<CommentResponse> findLatest(Long memeId, Long userId,Long id1, Long id2, Long id3, Long idx, Pageable pageable){
-        if(idx == null){
+        if(idx == null || idx == 0L){
             idx = Long.MAX_VALUE;
         }
         List<Object> temp = commentRepository.findLatestComment(memeId,userId,id1,id2,id3,idx,PageRequest.of(0,8));
