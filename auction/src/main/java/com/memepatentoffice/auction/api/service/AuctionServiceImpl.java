@@ -104,7 +104,7 @@ public class AuctionServiceImpl implements AuctionService{
                 .startingPrice(auction.getStartingPrice())
                 .memeImgUrl(auction.getMemeImgUrl())
                 .biddingHistory(
-                        bidRepository.findByAuctionId(auctionId).stream()
+                        bidRepository.findByAuctionIdOrderByCreatedAtDesc(auctionId).stream()
                                 .map((bid)-> BiddingHistory.builder()
                                         .nickname(bid.getNickname())
                                         .price(bid.getAskingprice())
