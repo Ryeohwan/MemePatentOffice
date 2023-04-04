@@ -18,9 +18,6 @@ const NavbarHamburger: React.FC = () => {
   const { pathname } = useLocation() as RoutePath;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  // const userId = JSON.parse(sessionStorage.getItem('user')!).userId
-
   const { sendRequest } = useAxios();
 
   // click하면 dropmenu
@@ -101,7 +98,9 @@ const NavbarHamburger: React.FC = () => {
         user.walletAddress = account;
         sessionStorage.setItem("user", JSON.stringify(user));
 
+        setOpen(!open);
         alert("지갑 연결 성공!");
+        
       } else {
         alert("MetaMask를 설치해주세요.");
       }
@@ -126,7 +125,8 @@ const NavbarHamburger: React.FC = () => {
       />
 
       <Sidebar
-        className={account ? styles.loginDropContainer : styles.dropContainer}
+        // className={account ? styles.loginDropContainer : styles.dropContainer}
+        className={styles.dropContainer}
         visible={open}
         position="top"
         showCloseIcon={false}
@@ -151,7 +151,8 @@ const NavbarHamburger: React.FC = () => {
             경매 둘러보기
           </NavLink>
 
-          {!account && <div onClick={accountHandler}>지갑 연결하기</div>}
+          {/* {!account && <div onClick={accountHandler}>지갑 연결하기</div>} */}
+          <div onClick={accountHandler}>지갑 연결하기</div>
 
           <div className={styles.navLink} onClick={mypageHandler}>
             마이페이지
