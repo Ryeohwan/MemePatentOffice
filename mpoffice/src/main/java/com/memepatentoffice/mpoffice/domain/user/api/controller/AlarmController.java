@@ -40,7 +40,7 @@ public class AlarmController {
             @RequestParam(value = "user") Long userId,
             @RequestParam(value = "meme") Long memeId
     ) throws NotFoundException {
-        alarmService.addAlarm(auctionId, userId, memeId, AlarmType.AUCTION_REG);
+        alarmService.addAuctionAlarm(auctionId, userId, memeId, AlarmType.AUCTION_REG);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -50,7 +50,7 @@ public class AlarmController {
             @RequestParam(value = "user") Long userId,
             @RequestParam(value = "meme") Long memeId
     ) throws NotFoundException {
-        alarmService.addAlarm(auctionId, userId, memeId, AlarmType.AUCTION_START);
+        alarmService.addAuctionAlarm(auctionId, userId, memeId, AlarmType.AUCTION_START);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -60,7 +60,7 @@ public class AlarmController {
             @RequestParam(value = "user") Long userId,
             @RequestParam(value = "meme") Long memeId
     ) throws NotFoundException {
-        alarmService.addAlarm(auctionId, userId, memeId, AlarmType.AUCTION_END);
+        alarmService.addAuctionAlarm(auctionId, userId, memeId, AlarmType.AUCTION_END);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

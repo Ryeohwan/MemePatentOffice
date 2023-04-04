@@ -8,9 +8,11 @@ import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentInfoRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentLikeRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.CommentResponse;
+import com.memepatentoffice.mpoffice.domain.meme.api.response.ReplyResponse;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.CommentService;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.MemeService;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.CommentRepository;
+import com.memepatentoffice.mpoffice.domain.user.api.service.AlarmService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -30,6 +32,8 @@ public class CommentController {
     private final MemeService memeService;
     private final CommentService commentService;
 
+    private final AlarmService alarmService;
+
     @GetMapping("/check/{title}")
     public ResponseEntity titleDuplicatedcheck(@PathVariable String title){
         String result = memeService.titleCheck(title);
@@ -41,10 +45,16 @@ public class CommentController {
     public ResponseEntity createComment(@RequestBody CommentRequest commentRequest) throws NotFoundException {
         if(commentRequest.getParentId() != null){
             System.out.println("hi this is reply");
-            return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createReply(commentRequest));
+            ReplyResponse reply = commentService.createReply(commentRequest);
+            // Reply 알람 등록
+            alarmService.addReplyAlarm(reply.getId(), reply.getUserId(), commentRequest.getMemeId(), reply.getParentId());
+            return ResponseEntity.status(HttpStatus.CREATED).body(reply);
         }else{
             System.out.println("this is comment");
-            return ResponseEntity.status(HttpStatus.CREATED).body(commentService.createComment(commentRequest));
+            CommentResponse comment = commentService.createComment(commentRequest);
+            // Comment 알람등록
+            alarmService.addCommentAlarm(comment.getId(), commentRequest.getMemeId());
+            return ResponseEntity.status(HttpStatus.CREATED).body(comment);
         }
 
     }
