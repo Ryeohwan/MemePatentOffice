@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { memeUploadActions } from "store/memeUpload";
 import { RootState } from "store/configStore";
-import { memeOwnerAccess, mintMemeTokenContract } from "web3config";
+import { checkMyBalance, memeOwnerAccess, mintMemeTokenContract } from "web3config";
 
 import SubmitBtn from "components/common/elements/SubmitBtn";
 import CheckingModal from "components/auction/upload/CheckingModal";
@@ -48,7 +48,8 @@ const MemeUploadBtn: React.FC = () => {
   const apiToken = process.env.REACT_APP_CM_KEY;
 
   // mint 후 받는 tokenID
-const tokenId = useRef<number|boolean|undefined>()
+  const tokenId = useRef<number|boolean|undefined>();
+
 
   // 텍스트 유효성 검사 함수
   const textMonitor = async (textInput: string) => {
@@ -134,7 +135,7 @@ const tokenId = useRef<number|boolean|undefined>()
 
   // minting 함수
   const mintHandler = async () => {
-    const account = sessionStorage.getItem("account");
+    const account = JSON.parse(sessionStorage.getItem('user')!).walletAddress;
     try {
       if (!account) return false;
       console.log("upload 버튼에서 memeOwnerAccess 실행됨");

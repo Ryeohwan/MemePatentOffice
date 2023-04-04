@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { memeListActions } from "store/memeList";
@@ -6,9 +6,9 @@ import { memeListActions } from "store/memeList";
 import { Icon } from "@iconify/react";
 import { Sidebar } from "primereact/sidebar";
 import styles from "./NavbarHamburger.module.css";
-import { giveSignInCoin, web3 } from "web3config";
+import { checkMyBalance, giveSignInCoin, web3 } from "web3config";
 import useAxios from "hooks/useAxios";
-
+import { Divider } from "primereact/divider";
 
 interface RoutePath {
   pathname: string;
@@ -19,6 +19,9 @@ const NavbarHamburger: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { sendRequest } = useAxios();
+  const myBalance = useRef<number | undefined>();
+  // true일 땐 잔액을 보여주고, false일 땐 지갑 연결하기를 띄움
+  const [ showBalance, setShowBalance ] = useState(false);
 
   // click하면 dropmenu
   const [open, setOpen] = useState<boolean>(false);
@@ -58,11 +61,13 @@ const NavbarHamburger: React.FC = () => {
         let account = "";
         if (typeof accounts[0] === "string") {
           account = web3.utils.toChecksumAddress(accounts[0]);
-          console.log(account)
+          console.log(account);
         }
         // 유저 디비에 wallet_address가 null일 때만 코인 지급
-        const walletAddress = JSON.parse(sessionStorage.getItem('user')!).walletAddress;
-        const userId = JSON.parse(sessionStorage.getItem('user')!).userId;
+        const walletAddress = JSON.parse(
+          sessionStorage.getItem("user")!
+        ).walletAddress;
+        const userId = JSON.parse(sessionStorage.getItem("user")!).userId;
 
         // 최초로 연결한 지갑인 경우, 코인 지급하고 post address
         if (walletAddress === null) {
@@ -72,14 +77,14 @@ const NavbarHamburger: React.FC = () => {
             method: "POST",
             data: {
               userId: userId,
-              walletAddress: account
-            }
+              walletAddress: account,
+            },
           });
           console.log("최초 연결 지갑에 코인 지급");
         } else {
           // 이전에 등록했던 지갑과 동일한 경우, 패스
           if (walletAddress === account) {
-            console.log("이전에 등록한 지갑과 동일합니다")
+            console.log("이전에 등록한 지갑과 동일합니다");
           } else if (walletAddress !== account) {
             // 이전에 등록한 지갑은 존재하지만 지금 지갑과 다를 경우, 새로 post
             sendRequest({
@@ -87,23 +92,30 @@ const NavbarHamburger: React.FC = () => {
               method: "POST",
               data: {
                 userId: userId,
-                walletAddress: account
-              }
+                walletAddress: account,
+              },
             });
             console.log("1인당 코인 1회만 지급");
-          };
-        };
+          }
+        }
 
         const user = JSON.parse(sessionStorage.getItem("user")!);
         user.walletAddress = account;
         sessionStorage.setItem("user", JSON.stringify(user));
 
-        setOpen(!open);
         alert("지갑 연결 성공!");
-        
       } else {
         alert("MetaMask를 설치해주세요.");
       }
+      await checkBalance();
+      console.log("지갑 연결하자마자 잔액 조회", myBalance.current)
+      if (!myBalance.current|| myBalance.current===undefined) {
+        console.log("잔액 조회에 실패했습니다, 지갑 다시 연결해보셈")
+        setShowBalance(false);
+      } else {
+        setShowBalance(true);
+      }
+
     } catch (error) {
       console.log(error);
     }
@@ -112,6 +124,27 @@ const NavbarHamburger: React.FC = () => {
   const logoutHandler = () => {
     sessionStorage.clear();
     navigate("/");
+  };
+
+  // 잔액 조회
+  const checkBalance = async () => {
+    const account = JSON.parse(sessionStorage.getItem("user")!).walletAddress;
+    try {
+      if (!account) return false;
+      console.log("upload 버튼에서 잔액조회 실행됨");
+      await checkMyBalance()
+        .then((balance) => {
+          console.log("내 지갑 잔액:", balance);
+          myBalance.current = balance;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      return myBalance.current;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
   };
 
   return (
@@ -152,7 +185,7 @@ const NavbarHamburger: React.FC = () => {
           </NavLink>
 
           {/* {!account && <div onClick={accountHandler}>지갑 연결하기</div>} */}
-          <div onClick={accountHandler}>지갑 연결하기</div>
+          {showBalance ? <div>내 잔액 : {myBalance.current}</div> : <div onClick={accountHandler}>지갑 연결하기</div>}
 
           <div className={styles.navLink} onClick={mypageHandler}>
             마이페이지
