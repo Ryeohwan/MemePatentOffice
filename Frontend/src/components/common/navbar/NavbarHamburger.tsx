@@ -54,6 +54,10 @@ const NavbarHamburger: React.FC = () => {
         if (typeof(accounts[0]) === "string") {
           account = web3.utils.toChecksumAddress(accounts[0]);
         }
+
+        // 유저 디비에 wallet_address가 null일 때만 코인 지급
+        
+
         sessionStorage.setItem("account", account);
         alert("지갑 연결 성공!");
       } else {
