@@ -29,9 +29,9 @@ const AuctionPage: React.FC = () => {
       brokerURL: ENDPOINT,
 
       // 연결 확인
-      debug: function (str) {
-        console.log(str);
-      },
+      // debug: function (str) {
+      //   console.log(str);
+      // },
 
       // 재연결 시도
       reconnectDelay: 3000,
