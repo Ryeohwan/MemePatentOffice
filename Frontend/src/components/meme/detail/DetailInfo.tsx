@@ -16,7 +16,7 @@ const DetailInfo: React.FC = () => {
   const memeid = parseInt(params.meme_id!, 10);
   const userId = JSON.parse(sessionStorage.user).userId;
   const userNickname = JSON.parse(sessionStorage.getItem("user")!).nickname;
-
+  const [visible, setVisible] = useState<boolean>(false)
   // get meme detail info
   const { data, isLoading, status, sendRequest } = useAxios();
   // post like meme
@@ -144,6 +144,9 @@ const DetailInfo: React.FC = () => {
     }
   };
 
+  const modalVisibleHandler = (visible:boolean) => {
+    setVisible(visible)
+  }
   return (
     <>
       <div className={styles.memeDetailPage}>
@@ -224,12 +227,13 @@ const DetailInfo: React.FC = () => {
                       sellerId: JSON.parse(sessionStorage.getItem('user')!).userId,
                     })
                   );
+                  modalVisibleHandler(true)
                 }}
               >
                 이 NFT 경매 등록하러 가기
               </div>
             )}
-            <UploadModal />
+            <UploadModal visible={visible} modalHandler={modalVisibleHandler}/>
           </>
         ) : (
           <p>loading중</p>
