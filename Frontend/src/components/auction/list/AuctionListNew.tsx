@@ -13,6 +13,7 @@ const AuctionListNew: React.FC = () => {
     console.log("new get!");
     sendRequest({ url: `/api/auction/list?sort=latest` });
   }, []);
+  
 
   return (
     <div className={styles.auctionListCardContainer}>

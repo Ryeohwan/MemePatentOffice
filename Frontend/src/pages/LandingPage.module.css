@@ -14,13 +14,13 @@
 .logowrapper > span {
   margin-top: 45%;
   margin-bottom: 3%;
-  width: 50%;
-  height: 30%;
+  width: 15rem;
+  height: 15rem;
 }
 
 .logowrapper > span > img {
   width: 100%;
-  height: 95%;
+  height: 100%;
 }
 
 .logowrapper > button {
