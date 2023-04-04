@@ -205,7 +205,7 @@ public class MemeService {
                     .price(a.getPrice())
                     .createdAt(a.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                     .build();
-            buyerList.add(temp);
+            if(a.getPrice()!= 0) buyerList.add(temp);
         }
         List<Double> temp = transactionRepository.PricaRankList(meme.getId());
         Double high = temp.get(0);

@@ -10,23 +10,30 @@ import com.memepatentoffice.mpoffice.domain.meme.db.repository.SearchRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class MemeSearchService {
 
     private final MemeSearchRepository memeSearchRepository;
+    private final RedisTemplate<String, String> redisTemplate;
 
     private final SearchRepository searchRepository;
     public Slice<MemeListResponse> getMemeList(Long lastId, Pageable pageable, String searchText) {
         if(searchText != null){
             checkingSearched(searchText);
         }
+
+        redisTemplate.opsForZSet().incrementScore("ranking", searchText,1);
+
         return memeSearchRepository.searchMemeList(lastId, searchText, pageable);
     }
 
@@ -51,8 +58,18 @@ public class MemeSearchService {
     }
 
 //    public Slice<SearchResponse> getdailyBest(){
-//        List<Search> all = searchRepository.findAll();
+//        LocalDateTime a = LocalDateTime.now();
+//        LocalDateTime oneDayago = a.minusDays(1);
+//        List<Objects> all = searchRepository.findDailyRanking(a,oneDayago);
+//        List<SearchResponse> result = new ArrayList<>();
+//        int ranking = 1;
+//        for(O b: all){
+//            SearchResponse temp = SearchResponse.builder()
+//                    .rank(ranking)
+//                    .time(b.)
+//                    .build();
 //
+//        }
 //        return "a";
 //    }
 }
