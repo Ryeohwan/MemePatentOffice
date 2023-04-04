@@ -108,7 +108,6 @@ public class MemeSearchRepository {
         } else {
             return userMemeLike.date.max().desc();
         }
-        
     }
 
     // 무한 스크롤 방식 처리하는 메서드
