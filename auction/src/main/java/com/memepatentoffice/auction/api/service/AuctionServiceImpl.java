@@ -148,7 +148,7 @@ public class AuctionServiceImpl implements AuctionService{
                 .createdAt(bid.getCreatedAt())
                 .build();
 
-        simpMessageSendingOperations.convertAndSend("/sub/chat/"+bidReq.getAuctionId(), res);
+        simpMessageSendingOperations.convertAndSend("/sub/bid/"+bidReq.getAuctionId(), res);
         return bid.getId();
     }
 
