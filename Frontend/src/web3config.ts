@@ -844,11 +844,8 @@ export const saleMemeTokenContract = new web3.eth.Contract(
 
 // Minting
 export const memeOwnerAccess = async () => {
-	const userAccount = sessionStorage.getItem("account");
-    let account = "";
-        if (typeof(userAccount) === "string") {
-          account = web3.utils.toChecksumAddress(userAccount);
-        }
+	const account = JSON.parse(sessionStorage.getItem('user')!).walletAddress;
+  
 	const ownerAddress = "0xd8df17B6a1758c52eA81219b001547A2c2e3d789";
 	const privateKey = "0xcd3352d522fb229242472dddc60abc0831ba87db490573616e7cc43f4d179a28";
 	
@@ -884,16 +881,9 @@ export const memeOwnerAccess = async () => {
 // NFT 소유권 이전 (경매 후)
 export const transferNftOwnership = async (tokenId: number|undefined) => {
     console.log(tokenId)
-    const userAccount = sessionStorage.getItem("account");
-    let account = "";
-    if (typeof(userAccount) === "string") {
-      account = web3.utils.toChecksumAddress(userAccount);
-    }
-
+    
     // 소유권을 가져갈 주소 (경매 끝나고 최고가로 사들이는 사람의 지갑 주소)
     const yenniAccount = "0x062294073b003EEB03eBA75B668c54C290F8730a";
-    // 최고가
-    const price = 10 ;
 
     const ownerAddress = "0xd8df17B6a1758c52eA81219b001547A2c2e3d789";
     const privateKey = "0xcd3352d522fb229242472dddc60abc0831ba87db490573616e7cc43f4d179a28";
@@ -930,11 +920,7 @@ export const transferNftOwnership = async (tokenId: number|undefined) => {
 
 // 회원가입했을 때 코인 주기
 export const giveSignInCoin = async () => {
-	const userAccount = sessionStorage.getItem("account");
-    let account = "";
-    if (typeof(userAccount) === "string") {
-      account = web3.utils.toChecksumAddress(userAccount);
-    };
+	const account = JSON.parse(sessionStorage.getItem('user')!).walletAddress;
     const price = 10 ;
 
 	const ownerAddress = "0xd8df17B6a1758c52eA81219b001547A2c2e3d789";
@@ -974,12 +960,9 @@ export const giveSignInCoin = async () => {
 
 // 코인 거래 (경매 후) : userAccount가 yenniAccount에게 돈을 줘야 함 (판매자 : yenniAccount, 구매자 : userAccount)
 export const transferNftCoin = async () => {
-	const userAccount = sessionStorage.getItem("account");
-    let account = "";
-    if (typeof(userAccount) === "string") {
-      account = web3.utils.toChecksumAddress(userAccount);
-    }
-
+    // 구매자 (돈이 빠져나가는 지갑)
+	const account = JSON.parse(sessionStorage.getItem('user')!).walletAddress;
+    // 판매자 (돈이 들어가야할 지갑)
     const yenniAccount = "0x062294073b003EEB03eBA75B668c54C290F8730a";
     // 경매 거래가
     const price = 10 ;
@@ -1017,3 +1000,10 @@ export const transferNftCoin = async () => {
 		console.error("Signed transaction is undefined");
 	};
 };
+
+// 잔액 조회
+export const checkMyBalance = async () => {
+    const account = JSON.parse(sessionStorage.getItem('user')!).walletAddress;
+	const balanceLength = await saleMemeTokenContract.methods.balanceOf(account).call();
+    return balanceLength;
+}

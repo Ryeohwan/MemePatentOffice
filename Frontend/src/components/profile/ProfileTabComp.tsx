@@ -35,7 +35,7 @@ const ProfileTabComp: React.FC<Props> = ({
       <TabComp items={tabItems}>
         <Route path="/tab=nft" element={<ProfileNft nickname={nickname}/>} />
         <Route path="/tab=auction" element={<ProfileAuction nickname={nickname} />}
-        />
+      />
       </TabComp>
     </div>
   );
