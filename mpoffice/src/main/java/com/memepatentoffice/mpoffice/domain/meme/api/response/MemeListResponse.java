@@ -14,4 +14,5 @@ public class MemeListResponse {
     private String imgUrl;
     private String description;
     private String example;
+    private String userImg;
 }
