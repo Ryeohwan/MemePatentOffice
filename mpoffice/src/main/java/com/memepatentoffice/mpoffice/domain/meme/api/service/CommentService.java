@@ -166,7 +166,7 @@ public class CommentService {
     }
 
     public Slice<CommentResponse> findLatest(Long memeId, Long userId,Long id1, Long id2, Long id3, Long idx, Pageable pageable){
-        if(idx == null){
+        if(idx == null || idx == 0L){
             idx = Long.MAX_VALUE;
         }
         List<Object> temp = commentRepository.findLatestComment(memeId,userId,id1,id2,id3,idx,PageRequest.of(0,8));
@@ -175,6 +175,9 @@ public class CommentService {
     }
 
     public Slice<ReplyResponse> findReply(Long memeId, Long userId,Long commentId ,Long idx,Pageable pageable){
+        if(idx == null){
+            idx = 0L;
+        }
         List<Object> temp =commentRepository.findReplyComment(memeId,userId,commentId,idx,PageRequest.of(0,8));
         List<ReplyResponse> result = convertToDtoReply(temp);
         return checkReplyLastPage(pageable,result);

@@ -52,6 +52,7 @@ public class MemeSearchService {
 
 //    public Slice<SearchResponse> getdailyBest(){
 //        List<Search> all = searchRepository.findAll();
+//
 //        return "a";
 //    }
 }
