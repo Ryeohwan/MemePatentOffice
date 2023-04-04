@@ -22,7 +22,7 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
     @Query("SELECT e FROM Comment e JOIN UserCommentLike e2 " +
             "where e.id = e2.comment.id ORDER BY e.createdAt ASC")
     List<Comment> findCommentsByMemeId(Long id);
-    int countAllByParentCommentId(Long id);
+    int countAllByParentCommentIdAndMemeId(Long commentId,Long memeId);
 
 
     // 여기서 베스트 3개 id 를받습니다. - 여기서 인기순 정렬한 값
