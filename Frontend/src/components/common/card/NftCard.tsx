@@ -1,17 +1,11 @@
 import React, { useState } from "react";
 import NftCardFront from "components/common/card/NftCardFront";
 import NftCardBack from "components/common/card/NftCardBack";
+import {memeType} from 'store/memeList';
 import styles from "./NftCard.module.css";
 
 interface NftProps {
-  items: {
-    id: number;
-    nickname: string;
-    title: string;
-    imgUrl: string;
-    description: string;
-    example: string;
-  };
+  items: memeType;
 }
 
 const NftCard: React.FC<NftProps> = (nft) => {

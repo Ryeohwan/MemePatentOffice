@@ -1,15 +1,9 @@
 import React from "react";
+import {memeType} from 'store/memeList';
 import styles from "./NftCardFront.module.css";
-import haku from "assets/haku.png";
 
 interface NftProps {
-  items: {
-    id: number;
-    nickname: string;
-    title: string;
-    imgUrl: string;
-    description: string;
-  };
+  items: memeType;
 }
 
 const NftCardFront: React.FC<NftProps> = (nft) => {
@@ -29,7 +23,7 @@ const NftCardFront: React.FC<NftProps> = (nft) => {
   return (
     <div className={styles.nftCardWrapper}>
       <div className={styles.nftOwner}>
-        <img src={haku} alt="" className={styles.nftOwnerImg} />
+        <img src={nft.items.userImg} alt="" className={styles.nftOwnerImg} />
         <div className={styles.nftOwnerName}>{nft.items.nickname}</div>
       </div>
       <img src={NFT_imgUrl} alt="" className={styles.nftImg} />
