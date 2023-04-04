@@ -24,19 +24,19 @@ const NicknameInput: React.FC<Props> = ({
   const { data, isLoading, sendRequest } = useAxios();
 
   // nickname 유효성 검사 함수
-  const nickNameCheck = () => {
+  const nickNameCheck = (checkNickname: string) => {
     // 1. 영어 + 한글 + 숫자만
-    if (!nickname.match(/^[ㄱ-ㅎ가-힣a-zA-Z0-9]+$/)) {
+    if (!checkNickname.match(/^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z0-9 ]+$/)) {
       setErrorMsg("영어 한글 숫자로만 입력해주세요.");
       return false;
     }
     // 2. 최대 60글자
-    if (nickname.length > 60) {
-      setErrorMsg("최대 60글자로 입력해주세요.");
+    if (checkNickname.length > 10) {
+      setErrorMsg("최대 10글자로 입력해주세요.");
       return false;
     }
     // 3. MEME으로 시작하는지
-    if (nickname.startsWith("MEME")) {
+    if (checkNickname.startsWith("MEME")) {
       setErrorMsg("닉네임은 MEME으로 시작하실 수 없습니다.");
       return false;
     }
@@ -48,7 +48,9 @@ const NicknameInput: React.FC<Props> = ({
   // nickname 변할때마다
   useEffect(() => {
     setErrorMsg("");
-    if (!nickname) {
+    const checkNickname = nickname.trim()
+
+    if (!checkNickname) {
       setNicknameState(true);
       setNicknameLoading(false);
       return;
@@ -58,9 +60,9 @@ const NicknameInput: React.FC<Props> = ({
     // 유효성검사 통과하면 중복검사
     setNicknameLoading(true);
     const identifier = setTimeout(() => {
-      const checkRes = nickNameCheck();
+      const checkRes = nickNameCheck(checkNickname);
       if (checkRes) {
-        sendRequest({ url: `/api/mpoffice/user/nickName/${nickname}` });
+        sendRequest({ url: `/api/mpoffice/user/nickName/${checkNickname}` });
       } else {
         setNicknameState(false);
         setNicknameLoading(false);
