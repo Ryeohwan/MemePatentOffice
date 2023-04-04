@@ -272,11 +272,18 @@ public class AuctionServiceImpl implements AuctionService{
         @Transactional
         @Override
         public void run() {
-            //경매 체결하기
+            //경매 체결하기 TODO: 트랜잭션화하기
             log.info("AuctionTerminater가 시작되었습니다");
             Auction auction = auctionRepository.findById(auctionId)
                     .orElse(null);
             log.info("종료할 Auction id는 "+auction.getId()+"입니다.");
+            //3. state 바꾸기
+            if(AuctionStatus.PROCEEDING.equals(auction.getStatus())){
+                auctionRepository.updateStatusToTerminated(auctionId);
+                log.info("경매 번호 "+auction.getId()+"번 경매를 종료합니다");
+            }else{
+                log.info("경매 번호 "+auction.getId()+"번 경매 종료가 실패해서 아직 PROCEEDING 상태입니다");
+            }
             //1. 스마트 컨트랙트 호출
             //2. mpoffice에 체결 요청 보냄
             AtomicReference<Long> buyerId = new AtomicReference<>(0L);
@@ -299,13 +306,7 @@ public class AuctionServiceImpl implements AuctionService{
                 throw new RuntimeException(e);
             }
 
-            //3. state 바꾸기
-            if(AuctionStatus.PROCEEDING.equals(auction.getStatus())){
-                auctionRepository.updateStatusToTerminated(auctionId);
-                log.info("경매 번호 "+auction.getId()+"번 경매를 종료합니다");
-            }else{
-                log.info("경매 번호 "+auction.getId()+"번 경매 종료가 실패해서 아직 PROCEEDING 상태입니다");
-            }
+
 
         }
     }
