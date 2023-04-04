@@ -1,12 +1,12 @@
 // home page (/home)
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Carousel } from "primereact/carousel";
 import { useSelector } from "react-redux";
 import { RootState } from "store/configStore";
 import { memeType } from "store/memeList";
 import { auctionCardType } from "store/auction";
 import useAxios from "hooks/useAxios";
-import { web3 } from "web3config";
+import { checkMyBalance, giveSignInCoin, web3 } from "web3config";
 import SkeletonCard from "components/common/card/SkeletonCard";
 import NftCard from "components/common/card/NftCard";
 import NftAuctionCard from "components/common/card/NftAuctionCard";
@@ -90,11 +90,9 @@ const HomePage: React.FC = () => {
     },
   ];
 
+  const { sendRequest: postWalletRequest } = useAxios();
+  const myBalance = useRef<number | undefined>();
   const accountHandler = async () => {
-    if(sessionStorage.getItem('account')){
-      alert('이미 연결되었습니다.')
-      return
-    }
     try {
       if (window.ethereum) {
         const accounts = await window.ethereum.request({
@@ -103,14 +101,80 @@ const HomePage: React.FC = () => {
         let account = "";
         if (typeof accounts[0] === "string") {
           account = web3.utils.toChecksumAddress(accounts[0]);
+          console.log(account);
         }
-        sessionStorage.setItem("account", account);
+        // 유저 디비에 wallet_address가 null일 때만 코인 지급
+        const walletAddress = JSON.parse(
+          sessionStorage.getItem("user")!
+        ).walletAddress;
+        const userId = JSON.parse(sessionStorage.getItem("user")!).userId;
+
+        // 최초로 연결한 지갑인 경우, 코인 지급하고 post address
+        if (walletAddress === null) {
+          giveSignInCoin();
+          postWalletRequest({
+            url: "/api/mpoffice/user/update/wallet",
+            method: "POST",
+            data: {
+              userId: userId,
+              walletAddress: account,
+            },
+          });
+          console.log("최초 연결 지갑에 코인 지급");
+        } else {
+          // 이전에 등록했던 지갑과 동일한 경우, 패스
+          if (walletAddress === account) {
+            console.log("이전에 등록한 지갑과 동일합니다");
+          } else if (walletAddress !== account) {
+            // 이전에 등록한 지갑은 존재하지만 지금 지갑과 다를 경우, 새로 post
+            postWalletRequest({
+              url: "/api/mpoffice/user/update/wallet",
+              method: "POST",
+              data: {
+                userId: userId,
+                walletAddress: account,
+              },
+            });
+            console.log("1인당 코인 1회만 지급");
+          }
+        }
+
+        const user = JSON.parse(sessionStorage.getItem("user")!);
+        user.walletAddress = account;
+        sessionStorage.setItem("user", JSON.stringify(user));
+
         alert("지갑 연결 성공!");
       } else {
         alert("MetaMask를 설치해주세요.");
       }
+      await checkBalance();
+      if (!myBalance.current|| myBalance.current===undefined) {
+        console.log("잔액 조회에 실패했습니다, 지갑 다시 연결해보셈")
+      } else {
+        console.log("지갑 연결하자마자 잔액 조회", myBalance.current)
+      }
+
     } catch (error) {
       console.log(error);
+    }
+  };
+  const checkBalance = async () => {
+    const account = JSON.parse(sessionStorage.getItem("user")!).walletAddress;
+    try {
+      if (!account) return false;
+      console.log("upload 버튼에서 잔액조회 실행됨");
+      await checkMyBalance()
+        .then((balance) => {
+          console.log("내 지갑 잔액:", balance);
+          myBalance.current = balance;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      return myBalance.current;
+    } catch (e) {
+      console.log(e);
+      return false;
     }
   };
 

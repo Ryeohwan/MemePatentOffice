@@ -23,6 +23,9 @@ const NavbarHamburger: React.FC = () => {
   // true일 땐 잔액을 보여주고, false일 땐 지갑 연결하기를 띄움
   const [ showBalance, setShowBalance ] = useState(false);
 
+  // 흠.. 내 지갑주소가 연결되어 있을 땐 잔액 조회로 수정해야 할듯
+  const myAccount = JSON.parse(sessionStorage.getItem('user')!).walletAddress;
+
   // click하면 dropmenu
   const [open, setOpen] = useState<boolean>(false);
 
@@ -114,6 +117,7 @@ const NavbarHamburger: React.FC = () => {
         setShowBalance(false);
       } else {
         setShowBalance(true);
+        console.log(myBalance.current)
       }
 
     } catch (error) {
@@ -185,7 +189,8 @@ const NavbarHamburger: React.FC = () => {
           </NavLink>
 
           {/* {!account && <div onClick={accountHandler}>지갑 연결하기</div>} */}
-          {showBalance ? <div>내 잔액 : {myBalance.current}</div> : <div onClick={accountHandler}>지갑 연결하기</div>}
+          
+          {!showBalance ? <div onClick={accountHandler}>지갑 연결하기</div> : <div>내 잔액 : {myBalance.current}</div> }
 
           <div className={styles.navLink} onClick={mypageHandler}>
             마이페이지
