@@ -18,16 +18,18 @@ public class Auction extends BaseEntity{
 
     @Column(name = "meme_id", nullable = false)
     private Long memeId;
+    //역정규화
+    @Column(name = "meme_img_url")
+    private String memeImgUrl;
+    @Column(name = "seller_id")
+    private Long sellerId;
+    //역정규화
+    @Column(name = "seller_nickname")
+    private String sellerNickname;
 
     @DateTimeFormat(pattern = "yyyy-mm-dd`T`HH-mm")
     @Column(name = "start_time")
     private LocalDateTime startTime;
-    @Column(name = "seller_id")
-    private Long sellerId;
-
-    @Column(name = "seller_nickname")
-    private String sellerNickname;
-
     @Column(name = "starting_price")
     private Long startingPrice;
 
@@ -38,10 +40,11 @@ public class Auction extends BaseEntity{
     private static final Integer AUCTION_DURATION_MINUTES = 60*24;
     @Builder
     public Auction(Long memeId, LocalDateTime startTime, Long sellerId,
-                   String sellerNickname, Long startingPrice) {
+                   String memeImgUrl, String sellerNickname, Long startingPrice) {
         this.memeId = memeId;
         this.startTime = startTime;
         this.sellerId = sellerId;
+        this.memeImgUrl = memeImgUrl;
         this.sellerNickname = sellerNickname;
         this.startingPrice = startingPrice;
         this.status = AuctionStatus.ENROLLED;
