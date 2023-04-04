@@ -24,3 +24,9 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+app:
+  business:
+    url: https://j8a305.p.ssafy.io/api/mpoffice
+  cors:
+    allowedOrigins: http://localhost:3000
