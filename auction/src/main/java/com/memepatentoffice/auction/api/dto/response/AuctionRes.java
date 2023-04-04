@@ -13,9 +13,12 @@ import java.util.List;
 @Builder
 @ToString
 public class AuctionRes {
+    @JsonFormat
     String sellerNickname;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm")
     LocalDateTime finishTime;
+    @JsonFormat
     Long startingPrice;
+    @JsonFormat
     List<BiddingHistory> biddingHistory;
 }
