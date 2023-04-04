@@ -1,26 +1,38 @@
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "store/configStore";
-import { auctionType } from "store/auctionList";
-import { auctionListActions } from "store/auctionList";
-
+import { useEffect } from "react";
+import useAxios from "hooks/useAxios";
+import { auctionCardType } from "store/auction";
 import NftAuctionCard from "components/common/card/NftAuctionCard";
 import styles from "./AuctionListTabComp.module.css";
-
-
+import SkeletonCard from "components/common/card/SkeletonCard";
 
 const AuctionListPopular: React.FC = () => {
-  const dispatch = useDispatch();
-  const auctionList = useSelector<RootState, auctionType[]>(
-    (state) => state.auctionList.auctionPopularList
-  );
+  const { data, status, isLoading, sendRequest } = useAxios();
 
-  // console.log(memeList);
+  useEffect(() => {
+    console.log('popular get!')
+    sendRequest({ url: `/api/auction/list?sort=popular` });
+  }, []);
 
   return (
     <div className={styles.auctionListCardContainer}>
-      {auctionList.map((auction) => {
-        return <NftAuctionCard key={auction.memeId} items={auction} />;
-      })}
+      {/* loading 중 */}
+      {isLoading && (
+        <SkeletonCard />
+      )}
+
+      {/* data 없는 경우 */}
+      {status === 200 && data.length === 0 && (
+        <div className={styles.noContentContainer}>
+          현재 등록된 경매가 없습니다.
+        </div>
+      )}
+
+      {/* data 들어온 경우 */}
+      {status === 200 && data.length > 0 && (
+        data.map((auction: auctionCardType) => {
+          return <NftAuctionCard key={auction.auctionId} items={auction} />;
+        })
+      )}
     </div>
   );
 };

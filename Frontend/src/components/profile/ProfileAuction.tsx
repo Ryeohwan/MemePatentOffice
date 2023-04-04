@@ -1,10 +1,10 @@
 import NftAuctionCard from "components/common/card/NftAuctionCard";
-import { auctionType } from "store/auctionList";
+import { auctionCardType } from "store/auction";
 
 import styles from "./ProfileAuction.module.css";
 
 interface Props {
-  auctionList: auctionType[];
+  auctionList: auctionCardType[];
 }
 
 const ProfileAuction: React.FC<Props> = ({ auctionList }) => {

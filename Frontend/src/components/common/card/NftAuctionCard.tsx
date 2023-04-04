@@ -1,10 +1,10 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { auctionType } from "store/auctionList";
+import { auctionCardType } from "store/auction";
 import styles from "./NftAuctionCard.module.css";
 
 interface AuctionProps {
-    items: auctionType;
+    items: auctionCardType;
 };
 
 const getRemainTime = (targetTime: number) => {

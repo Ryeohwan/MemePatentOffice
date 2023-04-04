@@ -3,7 +3,7 @@ import { Route, useLocation } from "react-router-dom";
 import TabComp from "components/common/tab/TabComp";
 
 import { memeType } from "store/memeList";
-import { auctionType } from "store/auctionList";
+import { auctionCardType } from "store/auction";
 
 import ProfileNft from "./ProfileNft";
 import ProfileAuction from "./ProfileAuction";
@@ -14,7 +14,7 @@ interface Props {
   nickname: string;
   auction_id: string|null;
   nftList: memeType[];
-  auctionList: auctionType[];
+  auctionList: auctionCardType[];
 }
 
 const ProfileTabComp: React.FC<Props> = ({

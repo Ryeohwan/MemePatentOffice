@@ -12,3 +12,7 @@
   justify-content: center;
   gap: 1rem;
 }
+
+.noContentContainer {
+  padding-top: 60%;
+}

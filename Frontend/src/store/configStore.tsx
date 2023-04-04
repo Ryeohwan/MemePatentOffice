@@ -5,9 +5,7 @@ import { ThunkAction } from 'redux-thunk';
 import  testReducer from 'store/test';
 import  chatReducer from 'store/chat';
 import auctionReducer from 'store/auction';
-// import memeDetailReducer from 'store/memeDetail';
 import memeListReducer from 'store/memeList';
-import auctionListReducer from 'store/auctionList';
 import noticeReducer from 'store/notice';
 import auctionUploadReducer from 'store/auctionUpload';
 import nftHistoryReducer from 'store/nftHistory';
@@ -20,9 +18,7 @@ const store = configureStore({
     test: testReducer,
     chat: chatReducer,
     auction: auctionReducer,
-    auctionList: auctionListReducer,
     auctionUpload: auctionUploadReducer,
-    // memeDetail: memeDetailReducer,
     memeList: memeListReducer,
     memeUpload: memeUploadReducer,
     notice: noticeReducer,
@@ -31,7 +27,6 @@ const store = configureStore({
     commentList: commentListReducer,
   },
 })
-
 
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
