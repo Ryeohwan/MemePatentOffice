@@ -1,5 +1,6 @@
 package com.memepatentoffice.auction.api.service;
 
+import com.memepatentoffice.auction.api.dto.BiddingHistory;
 import com.memepatentoffice.auction.api.dto.message.WebSocketCharacter;
 import com.memepatentoffice.auction.api.dto.request.AuctionCreationReq;
 import com.memepatentoffice.auction.api.dto.message.WebSocketChatReq;
@@ -49,14 +50,19 @@ public class AuctionServiceImpl implements AuctionService{
     @Override
     public Long registerAuction(AuctionCreationReq req) throws NotFoundException{
         if(!isp.existsMemeById(req.getMemeId())) throw new NotFoundException("유효하지 않은 밈 아이디입니다");
-        if(!isp.existsUserById(req.getSellerId())) throw new NotFoundException("유효하지 않은 판매자 아이디입니다");
+
+        String respBody = isp.findUserById(req.getSellerId())
+                .orElseThrow(()->new NotFoundException("sellerId가 유효하지 않습니다"));
+        JSONObject jsonObject = new JSONObject(respBody);
+        String sellerNickname = jsonObject.getString("nickname");
 
         log.info(req.toString());
         Auction auction = auctionRepository.save(Auction.builder()
                         .memeId(req.getMemeId())
                         .startTime(req.getStartDateTime())
                         .sellerId(req.getSellerId())
-                        .status(AuctionStatus.ENROLLED)
+                        .sellerNickname(sellerNickname)
+                        .startingPrice(req.getStartingPrice())
                 .build());
 
         ZonedDateTime startZdt = auction.getStartTime()
@@ -79,7 +85,24 @@ public class AuctionServiceImpl implements AuctionService{
 
     @Override
     public AuctionRes getInfo(Long auctionId) throws NotFoundException {
-        return null;
+        Auction auction = auctionRepository.findById(auctionId)
+                .orElseThrow(()->new NotFoundException("auctionId가 유효하지 않습니다"));
+
+        AuctionRes auctionRes =  AuctionRes.builder()
+                .sellerNickname(auction.getSellerNickname())
+                .finishTime(auction.getFinishTime())
+                .startingPrice(auction.getStartingPrice())
+                .biddingHistory(
+                        bidRepository.findByAuctionId(auctionId).stream()
+                                .map((bid)-> BiddingHistory.builder()
+                                        .nickname(bid.getNickname())
+                                        .price(bid.getAskingprice())
+                                        .time(bid.getCreatedAt())
+                                        .build()
+                                ).collect(Collectors.toList())
+                ).build();
+        log.info(auctionRes.toString());
+        return auctionRes;
     }
 
 
@@ -175,10 +198,6 @@ public class AuctionServiceImpl implements AuctionService{
     @Override
     public void sendCharacter(WebSocketCharacter dto) {
         simpMessageSendingOperations.convertAndSend("/sub/character/"+dto.getAuctionId(), dto);
-    }
-
-    public void sendCurrentPrice(Long auctionId){
-        //TODO: 옥션방에 들어오는 사람들에게 5초에 한번씩 웹소켓 쏴주기
     }
 
 
