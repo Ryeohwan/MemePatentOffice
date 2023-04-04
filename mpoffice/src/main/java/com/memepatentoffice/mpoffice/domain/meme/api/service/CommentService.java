@@ -3,20 +3,14 @@ package com.memepatentoffice.mpoffice.domain.meme.api.service;
 import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
 import com.memepatentoffice.mpoffice.db.entity.*;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentDeleteRequest;
-import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentInfoRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentLikeRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentRequest;
-import com.memepatentoffice.mpoffice.domain.meme.api.response.CommentCreateResponse;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.CommentResponse;
-import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeListResponse;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.ReplyResponse;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.*;
 import com.memepatentoffice.mpoffice.domain.user.db.repository.UserRepository;
-import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
-import org.springframework.data.querydsl.QPageRequest;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +18,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
