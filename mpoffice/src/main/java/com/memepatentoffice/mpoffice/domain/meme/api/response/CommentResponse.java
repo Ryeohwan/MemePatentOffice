@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 public class CommentResponse {
     private Long id;
+    private Long memeId;
     private Long userId;
     private String nickname;
     private String profileImage;

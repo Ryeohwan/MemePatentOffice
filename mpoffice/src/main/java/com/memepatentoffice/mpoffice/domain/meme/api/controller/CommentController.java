@@ -29,7 +29,6 @@ import java.util.List;
 public class CommentController {
     private final MemeService memeService;
     private final CommentService commentService;
-    private final CommentRepository commentRepository;
 
     @GetMapping("/check/{title}")
     public ResponseEntity titleDuplicatedcheck(@PathVariable String title){
@@ -112,4 +111,10 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @GetMapping("myComments")
+    public ResponseEntity myCommentList(@RequestParam(name = "userId") Long userId,
+                                        @RequestParam(name = "idx",required = false) Long idx,
+                                        @PageableDefault(size = 8) Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.myComments(userId,idx,pageable));
+    }
 }
