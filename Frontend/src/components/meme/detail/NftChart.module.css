@@ -1,3 +1,27 @@
+/* .chartWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+} */
+/* .chartContainer {
+    overflow-x: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: #999 #fff;
+    max-width: 100%;
+  }
+  .chartContainer::-webkit-scrollbar {
+    width: 5px;
+  }
+  .chartContainer::-webkit-scrollbar-track {
+    background: #fff;
+  }
+  .chartContainer::-webkit-scrollbar-thumb {
+    background-color: #999;
+    border-radius: 20px;
+    border: 3px solid #fff;
+  } */
+
 .detailInfoBox {
     background-color: var(--white-color);
     padding: 9px 12px;
@@ -30,4 +54,5 @@
     justify-content: center;
     gap: 1.3rem;
     margin-top: 30px;
+    /* overflow-x: auto; */
 }

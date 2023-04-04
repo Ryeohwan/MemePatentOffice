@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { memeUploadActions } from "store/memeUpload";
 import { RootState } from "store/configStore";
-import { mintMemeTokenContract } from "web3config";
+import { memeOwnerAccess, mintMemeTokenContract } from "web3config";
 
 import SubmitBtn from "components/common/elements/SubmitBtn";
 import CheckingModal from "components/auction/upload/CheckingModal";
@@ -46,6 +46,9 @@ const MemeUploadBtn: React.FC = () => {
   // 유효성검사 (AZURE) 관련 변수
   const apiEndpoint = process.env.REACT_APP_CM_ENDPOINT;
   const apiToken = process.env.REACT_APP_CM_KEY;
+
+  // mint 후 받는 tokenID
+const tokenId = useRef<number|boolean|undefined>()
 
   // 텍스트 유효성 검사 함수
   const textMonitor = async (textInput: string) => {
@@ -132,20 +135,16 @@ const MemeUploadBtn: React.FC = () => {
   // minting 함수
   const mintHandler = async () => {
     const account = sessionStorage.getItem("account");
-
     try {
       if (!account) return false;
-      const response = await mintMemeTokenContract.methods
-        .mintMemeToken()
-        .send({ from: account });
-      console.log(response);
-      if (response.status) {
-        const data = {
-          tokenId: response.transactionIndex,
-          // contractAddress: response.events.Transfer.address,
-        };
-        return data;
-      }
+      console.log("upload 버튼에서 memeOwnerAccess 실행됨");
+      await memeOwnerAccess().then((getTokenId) => {
+        console.log("Token ID:", getTokenId);
+        tokenId.current = getTokenId!;
+      }).catch((error) => {
+        console.error(error);
+      });
+      return tokenId.current;
     } catch (e) {
       console.log(e);
       return false;
@@ -153,14 +152,12 @@ const MemeUploadBtn: React.FC = () => {
   };
 
   // back에 api 보내는 axios
-  // const submitHandler = async (data: {tokenId: number, contractAddress: string}) => {
-  const submitHandler = async (data: {tokenId: number}) => {
+  const submitHandler = async (tokenId:any) => {
     const memeCreateRequest = {
       content: info,
       createrId: JSON.parse(sessionStorage.user).userId,
       title: title, 
-      tokenId: data.tokenId,
-      // contractAddress: data.contractAddress,
+      tokenId: tokenId,
     };
 
     const formData = new FormData();
@@ -252,9 +249,8 @@ const MemeUploadBtn: React.FC = () => {
       // nft 등록
       setModalTxt("NFT 등록중...");
       // await new Promise((resolve) => setTimeout(resolve, 3000));
-  
-      const mintRes = await mintHandler();
-      if (!mintRes) {
+      await mintHandler();
+      if (!tokenId.current || tokenId.current === undefined) {
         controlCheckModal(false);
         alert("민팅에 실패하셨습니다.");
         navigate("/main");
@@ -263,7 +259,7 @@ const MemeUploadBtn: React.FC = () => {
       console.log("민팅 성공!");
       
       // 백에 api 보내기
-      const backRes: string | number | boolean = await submitHandler(mintRes)
+      const backRes: string | boolean | undefined | number = await submitHandler(tokenId.current)
 
       // 백에 잘 등록한 경우
       if (typeof(backRes) === 'number') {

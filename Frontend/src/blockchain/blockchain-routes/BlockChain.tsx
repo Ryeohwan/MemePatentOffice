@@ -21,10 +21,11 @@ const BlockChain: React.FC = () => {
   };
 
   useEffect(() => {
-    getAccount();
-    memeOwnerAccess();
-    saleOwnerAccess();
-    console.log("세션에서 가져온", userAccount)
+    memeOwnerAccess().then((tokenId) => {
+      console.log("Token ID:", tokenId);
+    }).catch((error) => {
+      console.error(error);
+    });
   }, []);
 
   useEffect(() => {
