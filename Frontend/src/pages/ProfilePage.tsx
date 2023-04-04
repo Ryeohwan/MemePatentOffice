@@ -11,7 +11,7 @@ import styles from "./ProfilePage.module.css";
 const ProfilePage: React.FC = () => {
   const params = useParams();
   const nickname = params.nickname;
-  const auction_id = params.auction_id ? params.auction_id : null
+  const auction_id = params.auctionId ? params.auctionId : null
   
   // useAxios api get
   // 임시 data

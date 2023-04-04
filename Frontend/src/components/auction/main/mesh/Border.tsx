@@ -17,7 +17,7 @@ const Border: React.FC = () => {
   texCanvas.width = 100;
   texCanvas.height = 100;
   const canvasTexture = new THREE.CanvasTexture(texCanvas);
-  const { topPrice, finishTime, memeImgSrc } = useSelector<
+  const { biddingHistory, finishTime, memeImgUrl, startingPrice } = useSelector<
     RootState,
     auctionInfo
   >((state) => state.auction.auctionInfo);
@@ -25,9 +25,11 @@ const Border: React.FC = () => {
   // const arrTwo = arrOne[0]!.match(/:(.*?);/);
   // const mime = arrTwo![1];
   const loader = new GifLoader();
-  nftTexture.current! = useLoader(THREE.TextureLoader, memeImgSrc);
+  // const loader2 = new THREE.TextureLoader()
+  // const texture = loader2.load(memeImgUrl!)
+ nftTexture.current = useLoader(THREE.TextureLoader, memeImgUrl!)
   // if (mime === "gif") {
-  nftTexture.current! = loader.load(memeImgSrc, (reader) => {});
+  // nftTexture.current! = loader.load(memeImgSrc!, (reader) => {});
   // }
 
   const border = new THREE.Mesh(
@@ -51,7 +53,7 @@ const Border: React.FC = () => {
   NFT.position.set(-1, 5, -28.9);
   border.position.set(-1, 7, -29);
 
-  const targetTime = Math.floor(+new Date(finishTime) / 1000);
+  const targetTime = Math.floor(+new Date(finishTime!) / 1000);
 
   const getRemainTime = () => {
     const date = Math.floor(+new Date() / 1000);
@@ -83,7 +85,7 @@ const Border: React.FC = () => {
       texContext.fillRect(0, 0, 100, 100); // 좌표0,0, 크기
       texContext.font = "10px Gmarket Sans TTF";
       texContext.fillStyle = "white"; // 물감
-      texContext.fillText(`${topPrice} SSF`, 30, 37);
+      texContext.fillText(`${biddingHistory.length>0 ? biddingHistory[0].price : startingPrice} SSF`, 30, 37);
       texContext.font = "17px Gmarket Sans TTF";
       let timerProps = getRemainTime();
       let diff = timerProps[0];
@@ -93,7 +95,7 @@ const Border: React.FC = () => {
       } else {
         texContext.fillStyle = "white"; // 물감
       }
-      texContext.fillText(`${timerView}`, 10, 20);
+      texContext.fillText(`${timerView}`, 15, 20);
     }
   });
 

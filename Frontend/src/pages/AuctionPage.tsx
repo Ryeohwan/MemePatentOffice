@@ -7,12 +7,14 @@ import styles from "pages/AuctionPage.module.css";
 import { chatActions } from "store/chat";
 import { auctionActions } from "store/auction";
 import { playersInfo } from "store/auction";
-const ENDPOINT = process.env.NODE_ENV !== null?"wss://j8a305.p.ssafy.io/ws":"ws://localhost:8072/ws"
-// const ENDPOINT = "ws://localhost:8072/ws"
+import useAxios from "hooks/useAxios";
+// const ENDPOINT = process.env.NODE_ENV !== null?"wss://j8a305.p.ssafy.io/ws":"ws://localhost:8072/ws"
+const ENDPOINT = "ws://localhost:8072/ws"
 const AuctionPage: React.FC = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const characters= useRef<playersInfo[]>([])
   const [userNum,setUserNum] = useState<number>(0)
-
+  const {data, sendRequest} = useAxios()
   const userId = JSON.parse(sessionStorage.getItem('user')!).userId
   const userNickName = JSON.parse(sessionStorage.getItem('user')!).nickname
   const {auctionId} = useParams();
@@ -27,17 +29,18 @@ const AuctionPage: React.FC = () => {
       //   주소
       brokerURL: ENDPOINT,
 
-      //   연결 확인
-      // debug: function (str) {
-      //   console.log(str);
-      // },
+        // 연결 확인
+      debug: function (str) {
+        console.log(str);
+      },
 
       // 재연결 시도
       reconnectDelay: 3000,
       heartbeatIncoming: 2000,
       heartbeatOutgoing: 2000,
       // 연결
-      onConnect: (frame) => {
+      onConnect:async (frame) => {
+        await sendRequest({url:`/api/auction/info?auctionId=${auctionId}`})
         subscribe();
       },
 
@@ -91,7 +94,6 @@ const AuctionPage: React.FC = () => {
       `/sub/character/${auctionId}`,
       (body) => {
         const json_body = JSON.parse(body.body)
-        // const character = characters.find((c) => c.nickname === json_body.nickname) 
         const character = characters.current.find((c) => c.nickname===json_body.nickname) 
         if(character) {
           character.x = json_body.x
@@ -108,11 +110,25 @@ const AuctionPage: React.FC = () => {
         }
       }
     )
+    client.current.subscribe(
+      `/sub/bid/${auctionId}`,
+      (body) => {
+        const json_body = JSON.parse(body.body)
+        console.log(json_body)
+      }
+    )
     console.log(`subscribe()`)
   };
 
+  useEffect(()=>{
+    if(data){
+      console.log(data)
+      dispatch(auctionActions.getAuctionInfo(data))
+      setIsLoading(false)
+    }
+  },[data])
+
   useEffect(() => {
-      // dispatch(auctionActions.getAuctionInfo()) // redux에 있는 api 실행
     connect();
 
     return () => {
@@ -121,7 +137,10 @@ const AuctionPage: React.FC = () => {
   }, []);
   return (
     <>
+    {isLoading && <p>loading,,,</p>}
+    {!isLoading && 
       <AuctionCanvas client={client} auctionId={Number(auctionId)} characters={characters} userNum={userNum}/>
+    }
     </>
   );
 };

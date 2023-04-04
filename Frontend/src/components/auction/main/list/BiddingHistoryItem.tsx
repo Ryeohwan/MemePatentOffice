@@ -7,7 +7,7 @@ import styles from "components/auction/main/list/BiddingHistoryItem.module.css"
 interface BiddingHistoryItemProps{
     history:{
         nickname: string,
-        SSF: number,
+        price: number,
         time: string
     }
 }
@@ -20,7 +20,7 @@ const BiddingHistoryItem: React.FC<BiddingHistoryItemProps> = ({history}) => {
             <p>{history.nickname}</p>
         </div>
         <div className={styles.price}>
-            {history.SSF}
+            {history.price}
         </div>
         <div className={styles.time}>
             {history.time.split('T')[1]}
