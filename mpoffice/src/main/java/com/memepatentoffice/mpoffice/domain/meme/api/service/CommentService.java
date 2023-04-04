@@ -166,6 +166,9 @@ public class CommentService {
     }
 
     public Slice<CommentResponse> findLatest(Long memeId, Long userId,Long id1, Long id2, Long id3, Long idx, Pageable pageable){
+        if(idx == null){
+            idx = Long.MAX_VALUE;
+        }
         List<Object> temp = commentRepository.findLatestComment(memeId,userId,id1,id2,id3,idx,PageRequest.of(0,8));
         List<CommentResponse> result = convertToDtoLatest(temp);
         return checkLastPage(pageable,result);
@@ -310,13 +313,12 @@ public class CommentService {
 
     private Slice<CommentResponse> checkLastPage(Pageable pageable, List<CommentResponse> results) {
 
-        boolean hasNext = false;
+        boolean hasNext = true;
 
         // 조회한 결과 개수가 요청한 페이지 사이즈보다 크면 뒤에 더 있음, next = true
-        if (results.size() > pageable.getPageSize()) {
+        if (results.size() < pageable.getPageSize()) {
             System.out.println("why list here");
-            hasNext = true;
-            results.remove(pageable.getPageSize());
+            hasNext = false;
         }
         System.out.println(hasNext);
         return new SliceImpl<>(results, pageable, hasNext);
@@ -324,17 +326,12 @@ public class CommentService {
 
     private Slice<ReplyResponse> checkReplyLastPage(Pageable pageable, List<ReplyResponse> results) {
 
-        boolean hasNext = false;
-        System.out.println(results.size());
-        System.out.println(pageable.getPageSize());
+        boolean hasNext = true;
 
         // 조회한 결과 개수가 요청한 페이지 사이즈보다 크면 뒤에 더 있음, next = true
-        if (results.size() > pageable.getPageSize()) {
-            System.out.println("why reply here");
-            hasNext = true;
-            results.remove(pageable.getPageSize());
+        if (results.size() < pageable.getPageSize()) {
+            hasNext = false;
         }
-        System.out.println(hasNext);
         return new SliceImpl<>(results, pageable, hasNext);
     }
 }
