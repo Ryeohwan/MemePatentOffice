@@ -4,7 +4,7 @@ import React, { useRef, useState, useCallback, useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "store/configStore";
-import { auctionActions } from "store/auction";
+import { auctionActions, auctionInfo, biddingHistory } from "store/auction";
 import useAxios from "hooks/useAxios";
 
 import Scene from "components/auction/main/Scene";
@@ -65,6 +65,9 @@ const AuctionCanvas: React.FC<Characters> = ({
     new THREE.PerspectiveCamera(75, width / height, 0.1, 1000)
   );
   const [biddingVisible, setBiddingVisible] = useState<boolean>(false);
+  const auctionInfo = useSelector<RootState, auctionInfo>(
+    (state) => state.auction.auctionInfo
+  );
   const [fullScreen, setFullScreen] = useState(false);
 
   const [playerStatus, setPlayerState] = useState<number>(0);
@@ -93,21 +96,31 @@ const AuctionCanvas: React.FC<Characters> = ({
     setBiddingVisible(state);
   };
   const biddingSubmitHandler = (price: number) => {
-    sendRequest({
-      url: `/api/auction/add`,
-      method: "POST",
-      data: {
-        auctionId: auctionId,
-        userId: JSON.parse(sessionStorage.getItem('user')!).userId,
-        askingprice: price,
-      },
-    });
+    if (
+      price <=
+      (auctionInfo.biddingHistory.length > 0
+        ? auctionInfo.biddingHistory[0].price
+        : auctionInfo.startingPrice!)
+    ) {
+      alert("최고가보다 낮읍니다.");
+      return;
+    } else {
+      sendRequest({
+        url: `/api/auction/add`,
+        method: "POST",
+        data: {
+          auctionId: auctionId,
+          userId: JSON.parse(sessionStorage.getItem("user")!).userId,
+          askingprice: price,
+        },
+      });
 
-    setBiddingVisible(false);
-    dispatch(auctionActions.controlPlayerState(4));
-    setTimeout(() => {
-      dispatch(auctionActions.controlPlayerState(5));
-    }, 2000);
+      setBiddingVisible(false);
+      dispatch(auctionActions.controlPlayerState(4));
+      setTimeout(() => {
+        dispatch(auctionActions.controlPlayerState(5));
+      }, 2000);
+    }
   };
 
   const canSitHandler = useCallback((state: boolean) => {

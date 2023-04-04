@@ -7,10 +7,9 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .notContent {
-  padding-bottom: 40%;
+  padding-top: 40%;
 }

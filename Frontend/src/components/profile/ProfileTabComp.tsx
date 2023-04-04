@@ -13,14 +13,10 @@ import styles from "./ProfileTabComp.module.css";
 interface Props {
   nickname: string;
   auction_id: string|null;
-  nftList: memeType[];
-  auctionList: auctionCardType[];
 }
 
 const ProfileTabComp: React.FC<Props> = ({
   nickname,
-  nftList,
-  auctionList,
   auction_id
 }) => {
   const location = useLocation();
@@ -37,8 +33,8 @@ const ProfileTabComp: React.FC<Props> = ({
   return (
     <div className={styles.tabContainer}>
       <TabComp items={tabItems}>
-        <Route path="/tab=nft" element={<ProfileNft nftList={nftList} />} />
-        <Route path="/tab=auction" element={<ProfileAuction auctionList={auctionList} />}
+        <Route path="/tab=nft" element={<ProfileNft nickname={nickname}/>} />
+        <Route path="/tab=auction" element={<ProfileAuction nickname={nickname} />}
         />
       </TabComp>
     </div>

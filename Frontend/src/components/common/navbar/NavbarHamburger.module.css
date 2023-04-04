@@ -13,6 +13,12 @@
   border-radius: 0 0 6px 6px;
 }
 
+.loginDropContainer {
+  padding-top: 1rem;
+  height: 14rem !important;
+  border-radius: 0 0 6px 6px;
+}
+
 .dropMenu {
   display: flex;
   flex-direction: column;

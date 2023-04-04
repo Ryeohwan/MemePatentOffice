@@ -1,23 +1,39 @@
+import {useEffect} from 'react';
+import useAxios from 'hooks/useAxios';
 import { memeType } from "store/memeList";
+import SkeletonCard from 'components/common/card/SkeletonCard';
 import NftCard from "components/common/card/NftCard";
+
 import { ScrollTop } from "primereact/scrolltop";
 import styles from "./ProfileTabComp.module.css";
 
 interface Props {
-  nftList: memeType[];
+  nickname: string
 }
 
-const ProfileNft: React.FC<Props> = ({ nftList }) => {
+const ProfileNft: React.FC<Props> = ({ nickname }) => {
+  const {data, status, isLoading, sendRequest} = useAxios();
+  
+  useEffect(() => {
+    sendRequest({url: `/api/mpoffice/user/profile/memes/${nickname}`})
+  }, [])
+
   return (
     <div className={styles.cardContainer}>
+      {/* loading 중 */}
+      {isLoading && <SkeletonCard />}
+
       {/* 소유한 nft 없는 경우 */}
-      {nftList.length === 0 && (
+      {!isLoading && status === 201 && data.length === 0 && (
         <div className={styles.notContent}>소유한 nft가 없습니다.</div>
       )}
 
-      {nftList.map((nft) => {
-        return <NftCard key={nft.id} items={nft} />;
-      })}
+      {/* nft 있는 경우 */}
+      {!isLoading && status === 201 && data.length > 0 && (
+        data.map((nft: memeType) => {
+          return <NftCard key={nft.id} items={nft} />;
+        })
+      )}
 
       <ScrollTop
         target="parent"
