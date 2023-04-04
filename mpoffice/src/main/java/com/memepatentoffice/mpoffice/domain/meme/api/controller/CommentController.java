@@ -67,7 +67,7 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(commentService.findTop(memeId,userId));
     }
     @GetMapping("/list")
-    // 최신순으로 받기
+    // 최신순으로 받기 댓글만 조회
     public ResponseEntity CommentList(
                                       @RequestParam(name = "memeId") Long memeId,
                                       @RequestParam(name = "userId") Long userId,

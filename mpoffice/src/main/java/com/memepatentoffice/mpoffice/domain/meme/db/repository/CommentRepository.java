@@ -36,7 +36,7 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             " LEFT JOIN Comment d ON d.parentComment.id = c.id and d.meme.id = c.meme.id" +
             " WHERE c.meme.id = :memeId " +
             " GROUP BY c.content, c.id, c.user.nickname, c.user.profileImage, liked " +
-            " having COUNT(l) > 0 and COUNT(d) >= 5" +
+            " having COUNT(l) > 0 " +
 //            " GROUP BY c.content, c.createdAt, c.id, c.user.nickname, c.user.profileImage, liked" +
             " ORDER BY heartCnt desc " )
     Slice<Object> findBestThreeComment(@Param("memeId")Long memeId, @Param("userId") Long userId, Pageable pageable);
@@ -49,7 +49,7 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             "FROM Comment c \n" +
             "LEFT JOIN UserCommentLike l ON l.comment.id = c.id\n" +
             "LEFT JOIN Comment d ON c.id = d.parentComment.id and d.meme.id = c.meme.id\n" +
-            "WHERE c.meme.id = :memeId \n" +
+            "WHERE c.meme.id = :memeId and c.parentComment = null \n" +
             "  AND (c.id != :id1 OR :id1 IS NULL) \n" +
             "  AND (c.id != :id2 OR :id2 IS NULL) \n" +
             "  AND (c.id != :id3 OR :id3 IS NULL)\n" +

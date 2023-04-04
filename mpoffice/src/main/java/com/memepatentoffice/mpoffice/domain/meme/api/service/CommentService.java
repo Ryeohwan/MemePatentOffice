@@ -216,10 +216,12 @@ public class CommentService {
                 count = userCommentLikeRepository.countUserCommentLikesByCommentId(c.getId());
             }
 
+            int replyCount = commentRepository.countAllByParentCommentId(c.getId());
+
             CommentResponse dto = CommentResponse.builder()
                     .content(content)
                     .date(createdAt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-                    .replyCommentCnt(replyCommentCnt.intValue())
+                    .replyCommentCnt(replyCount)
                     .userId(c.getUser().getId())
                     .id(id)
                     .nickname(nickname)
@@ -228,7 +230,7 @@ public class CommentService {
                     .liked(liked)
                     .best(1)
                     .build();
-            dtoList.add(dto);
+            if(replyCount > 4) dtoList.add(dto);
         }
         return new SliceImpl<>(dtoList, slice.getPageable(), slice.hasNext());
     }
@@ -252,10 +254,12 @@ public class CommentService {
                 count = userCommentLikeRepository.countUserCommentLikesByCommentId(c.getId());
             }
 
+            int replyCount = commentRepository.countAllByParentCommentId(c.getId());
+
             CommentResponse dto = CommentResponse.builder()
                     .content(content)
                     .date(createdAt.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-                    .replyCommentCnt(replyCommentCnt.intValue())
+                    .replyCommentCnt(replyCount)
                     .id(id)
                     .userId(c.getUser().getId())
                     .nickname(nickname)
@@ -264,6 +268,7 @@ public class CommentService {
                     .liked(liked)
                     .best(0)
                     .build();
+
             dtoList.add(dto);
         }
         return dtoList;
