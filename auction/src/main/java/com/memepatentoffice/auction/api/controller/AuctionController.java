@@ -53,7 +53,7 @@ public class AuctionController {
     }
 
     @ApiOperation(value="경매 입찰", notes = "경매에 입찰합니다. 현재 호가보다 더 높은 가격으로 시도해야지만 입찰이 됩니다.")
-    @GetMapping("/add")
+    @PostMapping("/add")
     public ResponseEntity<?> bid(@RequestBody BidReq bidReq) throws NotFoundException, BiddingException {
         return ResponseEntity.status(HttpStatus.OK).body(auctionService.bid(bidReq));
     }
