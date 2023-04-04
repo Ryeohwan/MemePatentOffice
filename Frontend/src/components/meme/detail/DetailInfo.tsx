@@ -226,7 +226,7 @@ const DetailInfo: React.FC = () => {
             >
               이 NFT 경매 등록하러 가기
             </div>
-            <UploadModal />
+            {/* <UploadModal /> */}
           </>
         ) : (
           <p>loading중</p>

@@ -22,6 +22,7 @@ const UploadTime: React.FC = () => {
       <Calendar
         value={timeValue}
         onChange={(e: CalendarChangeEvent) => {
+          console.log(e.value)
           if (e.value != undefined) {
             setTimeValue(e.value as Date);
           }
@@ -32,6 +33,8 @@ const UploadTime: React.FC = () => {
         className={styles.calendar}
         showTime
         hourFormat="24"
+        hideOnDateTimeSelect
+        stepMinute={5}
       />
     </>
   );
