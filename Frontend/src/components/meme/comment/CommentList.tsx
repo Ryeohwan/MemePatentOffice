@@ -33,8 +33,9 @@ const CommentList: React.FC = () => {
   );
 
   useEffect(() => {
-    appDispatch(getCommentListAxiosThunk(memeid, -1));
     appDispatch(getBestCommentListAxiosThunk(memeid));
+    appDispatch(getCommentListAxiosThunk(memeid, -1));
+    console.log("댓글 나옴")
     return (
       // unmount 시 배열 초기화
       () => {dispatch(commentListActions.resetCommentList())}

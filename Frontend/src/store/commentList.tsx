@@ -66,6 +66,7 @@ const commentListSlice = createSlice({
     // 댓글 입력 시
     commentAddHandler: (state, actions) => {
       state.commentNewList = [actions.payload, ...state.commentNewList];
+      console.log("댓글 입력 리덕스 실행됨")
     },
     // 대댓글 입력 시
     replyAddHandler: (state, actions) => {
@@ -134,10 +135,10 @@ const commentListSlice = createSlice({
 export const getCommentListAxiosThunk =
   (memeId: number, lastPostRef: number): AppThunk =>
   async (dispatch) => { 
-    
+
     const sendRequest = async () => {
       const userId = JSON.parse(sessionStorage.user).userId;
-      const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/list?memeId=${memeId}&userId=${userId}${lastPostRef !== -1 ? `&idx=${lastPostRef}` : ""}`;
+      const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/list?memeId=${memeId}&userId=${userId}${lastPostRef !== -1 ?`&idx=${lastPostRef}` : ""}`;
 
       console.log("여기 보낼거임!", requestUrl);
 
@@ -218,7 +219,9 @@ export const getReplyListAxiosThunk =
   (memeId: number, commentId: number): AppThunk =>
   async (dispatch) => {
     const sendRequest = async () => {
-      const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/reply?memeId=${memeId}&commentId=${commentId}`;
+
+      const userId = JSON.parse(sessionStorage.user).userId;
+      const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/reply?memeId=${memeId}&userId=${userId}&commentId=${commentId}`;
 
       console.log("대댓글리스트 조회!", requestUrl);
 
