@@ -90,8 +90,8 @@ public class MemeController {
     }
 
     @GetMapping("/price")
-    public ResponseEntity tradeGraph(@RequestParam(name = "title")String title) throws NotFoundException{
-        PriceListResponse result = memeService.priceGraph(title);
+    public ResponseEntity tradeGraph(@RequestParam(name = "id")Long id) throws NotFoundException{
+        PriceListResponse result = memeService.priceGraph(id);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

@@ -59,5 +59,14 @@ public class MemeSearchController {
         return ResponseEntity.status(HttpStatus.OK).body(memeSearchService.getViewsMemeList(days, Idx, pageable, searchText));
     }
 
+//    @GetMapping("/bestKeyword")
+//    public ResponseEntity getDailyBestkeywords(){
+//
+//    }
+//
+//    @GetMapping("/bestKeyword")
+//    public ResponseEntity getWeeklyBestkeywords(){
+//
+//    }
 }
 
