@@ -6,12 +6,15 @@ import com.memepatentoffice.auction.api.dto.message.WebSocketChatReq;
 import com.memepatentoffice.auction.api.dto.request.BidReq;
 import com.memepatentoffice.auction.api.dto.response.AuctionListRes;
 import com.memepatentoffice.auction.api.service.AuctionService;
+import com.memepatentoffice.auction.common.exception.BadRequestException;
 import com.memepatentoffice.auction.common.exception.BiddingException;
 import com.memepatentoffice.auction.common.exception.NotFoundException;
 //import io.swagger.annotations.Api;
 //import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -19,27 +22,36 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auction")
 @RequiredArgsConstructor
+@Slf4j
 public class AuctionController {
     private final AuctionService auctionService;
     @ApiOperation(value="경매 리스트", notes = "경매장 리스트를 불러옵니다. sort: popular,latest,oldest")
-    @GetMapping("/list")
-    public ResponseEntity<?> getList(@RequestParam String sort) throws NotFoundException{
-        List<AuctionListRes> auctionList = null;
-        if("popular".equals(sort)){
-            auctionList = auctionService.findAllByHit();
-        }
-        else if("latest".equals(sort)){
-            auctionList = auctionService.findAllProceedingByFinishTimeLatest();
-        }
-        else if("oldest".equals(sort)){
-            auctionList = auctionService.findAllProceedingByFinishTimeOldest();
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(auctionList);
+    @GetMapping(value = "/list",params={"sort"})
+    public ResponseEntity<?> getList(@RequestParam String sort) throws NotFoundException {
+            List<AuctionListRes> auctionList = null;
+            if ("popular".equals(sort)) {
+                auctionList = auctionService.findAllByHit();
+            } else if ("latest".equals(sort)) {
+                auctionList = auctionService.findAllProceedingByFinishTimeLatest();
+            } else if ("oldest".equals(sort)) {
+                auctionList = auctionService.findAllProceedingByFinishTimeOldest();
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(auctionList);
     }
+
+    @ApiOperation(value="유저의 경매 리스트", notes = "유저가 실시했던 경매 리스트를 불러옵니다.")
+    @GetMapping(value = "/list",params={"userNickname"})
+    public ResponseEntity<?> getListByUserNickname(@RequestParam String userNickname) throws NotFoundException {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                auctionService.findAllBySellerNickname(userNickname)
+        );
+    }
+
     @ApiOperation(value="경매 정보", notes = "경매 정보를 리턴합니다.")
     @GetMapping("/info")
     public ResponseEntity<?> getInfo(@RequestParam Long auctionId) throws NotFoundException{

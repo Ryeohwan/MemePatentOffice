@@ -153,6 +153,32 @@ public class AuctionServiceImpl implements AuctionService{
     }
 
     @Override
+    public List<AuctionListRes> findAllBySellerNickname(String sellerNickname){
+        return auctionRepository.findAllBySellerNickname(sellerNickname).stream()
+                .map(auction -> streamExceptionHandler(()->{
+                    JSONObject jsonObject = isp.findMemeById(auction.getMemeId()).orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
+                    String title = jsonObject.getString("title");
+                    String imageurl = jsonObject.getString("memeImage");
+                    int hit = jsonObject.getInt("searched");
+
+                    AtomicReference<Long> highestBid = new AtomicReference<>(auction.getStartingPrice());
+                    bidRepository.findTopByAuctionIdOrderByAskingpriceDesc(auction.getId())
+                            .ifPresent(hb->highestBid.set(hb.getAskingprice()));
+
+                    return AuctionListRes.builder()
+                            .memeId(auction.getMemeId())
+                            .auctionId(auction.getId())
+                            .title(title)
+                            .finishTime(auction.getFinishTime())
+                            .highestBid(highestBid.get())
+                            .imgUrl(imageurl)
+                            .hit(hit)
+                            .build();
+                }))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<AuctionListRes> findAllByHit(){
         return auctionRepository.findAllProceeding().stream()
                 .map(auction -> streamExceptionHandler(()->{
