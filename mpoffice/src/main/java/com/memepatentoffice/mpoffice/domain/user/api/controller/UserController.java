@@ -3,10 +3,7 @@ package com.memepatentoffice.mpoffice.domain.user.api.controller;
 import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
 import com.memepatentoffice.mpoffice.common.Exception.UserAlreadyExistsException;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.GcpService;
-import com.memepatentoffice.mpoffice.domain.user.api.request.SocialRequest;
-import com.memepatentoffice.mpoffice.domain.user.api.request.UserSignUpRequest;
-import com.memepatentoffice.mpoffice.domain.user.api.request.UserUpdateRequest;
-import com.memepatentoffice.mpoffice.domain.user.api.request.UserWithdrawRequest;
+import com.memepatentoffice.mpoffice.domain.user.api.request.*;
 import com.memepatentoffice.mpoffice.domain.user.api.response.CountResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.response.SignUpResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.response.UserResponse;
@@ -75,6 +72,13 @@ public class UserController {
     @ResponseBody
     public ResponseEntity updateUser(@RequestBody UserUpdateRequest userUpdateRequest) throws NotFoundException {
         Long id = userService.updateUser(userUpdateRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(id);
+    }
+
+    @PostMapping("/update/wallet")
+    @ResponseBody
+    public ResponseEntity updateUserWallet(@RequestBody UserWalletUpdateRequest userWalletUpdateRequest) throws NotFoundException {
+        Long id = userService.updateUserWallet(userWalletUpdateRequest);
         return ResponseEntity.status(HttpStatus.OK).body(id);
     }
 
