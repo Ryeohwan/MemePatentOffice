@@ -23,10 +23,10 @@ const UserEditPage: React.FC = () => {
           <p>내 지갑</p>
         </div> */}
 
-        <div onClick={()=>navigate('withdrawl')} className="router-wrapper">
+        {/* <div onClick={()=>navigate('withdrawl')} className="router-wrapper">
           <i className="pi pi-user-minus" />
           <p>회원 탈퇴</p>
-        </div>
+        </div> */}
 
 
       </div>

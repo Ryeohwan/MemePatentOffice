@@ -52,7 +52,7 @@ const ProfileEditPage: React.FC = () => {
       user.nickname = (nickname && nickname.length > 0) ? nickname : user.nickname
       alert("회원정보가 수정되었습니다.")
       sessionStorage.setItem("user", JSON.stringify(user))
-      setNickname("");
+      navigate(`/profile/${JSON.parse(sessionStorage.user).nickname}/tab=nft`)
     }
   }, [status, isLoading])
 
