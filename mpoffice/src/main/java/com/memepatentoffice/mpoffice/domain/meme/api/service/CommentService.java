@@ -96,7 +96,7 @@ public class CommentService {
                 .nickname(created.getUser().getNickname())
                 .date(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                 .liked(userCommentLikeRepository.existsByUserIdAndCommentId(user.getId(),com.getId()))
-                .replyCommentCnt(commentRepository.countAllByParentCommentId(created.getId()))
+                .replyCommentCnt(commentRepository.countAllByParentCommentIdAndMemeId(created.getId(),created.getMeme().getId()))
                 .best(0)
                 .profileImage(created.getUser().getProfileImage())
                 .heartCnt(userCommentLikeRepository.countUserCommentLikesByCommentId(created.getId()))
@@ -216,7 +216,8 @@ public class CommentService {
                 count = userCommentLikeRepository.countUserCommentLikesByCommentId(c.getId());
             }
 
-            int replyCount = commentRepository.countAllByParentCommentId(c.getId());
+            int replyCount = commentRepository.countAllByParentCommentIdAndMemeId(c.getId(),c.getMeme().getId());
+
 
             CommentResponse dto = CommentResponse.builder()
                     .content(content)
@@ -254,7 +255,7 @@ public class CommentService {
                 count = userCommentLikeRepository.countUserCommentLikesByCommentId(c.getId());
             }
 
-            int replyCount = commentRepository.countAllByParentCommentId(c.getId());
+            int replyCount = commentRepository.countAllByParentCommentIdAndMemeId(c.getId(),c.getMeme().getId());
 
             CommentResponse dto = CommentResponse.builder()
                     .content(content)
