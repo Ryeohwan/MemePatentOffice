@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.memepatentoffice.auction.api.dto.AuctionClosing;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
+import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -18,11 +19,7 @@ public class InterServiceCommunicationProvider {
     private final OkHttpClient client = new OkHttpClient();
     private final ObjectMapper mapper = new ObjectMapper();
     private final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    /*
-    *    @Return
-    * 404 not found인 경우 null을 반환한다
-    * */
-    public Optional<String> getRequestToUrl(String url){
+    public Optional<JSONObject> getRequestToUrl(String url){
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -30,7 +27,7 @@ public class InterServiceCommunicationProvider {
             if(response.isSuccessful()){
                 String respBody = response.body().string();
                 log.info(respBody);
-                return Optional.of(respBody);
+                return Optional.of(new JSONObject(respBody));
             }
             else{
                 log.error("InterServiceCommunicationProvider returned "+response.code()+" by "+url);
@@ -41,7 +38,7 @@ public class InterServiceCommunicationProvider {
         }
     }
 
-    public Optional<String> postRequestToUrl(String url, Object o) throws JsonProcessingException {
+    public Optional<JSONObject> postRequestToUrl(String url, Object o) throws JsonProcessingException {
         RequestBody body = RequestBody.create(
                 mapper.writeValueAsString(o),
                 JSON
@@ -54,7 +51,7 @@ public class InterServiceCommunicationProvider {
             if(response.isSuccessful()){
                 String respBody = response.body().string();
                 log.info(respBody);
-                return Optional.of(respBody);
+                return Optional.of(new JSONObject(respBody));
             }
             else{
                 log.error("InterServiceCommunicationProvider returned "+response.code()+" by "+url);
@@ -65,14 +62,14 @@ public class InterServiceCommunicationProvider {
         }
     }
 
-    public Optional<String> addTransaction(AuctionClosing a) throws JsonProcessingException{
+    public Optional<JSONObject> addTransaction(AuctionClosing a) throws JsonProcessingException{
         return postRequestToUrl(MPOFFICE_SERVER_URL+"/meme/addTransaction", a);
     }
 
-    public Optional<String> findUserById(Long userId){
+    public Optional<JSONObject> findUserById(Long userId){
         return getRequestToUrl(MPOFFICE_SERVER_URL+"/user/"+userId);
     }
-    public Optional<String> findMemeById(Long memeId){
+    public Optional<JSONObject> findMemeById(Long memeId){
         return getRequestToUrl(MPOFFICE_SERVER_URL+"/meme/"+memeId);
     }
     public boolean existsUserById(Long userId){

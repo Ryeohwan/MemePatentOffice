@@ -19,6 +19,10 @@ public class AuctionRes {
     LocalDateTime finishTime;
     @JsonFormat
     Long startingPrice;
+
+    @JsonFormat
+    String memeImgUrl;
+
     @JsonFormat
     List<BiddingHistory> biddingHistory;
 }

@@ -56,16 +56,18 @@ public class AuctionServiceImpl implements AuctionService{
     @Transactional
     @Override
     public Long registerAuction(AuctionCreationReq req) throws NotFoundException{
-        if(!isp.existsMemeById(req.getMemeId())) throw new NotFoundException("유효하지 않은 밈 아이디입니다");
+        JSONObject jsonObject = isp.findMemeById(req.getMemeId())
+                .orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
+        String memeImgUrl = jsonObject.getString("memeImage");
 
-        String respBody = isp.findUserById(req.getSellerId())
+        jsonObject = isp.findUserById(req.getSellerId())
                 .orElseThrow(()->new NotFoundException("sellerId가 유효하지 않습니다"));
-        JSONObject jsonObject = new JSONObject(respBody);
         String sellerNickname = jsonObject.getString("nickname");
 
         log.info(req.toString());
         Auction auction = auctionRepository.save(Auction.builder()
                         .memeId(req.getMemeId())
+                        .memeImgUrl(memeImgUrl)
                         .startTime(req.getStartDateTime())
                         .sellerId(req.getSellerId())
                         .sellerNickname(sellerNickname)
@@ -99,6 +101,7 @@ public class AuctionServiceImpl implements AuctionService{
                 .sellerNickname(auction.getSellerNickname())
                 .finishTime(auction.getFinishTime())
                 .startingPrice(auction.getStartingPrice())
+                .memeImgUrl(auction.getMemeImgUrl())
                 .biddingHistory(
                         bidRepository.findByAuctionId(auctionId).stream()
                                 .map((bid)-> BiddingHistory.builder()
@@ -118,9 +121,8 @@ public class AuctionServiceImpl implements AuctionService{
         if(!AuctionStatus.PROCEEDING.equals(auction.getStatus())){
             throw new BiddingException("아직 시작되지 않았거나 종료된 경매입니다");
         }
-        String respBody = isp.findUserById(bidReq.getUserId())
+        JSONObject jsonObject = isp.findUserById(bidReq.getUserId())
                 .orElseThrow(()->new NotFoundException("sellerId가 유효하지 않습니다"));
-        JSONObject jsonObject = new JSONObject(respBody);
         String nickname = jsonObject.getString("nickname");
 
         Bid currentTopBid = bidRepository.findTopByOrderByCreatedAtDesc();
@@ -151,8 +153,7 @@ public class AuctionServiceImpl implements AuctionService{
     public List<AuctionListRes> findAllByHit(){
         return auctionRepository.findAllProceeding().stream()
                 .map(auction -> streamExceptionHandler(()->{
-                    String respBody = isp.findMemeById(auction.getMemeId()).orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
-                    JSONObject jsonObject = new JSONObject(respBody);
+                    JSONObject jsonObject = isp.findMemeById(auction.getMemeId()).orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
                     String title = jsonObject.getString("title");
                     String imageurl = jsonObject.getString("memeImage");
                     int hit = jsonObject.getInt("searched");
@@ -179,8 +180,7 @@ public class AuctionServiceImpl implements AuctionService{
     public List<AuctionListRes> findAllProceedingByFinishTimeLatest() throws RuntimeException{
         return auctionRepository.findAllProceedingByFinishTimeLatest().stream()
                 .map(auction -> streamExceptionHandler(()->{
-                    String respBody = isp.findMemeById(auction.getMemeId()).orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
-                    JSONObject jsonObject = new JSONObject(respBody);
+                    JSONObject jsonObject = isp.findMemeById(auction.getMemeId()).orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
                     String title = jsonObject.getString("title");
                     String imageurl = jsonObject.getString("memeImage");
                     int hit = jsonObject.getInt("searched");
@@ -205,8 +205,7 @@ public class AuctionServiceImpl implements AuctionService{
     public List<AuctionListRes> findAllProceedingByFinishTimeOldest() throws RuntimeException{
         return auctionRepository.findAllProceedingByFinishTimeOldest().stream()
                 .map(auction -> streamExceptionHandler(()->{
-                    String respBody = isp.findMemeById(auction.getMemeId()).orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
-                    JSONObject jsonObject = new JSONObject(respBody);
+                    JSONObject jsonObject = isp.findMemeById(auction.getMemeId()).orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
                     String title = jsonObject.getString("title");
                     String imageurl = jsonObject.getString("memeImage");
                     int hit = jsonObject.getInt("searched");
