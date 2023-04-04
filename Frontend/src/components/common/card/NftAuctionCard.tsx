@@ -52,7 +52,8 @@ const NftAuctionCard: React.FC<AuctionProps> = (nft) => {
   // 경매방 입장하기
   const enterHandler = () => {
     if (auctionTime > 0) {
-      navigate(`/auction/${nft.items.auctionId}`);
+      // navigate(`/auction/${nft.items.auctionId}`);
+      window.location.href = `/auction/${nft.items.auctionId}`
     } else {
       alert("입장하실 수 없는 방입니다.");
     }
