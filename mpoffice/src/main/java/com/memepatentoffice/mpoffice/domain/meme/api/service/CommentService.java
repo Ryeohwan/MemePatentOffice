@@ -195,6 +195,38 @@ public class CommentService {
         }
     }
 
+    public Slice<CommentResponse> myComments(Long userId,Long idx,Pageable pageable){
+        if(idx == null || idx == 0L){
+            idx = Long.MAX_VALUE;
+        }
+        List<CommentResponse> list = convertToCR(commentRepository.findMyListByUserId(userId,idx,PageRequest.of(0,8)));
+        return checkLastPage(pageable,list);
+    }
+
+    public List<CommentResponse> convertToCR(List<Comment> list){
+        List<CommentResponse> all = new ArrayList<>();
+        for(Comment a : list){
+            Comment c = commentRepository.findById(a.getId()).get();
+            int count = 0;
+            if(userCommentLikeRepository.existsByUserIdAndCommentId(c.getUser().getId(),c.getId())){
+                count = userCommentLikeRepository.countUserCommentLikesByCommentId(c.getId());
+            }
+            int replyCount = commentRepository.countAllByParentCommentIdAndMemeId(c.getId(),c.getMeme().getId());
+            CommentResponse temp = CommentResponse.builder()
+                    .id(a.getId())
+                    .memeId(a.getMeme().getId())
+                    .userId(a.getUser().getId())
+                    .heartCnt(count)
+                    .content(a.getContent())
+                    .date(a.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                    .replyCommentCnt(replyCount)
+                    .build();
+            all.add(temp);
+        }
+        return all;
+    }
+
+
     public Slice<CommentResponse> convertToDtoTop(Slice<Object> slice) {
         List<CommentResponse> dtoList = new ArrayList<>();
         for (Object obj : slice) {
@@ -330,4 +362,6 @@ public class CommentService {
         }
         return new SliceImpl<>(results, pageable, hasNext);
     }
+
+
 }

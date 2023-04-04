@@ -23,7 +23,8 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             "where e.id = e2.comment.id ORDER BY e.createdAt ASC")
     List<Comment> findCommentsByMemeId(Long id);
     int countAllByParentCommentIdAndMemeId(Long commentId,Long memeId);
-
+    @Query("select c from Comment c where c.id < :idx and c.user.id = :userId order by c.id desc ")
+    List<Comment> findMyListByUserId(@Param("userId") Long userId, @Param("idx") Long idx,Pageable pageable);
 
     // 여기서 베스트 3개 id 를받습니다. - 여기서 인기순 정렬한 값
     @Query("SELECT c.content, c.createdAt, " +
