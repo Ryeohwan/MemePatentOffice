@@ -53,7 +53,7 @@ const UploadModal: React.FC<UploadModalProps> = ({visible, modalHandler}) => {
         startDateTime: new Date(submitMeme.startDateTime!)
       }
     })
-
+    console.log(new Date(submitMeme.startDateTime!))
     setCheckModalVisible(false)
   };
 

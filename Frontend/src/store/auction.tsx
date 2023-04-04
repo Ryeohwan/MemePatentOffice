@@ -1,18 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import sang from "assets/sang.gif";
 
 export type biddingHistory = {
   nickname: string;
-  SSF: number;
+  price: number;
   time: string;
 };
 
 export type auctionInfo = {
-  memeId: number;
-  sellerNickname: string;
-  topPrice: number;
-  finishTime: string;
-  memeImgSrc: string;
+  sellerNickname: string | null;
+  startingPrice: number | null;
+  finishTime: string | null;
+  biddingHistory: biddingHistory[];
+  memeImgUrl: string | null;
 };
 
 export type playersInfo = {
@@ -35,15 +34,14 @@ interface initialStateInterface {
 }
 
 const initialState: initialStateInterface = {
-  biddingHistory: [
-  ],
+  biddingHistory: [],
   playerState: 0,
   auctionInfo: {
-    memeId: 1,
-    sellerNickname: "3반 김재준",
-    topPrice: 238478,
-    finishTime: new Date(2023, 2, 30, 9, 7, 0, 0).toISOString(),
-    memeImgSrc: sang,
+    sellerNickname: null,
+    startingPrice: null,
+    finishTime: null,
+    biddingHistory: [],
+    memeImgUrl: null,
   },
   playersInfo: [],
   status: "DEFAULT",
@@ -62,11 +60,11 @@ const auctionSlice = createSlice({
       state.biddingHistory = [];
       state.status = "DEFAULT";
       state.auctionInfo = {
-        memeId: 1,
-        sellerNickname: "3반 김재준",
-        topPrice: 238478,
-        finishTime: new Date(2023, 2, 30, 9, 7, 0, 0).toISOString(),
-        memeImgSrc: sang,
+        sellerNickname: null,
+        startingPrice: null,
+        finishTime: null,
+        biddingHistory: [],
+        memeImgUrl:null,
       };
     },
     getAuctionInfo: (state, actions) => {

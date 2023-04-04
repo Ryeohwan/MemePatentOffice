@@ -5,6 +5,7 @@ import React, { useRef, useState, useCallback, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "store/configStore";
 import { auctionActions } from "store/auction";
+import useAxios from "hooks/useAxios";
 
 import Scene from "components/auction/main/Scene";
 import styles from "components/auction/main/AuctionCanvas.module.css";
@@ -31,6 +32,7 @@ const AuctionCanvas: React.FC<Characters> = ({
     (state) => state.auction.playerState
   );
 
+  const { data, sendRequest } = useAxios();
   const [isFull, setIsFull] = useState<Boolean>(false);
   const [visible, setVisible] = useState<Boolean>(false);
   const player = useRef<THREE.Object3D>(new THREE.Object3D());
@@ -64,11 +66,11 @@ const AuctionCanvas: React.FC<Characters> = ({
   );
   const [biddingVisible, setBiddingVisible] = useState<boolean>(false);
   const [fullScreen, setFullScreen] = useState(false);
-  
+
   const [playerStatus, setPlayerState] = useState<number>(0);
   const changeHandler = () => {
-    setPlayerState((prev)=>prev+1)
-  }
+    setPlayerState((prev) => prev + 1);
+  };
   // useEffect(() => {
   //   const elem = document.getElementById("auction");
   //   if (elem) {
@@ -90,7 +92,17 @@ const AuctionCanvas: React.FC<Characters> = ({
   const biddingHandler = (state: boolean) => {
     setBiddingVisible(state);
   };
-  const biddingSubmitHandler = () => {
+  const biddingSubmitHandler = (price: number) => {
+    sendRequest({
+      url: `/api/auction/add`,
+      method: "POST",
+      data: {
+        auctionId: auctionId,
+        userId: JSON.parse(sessionStorage.getItem('user')!).userId,
+        askingprice: price,
+      },
+    });
+
     setBiddingVisible(false);
     dispatch(auctionActions.controlPlayerState(4));
     setTimeout(() => {
@@ -219,7 +231,7 @@ const AuctionCanvas: React.FC<Characters> = ({
             onClick={sitDownHandler}
           />
         )}
-        {playerState===5 && (
+        {playerState === 5 && (
           <>
             <Button icon="pi pi-dollar" onClick={() => biddingHandler(true)} />
             <Button
@@ -237,7 +249,7 @@ const AuctionCanvas: React.FC<Characters> = ({
         <ChatMain client={client} auctionId={auctionId} />
       </div>
       <div className={styles.fullMoniterBtn}>
-        {playerState===5 ? (
+        {playerState === 5 ? (
           isFull ? (
             <Button onClick={() => notFullMoniter()}>확대</Button>
           ) : (

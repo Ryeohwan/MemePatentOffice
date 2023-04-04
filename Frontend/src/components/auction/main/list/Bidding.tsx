@@ -8,7 +8,7 @@ import { Button } from "primereact/button";
 interface BiddingProps {
   biddingVisible: boolean;
   biddingHandler: (state:boolean) => void;
-  biddingSubmitHandler: () => void;
+  biddingSubmitHandler: (price:number) => void;
 }
 
 const Bidding: React.FC<BiddingProps> = ({
@@ -42,7 +42,7 @@ const Bidding: React.FC<BiddingProps> = ({
           placeholder="SSF"
           onChange={inputHandler}
         />
-        <Button label="입찰" onClick={() => biddingSubmitHandler()} />
+        <Button label="입찰" onClick={() => biddingSubmitHandler(inputValue)} />
       </form>
       <p className={styles.mySSF}>보유 SSF: 124 SSF </p>
     </Sidebar>

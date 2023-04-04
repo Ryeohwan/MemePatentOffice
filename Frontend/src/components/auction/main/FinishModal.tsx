@@ -19,14 +19,14 @@ type action = {
 
 const FinishModal: React.FC = () => {
   const navigate = useNavigate();
-  const { finishTime, memeId } = useSelector<RootState, auctionInfo>(
+  const { finishTime } = useSelector<RootState, auctionInfo>(
     (state) => state.auction.auctionInfo
   );
   const biddingHistory = useSelector<RootState, biddingHistory[]>(
     (state) => state.auction.biddingHistory
   );
   // 끝나는 시간 format
-  const finishFormat = finishTime.split("T")[1].substring(0, 5);
+  const finishFormat = finishTime ? finishTime.split("T")[1].substring(0, 5) : ''
 
   // 모달창
   const [visible, setVisible] = useState<boolean>(false);
@@ -93,7 +93,7 @@ const FinishModal: React.FC = () => {
               <Button
                 className={styles.exitBtn}
                 onClick={() => {
-                  navigate(`/meme-detail/${memeId}`);
+                  navigate(`/main`);
                 }}
               >
                 나가기

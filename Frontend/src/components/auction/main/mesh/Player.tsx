@@ -125,22 +125,21 @@ const Player: React.FC<PlayerProps> = ({
   useFrame((state, delta) => {
     // console.log(state)
     mixer.update(delta);
-    // console.log(character.children[0].position)
-    // console.log(character.children[0])
-    client.current?.publish({
-      destination: "/pub/character",
-      body: JSON.stringify({
-        auctionId: auctionId,
-        nickname: JSON.parse(sessionStorage.getItem("user")!).nickname,
-        x: player.current.position.x,
-        y: player.current.position.y,
-        z: player.current.position.z,
-        rotation_x: player.current.rotation.x,
-        rotation_y: player.current.rotation.y,
-        rotation_z: player.current.rotation.z,
-        status: status,
-      }),
-    });
+
+    // client.current?.publish({
+    //   destination: "/pub/character",
+    //   body: JSON.stringify({
+    //     auctionId: auctionId,
+    //     nickname: JSON.parse(sessionStorage.getItem("user")!).nickname,
+    //     x: player.current.position.x,
+    //     y: player.current.position.y,
+    //     z: player.current.position.z,
+    //     rotation_x: player.current.rotation.x,
+    //     rotation_y: player.current.rotation.y,
+    //     rotation_z: player.current.rotation.z,
+    //     status: status,
+    //   }),
+    // });
 
     if (playerState === 0) {
       if (status !== "DEFAULT")

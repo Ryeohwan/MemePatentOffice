@@ -10,7 +10,7 @@ import styles from "components/auction/main/list/BiddingHistoryList.module.css";
 
 type biddingHistory = {
   nickname: string;
-  SSF: number;
+  price: number;
   time: string;
 };
 
