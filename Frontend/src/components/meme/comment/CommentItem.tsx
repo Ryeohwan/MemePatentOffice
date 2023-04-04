@@ -11,6 +11,9 @@ import ReplyCommentItem from "./ReplyComentItem";
 import useAxios from "hooks/useAxios";
 import { useAppDispatch } from "hooks/useAppDispatch";
 import ElapsedText from "components/common/elements/ElapsedText";
+import { useInView } from "react-intersection-observer";
+
+
 
 interface CommentType {
   items: commentType;
@@ -44,7 +47,14 @@ const CommentItem: React.FC<CommentType> = (comment) => {
   const { sendRequest: postCommentRequest } = useAxios();
   const { sendRequest: deleteCommentRequest } = useAxios();
   const [clickViewReply, setClickViewReply] = useState(false);
-  // const [heartStatus, setHeartStatus] = useState(heart);
+
+  // 무한 스크롤
+  const [ref, inView] = useInView({
+    threshold: 1,
+    delay: 300,
+  })
+  const [lastCommentRef, setLastCommentRef] = useState(-1);
+
 
   // 좋아요 눌렀을 때 내가 이미 좋아한 댓글이면 좋아요 취소, 아니면 좋아요 => 좋아요 개수 -1, +1
   const handleHeart = () => {
@@ -70,7 +80,7 @@ const CommentItem: React.FC<CommentType> = (comment) => {
 
   // 답글 더보기 눌렀을 때 답글 가져옴
   const onClickViewReply = () => {
-    appDispatch(getReplyListAxiosThunk(memeid, commentId));
+    appDispatch(getReplyListAxiosThunk(memeid, commentId, lastCommentRef));
     setClickViewReply(!clickViewReply);
   };
 
@@ -87,6 +97,24 @@ const CommentItem: React.FC<CommentType> = (comment) => {
     console.log("원댓글 id ",commentId)
     dispatch(commentListActions.commentDeleteHandler(commentId));
   };
+  
+  // 무한 스크롤
+  const hasNext = useSelector<RootState, boolean>(
+    (state) => state.commentList.nextCommentNewList
+  );
+
+  useEffect(() => {
+    if (inView && lastCommentRef !== -1) {
+      appDispatch(getReplyListAxiosThunk(memeid,commentId, lastCommentRef));
+    }
+  }, [inView]);
+
+  useEffect(() => {
+    if (replyCommentList.length > 0 ) {
+      setLastCommentRef(replyCommentList[replyCommentList.length - 1].id -1);
+    }
+  }, [replyCommentList]);
+
 
   return (
     <div className={styles.commentItemContainer}>
@@ -161,6 +189,7 @@ const CommentItem: React.FC<CommentType> = (comment) => {
                     </>
                   );
                 })}
+                <div ref={hasNext ? ref : null} />
               </div>
             )}
           </div>

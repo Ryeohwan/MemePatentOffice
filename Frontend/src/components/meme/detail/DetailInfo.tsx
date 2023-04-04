@@ -221,6 +221,7 @@ const DetailInfo: React.FC = () => {
                     auctionUploadActions.controlModal({
                       visible: true,
                       memeid: memeid,
+                      sellerId: JSON.parse(sessionStorage.getItem('user')!).userId,
                     })
                   );
                 }}
