@@ -17,11 +17,13 @@ const LoginPage: React.FC = () => {
     userId: number;
     nickname: string;
     imgUrl: string;
+    walletAddress: string|null;
   
-    constructor(userId: number, nickname: string, imgUrl: string) {
+    constructor(userId: number, nickname: string, imgUrl: string, walletAddress:string|null) {
       this.userId = userId;
       this.nickname = nickname;
       this.imgUrl = imgUrl;
+      this.walletAddress = walletAddress;
     }
   }
 
@@ -39,7 +41,7 @@ const LoginPage: React.FC = () => {
 
     // user nickname & img 받아오기
     sendRequest({url: `/api/mpoffice/user/info/${userId}`})
-
+    
   }, [])
   
   // userInfo 받아와서 session 저장 -> main이동
@@ -47,9 +49,9 @@ const LoginPage: React.FC = () => {
     if (status !== 200) return;
     console.log(data);
 
-  const user = new User(data.id, data.nickname, data.profileImage)
-  sessionStorage.setItem("user", JSON.stringify(user));
-  navigate("/main")
+    const user = new User(data.id, data.nickname, data.profileImage, data.walletAddress)
+    sessionStorage.setItem("user", JSON.stringify(user));
+    navigate("/main")
   }, [status])
 
 

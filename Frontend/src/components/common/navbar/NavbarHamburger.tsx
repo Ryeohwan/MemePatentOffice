@@ -6,7 +6,9 @@ import { memeListActions } from "store/memeList";
 import { Icon } from "@iconify/react";
 import { Sidebar } from "primereact/sidebar";
 import styles from "./NavbarHamburger.module.css";
-import { web3 } from "web3config";
+import { giveSignInCoin, web3 } from "web3config";
+import useAxios from "hooks/useAxios";
+
 
 interface RoutePath {
   pathname: string;
@@ -16,7 +18,11 @@ const NavbarHamburger: React.FC = () => {
   const { pathname } = useLocation() as RoutePath;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const account = sessionStorage.getItem("account");
+
+  // const userId = JSON.parse(sessionStorage.getItem('user')!).userId
+
+  const { sendRequest } = useAxios();
+
   // click하면 dropmenu
   const [open, setOpen] = useState<boolean>(false);
 
@@ -55,9 +61,46 @@ const NavbarHamburger: React.FC = () => {
         let account = "";
         if (typeof accounts[0] === "string") {
           account = web3.utils.toChecksumAddress(accounts[0]);
+          console.log(account)
         }
-        sessionStorage.setItem("account", account);
-        setOpen(!open);
+        // 유저 디비에 wallet_address가 null일 때만 코인 지급
+        const walletAddress = JSON.parse(sessionStorage.getItem('user')!).walletAddress;
+        const userId = JSON.parse(sessionStorage.getItem('user')!).userId;
+
+        // 최초로 연결한 지갑인 경우, 코인 지급하고 post address
+        if (walletAddress === null) {
+          giveSignInCoin();
+          sendRequest({
+            url: "/api/mpoffice/user/update/wallet",
+            method: "POST",
+            data: {
+              userId: userId,
+              walletAddress: account
+            }
+          });
+          console.log("최초 연결 지갑에 코인 지급");
+        } else {
+          // 이전에 등록했던 지갑과 동일한 경우, 패스
+          if (walletAddress === account) {
+            console.log("이전에 등록한 지갑과 동일합니다")
+          } else if (walletAddress !== account) {
+            // 이전에 등록한 지갑은 존재하지만 지금 지갑과 다를 경우, 새로 post
+            sendRequest({
+              url: "/api/mpoffice/user/update/wallet",
+              method: "POST",
+              data: {
+                userId: userId,
+                walletAddress: account
+              }
+            });
+            console.log("1인당 코인 1회만 지급");
+          };
+        };
+
+        const user = JSON.parse(sessionStorage.getItem("user")!);
+        user.walletAddress = account;
+        sessionStorage.setItem("user", JSON.stringify(user));
+
         alert("지갑 연결 성공!");
       } else {
         alert("MetaMask를 설치해주세요.");

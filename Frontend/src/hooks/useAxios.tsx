@@ -1,7 +1,6 @@
 import { useCallback, useState } from "react";
 import {useNavigate} from 'react-router-dom'
-
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
 // axios 보내고 401 뜨면 logout
 // 간단하게 get / post / push 하는데서만 사용할 수 있음

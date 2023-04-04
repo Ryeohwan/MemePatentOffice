@@ -140,7 +140,7 @@ const tokenId = useRef<number|boolean|undefined>()
       console.log("upload 버튼에서 memeOwnerAccess 실행됨");
       await memeOwnerAccess().then((getTokenId) => {
         console.log("Token ID:", getTokenId);
-        tokenId.current = getTokenId!;
+        tokenId.current = getTokenId;
       }).catch((error) => {
         console.error(error);
       });
@@ -251,6 +251,7 @@ const tokenId = useRef<number|boolean|undefined>()
       setModalTxt("NFT 등록중...");
       // await new Promise((resolve) => setTimeout(resolve, 3000));
       await mintHandler();
+      console.log(tokenId.current)
       if (!tokenId.current || tokenId.current === undefined) {
         controlCheckModal(false);
         alert("민팅에 실패하셨습니다.");
