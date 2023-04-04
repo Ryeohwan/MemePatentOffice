@@ -23,13 +23,17 @@
 .pointTime {
     animation: blink-effect 1s infinite;
 }
-
 @keyframes blink-effect {
     50% {
         opacity: 100%;
         color: var(--impossible-color);
     }
 }
+
+.disabledTime {
+    color: var(--impossible-color);
+}
+
 
 .auctionTimeTxt, .auctionBidTxt {
     display: inline-block;

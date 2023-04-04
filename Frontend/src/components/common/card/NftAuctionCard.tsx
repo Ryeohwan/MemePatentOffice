@@ -63,7 +63,7 @@ const NftAuctionCard: React.FC<AuctionProps> = (nft) => {
     const interval = setInterval(() => {
       setAuctionTime((prev) => prev - 1);
     }, 1000);
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); 
   }, []);
 
   return (
@@ -72,7 +72,13 @@ const NftAuctionCard: React.FC<AuctionProps> = (nft) => {
       <div className={styles.nftTitleText}>{slicingText(auctionMemeTitle)}</div>
       <div>
         <div className={styles.auctionTimeTxt}>남은 시간</div>
-        <div className={`${styles.auctionTime} ${auctionTime < 60 ? styles.pointTime : ""}`}>{formatTime(auctionTime)}</div>
+        <div
+          className={`${styles.auctionTime} ${
+            auctionTime < 60 && auctionTime > 0 ? styles.pointTime : ""
+          } ${auctionTime === 0 || auctionTime < 0 ? styles.disabledTime : ""}`}
+        >
+          {formatTime(auctionTime)}
+        </div>
       </div>
       <div>
         <div className={styles.auctionBidTxt}>최고가</div>
@@ -82,9 +88,6 @@ const NftAuctionCard: React.FC<AuctionProps> = (nft) => {
         <NavLink to={memeDetailUrl} className={styles.navLink}>
           <div className={styles.nftDetailBtn}>상세 보기</div>
         </NavLink>
-        {/* <NavLink to={auctionDetailUrl} className={styles.navLink}>
-            <div className={styles.auctionDetailBtn}>경매방 입장하기</div>
-        </NavLink> */}
         <div className={styles.navLink} onClick={enterHandler}>
           <div className={styles.auctionDetailBtn}>경매방 입장하기</div>
         </div>
