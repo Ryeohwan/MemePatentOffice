@@ -1,6 +1,7 @@
 package com.memepatentoffice.auction.api.service;
 
 import com.memepatentoffice.auction.api.dto.BiddingHistory;
+import com.memepatentoffice.auction.api.dto.message.WebSocketBidRes;
 import com.memepatentoffice.auction.api.dto.message.WebSocketCharacter;
 import com.memepatentoffice.auction.api.dto.request.AuctionCreationReq;
 import com.memepatentoffice.auction.api.dto.message.WebSocketChatReq;
@@ -124,13 +125,21 @@ public class AuctionServiceImpl implements AuctionService{
             throw new BiddingException("제안하는 가격이 현재 호가보다 낮아서 안됩니다");
         }
 
-        return bidRepository.save(
+         Bid bid = bidRepository.save(
                 Bid.builder()
                         .auctionId(bidReq.getAuctionId())
                         .userId(bidReq.getUserId())
                         .nickname(nickname)
                         .askingprice(bidReq.getAskingprice()).build()
-        ).getId();
+        );
+        WebSocketBidRes res = WebSocketBidRes.builder()
+                .nickname(bid.getNickname())
+                .askingPrice(bid.getAskingprice())
+                .createdAt(bid.getCreatedAt())
+                .build();
+
+        simpMessageSendingOperations.convertAndSend("/sub/chat/"+bidReq.getAuctionId(), res);
+        return bid.getId();
     }
 
     @Override
