@@ -254,6 +254,13 @@ public class AuctionServiceImpl implements AuctionService{
                             .build();
                 })).collect(Collectors.toList());
     }
+
+    @Override
+    public List<AuctionListRes> getListForCarousel() {
+        List<AuctionListRes> listSortedByHit = this.findAllByHit();
+        return new ArrayList<>(listSortedByHit.subList(0, Math.min(5, listSortedByHit.size())));
+    }
+
     @Override
     public void sendChat(WebSocketChatReq req){
         Long auctionId = req.getAuctionId();

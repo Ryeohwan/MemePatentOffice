@@ -58,6 +58,12 @@ public class AuctionController {
         return ResponseEntity.status(HttpStatus.OK).body(auctionService.getInfo(auctionId));
     }
 
+    @ApiOperation(value="캐러셀에 띄울 경매 리스트", notes= "캐러셀에 띄울 경매 정보 5개입니다.")
+    @GetMapping("/carousel")
+    public ResponseEntity<?> getListForCarousel(){
+        return ResponseEntity.status(HttpStatus.OK).body(auctionService.getListForCarousel());
+    }
+
     @ApiOperation(value="경매 등록", notes = "경매를 예약합니다. 예약한 시간에 경매가 시작되고, 시작 후 60*24 후에 끝납니다.")
     @PostMapping("/register")
     public ResponseEntity<?> registerAuction(@RequestBody AuctionCreationReq auctionCreationReq) throws IOException, NotFoundException{
