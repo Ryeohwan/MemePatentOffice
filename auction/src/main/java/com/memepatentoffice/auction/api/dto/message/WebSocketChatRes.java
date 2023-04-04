@@ -16,7 +16,7 @@ public class WebSocketChatRes {
     private Long auctionId;
     private String nickname;
     private String message;
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime createdAt;
 
 }
