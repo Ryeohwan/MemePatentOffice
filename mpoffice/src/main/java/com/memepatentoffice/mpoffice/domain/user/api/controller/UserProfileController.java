@@ -18,6 +18,7 @@ public class UserProfileController {
 
     @GetMapping("/image/{nickname}")
     public ResponseEntity getUserImage(@PathVariable("nickname") String nickname) throws NotFoundException {
+        System.out.println(nickname);
         User user = userProfileService.getUserImage(nickname);
         UserImageResponse userImageResponse = UserImageResponse.builder()
                 .imgUrl(user.getProfileImage())
