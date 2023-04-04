@@ -49,13 +49,14 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             "FROM Comment c \n" +
             "LEFT JOIN UserCommentLike l ON l.comment.id = c.id\n" +
             "LEFT JOIN Comment d ON c.id = d.parentComment.id and d.meme.id = c.meme.id\n" +
-            "WHERE c.meme.id = :memeId and c.parentComment = null \n" +
+            "WHERE c.meme.id = :memeId and c.parentComment = null " +
+            "  And c.id < :idx \n" +
             "  AND (c.id != :id1 OR :id1 IS NULL) \n" +
             "  AND (c.id != :id2 OR :id2 IS NULL) \n" +
             "  AND (c.id != :id3 OR :id3 IS NULL)\n" +
             "GROUP BY c.content, c.createdAt, c.id, c.user.nickname, c.user.profileImage\n" +
             "ORDER BY c.createdAt DESC")
-    List<Object> findLatestComment(@Param("memeId")Long memeId, @Param("userId") Long userId, @Param("id1")Long id1, @Param("id2") Long id2, @Param("id3") Long id3);
+    List<Object> findLatestComment(@Param("memeId")Long memeId, @Param("userId") Long userId, @Param("id1")Long id1, @Param("id2") Long id2, @Param("id3") Long id3, @Param("idx") Long idx,Pageable pageable);
 
     @Query("SELECT c.content, c.createdAt, \n" +
             "       c.id, c.user.nickname, c.user.profileImage, \n" +
@@ -63,10 +64,11 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             "       EXISTS(SELECT 1 FROM UserCommentLike ucl WHERE ucl.comment.id = c.id AND ucl.user.id = :userId) as liked \n" +
             "FROM Comment c \n" +
             "LEFT JOIN UserCommentLike l ON l.comment.id = c.id\n" +
-            "WHERE c.meme.id = :memeId and c.parentComment.id > 0 and c.parentComment.id = :commentId \n" +
+            "WHERE c.meme.id = :memeId and c.parentComment.id > 0 and c.parentComment.id = :commentId" +
+            " And c.id < :idx \n" +
             "GROUP BY c.content, c.createdAt, c.id, c.user.nickname, c.user.profileImage\n" +
             "ORDER BY c.createdAt asc" )
-    List<Object> findReplyComment(@Param("memeId")Long memeId, @Param("userId")Long userId,@Param("commentId") Long commentId);
+    List<Object> findReplyComment(@Param("memeId")Long memeId, @Param("userId")Long userId,@Param("commentId") Long commentId, @Param("idx") Long idx,Pageable pageable);
 
 
 

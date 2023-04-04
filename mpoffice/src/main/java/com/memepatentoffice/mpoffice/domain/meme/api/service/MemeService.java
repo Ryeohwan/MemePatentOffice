@@ -195,8 +195,8 @@ public class MemeService {
         return totalCount;
     }
 
-    public PriceListResponse priceGraph(String title) throws NotFoundException{
-        Meme meme = memeRepository.findMemeByTitle(title).orElseThrow(()-> new NotFoundException("해당하는 밈이 없습니다."));
+    public PriceListResponse priceGraph(Long titleId) throws NotFoundException{
+        Meme meme = memeRepository.findById(titleId).orElseThrow(()-> new NotFoundException("해당하는 밈이 없습니다."));
         List<Transaction> en = transactionRepository.findBuyerList();
         List<TransactionResponse> buyerList = new ArrayList<>();
         for(Transaction a : en){

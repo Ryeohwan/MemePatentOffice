@@ -14,6 +14,7 @@ import com.memepatentoffice.mpoffice.domain.meme.db.repository.CommentRepository
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,7 +72,9 @@ public class CommentController {
     public ResponseEntity CommentList(
                                       @RequestParam(name = "memeId") Long memeId,
                                       @RequestParam(name = "userId") Long userId,
-                                      @RequestParam(required = false,name = "idx")int idx){
+                                      @RequestParam(required = false,name = "idx")Long idx,
+                                      @PageableDefault(size = 8, sort = "idx") Pageable pageable
+                                      ){
         Long id1 = null;
         Long id2 = null;
         Long id3 = null;
@@ -88,7 +91,7 @@ public class CommentController {
             case 1:
                 id1 = commentService.findTop(memeId,userId).getContent().get(0).getId();
         }
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.findLatest(memeId,userId,id1,id2,id3,idx));
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.findLatest(memeId,userId,id1,id2,id3,idx,pageable));
     }
 
     @GetMapping("/reply")
@@ -97,8 +100,9 @@ public class CommentController {
             @RequestParam(name = "memeId") Long memeId,
             @RequestParam(name = "userId") Long userId,
             @RequestParam(name = "commentId") Long commentId,
-            @RequestParam(name = "idx") int idx){
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.findReply(memeId,userId,commentId,idx));
+            @RequestParam(name = "idx") Long idx,
+            @PageableDefault(size = 8, sort="createdAt")Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.findReply(memeId,userId,commentId,idx,pageable));
     }
 
     @PostMapping("/delete")

@@ -165,17 +165,16 @@ public class CommentService {
         return result;
     }
 
-    public Slice<CommentResponse> findLatest(Long memeId, Long userId,Long id1, Long id2, Long id3, int idx){
-
-        List<Object> temp =commentRepository.findLatestComment(memeId,userId,id1,id2,id3);
+    public Slice<CommentResponse> findLatest(Long memeId, Long userId,Long id1, Long id2, Long id3, Long idx, Pageable pageable){
+        List<Object> temp = commentRepository.findLatestComment(memeId,userId,id1,id2,id3,idx,PageRequest.of(0,8));
         List<CommentResponse> result = convertToDtoLatest(temp);
-        return SliceConverter.convert(result, idx, 8, Sort.unsorted());
+        return checkLastPage(pageable,result);
     }
 
-    public Slice<ReplyResponse> findReply(Long memeId, Long userId,Long commentId ,int idx){
-        List<Object> temp =commentRepository.findReplyComment(memeId,userId,commentId);
+    public Slice<ReplyResponse> findReply(Long memeId, Long userId,Long commentId ,Long idx,Pageable pageable){
+        List<Object> temp =commentRepository.findReplyComment(memeId,userId,commentId,idx,PageRequest.of(0,8));
         List<ReplyResponse> result = convertToDtoReply(temp);
-        return SliceConverter.convert(result, idx, 8, Sort.unsorted());
+        return checkReplyLastPage(pageable,result);
     }
     @Transactional
     public String deleteComment(CommentDeleteRequest commentDeleteRequest)throws NotFoundException{
@@ -315,9 +314,27 @@ public class CommentService {
 
         // 조회한 결과 개수가 요청한 페이지 사이즈보다 크면 뒤에 더 있음, next = true
         if (results.size() > pageable.getPageSize()) {
+            System.out.println("why list here");
             hasNext = true;
             results.remove(pageable.getPageSize());
         }
+        System.out.println(hasNext);
+        return new SliceImpl<>(results, pageable, hasNext);
+    }
+
+    private Slice<ReplyResponse> checkReplyLastPage(Pageable pageable, List<ReplyResponse> results) {
+
+        boolean hasNext = false;
+        System.out.println(results.size());
+        System.out.println(pageable.getPageSize());
+
+        // 조회한 결과 개수가 요청한 페이지 사이즈보다 크면 뒤에 더 있음, next = true
+        if (results.size() > pageable.getPageSize()) {
+            System.out.println("why reply here");
+            hasNext = true;
+            results.remove(pageable.getPageSize());
+        }
+        System.out.println(hasNext);
         return new SliceImpl<>(results, pageable, hasNext);
     }
 }
