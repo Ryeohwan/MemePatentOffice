@@ -98,7 +98,7 @@ const NavbarHamburger: React.FC = () => {
         const user = JSON.parse(sessionStorage.getItem("user")!);
         user.walletAddress = account;
         sessionStorage.setItem("user", JSON.stringify(user));
-
+        setOpen(!open);
         alert("지갑 연결 성공!");
       } else {
         alert("MetaMask를 설치해주세요.");
