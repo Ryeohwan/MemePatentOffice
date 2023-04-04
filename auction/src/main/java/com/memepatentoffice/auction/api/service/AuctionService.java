@@ -22,6 +22,7 @@ public interface AuctionService {
     List<AuctionListRes> findAllByHit() throws NotFoundException;
     List<AuctionListRes> findAllProceedingByFinishTimeLatest() throws NotFoundException;
     List<AuctionListRes> findAllProceedingByFinishTimeOldest() throws NotFoundException;
+    List<AuctionListRes> getListForCarousel();
 
     void sendChat(WebSocketChatReq req);
     void sendCharacter(WebSocketCharacter dto);
