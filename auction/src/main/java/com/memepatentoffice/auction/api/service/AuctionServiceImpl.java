@@ -1,5 +1,7 @@
 package com.memepatentoffice.auction.api.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.memepatentoffice.auction.api.dto.AuctionClosing;
 import com.memepatentoffice.auction.api.dto.BiddingHistory;
 import com.memepatentoffice.auction.api.dto.message.WebSocketBidRes;
 import com.memepatentoffice.auction.api.dto.message.WebSocketCharacter;
@@ -25,6 +27,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -274,10 +277,26 @@ public class AuctionServiceImpl implements AuctionService{
             log.info("종료할 Auction id는 "+auction.getId()+"입니다.");
             //1. 스마트 컨트랙트 호출
             //2. mpoffice에 체결 요청 보냄
+            Long buyerId = null;
+            Long price = 0L;
             Bid currentTopBid = bidRepository.findTopByOrderByCreatedAtDesc();
-            if(currentTopBid==null){
-
+            if(currentTopBid!=null){
+                buyerId = currentTopBid.getUserId();
+                price = currentTopBid.getAskingprice();
             }
+            AuctionClosing auctionClosing = AuctionClosing.builder()
+                    .memeId(auction.getMemeId())
+                    .buyerId(buyerId)
+                    .sellerId(auction.getSellerId())
+                    .createdAt(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                    .price(price)
+                    .build();
+            try{
+                isp.addTransaction(auctionClosing);
+            }catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+
             //3. state 바꾸기
             if(AuctionStatus.PROCEEDING.equals(auction.getStatus())){
                 auctionRepository.updateStatusToTerminated(auctionId);
