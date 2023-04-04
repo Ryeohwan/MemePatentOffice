@@ -1,16 +1,20 @@
 package com.memepatentoffice.auction.api.service;
 
 import com.memepatentoffice.auction.api.dto.BiddingHistory;
+import com.memepatentoffice.auction.api.dto.message.WebSocketBidRes;
 import com.memepatentoffice.auction.api.dto.message.WebSocketCharacter;
 import com.memepatentoffice.auction.api.dto.request.AuctionCreationReq;
 import com.memepatentoffice.auction.api.dto.message.WebSocketChatReq;
 import com.memepatentoffice.auction.api.dto.message.WebSocketChatRes;
+import com.memepatentoffice.auction.api.dto.request.BidReq;
 import com.memepatentoffice.auction.api.dto.response.AuctionListRes;
 import com.memepatentoffice.auction.api.dto.response.AuctionRes;
+import com.memepatentoffice.auction.common.exception.BiddingException;
 import com.memepatentoffice.auction.common.exception.NotFoundException;
 import com.memepatentoffice.auction.common.util.ExceptionSupplier;
 import com.memepatentoffice.auction.common.util.InterServiceCommunicationProvider;
 import com.memepatentoffice.auction.db.entity.Auction;
+import com.memepatentoffice.auction.db.entity.Bid;
 import com.memepatentoffice.auction.db.entity.type.AuctionStatus;
 import com.memepatentoffice.auction.db.repository.AuctionRepository;
 import com.memepatentoffice.auction.db.repository.BidRepository;
@@ -104,18 +108,38 @@ public class AuctionServiceImpl implements AuctionService{
         log.info(auctionRes.toString());
         return auctionRes;
     }
-
-
     @Override
-    public void sendChat(WebSocketChatReq req){
-        Long auctionId = req.getAuctionId();
-        WebSocketChatRes res = WebSocketChatRes.builder()
-                .auctionId(auctionId)
-                .nickname(req.getNickname())
-                .message(req.getMessage())
-                .createdAt(LocalDateTime.now()).build();
-        simpMessageSendingOperations.convertAndSend("/sub/chat/"+auctionId, res);
+    public Long bid(BidReq bidReq) throws NotFoundException, BiddingException {
+        Auction auction = auctionRepository.findById(bidReq.getAuctionId())
+                .orElseThrow(()->new NotFoundException("auctionId가 유효하지 않습니다"));
+        if(!AuctionStatus.PROCEEDING.equals(auction.getStatus())){
+            throw new BiddingException("아직 시작되지 않았거나 종료된 경매입니다");
+        }
+        String respBody = isp.findUserById(bidReq.getUserId())
+                .orElseThrow(()->new NotFoundException("sellerId가 유효하지 않습니다"));
+        JSONObject jsonObject = new JSONObject(respBody);
+        String nickname = jsonObject.getString("nickname");
 
+        Bid currentTopBid = bidRepository.findTopByOrderByCreatedAtDesc();
+        if(!(bidReq.getAskingprice() > currentTopBid.getAskingprice())){
+            throw new BiddingException("제안하는 가격이 현재 호가보다 낮아서 안됩니다");
+        }
+
+         Bid bid = bidRepository.save(
+                Bid.builder()
+                        .auctionId(bidReq.getAuctionId())
+                        .userId(bidReq.getUserId())
+                        .nickname(nickname)
+                        .askingprice(bidReq.getAskingprice()).build()
+        );
+        WebSocketBidRes res = WebSocketBidRes.builder()
+                .nickname(bid.getNickname())
+                .askingPrice(bid.getAskingprice())
+                .createdAt(bid.getCreatedAt())
+                .build();
+
+        simpMessageSendingOperations.convertAndSend("/sub/chat/"+bidReq.getAuctionId(), res);
+        return bid.getId();
     }
 
     @Override
@@ -194,7 +218,17 @@ public class AuctionServiceImpl implements AuctionService{
                             .build();
                 })).collect(Collectors.toList());
     }
+    @Override
+    public void sendChat(WebSocketChatReq req){
+        Long auctionId = req.getAuctionId();
+        WebSocketChatRes res = WebSocketChatRes.builder()
+                .auctionId(auctionId)
+                .nickname(req.getNickname())
+                .message(req.getMessage())
+                .createdAt(LocalDateTime.now()).build();
+        simpMessageSendingOperations.convertAndSend("/sub/chat/"+auctionId, res);
 
+    }
     @Override
     public void sendCharacter(WebSocketCharacter dto) {
         simpMessageSendingOperations.convertAndSend("/sub/character/"+dto.getAuctionId(), dto);
@@ -228,10 +262,14 @@ public class AuctionServiceImpl implements AuctionService{
         @Transactional
         @Override
         public void run() {
+            //경매 체결하기
             log.info("AuctionTerminater가 시작되었습니다");
             Auction auction = auctionRepository.findById(auctionId)
                     .orElse(null);
             log.info("종료할 Auction id는 "+auction.getId()+"입니다.");
+            //1. 스마트 컨트랙트 호출
+            //2. 체결 요청 보냄
+            //3. state 바꾸기
             if(AuctionStatus.PROCEEDING.equals(auction.getStatus())){
                 auctionRepository.updateStatusToTerminated(auctionId);
                 log.info("경매 번호 "+auction.getId()+"번 경매를 종료합니다");

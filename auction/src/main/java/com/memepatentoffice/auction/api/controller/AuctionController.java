@@ -6,7 +6,6 @@ import com.memepatentoffice.auction.api.dto.message.WebSocketChatReq;
 import com.memepatentoffice.auction.api.dto.request.BidReq;
 import com.memepatentoffice.auction.api.dto.response.AuctionListRes;
 import com.memepatentoffice.auction.api.service.AuctionService;
-import com.memepatentoffice.auction.api.service.BidService;
 import com.memepatentoffice.auction.common.exception.BiddingException;
 import com.memepatentoffice.auction.common.exception.NotFoundException;
 //import io.swagger.annotations.Api;
@@ -26,7 +25,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuctionController {
     private final AuctionService auctionService;
-    private BidService bidService;
     @ApiOperation(value="경매 리스트", notes = "경매장 리스트를 불러옵니다. sort: popular,latest,oldest")
     @GetMapping("/list")
     public ResponseEntity<?> getList(@RequestParam String sort) throws NotFoundException{
@@ -57,7 +55,7 @@ public class AuctionController {
     @ApiOperation(value="경매 입찰", notes = "경매에 입찰합니다. 현재 호가보다 더 높은 가격으로 시도해야지만 입찰이 됩니다.")
     @GetMapping("/add")
     public ResponseEntity<?> bid(@RequestBody BidReq bidReq) throws NotFoundException, BiddingException {
-        return ResponseEntity.status(HttpStatus.OK).body(bidService.bid(bidReq));
+        return ResponseEntity.status(HttpStatus.OK).body(auctionService.bid(bidReq));
     }
 
     @MessageMapping("/chat")
