@@ -13,7 +13,7 @@ public class SearchResponse {
     String title;
     int rank;
 
-    int time;
+    int count;
 
     public void setRank(int rank) {
         this.rank = rank;

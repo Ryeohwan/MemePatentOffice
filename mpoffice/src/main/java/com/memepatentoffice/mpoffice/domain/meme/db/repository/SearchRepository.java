@@ -22,13 +22,13 @@ public interface SearchRepository extends JpaRepository<Search , Long> {
             "WHERE s.date BETWEEN :oneWeekAgo AND :time " + // 검색 기간 조건 추가
             "GROUP BY s.title " +
             "ORDER BY sc DESC ")
-    List<Objects> findDailyRanking(@Param("time") LocalDateTime time, @Param("oneWeekAgo") LocalDateTime oneDayAgo);
+    List<Object[]> findDailyRanking(@Param("time") LocalDateTime time, @Param("oneWeekAgo") LocalDateTime oneDayAgo);
 
     @Query("SELECT s.title, count(*) as sc " +
             "FROM Search s " +
             "WHERE s.date BETWEEN :oneWeekAgo AND :time " + // 검색 기간 조건 추가
             "GROUP BY s.title " +
             "ORDER BY sc DESC ")
-    List<Search> findWeeklyRanking(@Param("time") LocalDateTime time, @Param("oneWeekAgo") LocalDateTime oneWeekAgo);
+    List<Object[]> findWeeklyRanking(@Param("time") LocalDateTime time, @Param("oneWeekAgo") LocalDateTime oneWeekAgo);
 
 }
