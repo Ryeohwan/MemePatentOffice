@@ -18,4 +18,5 @@ public interface MemeRepository extends JpaRepository<Meme,Long> {
     @Override
     <S extends Meme> S save(S entity);
     List<Meme> findAllByOwnerIdOrderByCreatedAtDesc(Long userId);
+
 }
