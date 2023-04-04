@@ -50,11 +50,11 @@ const ReplyCommentItem:React.FC<ReplyCommentItemProps> = ({ writerImg, writerNic
 
         <div className={styles.commentBody}>
           <div className={styles.commentText}>{content}</div>
+          <div className={styles.userReaction}>
+            {userNickname === writerNickname && <div onClick={deleteReplyHandler}>삭제</div>}
+          </div>
         </div>
 
-        <div className={styles.userReaction}>
-          {userNickname === writerNickname && <div onClick={deleteReplyHandler}>삭제</div>}
-        </div>
       </div>
     </div>
   );

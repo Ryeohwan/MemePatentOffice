@@ -25,6 +25,7 @@ interface initialStateInterface {
   nowParentName: null | string;
 
   nextCommentNewList: boolean;
+  nextReplyNewList: boolean;
   loadingNewCommentList: boolean;
   loadingMoreNewCommentList: boolean;
   loadingBestCommentList: boolean;
@@ -38,6 +39,7 @@ const initialState: initialStateInterface = {
   nowParentName: null,
 
   nextCommentNewList: true,
+  nextReplyNewList: true,
   loadingNewCommentList: false,
   loadingMoreNewCommentList: false,
   loadingBestCommentList: false,
@@ -59,8 +61,15 @@ const commentListSlice = createSlice({
     getBestCommentList: (state, actions) => {
       state.commentBestList = actions.payload;
     },
-    getReplyCommentList: (state, actions) => {
-      state.replyCommentList = actions.payload;
+    updateReplyCommentList: (state, actions) => {
+      state.nextReplyNewList = actions.payload.hasNext;
+      if (actions.payload.lastPostRef === -1) {
+        state.replyCommentList = []
+      }
+      if (actions.payload.getList) {
+        state.replyCommentList = [...state.replyCommentList, ...actions.payload.getList]
+      }
+      console.log(state.replyCommentList)
     },
 
     // 댓글 입력 시
@@ -138,9 +147,9 @@ export const getCommentListAxiosThunk =
 
     const sendRequest = async () => {
       const userId = JSON.parse(sessionStorage.user).userId;
-      const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/list?memeId=${memeId}&userId=${userId}${lastPostRef !== -1 ?`&idx=${lastPostRef}` : ""}`;
+      const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/list?memeId=${memeId}&userId=${userId}${lastPostRef !== -1 ?`&idx=${lastPostRef}` : `&idx=0`}`;
 
-      console.log("여기 보낼거임!", requestUrl);
+      console.log("get new comment list!", requestUrl);
 
       const response = await axios.get(requestUrl, {
         headers: {
@@ -165,7 +174,7 @@ export const getCommentListAxiosThunk =
       if (!res || res.empty) {
         return;
       }
-      // dispatch(commentListActions.getCommentList(res.content));
+
       dispatch(commentListActions.updateNewCommentList({
         getList: res.content,
         lastPostId : lastPostRef,
@@ -184,7 +193,7 @@ export const getBestCommentListAxiosThunk =
       const userId = JSON.parse(sessionStorage.user).userId;
       const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/bestList?memeId=${memeId}&userId=${userId}`;
 
-      console.log("여기 보낼거임!", requestUrl);
+      console.log("get best comment list!", requestUrl);
 
       const response = await axios.get(requestUrl, {
         headers: {
@@ -216,12 +225,12 @@ export const getBestCommentListAxiosThunk =
   };
 
 export const getReplyListAxiosThunk =
-  (memeId: number, commentId: number): AppThunk =>
+  (memeId: number, commentId: number, lastCommentRef:number): AppThunk =>
   async (dispatch) => {
     const sendRequest = async () => {
 
       const userId = JSON.parse(sessionStorage.user).userId;
-      const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/reply?memeId=${memeId}&userId=${userId}&commentId=${commentId}`;
+      const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/reply?memeId=${memeId}&userId=${userId}&commentId=${commentId}${lastCommentRef !== -1 ?`&idx=${lastCommentRef}` : `&idx=0`}`;
 
       console.log("대댓글리스트 조회!", requestUrl);
 
@@ -248,7 +257,11 @@ export const getReplyListAxiosThunk =
       if (!res || res.empty) {
         return;
       }
-      dispatch(commentListActions.getReplyCommentList(res.content));
+      dispatch(commentListActions.updateReplyCommentList({
+        getList: res.content,
+        lastPostId : lastCommentRef,
+        hasNext: !res.last,
+      }))
     } catch (err) {
       console.log(err);
     }

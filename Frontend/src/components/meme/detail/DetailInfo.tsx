@@ -6,7 +6,6 @@ import useAxios from "hooks/useAxios";
 import UploadModal from "components/auction/upload/UploadModal";
 import styles from "./DetailInfo.module.css";
 import { Icon } from "@iconify/react";
-import { format } from "path";
 
 const DetailInfo: React.FC = () => {
   const dispatch = useDispatch();
@@ -16,6 +15,7 @@ const DetailInfo: React.FC = () => {
   const params = useParams();
   const memeid = parseInt(params.meme_id!, 10);
   const userId = JSON.parse(sessionStorage.user).userId;
+  const userNickname = JSON.parse(sessionStorage.getItem("user")!).nickname;
 
   // get meme detail info
   const { data, isLoading, status, sendRequest } = useAxios();
@@ -25,10 +25,9 @@ const DetailInfo: React.FC = () => {
   const { sendRequest: dislikeRequest } = useAxios();
   // post cart alarm
   const { sendRequest: alarmRequest } = useAxios();
-  
-  // 밈 업로드 시간
-  const [ createdDate, setCreatedDate ] = useState("");
 
+  // 밈 업로드 시간
+  const [createdDate, setCreatedDate] = useState("");
 
   // like, dislike count
   const [likes, setLikes] = useState(0);
@@ -63,11 +62,14 @@ const DetailInfo: React.FC = () => {
     setDislikes(data.hateCount);
     const isoDate = data.createdAt;
     const date = new Date(isoDate);
+    const formattedDate = `${date.getFullYear()}-${String(
+      date.getMonth() + 1
+    ).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+    const formattedTime = `${String(date.getHours()).padStart(2, "0")}:${String(
+      date.getMinutes()
+    ).padStart(2, "0")}`;
+    setCreatedDate(`${formattedDate}  ${formattedTime}`);
 
-    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-    const formattedTime = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
-    setCreatedDate(`${formattedDate}  ${formattedTime}`)
-    
     if (data.memeLike === "LIKE") {
       setLikeAction(true);
     } else if (data.memeLike === "HATE") {
@@ -162,9 +164,7 @@ const DetailInfo: React.FC = () => {
 
             <div className={styles.memeTitle}>{data.title}</div>
             <div className={styles.memeTimeView}>
-              <span>
-                {createdDate}
-              </span>
+              <span>{createdDate}</span>
               <span>조회수 {data.searched}</span>
             </div>
             <div className={styles.memeImgWrapper}>
@@ -213,19 +213,22 @@ const DetailInfo: React.FC = () => {
                 <div className={styles.heartNumber}>{dislikes}</div>
               </div>
             </div>
-            <div
-              className={styles.uploadAuctionBtn}
-              onClick={() => {
-                dispatch(
-                  auctionUploadActions.controlModal({
-                    visible: true,
-                    memeid: memeid,
-                  })
-                );
-              }}
-            >
-              이 NFT 경매 등록하러 가기
-            </div>
+            {userNickname === data.createrNickname && (
+              <div
+                className={styles.uploadAuctionBtn}
+                onClick={() => {
+                  dispatch(
+                    auctionUploadActions.controlModal({
+                      visible: true,
+                      memeid: memeid,
+                      sellerId: JSON.parse(sessionStorage.getItem('user')!).userId,
+                    })
+                  );
+                }}
+              >
+                이 NFT 경매 등록하러 가기
+              </div>
+            )}
             <UploadModal />
           </>
         ) : (
