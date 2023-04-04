@@ -10,7 +10,6 @@ import { playersInfo } from "store/auction";
 const ENDPOINT = process.env.NODE_ENV !== null?"wss://j8a305.p.ssafy.io/ws":"ws://localhost:8072/ws"
 // const ENDPOINT = "ws://localhost:8072/ws"
 const AuctionPage: React.FC = () => {
-  // const characters= useRef<playersInfo[]>([])
   const characters= useRef<playersInfo[]>([])
   const [userNum,setUserNum] = useState<number>(0)
 

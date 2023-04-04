@@ -15,37 +15,36 @@ import { Avatar } from "primereact/avatar";
 
 import styles from "components/auction/upload/UploadDropDown.module.css";
 
-const UploadDropDown: React.FC = () => {
+interface UploadDropDownProps {
+  visible: boolean
+}
+
+const UploadDropDown: React.FC<UploadDropDownProps> = ({visible}) => {
   const dispatch = useDispatch();
   const [selectedMeme, setSelectedMeme] = useState<memeList | null>(null);
   // 내가 선택한 밈 id
   // 내가 보유하는 밈 리스트
   const { data: myMemeList, sendRequest } = useAxios();
   const userId = JSON.parse(sessionStorage.getItem("user")!).userId;
-
-
-  const visible = useSelector<RootState, boolean>(
-    (state) => state.auctionUpload.isVisible
-  );
   // 만약 상세페이지에서 왔을때
 
-  const { id } = useSelector<RootState, submitMeme>(
+  const { memeId } = useSelector<RootState, submitMeme>(
     (state) => state.auctionUpload.submitMeme
   );
+  
   useEffect(() => {
     sendRequest({url:`/api/mpoffice/meme/memeList?userId=${userId}`});
   }, [visible]);
 
   useEffect(()=>{
-    if (id && myMemeList) {
+    if (memeId && myMemeList) {
       for (let i = 0; i < myMemeList.length; i++) {
-        if (myMemeList[i].id === id) {
+        if (myMemeList[i].id === memeId) {
           setSelectedMeme(myMemeList[i]);
         }
       }
     }
   },[myMemeList])
-  console.log()
 
   // 드랍다운 템플릿
   const selectedMemeTemplate = (option: memeList, props: DropdownProps) => {

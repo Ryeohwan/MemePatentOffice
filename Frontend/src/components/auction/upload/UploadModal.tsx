@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { auctionUploadActions } from "store/auctionUpload";
+import { useSelector } from "react-redux";
 import { submitMeme } from "store/auctionUpload";
 import { RootState } from "store/configStore";
 
 import { Checkbox, CheckboxChangeEvent } from "primereact/checkbox";
 import { Dialog } from "primereact/dialog";
+import useAxios from "hooks/useAxios";
 import UploadDropDown from "./UploadDropDown";
 import check from "assets/icon_check.png";
 import styles from "components/auction/upload/UploadModal.module.css";
@@ -14,16 +13,14 @@ import UploadTime from "./UploadTime";
 import UploadPrice from "./UploadPrice";
 import CheckingModal from "./CheckingModal";
 
-const UploadModal: React.FC = () => {
-  const dispatch = useDispatch();
+interface UploadModalProps {
+  modalHandler: (visible: boolean) => void;
+  visible: boolean;
+}
 
-  // 나중에 props로 바꾸기 홈갔다오면 켜져있어서 문제
-  const visible = useSelector<RootState, boolean>(
-    (state) => state.auctionUpload.isVisible
-  );
-
+const UploadModal: React.FC<UploadModalProps> = ({visible, modalHandler}) => {
   const [checkModalVisible, setCheckModalVisible] = useState<boolean>(false); // 유효성 검사 모달 보여주는 변수
-
+  const {data, status, sendRequest} = useAxios()
   const submitMeme = useSelector<RootState, submitMeme>(
     (state) => state.auctionUpload.submitMeme
   ); // 제출 객체
@@ -34,17 +31,38 @@ const UploadModal: React.FC = () => {
   useEffect(() => {
     setIsValid(
       !!(
-        submitMeme.id &&
-        submitMeme.lowPrice &&
-        submitMeme.auctionDate &&
+        submitMeme.memeId &&
+        submitMeme.startingPrice &&
+        submitMeme.startDateTime &&
         isCheck
       )
     );
   }, [submitMeme, isCheck]);
+
   //최종 제출 누르면 모달 키는 함수
-  const controlCheckModal = (visible: boolean) => {
+  const controlCheckModal = async (visible: boolean) => {
     setCheckModalVisible(visible);
+
+    await sendRequest({
+      url: `/api/auction/register`,
+      method: "POST",
+      data: {
+        sellerId: submitMeme.sellerId,
+        memeId: submitMeme.memeId,
+        startingPrice: submitMeme.startingPrice,
+        startDateTime: new Date(submitMeme.startDateTime!)
+      }
+    })
+
+    setCheckModalVisible(false)
   };
+
+  useEffect(()=>{
+    if(status === 201){
+      modalHandler(false)
+    }
+  },[status])
+  
   return (
     <>
       <Dialog
@@ -52,14 +70,14 @@ const UploadModal: React.FC = () => {
         className={styles.modal}
         visible={visible}
         onHide={() => {
-          dispatch(auctionUploadActions.controlModal({ visible: false }));
+          modalHandler(false)
         }}
         blockScroll={true}
       >
         <div className={styles.wrapper}>
           <div className={styles.dropDown}>
             <p>경매 등록 밈</p>
-            <UploadDropDown />
+            <UploadDropDown visible={visible}/>
           </div>
 
           <div className={styles.calendar}>
