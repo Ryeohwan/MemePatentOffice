@@ -61,6 +61,7 @@
     height: 250px;
     border-radius: 6px;
     margin-top: 10px;
+    object-fit: cover;
 }
 
 .memeGuide {
