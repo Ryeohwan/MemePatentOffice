@@ -41,7 +41,7 @@ public class AuctionController {
         return ResponseEntity.status(HttpStatus.OK).body(auctionList);
     }
     @ApiOperation(value="경매 정보", notes = "경매 정보를 리턴합니다.")
-    @PostMapping("/info")
+    @GetMapping("/info")
     public ResponseEntity<?> getInfo(@RequestParam Long auctionId) throws NotFoundException{
         return ResponseEntity.status(HttpStatus.OK).body(auctionService.getInfo(auctionId));
     }
