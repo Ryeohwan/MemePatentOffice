@@ -67,14 +67,27 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(commentService.findTop(memeId,userId));
     }
     @GetMapping("/list")
-    // 최신순으로 받기
+    // 최신순으로 받기 댓글만 조회
     public ResponseEntity CommentList(
                                       @RequestParam(name = "memeId") Long memeId,
                                       @RequestParam(name = "userId") Long userId,
                                       @RequestParam(required = false,name = "idx")int idx){
-        Long id1 = commentService.findTop(memeId,userId).getContent().get(0).getId();
-        Long id2 = commentService.findTop(memeId,userId).getContent().get(1).getId();
-        Long id3 = commentService.findTop(memeId,userId).getContent().get(2).getId();
+        Long id1 = null;
+        Long id2 = null;
+        Long id3 = null;
+        switch (commentService.findTop(memeId,userId).getContent().size()){
+            case 3:
+                id1 = commentService.findTop(memeId,userId).getContent().get(0).getId();
+                id2 = commentService.findTop(memeId,userId).getContent().get(1).getId();
+                id3 = commentService.findTop(memeId,userId).getContent().get(2).getId();
+                break;
+            case 2:
+                id1 = commentService.findTop(memeId,userId).getContent().get(0).getId();
+                id2 = commentService.findTop(memeId,userId).getContent().get(1).getId();
+                break;
+            case 1:
+                id1 = commentService.findTop(memeId,userId).getContent().get(0).getId();
+        }
         return ResponseEntity.status(HttpStatus.OK).body(commentService.findLatest(memeId,userId,id1,id2,id3,idx));
     }
 
