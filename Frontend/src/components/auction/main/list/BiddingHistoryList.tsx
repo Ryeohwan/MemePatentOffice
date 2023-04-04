@@ -16,7 +16,7 @@ type biddingHistory = {
 
 const BiddingHistoryList: React.FC = () => {
   const biddingHistory = useSelector<RootState, biddingHistory[]>(
-    (state) => state.auction.biddingHistory
+    (state) => state.auction.auctionInfo.biddingHistory
   );
 
   return (

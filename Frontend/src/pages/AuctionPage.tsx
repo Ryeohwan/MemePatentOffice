@@ -8,8 +8,8 @@ import { chatActions } from "store/chat";
 import { auctionActions } from "store/auction";
 import { playersInfo } from "store/auction";
 import useAxios from "hooks/useAxios";
-// const ENDPOINT = process.env.NODE_ENV !== null?"wss://j8a305.p.ssafy.io/ws":"ws://localhost:8072/ws"
-const ENDPOINT = "ws://localhost:8072/ws"
+const ENDPOINT = process.env.NODE_ENV !== null?"wss://j8a305.p.ssafy.io/ws":"ws://localhost:8072/ws"
+// const ENDPOINT = "ws://localhost:8072/ws"
 const AuctionPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const characters= useRef<playersInfo[]>([])

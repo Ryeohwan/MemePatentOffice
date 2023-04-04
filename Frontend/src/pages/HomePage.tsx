@@ -6,7 +6,7 @@ import { RootState } from "store/configStore";
 import { memeType } from "store/memeList";
 import { auctionCardType } from "store/auction";
 import useAxios from "hooks/useAxios";
-
+import { web3 } from "web3config";
 import SkeletonCard from "components/common/card/SkeletonCard";
 import NftCard from "components/common/card/NftCard";
 import NftAuctionCard from "components/common/card/NftAuctionCard";
@@ -14,15 +14,26 @@ import HomeCarousel from "components/main/homepage/HomeCarousel";
 import styles from "./HomePage.module.css";
 
 const HomePage: React.FC = () => {
-  
   // 요즘 핫한 밈
-  const {data: hotMeme, isLoading: hotMemeLoading, sendRequest: hotMemeRequest} = useAxios();
+  const {
+    data: hotMeme,
+    isLoading: hotMemeLoading,
+    sendRequest: hotMemeRequest,
+  } = useAxios();
 
   // 이번주 비싸게 팔린 밈
-  const {data: expensiveMeme, isLoading: expensiveMemeLoading, sendRequest: expensiveMemeRequest} = useAxios();
+  const {
+    data: expensiveMeme,
+    isLoading: expensiveMemeLoading,
+    sendRequest: expensiveMemeRequest,
+  } = useAxios();
 
   // 이번주 조회수 많은 밈
-  const {data: viewsMeme, isLoading: viewsMemeLoading, sendRequest: viewsMemeRequest} = useAxios();
+  const {
+    data: viewsMeme,
+    isLoading: viewsMemeLoading,
+    sendRequest: viewsMemeRequest,
+  } = useAxios();
 
   // 지금 HOT 한 경매
   // dummy data
@@ -77,38 +88,64 @@ const HomePage: React.FC = () => {
       highestBid: 500,
       imgUrl: "theglory.jpeg",
     },
+  ];
 
-  ]
+  const accountHandler = async () => {
+    if(sessionStorage.getItem('account')){
+      alert('이미 연결되었습니다.')
+      return
+    }
+    try {
+      if (window.ethereum) {
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        let account = "";
+        if (typeof accounts[0] === "string") {
+          account = web3.utils.toChecksumAddress(accounts[0]);
+        }
+        sessionStorage.setItem("account", account);
+        alert("지갑 연결 성공!");
+      } else {
+        alert("MetaMask를 설치해주세요.");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-
-  
-  // landering 될때 data get 하기 
+  // landering 될때 data get 하기
   // loading 중에는 skeleton
   useEffect(() => {
-    hotMemeRequest({url: '/api/mpoffice/meme/search/popular?days=week'})
-    expensiveMemeRequest({url: '/api/mpoffice/meme/search/expensive?days=week'})
-    viewsMemeRequest({url: '/api/mpoffice/meme/search/views?days=week'})
-  }, [])
+    hotMemeRequest({ url: "/api/mpoffice/meme/search/popular?days=week" });
+    expensiveMemeRequest({
+      url: "/api/mpoffice/meme/search/expensive?days=week",
+    });
+    viewsMemeRequest({ url: "/api/mpoffice/meme/search/views?days=week" });
+  }, []);
 
   // Main Carousel에 내려보낼 props
   const MAIN_INFO = [
     {
       id: 1,
       imgUrl: "home/meme.gif",
-      btnTxt: "밈 사전 바로가기",
-      btnUrl: "/meme-list/type=new",
+      btnTxt: "지갑 연결하기",
+      btnUrl: null,
+      btnEffect: accountHandler,
     },
     {
       id: 2,
       imgUrl: "home/uploadmeme.jpg",
       btnTxt: "밈 등록하러 가기",
       btnUrl: "/meme-upload",
+      btnEffect: async () => {},
     },
     {
       id: 3,
       imgUrl: "home/auction.jpg",
       btnTxt: "경매 구경하러 가기",
       btnUrl: "/auction-list/type=popular",
+      btnEffect: async () => {},
     },
   ];
 
@@ -156,7 +193,7 @@ const HomePage: React.FC = () => {
       {hotMemeLoading && (
         <div className={styles.skeletonWrapper}>
           <SkeletonCard />
-        </div>          
+        </div>
       )}
       {hotMeme && !hotMemeLoading && (
         <Carousel
