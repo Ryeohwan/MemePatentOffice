@@ -45,8 +45,7 @@ public class AuctionController {
     @ApiOperation(value="경매 정보", notes = "경매 정보를 리턴합니다.")
     @PostMapping("/info")
     public ResponseEntity<?> getInfo(@RequestParam Long auctionId) throws NotFoundException{
-        //TODO
-        return null;
+        return ResponseEntity.status(HttpStatus.OK).body(auctionService.getInfo(auctionId));
     }
 
     @ApiOperation(value="경매 등록", notes = "경매를 예약합니다. 예약한 시간에 경매가 시작되고, 시작 후 60*24 후에 끝납니다.")

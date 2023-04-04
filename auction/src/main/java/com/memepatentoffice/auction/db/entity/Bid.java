@@ -1,6 +1,5 @@
 package com.memepatentoffice.auction.db.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,20 +12,29 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Table(name = "bids")
 @EntityListeners(AuditingEntityListener.class)
 public class Bid extends BaseEntity{
     @Column(name = "auction_id", nullable = false)
     private Long auctionId;
+
     @Column(name = "user_id", nullable = false)
     private Long userId;
+
+    @Column(name = "nickname", nullable = false)
+    private String nickname;
     @Column(name = "askingprice")
     private Long askingprice;
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+    @Builder
+    public Bid(Long auctionId, Long userId, String nickname, Long askingprice) {
+        this.auctionId = auctionId;
+        this.userId = userId;
+        this.nickname = nickname;
+        this.askingprice = askingprice;
+    }
 
 
 }
