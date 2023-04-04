@@ -1,20 +1,17 @@
-package com.memepatentoffice.auction.api.message;
+package com.memepatentoffice.auction.api.dto.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class WebSocketChatRes {
+public class WebSocketChatReq {
     private Long auctionId;
     private String nickname;
     private String message;
-    private LocalDateTime createdAt;
 
 }

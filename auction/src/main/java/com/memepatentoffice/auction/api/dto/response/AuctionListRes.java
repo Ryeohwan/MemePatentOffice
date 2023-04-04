@@ -1,5 +1,6 @@
-package com.memepatentoffice.auction.api.response;
+package com.memepatentoffice.auction.api.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -7,10 +8,11 @@ import java.time.LocalDateTime;
 
 @Builder
 @Getter
-public class AuctionRes {
+public class AuctionListRes {
     private Long memeId;
     private Long auctionId;
     private String title;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime finishTime;
     private Long highestBid;
     private String imgUrl;

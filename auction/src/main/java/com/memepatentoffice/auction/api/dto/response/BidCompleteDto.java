@@ -1,4 +1,4 @@
-package com.memepatentoffice.auction.api.response;
+package com.memepatentoffice.auction.api.dto.response;
 
 import java.time.LocalDateTime;
 

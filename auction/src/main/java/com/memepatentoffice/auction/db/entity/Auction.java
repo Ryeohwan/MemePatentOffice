@@ -1,5 +1,6 @@
 package com.memepatentoffice.auction.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.memepatentoffice.auction.db.entity.type.AuctionStatus;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -7,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter

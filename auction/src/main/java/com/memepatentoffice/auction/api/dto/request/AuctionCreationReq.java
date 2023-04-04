@@ -1,4 +1,4 @@
-package com.memepatentoffice.auction.api.request;
+package com.memepatentoffice.auction.api.dto.request;
 
 import lombok.*;
 

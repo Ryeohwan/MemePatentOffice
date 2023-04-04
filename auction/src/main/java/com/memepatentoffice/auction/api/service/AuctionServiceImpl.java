@@ -1,10 +1,11 @@
 package com.memepatentoffice.auction.api.service;
 
-import com.memepatentoffice.auction.api.message.WebSocketCharacter;
-import com.memepatentoffice.auction.api.request.AuctionCreationReq;
-import com.memepatentoffice.auction.api.message.WebSocketChatReq;
-import com.memepatentoffice.auction.api.message.WebSocketChatRes;
-import com.memepatentoffice.auction.api.response.AuctionRes;
+import com.memepatentoffice.auction.api.dto.message.WebSocketCharacter;
+import com.memepatentoffice.auction.api.dto.request.AuctionCreationReq;
+import com.memepatentoffice.auction.api.dto.message.WebSocketChatReq;
+import com.memepatentoffice.auction.api.dto.message.WebSocketChatRes;
+import com.memepatentoffice.auction.api.dto.response.AuctionListRes;
+import com.memepatentoffice.auction.api.dto.response.AuctionRes;
 import com.memepatentoffice.auction.common.exception.NotFoundException;
 import com.memepatentoffice.auction.common.util.ExceptionSupplier;
 import com.memepatentoffice.auction.common.util.InterServiceCommunicationProvider;
@@ -30,7 +31,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class AuctionServiceImpl implements AuctionService{
     private final BidRepository bidRepository;
-
     private final AuctionRepository auctionRepository;
     private final SimpMessageSendingOperations simpMessageSendingOperations;
     private final InterServiceCommunicationProvider isp;
@@ -47,7 +47,7 @@ public class AuctionServiceImpl implements AuctionService{
 
     @Transactional
     @Override
-    public Long enrollAuction(AuctionCreationReq req) throws NotFoundException{
+    public Long registerAuction(AuctionCreationReq req) throws NotFoundException{
         if(!isp.existsMemeById(req.getMemeId())) throw new NotFoundException("유효하지 않은 밈 아이디입니다");
         if(!isp.existsUserById(req.getSellerId())) throw new NotFoundException("유효하지 않은 판매자 아이디입니다");
 
@@ -77,6 +77,11 @@ public class AuctionServiceImpl implements AuctionService{
         return auction.getId();
     }
 
+    @Override
+    public AuctionRes getInfo(Long auctionId) throws NotFoundException {
+        return null;
+    }
+
 
     @Override
     public void sendChat(WebSocketChatReq req){
@@ -91,7 +96,7 @@ public class AuctionServiceImpl implements AuctionService{
     }
 
     @Override
-    public List<AuctionRes> findAllByHit(){
+    public List<AuctionListRes> findAllByHit(){
         return auctionRepository.findAllProceeding().stream()
                 .map(auction -> streamExceptionHandler(()->{
                     String respBody = isp.findMemeById(auction.getMemeId()).orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
@@ -103,7 +108,7 @@ public class AuctionServiceImpl implements AuctionService{
                     Long highestBid = bidRepository.highestBid(auction.getId())
                             .orElse(0L);
                     log.info(auction.toString());
-                    return AuctionRes.builder()
+                    return AuctionListRes.builder()
                             .memeId(auction.getMemeId())
                             .auctionId(auction.getId())
                             .title(title)
@@ -113,12 +118,12 @@ public class AuctionServiceImpl implements AuctionService{
                             .hit(hit)
                             .build();
                 }))
-                .sorted(Comparator.comparing(AuctionRes::getHit).reversed())
+                .sorted(Comparator.comparing(AuctionListRes::getHit).reversed())
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<AuctionRes> findAllProceedingByFinishTimeLatest() throws RuntimeException{
+    public List<AuctionListRes> findAllProceedingByFinishTimeLatest() throws RuntimeException{
         return auctionRepository.findAllProceedingByFinishTimeLatest().stream()
                 .map(auction -> streamExceptionHandler(()->{
                     String respBody = isp.findMemeById(auction.getMemeId()).orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
@@ -130,7 +135,7 @@ public class AuctionServiceImpl implements AuctionService{
                     Long highestBid = bidRepository.highestBid(auction.getId())
                             .orElse(0L);
 
-                    return AuctionRes.builder()
+                    return AuctionListRes.builder()
                             .memeId(auction.getMemeId())
                             .auctionId(auction.getId())
                             .title(title)
@@ -143,7 +148,7 @@ public class AuctionServiceImpl implements AuctionService{
     }
 
     @Override
-    public List<AuctionRes> findAllProceedingByFinishTimeOldest() throws RuntimeException{
+    public List<AuctionListRes> findAllProceedingByFinishTimeOldest() throws RuntimeException{
         return auctionRepository.findAllProceedingByFinishTimeOldest().stream()
                 .map(auction -> streamExceptionHandler(()->{
                     String respBody = isp.findMemeById(auction.getMemeId()).orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
@@ -155,7 +160,7 @@ public class AuctionServiceImpl implements AuctionService{
                     Long highestBid = bidRepository.highestBid(auction.getId())
                             .orElse(0L);
 
-                    return AuctionRes.builder()
+                    return AuctionListRes.builder()
                             .memeId(auction.getMemeId())
                             .auctionId(auction.getId())
                             .title(title)
@@ -182,7 +187,7 @@ public class AuctionServiceImpl implements AuctionService{
         Long auctionId;
 
         @Override
-        @javax.transaction.Transactional
+        @Transactional
         public void run() {
             log.info("AuctionStarter가 실행되었습니다");
             Auction auction = auctionRepository.findById(auctionId)
