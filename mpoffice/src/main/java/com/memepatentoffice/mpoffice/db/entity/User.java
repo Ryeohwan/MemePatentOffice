@@ -72,4 +72,8 @@ public class User extends BaseEntity{
     public void setIsValid(IsValid isValid) {
         this.isValid = isValid;
     }
+
+    public void setWalletAddress(String walletAddress) {
+        this.walletAddress = walletAddress;
+    }
 }
