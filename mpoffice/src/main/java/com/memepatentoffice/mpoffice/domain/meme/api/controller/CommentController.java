@@ -100,7 +100,7 @@ public class CommentController {
             @RequestParam(name = "memeId") Long memeId,
             @RequestParam(name = "userId") Long userId,
             @RequestParam(name = "commentId") Long commentId,
-            @RequestParam(name = "idx") Long idx,
+            @RequestParam(name = "idx",required = false) Long idx,
             @PageableDefault(size = 8)Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(commentService.findReply(memeId,userId,commentId,idx,pageable));
     }

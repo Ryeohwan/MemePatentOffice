@@ -175,6 +175,9 @@ public class CommentService {
     }
 
     public Slice<ReplyResponse> findReply(Long memeId, Long userId,Long commentId ,Long idx,Pageable pageable){
+        if(idx == null){
+            idx = 0L;
+        }
         List<Object> temp =commentRepository.findReplyComment(memeId,userId,commentId,idx,PageRequest.of(0,8));
         List<ReplyResponse> result = convertToDtoReply(temp);
         return checkReplyLastPage(pageable,result);
