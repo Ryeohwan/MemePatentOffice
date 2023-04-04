@@ -1,23 +1,40 @@
-import NftAuctionCard from "components/common/card/NftAuctionCard";
+import {useEffect} from 'react';
+import useAxios from 'hooks/useAxios';
 import { auctionCardType } from "store/auction";
+import SkeletonCard from 'components/common/card/SkeletonCard';
+import NftAuctionCard from "components/common/card/NftAuctionCard";
+
 import { ScrollTop } from "primereact/scrolltop";
 import styles from "./ProfileTabComp.module.css";
 
 interface Props {
-  auctionList: auctionCardType[];
+  nickname: string;
 }
 
-const ProfileAuction: React.FC<Props> = ({ auctionList }) => {
+const ProfileAuction: React.FC<Props> = ({ nickname }) => {
+  // 경매 api 아직 안나왔음
+  const {data, status, isLoading, sendRequest} = useAxios();
+
+  useEffect(() => {
+    sendRequest({url: `/api/auction/list?userNickname=${nickname}`})
+  }, [])
+
   return (
     <div className={styles.cardContainer}>
-      {/*  nft 없는 경우 */}
-      {auctionList.length === 0 && (
+      {/* loading 중 */}
+      {isLoading && <SkeletonCard />}
+
+      {/* 진행중인 경매 없는 경우 */}
+      {!isLoading && status === 200 && data.length === 0 && (
         <div className={styles.notContent}>진행중인 경매가 없습니다.</div>
       )}
 
-      {auctionList.map((auction) => {
-        return <NftAuctionCard key={auction.memeId} items={auction} />;
-      })}
+      {/* 경매 있는 경우 */}
+      {!isLoading && status === 200 && data.length > 0 && (
+        data.map((auction: auctionCardType) => {
+          return <NftAuctionCard key={auction.memeId} items={auction} />;
+        })
+      )}
 
       <ScrollTop
         target="parent"

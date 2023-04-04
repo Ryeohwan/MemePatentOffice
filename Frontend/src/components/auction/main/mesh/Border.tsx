@@ -28,6 +28,7 @@ const Border: React.FC = () => {
   // const loader2 = new THREE.TextureLoader()
   // const texture = loader2.load(memeImgUrl!)
  nftTexture.current = useLoader(THREE.TextureLoader, memeImgUrl!)
+ console.log(memeImgUrl)
   // if (mime === "gif") {
   // nftTexture.current! = loader.load(memeImgSrc!, (reader) => {});
   // }

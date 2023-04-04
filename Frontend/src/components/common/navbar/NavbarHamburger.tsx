@@ -34,6 +34,7 @@ const NavbarHamburger: React.FC = () => {
   // 네브바에서 밈사전으로 들어가는 경우 memeList redux reset
   const memeListHandler = () => {
     dispatch(memeListActions.resetAll());
+    setOpen(!open);
     navigate("/meme-list/type=new");
   };
 
@@ -44,6 +45,7 @@ const NavbarHamburger: React.FC = () => {
     }/tab=nft`;
 
     if (pathname.includes("profile") && !pathname.includes("setting")) {
+      setOpen(!open);
       window.location.href = mypageUrl;
     } else {
       navigate(mypageUrl);
@@ -57,7 +59,7 @@ const NavbarHamburger: React.FC = () => {
           method: "eth_requestAccounts",
         });
         let account = "";
-        if (typeof(accounts[0]) === "string") {
+        if (typeof accounts[0] === "string") {
           account = web3.utils.toChecksumAddress(accounts[0]);
           console.log(account)
         }
@@ -124,7 +126,7 @@ const NavbarHamburger: React.FC = () => {
       />
 
       <Sidebar
-        className={styles.dropContainer}
+        className={account ? styles.loginDropContainer : styles.dropContainer}
         visible={open}
         position="top"
         showCloseIcon={false}
@@ -141,16 +143,19 @@ const NavbarHamburger: React.FC = () => {
             밈 사전
           </div>
 
-          <NavLink to="/auction-list/type=new" className={styles.navLink}>
+          <NavLink
+            onClick={() => setOpen(!open)}
+            to="/auction-list/type=new"
+            className={styles.navLink}
+          >
             경매 둘러보기
           </NavLink>
 
-          <div onClick={accountHandler}>지갑 연결하기</div>
+          {!account && <div onClick={accountHandler}>지갑 연결하기</div>}
 
           <div className={styles.navLink} onClick={mypageHandler}>
             마이페이지
           </div>
-
           <p className={styles.navLink} onClick={logoutHandler}>
             로그아웃
           </p>

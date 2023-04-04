@@ -9,7 +9,8 @@ interface HomeCarouselProps {
     id: number;
     imgUrl: string;
     btnTxt: string;
-    btnUrl: string;
+    btnUrl: string|null;
+    btnEffect: ()=>Promise<void>
   }[];
 }
 
@@ -26,7 +27,6 @@ const HomeCarousel: React.FC<HomeCarouselProps> = ({ info }) => {
           );
     }, 5000);
     return () => {
-        console.log(2)
         clearInterval(intervalId);
     }
   }, []);
@@ -62,7 +62,11 @@ const HomeCarousel: React.FC<HomeCarouselProps> = ({ info }) => {
       <button
         className={styles.carouselBtn}
         onClick={() => {
-          navigateHandler(info[currentImageIndex].btnUrl);
+          if(info[currentImageIndex].btnUrl){
+            navigateHandler(info[currentImageIndex].btnUrl!);
+          } else if (info[currentImageIndex].btnEffect !== null){
+            info[currentImageIndex].btnEffect()
+          }
         }}
       >
         {info[currentImageIndex].btnTxt}
