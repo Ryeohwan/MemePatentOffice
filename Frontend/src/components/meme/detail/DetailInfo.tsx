@@ -6,6 +6,7 @@ import useAxios from "hooks/useAxios";
 import UploadModal from "components/auction/upload/UploadModal";
 import styles from "./DetailInfo.module.css";
 import { Icon } from "@iconify/react";
+import { format } from "path";
 
 const DetailInfo: React.FC = () => {
   const dispatch = useDispatch();
@@ -24,6 +25,10 @@ const DetailInfo: React.FC = () => {
   const { sendRequest: dislikeRequest } = useAxios();
   // post cart alarm
   const { sendRequest: alarmRequest } = useAxios();
+  
+  // 밈 업로드 시간
+  const [ createdDate, setCreatedDate ] = useState("");
+
 
   // like, dislike count
   const [likes, setLikes] = useState(0);
@@ -33,10 +38,10 @@ const DetailInfo: React.FC = () => {
   const [dislikeAction, setDislikeAction] = useState<boolean>(false);
 
   // 경매 알림 상태
-  const [cart, setCart] = useState<string>("")
+  const [cart, setCart] = useState<string>("");
 
   // 경매에 등록된 상태인지
-  const [auctionState, setAuctionState] = useState<string|null>();
+  const [auctionState, setAuctionState] = useState<string | null>();
 
   useEffect(() => {
     setIsFromNotice(location.state ? true : false);
@@ -53,10 +58,16 @@ const DetailInfo: React.FC = () => {
   useEffect(() => {
     if (status !== 200) return;
     setAuctionState(data.auctionState);
-    setCart(data.cart)
+    setCart(data.cart);
     setLikes(data.likeCount);
     setDislikes(data.hateCount);
+    const isoDate = data.createdAt;
+    const date = new Date(isoDate);
 
+    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    const formattedTime = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+    setCreatedDate(`${formattedDate}  ${formattedTime}`)
+    
     if (data.memeLike === "LIKE") {
       setLikeAction(true);
     } else if (data.memeLike === "HATE") {
@@ -76,21 +87,21 @@ const DetailInfo: React.FC = () => {
         memeId: memeid,
         userId: userId,
         cart: "ADD",
-      }
+      },
     });
     setCart(cart === "ADD" ? "DELETE" : "ADD");
   };
 
   const onClickLike = () => {
-      likeRequest({
-        url: "/api/mpoffice/meme/like",
-        method: "POST",
-        data: {
-          memeId: memeid,
-          userId: userId,
-          memeLike: "LIKE" 
-        },
-      });
+    likeRequest({
+      url: "/api/mpoffice/meme/like",
+      method: "POST",
+      data: {
+        memeId: memeid,
+        userId: userId,
+        memeLike: "LIKE",
+      },
+    });
 
     if (likeAction) {
       setLikes(likes - 1);
@@ -107,15 +118,15 @@ const DetailInfo: React.FC = () => {
   };
 
   const onClickDislike = () => {
-      dislikeRequest({
-        url: "/api/mpoffice/meme/like",
-        method: "POST",
-        data: {
-          memeId: memeid,
-          userId: userId,
-          memeLike: "HATE" 
-        },
-      });
+    dislikeRequest({
+      url: "/api/mpoffice/meme/like",
+      method: "POST",
+      data: {
+        memeId: memeid,
+        userId: userId,
+        memeLike: "HATE",
+      },
+    });
 
     if (dislikeAction) {
       setDislikes(dislikes - 1);
@@ -138,7 +149,7 @@ const DetailInfo: React.FC = () => {
           <>
             <div className={styles.auctionBtnWrapper}>
               <div className={styles.alarmBtn} onClick={onClickGetAlarm}>
-                {cart==="ADD"?"경매 알림 취소": "경매 알림 받기"}
+                {cart === "ADD" ? "경매 알림 취소" : "경매 알림 받기"}
               </div>
               <div
                 className={
@@ -152,8 +163,7 @@ const DetailInfo: React.FC = () => {
             <div className={styles.memeTitle}>{data.title}</div>
             <div className={styles.memeTimeView}>
               <span>
-                {data.createdAt[0]}.{data.createdAt[1]}.{data.createdAt[2]}
-                &nbsp;&nbsp;{data.createdAt[3]}:{data.createdAt[4]}
+                {createdDate}
               </span>
               <span>조회수 {data.searched}</span>
             </div>
@@ -175,15 +185,12 @@ const DetailInfo: React.FC = () => {
               <div className={styles.ownerName}>{data.ownerNickname}</div>
             </div>
             <div className={styles.heartGroup}>
-
               <div className={styles.heartWrapper}>
                 <div className={styles.dislikeBtn}>
                   <Icon
                     icon="mdi:cards-heart"
                     className={
-                      !likeAction
-                        ? styles.heartImoji
-                        : styles.dislikeHeartImoji
+                      !likeAction ? styles.heartImoji : styles.dislikeHeartImoji
                     }
                     onClick={onClickLike}
                   />
