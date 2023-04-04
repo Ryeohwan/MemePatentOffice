@@ -121,8 +121,10 @@ public class AuctionServiceImpl implements AuctionService{
         String nickname = jsonObject.getString("nickname");
 
         Bid currentTopBid = bidRepository.findTopByOrderByCreatedAtDesc();
-        if(!(bidReq.getAskingprice() > currentTopBid.getAskingprice())){
-            throw new BiddingException("제안하는 가격이 현재 호가보다 낮아서 안됩니다");
+        if(currentTopBid!=null){
+            if(!(bidReq.getAskingprice() > currentTopBid.getAskingprice())){
+                throw new BiddingException("제안하는 가격이 현재 호가보다 낮아서 안됩니다");
+            }
         }
 
          Bid bid = bidRepository.save(
@@ -152,15 +154,16 @@ public class AuctionServiceImpl implements AuctionService{
                     String imageurl = jsonObject.getString("memeImage");
                     int hit = jsonObject.getInt("searched");
 
-                    Long highestBid = bidRepository.highestBid(auction.getId())
-                            .orElse(0L);
-                    log.info(auction.toString());
+                    Long highestBidPrice = auction.getStartingPrice();
+                    Optional<Bid> highestBid = bidRepository.findTopByAuctionIdOrderByAskingpriceDesc(auction.getId());
+                    if(highestBid.isPresent()) highestBidPrice=highestBid.get().getAskingprice();
+
                     return AuctionListRes.builder()
                             .memeId(auction.getMemeId())
                             .auctionId(auction.getId())
                             .title(title)
                             .finishTime(auction.getFinishTime())
-                            .highestBid(highestBid)
+                            .highestBid(highestBidPrice)
                             .imgUrl(imageurl)
                             .hit(hit)
                             .build();
@@ -179,15 +182,16 @@ public class AuctionServiceImpl implements AuctionService{
                     String imageurl = jsonObject.getString("memeImage");
                     int hit = jsonObject.getInt("searched");
 
-                    Long highestBid = bidRepository.highestBid(auction.getId())
-                            .orElse(0L);
+                    Long highestBidPrice = auction.getStartingPrice();
+                    Optional<Bid> highestBid = bidRepository.findTopByAuctionIdOrderByAskingpriceDesc(auction.getId());
+                    if(highestBid.isPresent()) highestBidPrice=highestBid.get().getAskingprice();
 
                     return AuctionListRes.builder()
                             .memeId(auction.getMemeId())
                             .auctionId(auction.getId())
                             .title(title)
                             .finishTime(auction.getFinishTime())
-                            .highestBid(highestBid)
+                            .highestBid(highestBidPrice)
                             .imgUrl(imageurl)
                             .hit(hit)
                             .build();
@@ -204,15 +208,16 @@ public class AuctionServiceImpl implements AuctionService{
                     String imageurl = jsonObject.getString("memeImage");
                     int hit = jsonObject.getInt("searched");
 
-                    Long highestBid = bidRepository.highestBid(auction.getId())
-                            .orElse(0L);
+                    Long highestBidPrice = auction.getStartingPrice();
+                    Optional<Bid> highestBid = bidRepository.findTopByAuctionIdOrderByAskingpriceDesc(auction.getId());
+                    if(highestBid.isPresent()) highestBidPrice=highestBid.get().getAskingprice();
 
                     return AuctionListRes.builder()
                             .memeId(auction.getMemeId())
                             .auctionId(auction.getId())
                             .title(title)
                             .finishTime(auction.getFinishTime())
-                            .highestBid(highestBid)
+                            .highestBid(highestBidPrice)
                             .imgUrl(imageurl)
                             .hit(hit)
                             .build();
@@ -268,7 +273,11 @@ public class AuctionServiceImpl implements AuctionService{
                     .orElse(null);
             log.info("종료할 Auction id는 "+auction.getId()+"입니다.");
             //1. 스마트 컨트랙트 호출
-            //2. 체결 요청 보냄
+            //2. mpoffice에 체결 요청 보냄
+            Bid currentTopBid = bidRepository.findTopByOrderByCreatedAtDesc();
+            if(currentTopBid==null){
+
+            }
             //3. state 바꾸기
             if(AuctionStatus.PROCEEDING.equals(auction.getStatus())){
                 auctionRepository.updateStatusToTerminated(auctionId);
