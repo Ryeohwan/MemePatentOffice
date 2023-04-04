@@ -132,7 +132,9 @@ public class MemeSearchRepository {
                         meme.title,
                         meme.imageurl.as("imgUrl"),
                         meme.content.as("description"),
-                        meme.situation.as("example")))
+                        meme.situation.as("example"),
+                        user.profileImage.as("userImg"))
+                )
                 .from(meme)
                 .innerJoin(user).fetchJoin()
                 .on(meme.owner.id.eq(user.id))
@@ -160,7 +162,8 @@ public class MemeSearchRepository {
                                 meme.title,
                                 meme.imageurl.as("imgUrl"),
                                 meme.content.as("description"),
-                                meme.situation.as("example")))
+                                meme.situation.as("example"),
+                                user.profileImage.as("userImg")))
                 .from(meme)
 
                 // 닉네임
@@ -183,8 +186,8 @@ public class MemeSearchRepository {
                 .groupBy(meme.id)
                 .having( ltPopularMemeId(lastMemeId) )
                 .orderBy(
-                        daysMemeLike(days),
                         meme.id.count().desc(),
+                        daysMemeLike(days),
                         meme.id.desc()
                 )
                 .limit(pageable.getPageSize()+1)
@@ -204,7 +207,8 @@ public class MemeSearchRepository {
                                 meme.title,
                                 meme.imageurl.as("imgUrl"),
                                 meme.content.as("description"),
-                                meme.situation.as("example")))
+                                meme.situation.as("example"),
+                                user.profileImage.as("userImg")))
                 .from(meme)
 
                 .innerJoin(user).fetchJoin()
@@ -236,7 +240,8 @@ public class MemeSearchRepository {
                                 meme.title,
                                 meme.imageurl.as("imgUrl"),
                                 meme.content.as("description"),
-                                meme.situation.as("example")))
+                                meme.situation.as("example"),
+                                user.profileImage.as("userImg")))
                 .from(meme)
                 .innerJoin(user).fetchJoin()
                 .on(meme.owner.id.eq(user.id))
