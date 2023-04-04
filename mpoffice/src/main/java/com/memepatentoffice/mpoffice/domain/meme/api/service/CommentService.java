@@ -43,7 +43,7 @@ public class CommentService {
         Meme meme = memeRepository.findById(commentRequest.getMemeId())
                 .orElseThrow(()->new NotFoundException("유효하지 않은 밈입니다"));
         Optional<Comment> parentComment = commentRepository.findById(commentRequest.getParentId());
-        //optional로 user
+        //optional로 user update
         Comment com = new Comment().builder()
                 .content(commentRequest.getContent())
                 .user(user)
