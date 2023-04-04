@@ -161,16 +161,16 @@ public class AuctionServiceImpl implements AuctionService{
                     String imageurl = jsonObject.getString("memeImage");
                     int hit = jsonObject.getInt("searched");
 
-                    Long highestBidPrice = auction.getStartingPrice();
-                    Optional<Bid> highestBid = bidRepository.findTopByAuctionIdOrderByAskingpriceDesc(auction.getId());
-                    if(highestBid.isPresent()) highestBidPrice=highestBid.get().getAskingprice();
+                    AtomicReference<Long> highestBid = new AtomicReference<>(auction.getStartingPrice());
+                    bidRepository.findTopByAuctionIdOrderByAskingpriceDesc(auction.getId())
+                            .ifPresent(hb->highestBid.set(hb.getAskingprice()));
 
                     return AuctionListRes.builder()
                             .memeId(auction.getMemeId())
                             .auctionId(auction.getId())
                             .title(title)
                             .finishTime(auction.getFinishTime())
-                            .highestBid(highestBidPrice)
+                            .highestBid(highestBid.get())
                             .imgUrl(imageurl)
                             .hit(hit)
                             .build();
@@ -188,16 +188,16 @@ public class AuctionServiceImpl implements AuctionService{
                     String imageurl = jsonObject.getString("memeImage");
                     int hit = jsonObject.getInt("searched");
 
-                    Long highestBidPrice = auction.getStartingPrice();
-                    Optional<Bid> highestBid = bidRepository.findTopByAuctionIdOrderByAskingpriceDesc(auction.getId());
-                    if(highestBid.isPresent()) highestBidPrice=highestBid.get().getAskingprice();
+                    AtomicReference<Long> highestBid = new AtomicReference<>(auction.getStartingPrice());
+                    bidRepository.findTopByAuctionIdOrderByAskingpriceDesc(auction.getId())
+                            .ifPresent(hb->highestBid.set(hb.getAskingprice()));
 
                     return AuctionListRes.builder()
                             .memeId(auction.getMemeId())
                             .auctionId(auction.getId())
                             .title(title)
                             .finishTime(auction.getFinishTime())
-                            .highestBid(highestBidPrice)
+                            .highestBid(highestBid.get())
                             .imgUrl(imageurl)
                             .hit(hit)
                             .build();
@@ -213,16 +213,16 @@ public class AuctionServiceImpl implements AuctionService{
                     String imageurl = jsonObject.getString("memeImage");
                     int hit = jsonObject.getInt("searched");
 
-                    Long highestBidPrice = auction.getStartingPrice();
-                    Optional<Bid> highestBid = bidRepository.findTopByAuctionIdOrderByAskingpriceDesc(auction.getId());
-                    if(highestBid.isPresent()) highestBidPrice=highestBid.get().getAskingprice();
+                    AtomicReference<Long> highestBid = new AtomicReference<>(auction.getStartingPrice());
+                    bidRepository.findTopByAuctionIdOrderByAskingpriceDesc(auction.getId())
+                            .ifPresent(hb->highestBid.set(hb.getAskingprice()));
 
                     return AuctionListRes.builder()
                             .memeId(auction.getMemeId())
                             .auctionId(auction.getId())
                             .title(title)
                             .finishTime(auction.getFinishTime())
-                            .highestBid(highestBidPrice)
+                            .highestBid(highestBid.get())
                             .imgUrl(imageurl)
                             .hit(hit)
                             .build();
