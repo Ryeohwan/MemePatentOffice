@@ -28,6 +28,7 @@ const ProfilePage: React.FC = () => {
         description: "오순도순 토토로 가족",
         example:
           "나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. 나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. 나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. 나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. 나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. 나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. ",
+        userImg: "https://storage.googleapis.com/mpoffice/Logo.png"
       },
       {
         id: 2,
@@ -37,6 +38,7 @@ const ProfilePage: React.FC = () => {
         description: "뉴진스의 곡 OMG 속 가사인 oh my oh my god 가 엄마엄마가~로 들린다고 해서 시작되었다.",
         example:
           "틱톡, 릴스 챌린지로 자리잡은 밈이다. 누가 이렇게 예쁘게 낳았어? 라고 질문하면 뉴진스의 OMG 노래를 부르며 엄마엄마가~ 라고 답한다.",
+        userImg: "https://storage.googleapis.com/mpoffice/Logo.png"
       },
       {
         id: 3,
@@ -46,6 +48,7 @@ const ProfilePage: React.FC = () => {
         description: "내 말 알아들었으면 끄덕여라",
         example:
           "인기 드라마 더 글로리 속 학교 폭력 가해자 박연진이 같은 무리의 친구(?) 최혜정에게 하는 대사이다. 최혜정이 박연진 남편의 친구 무리에게 박연진의 학창 시절에 대한 이야기를 해서 박연진이 화나서 하는 대사이다.",
+        userImg: "https://storage.googleapis.com/mpoffice/Logo.png"
       },
       {
         id: 4,
@@ -56,6 +59,7 @@ const ProfilePage: React.FC = () => {
         description: "오순도순 토토로 가족",
         example:
           "나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. 나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. 나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. 나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. 나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. 나무 위에 큰 토토로, 중간 토토로, 작은 토토로, 사츠키와 메이가 앉아 한가로운 오후를 보내고 있다. ",
+        userImg: "https://storage.googleapis.com/mpoffice/Logo.png"
       },
       {
         id: 5,
@@ -65,6 +69,7 @@ const ProfilePage: React.FC = () => {
         description: "뉴진스의 곡 OMG 속 가사인 oh my oh my god 가 엄마엄마가~로 들린다고 해서 시작되었다.",
         example:
           "틱톡, 릴스 챌린지로 자리잡은 밈이다. 누가 이렇게 예쁘게 낳았어? 라고 질문하면 뉴진스의 OMG 노래를 부르며 엄마엄마가~ 라고 답한다.",
+        userImg: "https://storage.googleapis.com/mpoffice/Logo.png"
       },
       {
         id: 6,
@@ -74,6 +79,7 @@ const ProfilePage: React.FC = () => {
         description: "내 말 알아들었으면 끄덕여라",
         example:
           "인기 드라마 더 글로리 속 학교 폭력 가해자 박연진이 같은 무리의 친구(?) 최혜정에게 하는 대사이다. 최혜정이 박연진 남편의 친구 무리에게 박연진의 학창 시절에 대한 이야기를 해서 박연진이 화나서 하는 대사이다.",
+        userImg: "https://storage.googleapis.com/mpoffice/Logo.png"
       },
     ],
     auctionList: [

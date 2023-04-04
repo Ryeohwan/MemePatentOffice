@@ -9,6 +9,7 @@ export type memeType = {
   imgUrl: string;
   description: string;
   example: string;
+  userImg: string;
 };
 
 interface initialStateInterface {
