@@ -15,6 +15,7 @@ COPY mpoffice/settings.gradle .
 COPY mpoffice/src src
 RUN chmod +x ./gradlew
 RUN ./gradlew clean bootJar
+RUN apk add tzdata
 
 FROM adoptopenjdk:11-hotspot
 COPY --from=builder build/libs/*.jar app.jar
