@@ -5,31 +5,25 @@ import { giveSignInCoin, memeOwnerAccess, transferNftCoin, transferNftOwnership 
 
 const BlockChain: React.FC = () => {
   const [account, setAccount] = useState("");
-  const userAccount = sessionStorage.getItem("account");
-  // const walletAddress = JSON.parse(sessionStorage.user).walletAddress;
-  const walletAddress = JSON.parse(sessionStorage.getItem('user')!).walletAddress
-  const getAccount = async () => {
-    try {
-      if (window.ethereum) {
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        setAccount(accounts[0]);
-      } else {
-        alert("Install Metamask");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const [ yes, setYes ] = useState(false);
+  let accountAddress = "";
+
+  const getUserAccount = () => {
+    const user = JSON.parse(sessionStorage.getItem("user")!);
+    user.walletAddress = "0xFE9bf05034D04EE9bAfb5c9ef3BD4b6EF33959bd";
+    sessionStorage.setItem("user", JSON.stringify(user));
+    setYes(true);
+  }
 
   useEffect(() => {
-    console.log(walletAddress)
+    const userId = JSON.parse(sessionStorage.user).userId;
+    console.log("user session", userId);
   }, []);
 
   useEffect(() => {
-    console.log(account);
-  }, [account]);
+    
+  }, [yes])
+
 
   return (
     <div>
