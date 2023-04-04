@@ -4,7 +4,7 @@ import { Carousel } from "primereact/carousel";
 import { useSelector } from "react-redux";
 import { RootState } from "store/configStore";
 import { memeType } from "store/memeList";
-import { auctionType } from "store/auctionList";
+import { auctionCardType } from "store/auction";
 import useAxios from "hooks/useAxios";
 
 import SkeletonCard from "components/common/card/SkeletonCard";
@@ -132,7 +132,7 @@ const HomePage: React.FC = () => {
   ];
 
   // 밈, 경매 캐러셀
-  const nftCarousel = (nft: memeType | auctionType) => {
+  const nftCarousel = (nft: memeType | auctionCardType) => {
     if ("description" in nft) {
       return <NftCard items={nft} />;
     } else {

@@ -46,7 +46,7 @@ const LandingPage = () => {
     <div className={styles.container}>
       {/* <div ref={ref} className={styles.section}> */}
         <div id="logo" className={styles.logowrapper}>
-          <Image src={logo} />
+          <Image src={logo} imageStyle={{objectFit: "cover"}}/>
           <p>밈 특허청</p>
           <button onClick={loginHandler}>
             <Image src={kakaoLogo} />

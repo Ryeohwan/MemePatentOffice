@@ -1,6 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import sang from "assets/sang.gif";
 
+export type auctionCardType = {
+  memeId: number;
+  auctionId: number;
+  title: string;
+  finishTime: string;
+  highestBid: number;
+  imgUrl: string;
+}
+
 export type biddingHistory = {
   nickname: string;
   SSF: number;
