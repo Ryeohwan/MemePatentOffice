@@ -32,6 +32,7 @@ import java.util.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -125,12 +126,14 @@ public class AuctionServiceImpl implements AuctionService{
                 .orElseThrow(()->new NotFoundException("sellerId가 유효하지 않습니다"));
         String nickname = jsonObject.getString("nickname");
 
-        Bid currentTopBid = bidRepository.findTopByOrderByCreatedAtDesc();
-        if(currentTopBid!=null){
-            if(!(bidReq.getAskingprice() > currentTopBid.getAskingprice())){
-                throw new BiddingException("제안하는 가격이 현재 호가보다 낮아서 안됩니다");
-            }
-        }
+        bidRepository.findTopByAuctionIdOrderByAskingpriceDesc(bidReq.getAuctionId())
+                .ifPresent((currentTopBid) -> streamExceptionHandler(() -> {
+                            if (!(bidReq.getAskingprice() > currentTopBid.getAskingprice())) {
+                                throw new BiddingException("제안하는 가격이 현재 호가보다 낮아서 안됩니다");
+                            }
+                            return currentTopBid;
+                        }
+                ));
 
          Bid bid = bidRepository.save(
                 Bid.builder()
@@ -276,19 +279,19 @@ public class AuctionServiceImpl implements AuctionService{
             log.info("종료할 Auction id는 "+auction.getId()+"입니다.");
             //1. 스마트 컨트랙트 호출
             //2. mpoffice에 체결 요청 보냄
-            Long buyerId = null;
-            Long price = 0L;
-            Bid currentTopBid = bidRepository.findTopByOrderByCreatedAtDesc();
-            if(currentTopBid!=null){
-                buyerId = currentTopBid.getUserId();
-                price = currentTopBid.getAskingprice();
-            }
+            AtomicReference<Long> buyerId = new AtomicReference<>(0L);
+            AtomicReference<Long> price = new AtomicReference<>(0L);
+            bidRepository.findTopByAuctionIdOrderByAskingpriceDesc(auctionId)
+                    .ifPresent(currentTopBid->{
+                        buyerId.set(currentTopBid.getUserId());
+                        price.set(currentTopBid.getAskingprice());
+                    });
             AuctionClosing auctionClosing = AuctionClosing.builder()
                     .memeId(auction.getMemeId())
-                    .buyerId(buyerId)
+                    .buyerId(buyerId.get())
                     .sellerId(auction.getSellerId())
                     .createdAt(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-                    .price(price)
+                    .price(price.get())
                     .build();
             try{
                 isp.addTransaction(auctionClosing);

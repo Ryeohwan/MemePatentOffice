@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @ToString
 public class AuctionRes {
-    @JsonFormat
+    @JsonFormat //TODO: 이거 빼면 finishTime 만 응답으로 가는 이유 찾기
     String sellerNickname;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm")
     LocalDateTime finishTime;
