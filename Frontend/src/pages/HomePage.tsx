@@ -85,15 +85,18 @@ const HomePage: React.FC = () => {
           });
           const user = JSON.parse(sessionStorage.getItem("user")!);
           user.walletAddress = account;
+
           sessionStorage.setItem("user", JSON.stringify(user));
           setModalTxt("최초로 연결된 지갑이네요. 10SSF를 선물로 받는 중입니다!")
+
           const giveCoinStatus = await giveSignInCoin();
           if (giveCoinStatus) {
-            setModalTxt("10SSF를 받았습니다! 잔액을 조회해 보세요!")
-            
+            setModalTxt("10SSF를 받았습니다!")
+            await new Promise((resolve) => setTimeout(resolve, 1000));
             controlCheckModal(false);
           } else {
             setModalTxt("네트워크가 불안정해 선물을 받지 못했습니다.")
+            await new Promise((resolve) => setTimeout(resolve, 1000));
             controlCheckModal(false);
           }
 
@@ -114,17 +117,23 @@ const HomePage: React.FC = () => {
               },
             });
             setModalTxt("최초 등록된 지갑에 한해서만 10SSF가 지급됩니다");
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+            await new Promise((resolve) => setTimeout(resolve, 2000));
             controlCheckModal(false)
             const user = JSON.parse(sessionStorage.getItem("user")!);
             user.walletAddress = account;
             sessionStorage.setItem("user", JSON.stringify(user));
           }
         }
-        alert("지갑 연결 성공!");
+        setModalTxt("지갑 연결 성공!");
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        controlCheckModal(false);
       } else {
-        alert("MetaMask를 설치해주세요.");
+        setModalTxt("Metamask를 설치해 주세요.");
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        controlCheckModal(false);
+
       }
+      controlCheckModal(false);
       await checkBalance();
       if (!myBalance.current || myBalance.current === undefined) {
         console.log("잔액 조회에 실패했습니다, 지갑 다시 연결해보셈");

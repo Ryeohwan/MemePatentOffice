@@ -24,8 +24,11 @@ const BlockChain: React.FC = () => {
       user.walletAddress = null;
       sessionStorage.setItem("user", JSON.stringify(user));
     }
-
   };
+
+  useEffect(()=> {
+    checkMyBalance();
+  },[])
   
   return (
     <div>
