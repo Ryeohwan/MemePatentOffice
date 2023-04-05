@@ -101,12 +101,13 @@ public class AlarmService {
     public void addReplyAlarm(Long commentId, Long userId, Long memeId, Long parentId) throws NotFoundException {
         // 댓글의 주인에게 알림을 등록한다
         // REPLY 일때 auctionId에 parent comment 의 id 값이 들어가 있다.
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new NotFoundException(commentId + ":Comment"));
+        // 대댓글 아이디, 대댓글을 단 사람, 대댓글을 단 밈, 대댓글의 부모 댓글 아이디
+        Comment parentComment = commentRepository.findById(parentId).orElseThrow(() -> new NotFoundException(commentId + ":Comment"));
         Alarm alarm = Alarm
                 .builder()
-                .comment(comment)
+                .comment(commentRepository.findById(commentId).orElseThrow(() -> new NotFoundException(commentId + ":Comment")))
                 .creater(userRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId + " : User")))
-                .userId(comment.getUser().getId()) // Comment의 주인에게 알림을 보낸다
+                .userId(parentComment.getUser().getId()) // Comment의 주인에게 알림을 보낸다
                 .meme(memeRepository.findById(memeId).orElseThrow(() -> new NotFoundException(memeId + " : Meme")))
                 .auctionId(parentId)
                 .type(AlarmType.REPLY).build();
