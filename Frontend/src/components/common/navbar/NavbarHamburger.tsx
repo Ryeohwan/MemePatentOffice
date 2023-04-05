@@ -24,7 +24,9 @@ const NavbarHamburger: React.FC = () => {
   const [ showBalance, setShowBalance ] = useState(false);
 
   // 흠.. 내 지갑주소가 연결되어 있을 땐 잔액 조회로 수정해야 할듯
-  const myAccount = JSON.parse(sessionStorage.getItem('user')!).walletAddress;
+  // 요기 수정햇읍니다 
+  // login 페이지에서는 user 없어서 일단 session에 user 없으면 null 박아둠
+  const myAccount = sessionStorage.user ? JSON.parse(sessionStorage.user).walletAddress : null;
 
   // click하면 dropmenu
   const [open, setOpen] = useState<boolean>(false);
