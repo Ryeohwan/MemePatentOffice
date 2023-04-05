@@ -10,7 +10,7 @@ import { Icon } from "@iconify/react";
 const DetailInfo: React.FC = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const [isFromNotice, setIsFromNotice] = useState<boolean>();
+  const [auctionPoint, setAuctionPoint] = useState<boolean>();
   
   // get memid from params
   const params = useParams();
@@ -44,10 +44,9 @@ const DetailInfo: React.FC = () => {
   const [auctionState, setAuctionState] = useState<string | null>();
 
 
-  // 어디서 온건지 확인
+  // 경매 버튼 포인트 줄건지 확인
   useEffect(() => {
-    // 알림 > 경매에서 온 경우
-    // setIsFromNotice(location.state ? true : false);
+    setAuctionPoint(location.state && location.state.from === "auction")
   }, []);
 
   // get Meme detail info
@@ -162,7 +161,7 @@ const DetailInfo: React.FC = () => {
               </div>
               <div
                 className={
-                  isFromNotice ? styles.auctionInfoBtn2 : styles.auctionInfoBtn
+                  auctionPoint ? styles.auctionInfoBtn2 : styles.auctionInfoBtn
                 }
               >
                 12월 28일 13시 경매 예정

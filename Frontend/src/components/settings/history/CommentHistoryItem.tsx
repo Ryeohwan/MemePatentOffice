@@ -15,7 +15,7 @@ const CommentHistoryItem: React.FC<CommentHistoryItemProps> = ({ item }) => {
 
   const clickHandler = () => {
     // meme-detail comment로 이동 (state에 댓글 id)
-    navigate(`/meme-detail/${item.memeId}/tab=comment`, {state:{commentId: item.id}});
+    navigate(`/meme-detail/${item.memeId}/tab=comment`, {state:{from: "comment"}});
   };
 
   return (
