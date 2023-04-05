@@ -9,7 +9,6 @@ const ElapsedText = (createdTime:Date|string) => {
     const elapsedTime = Math.trunc(
       (now.getTime() - new Date(createdTime).getTime()) / 1000
     )
-
     let elapsedText = ""
     if (elapsedTime < seconds) {
       elapsedText = "방금 전"
