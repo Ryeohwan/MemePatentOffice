@@ -27,9 +27,14 @@
 .memeImg{
     border-radius: 6px;
     overflow: hidden;
-    width:25% !important;
+    width:20% !important;
 }
 
 .memeImg>img{
     object-fit: cover;
+}
+
+.panel{
+    left : 16% !important;
+    width:60%;
 }
