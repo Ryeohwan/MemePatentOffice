@@ -48,7 +48,7 @@ public class CommentController {
             System.out.println("hi this is reply");
             ReplyResponse reply = commentService.createReply(commentRequest);
             // Reply 알람 등록
-            // 대댓글을 단 사람과 댓글을 단 사람이 같지 않을때
+            // 대댓글을 단 사람과 댓글을 단 사람이 같지 않을때 
 
             if(!reply.getNickname().equals(reply.getParentName())) {
                 alarmService.addReplyAlarm(reply.getId(), reply.getUserId(), commentRequest.getMemeId(), reply.getParentId());
