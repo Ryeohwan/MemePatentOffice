@@ -1,7 +1,15 @@
 import Web3 from "web3";
 import { AbiItem } from "web3-utils";
 
-export const web3 = new Web3(window.ethereum);
+const endpoint = process.env.REACT_APP_INFURA_ENDPOINT;
+// export const web3 = new Web3(new Web3.providers.HttpProvider(endpoint!));
+
+export let web3:any;
+if (window.ethereum) {
+	web3 = new Web3(window.ethereum);
+} else {
+	web3 = new Web3(new Web3.providers.HttpProvider(endpoint!));
+};
 
 export const saleMemeTokenAddress = "0x991A4A2c004061a87D26E5aDB19f827F64078FB8";
 export const mintMemeTokenAddress = "0x729c78AE9F9c186Fbac20f7f2BfEAC363150dcea";
@@ -925,12 +933,14 @@ export const transferNftOwnership = async (tokenId: number|undefined) => {
 export const giveSignInCoin = async () => {
 	const account = JSON.parse(sessionStorage.getItem('user')!).walletAddress;
 	console.log(account)
-    const price = 10 ;
+	///////////////////
+    const price = 10;
 
 	const ownerAddress = "0xd8df17B6a1758c52eA81219b001547A2c2e3d789";
 	const privateKey = "0xcd3352d522fb229242472dddc60abc0831ba87db490573616e7cc43f4d179a28";
 	
 	const gasPrice = await web3.eth.getGasPrice();
+	console.log(gasPrice)
 	const gasLimit = 3000000;
 	let data;
 	try {

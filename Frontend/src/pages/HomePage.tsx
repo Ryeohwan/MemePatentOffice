@@ -12,6 +12,7 @@ import NftCard from "components/common/card/NftCard";
 import NftAuctionCard from "components/common/card/NftAuctionCard";
 import HomeCarousel from "components/main/homepage/HomeCarousel";
 import styles from "./HomePage.module.css";
+import CheckingModal from "components/auction/upload/CheckingModal";
 
 const HomePage: React.FC = () => {
   // 요즘 핫한 밈
@@ -47,6 +48,7 @@ const HomePage: React.FC = () => {
   const myBalance = useRef<number | undefined>();
 
   // 돈 들어오고 있다고 모달로 알림
+  const [modalTxt, setModalTxt] = useState("");
   const [checkModalVisible, setCheckModalVisible] = useState<boolean>(false);
   const controlCheckModal = (visible: boolean) => {
     setCheckModalVisible(visible);
@@ -63,12 +65,14 @@ const HomePage: React.FC = () => {
           account = web3.utils.toChecksumAddress(accounts[0]);
           console.log(account);
         }
-        // 유저 디비에 wallet_address가 null일 때만 코인 지급
+        
+        // 유저 디비에서 가져온 wallet_address
         const walletAddress = JSON.parse(
           sessionStorage.getItem("user")!
-        ).walletAddress;
+          ).walletAddress;
         const userId = JSON.parse(sessionStorage.getItem("user")!).userId;
-
+          
+        controlCheckModal(true);
         // 최초로 연결한 지갑인 경우, 코인 지급하고 post address
         if (walletAddress === null) {
           await postWalletRequest({
@@ -81,15 +85,27 @@ const HomePage: React.FC = () => {
           });
           const user = JSON.parse(sessionStorage.getItem("user")!);
           user.walletAddress = account;
+
           sessionStorage.setItem("user", JSON.stringify(user));
+          setModalTxt("최초로 연결된 지갑이네요. 10SSF를 선물로 받는 중입니다!")
+
           const giveCoinStatus = await giveSignInCoin();
-          console.log("최초 연결 지갑에 코인 지급", giveCoinStatus);
+          if (giveCoinStatus) {
+            setModalTxt("10SSF를 받았습니다!")
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            controlCheckModal(false);
+          } else {
+            setModalTxt("네트워크가 불안정해 선물을 받지 못했습니다.")
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            controlCheckModal(false);
+          }
 
         } else {
           // 이전에 등록했던 지갑과 동일한 경우, 패스
           if (walletAddress === account) {
-            console.log("이전에 등록한 지갑과 동일합니다");
-            
+            setModalTxt("이전에 등록한 지갑과 동일한 지갑에 연결 중입니다.");
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            controlCheckModal(false);
           } else if (walletAddress !== account) {
             // 이전에 등록한 지갑은 존재하지만 지금 지갑과 다를 경우, 새로 post
             postWalletRequest({
@@ -100,16 +116,24 @@ const HomePage: React.FC = () => {
                 walletAddress: account,
               },
             });
-            console.log("1인당 코인 1회만 지급");
+            setModalTxt("최초 등록된 지갑에 한해서만 10SSF가 지급됩니다");
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            controlCheckModal(false)
             const user = JSON.parse(sessionStorage.getItem("user")!);
             user.walletAddress = account;
             sessionStorage.setItem("user", JSON.stringify(user));
           }
         }
-        alert("지갑 연결 성공!");
+        setModalTxt("지갑 연결 성공!");
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        controlCheckModal(false);
       } else {
-        alert("MetaMask를 설치해주세요.");
+        setModalTxt("Metamask를 설치해 주세요.");
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        controlCheckModal(false);
+
       }
+      controlCheckModal(false);
       await checkBalance();
       if (!myBalance.current || myBalance.current === undefined) {
         console.log("잔액 조회에 실패했습니다, 지갑 다시 연결해보셈");
@@ -212,97 +236,105 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <div>
-      {/* main carousel */}
-      <HomeCarousel info={MAIN_INFO} />
+    <>
+      <div>
+        {/* main carousel */}
+        <HomeCarousel info={MAIN_INFO} />
 
-      {/* meme carousel */}
-      <div className={styles.homeMenuWrapper}>
-        <div className={styles.homeMenuTitle}>요즘 HOT한 밈</div>
-      </div>
-      {hotMemeLoading && (
-        <div className={styles.skeletonWrapper}>
-          <SkeletonCard />
+        {/* meme carousel */}
+        <div className={styles.homeMenuWrapper}>
+          <div className={styles.homeMenuTitle}>요즘 HOT한 밈</div>
         </div>
-      )}
-      {hotMeme && !hotMemeLoading && (
-        <Carousel
-          value={hotMeme.content}
-          numVisible={3}
-          numScroll={3}
-          itemTemplate={(page) => nftCarousel(page)}
-          orientation={"horizontal"}
-          showIndicators={false}
-          circular={true}
-          responsiveOptions={responsiveOptions}
-        />
-      )}
-
-      <div className={styles.homeMenuWrapper}>
-        <div className={styles.homeMenuTitle}>이번 주 비싸게 팔린 밈</div>
-      </div>
-      {expensiveMemeLoading && (
-        <div className={styles.skeletonWrapper}>
-          <SkeletonCard />
-        </div>
-      )}
-      {expensiveMeme && !expensiveMemeLoading && (
-        <Carousel
-          value={expensiveMeme.content}
-          numVisible={3}
-          numScroll={3}
-          itemTemplate={(page) => nftCarousel(page)}
-          orientation={"horizontal"}
-          showIndicators={false}
-          circular={true}
-          responsiveOptions={responsiveOptions}
-        />
-      )}
-
-      <div className={styles.homeMenuWrapper}>
-        <div className={styles.homeMenuTitle}>이번 주 조회수 많은 밈</div>
-      </div>
-      {viewsMemeLoading && (
-        <div className={styles.skeletonWrapper}>
-          <SkeletonCard />
-        </div>
-      )}
-      {viewsMeme && !viewsMemeLoading && (
-        <Carousel
-          value={viewsMeme.content}
-          numVisible={3}
-          numScroll={3}
-          itemTemplate={(page) => nftCarousel(page)}
-          orientation={"horizontal"}
-          showIndicators={false}
-          circular={true}
-          responsiveOptions={responsiveOptions}
-        />
-      )}
-
-      <hr />
-
-      {/* auction carousel */}
-      {/* 여기 데이터 없을 수도 있어서 없으면 아예 영역 자체 안띄우도록 해돔 */}
-      {!hotAuctionLoading && hotAuction && hotAuction.length > 0 && (
-        <>
-          <div className={styles.homeMenuWrapper}>
-            <div className={styles.homeMenuTitle}>지금 HOT한 경매</div>
+        {hotMemeLoading && (
+          <div className={styles.skeletonWrapper}>
+            <SkeletonCard />
           </div>
+        )}
+        {hotMeme && !hotMemeLoading && (
           <Carousel
-            value={hotAuction}
+            value={hotMeme.content}
             numVisible={3}
             numScroll={3}
             itemTemplate={(page) => nftCarousel(page)}
             orientation={"horizontal"}
             showIndicators={false}
-            responsiveOptions={responsiveOptions}
             circular={true}
+            responsiveOptions={responsiveOptions}
           />
-        </>
-      )}
+        )}
 
-    </div>
+        <div className={styles.homeMenuWrapper}>
+          <div className={styles.homeMenuTitle}>이번 주 비싸게 팔린 밈</div>
+        </div>
+        {expensiveMemeLoading && (
+          <div className={styles.skeletonWrapper}>
+            <SkeletonCard />
+          </div>
+        )}
+        {expensiveMeme && !expensiveMemeLoading && (
+          <Carousel
+            value={expensiveMeme.content}
+            numVisible={3}
+            numScroll={3}
+            itemTemplate={(page) => nftCarousel(page)}
+            orientation={"horizontal"}
+            showIndicators={false}
+            circular={true}
+            responsiveOptions={responsiveOptions}
+          />
+        )}
+
+        <div className={styles.homeMenuWrapper}>
+          <div className={styles.homeMenuTitle}>이번 주 조회수 많은 밈</div>
+        </div>
+        {viewsMemeLoading && (
+          <div className={styles.skeletonWrapper}>
+            <SkeletonCard />
+          </div>
+        )}
+        {viewsMeme && !viewsMemeLoading && (
+          <Carousel
+            value={viewsMeme.content}
+            numVisible={3}
+            numScroll={3}
+            itemTemplate={(page) => nftCarousel(page)}
+            orientation={"horizontal"}
+            showIndicators={false}
+            circular={true}
+            responsiveOptions={responsiveOptions}
+          />
+        )}
+
+        <hr />
+
+        {/* auction carousel */}
+        {/* 여기 데이터 없을 수도 있어서 없으면 아예 영역 자체 안띄우도록 해돔 */}
+        {!hotAuctionLoading && hotAuction && hotAuction.length > 0 && (
+          <>
+            <div className={styles.homeMenuWrapper}>
+              <div className={styles.homeMenuTitle}>지금 HOT한 경매</div>
+            </div>
+            <Carousel
+              value={hotAuction}
+              numVisible={3}
+              numScroll={3}
+              itemTemplate={(page) => nftCarousel(page)}
+              orientation={"horizontal"}
+              showIndicators={false}
+              responsiveOptions={responsiveOptions}
+              circular={true}
+            />
+          </>
+        )}
+
+      </div>
+      <CheckingModal
+        checkModalVisible={checkModalVisible}
+        controlCheckModal={controlCheckModal}
+        headerInput="지갑 조회 중..."
+        textInput={modalTxt}
+      />
+    </>
   );
 };
 

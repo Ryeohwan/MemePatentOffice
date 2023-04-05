@@ -35,8 +35,8 @@ const MemeUploadPage: React.FC = () => {
 
     // MetaMask 계정 연결되어 있는지 확인
     if (!JSON.parse(
-      sessionStorage.getItem("user")!
-    ).walletAddress) {
+          sessionStorage.getItem("user")!
+        ).walletAddress) {
       alert('MetaMask를 연결하세요.')
       controlCheckModal(false);
       navigate(-1)
