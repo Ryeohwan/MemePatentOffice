@@ -6,14 +6,11 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/configStore";
 import { commentListActions } from "store/commentList";
-import { getReplyListAxiosThunk } from "store/commentList";
 import ReplyCommentItem from "./ReplyComentItem";
 import useAxios from "hooks/useAxios";
 import { useAppDispatch } from "hooks/useAppDispatch";
 import ElapsedText from "components/common/elements/ElapsedText";
 import { useInView } from "react-intersection-observer";
-
-
 
 interface CommentType {
   items: commentType;
@@ -36,26 +33,20 @@ const CommentItem: React.FC<CommentType> = (comment) => {
   const commentText = comment.items.content;
   const heart = comment.items.liked;
   const best = comment.items.best;
-  const replyCnt = comment.items.replyCommentCnt;
-  const replyCommentList = useSelector<RootState, commentType[]>(
-    (state) => state.commentList.replyCommentList
-  );
+  const [replyCnt, setReplyCnt] = useState(comment.items.replyCommentCnt);
   const heartNum = comment.items.heartCnt;
-  const elapsedText = ElapsedText(comment.items.date)
+  const elapsedText = ElapsedText(comment.items.date);
   const dispatch = useDispatch();
   const appDispatch = useAppDispatch();
   const { sendRequest: postCommentRequest } = useAxios();
   const { sendRequest: deleteCommentRequest } = useAxios();
   const [clickViewReply, setClickViewReply] = useState(false);
 
-  // 무한 스크롤
-  const [ref, inView] = useInView({
-    threshold: 1,
-    delay: 300,
-  })
+  const newReply = useSelector<RootState, commentType|null>(state=>state.commentList.replyComment)
+  const [replyCommentList, setReplyCommentList] = useState<commentType[]>([]);
   const [lastCommentRef, setLastCommentRef] = useState(-1);
-
-
+  const { data: replyData, sendRequest } = useAxios();
+  const {sendRequest : deleteReplyRequest} = useAxios()
   // 좋아요 눌렀을 때 내가 이미 좋아한 댓글이면 좋아요 취소, 아니면 좋아요 => 좋아요 개수 -1, +1
   const handleHeart = () => {
     // 좋아요 토글
@@ -72,17 +63,63 @@ const CommentItem: React.FC<CommentType> = (comment) => {
     });
   };
 
+  const getReplyList = () => {
+    sendRequest({
+      url: `/api/mpoffice/meme/comment/reply?memeId=${memeid}&userId=${userId}&commentId=${commentId}${
+        lastCommentRef !== -1 ? `&idx=${lastCommentRef}` : `&idx=0`
+      }`,
+    });
+
+    if(!clickViewReply){
+      setClickViewReply(true);
+    }
+  };
+
+  const closeReplyList = () => {
+    setClickViewReply(false);
+    setReplyCommentList([]);
+    setLastCommentRef(-1);
+  };
+  useEffect(() => {
+    if (replyData) {
+      setReplyCommentList((prev) => [...prev, ...replyData.content]);
+      setLastCommentRef(replyData.content[replyData.content.length - 1].id);
+      setHasNext(!replyData.last)
+    }
+  }, [replyData]);
+
   // 답글달기 클릭하면 redux의 parentId, parentName 바꿈
   const uploadReply = () => {
     dispatch(commentListActions.changeNowParentId(commentId));
     dispatch(commentListActions.changeNowParentName(commentWriterName));
   };
+  
+  useEffect(()=>{
+    if(newReply?.parentId === commentId){
+      setReplyCommentList((prev)=>[...prev, newReply!])
+      setClickViewReply(true);
+      setReplyCnt(prev=>prev+1)
+    }
+  },[newReply])
 
-  // 답글 더보기 눌렀을 때 답글 가져옴
-  const onClickViewReply = () => {
-    appDispatch(getReplyListAxiosThunk(memeid, commentId, lastCommentRef));
-    setClickViewReply(!clickViewReply);
-  };
+  const deleteReply = (id:number) => {
+    deleteReplyRequest({
+      url: "/api/mpoffice/meme/comment/delete",
+      method: "POST",
+      data: {
+        userId: userId,
+        memeId: memeid,
+        commentId: id
+      }
+    });
+
+    if (replyCommentList.length>0){
+      setReplyCommentList(replyCommentList.filter((comment) => {
+        return comment.id !== id
+      }))
+    }
+    setReplyCnt((prev)=>prev-1)
+  }
 
   const onClickDelete = () => {
     deleteCommentRequest({
@@ -94,27 +131,12 @@ const CommentItem: React.FC<CommentType> = (comment) => {
         commentId: commentId,
       },
     });
-    console.log("원댓글 id ",commentId)
+    console.log("원댓글 id ", commentId);
     dispatch(commentListActions.commentDeleteHandler(commentId));
   };
-  
+
   // 무한 스크롤
-  const hasNext = useSelector<RootState, boolean>(
-    (state) => state.commentList.nextCommentNewList
-  );
-
-  useEffect(() => {
-    if (inView && lastCommentRef !== -1) {
-      appDispatch(getReplyListAxiosThunk(memeid,commentId, lastCommentRef));
-    }
-  }, [inView]);
-
-  useEffect(() => {
-    if (replyCommentList.length > 0 ) {
-      setLastCommentRef(replyCommentList[replyCommentList.length - 1].id -1);
-    }
-  }, [replyCommentList]);
-
+  const [hasNext,setHasNext] = useState<boolean>()
 
   return (
     <div className={styles.commentItemContainer}>
@@ -160,7 +182,7 @@ const CommentItem: React.FC<CommentType> = (comment) => {
                 <div>
                   <hr />
                 </div>
-                <div onClick={onClickViewReply}> 답글 {replyCnt}개 더보기 </div>
+                <div onClick={getReplyList}> 답글 {replyCnt}개 더보기 </div>
               </div>
             ) : (
               <div>
@@ -168,14 +190,14 @@ const CommentItem: React.FC<CommentType> = (comment) => {
                   <div>
                     <hr />
                   </div>
-                  <div onClick={onClickViewReply}> 답글 숨기기 </div>
+                  <div onClick={closeReplyList}> 답글 숨기기 </div>
                 </div>
                 {replyCommentList.map((item) => {
                   return (
                     <>
                       {item.parentId === commentId && (
                         <ReplyCommentItem
-                          key={item.id}
+                          key={`reply1-${item.id}-${item.date}`}
                           writerImg={item.profileImage}
                           writerNickname={item.nickname}
                           createdAt={item.date}
@@ -184,12 +206,22 @@ const CommentItem: React.FC<CommentType> = (comment) => {
                           userId={userId}
                           memeid={memeid}
                           id={item.id}
+                          deleteReply={deleteReply}
                         />
                       )}
                     </>
                   );
                 })}
-                <div ref={hasNext ? ref : null} />
+                {hasNext && (
+                  <div className={styles.replyContainer}>
+                    <div>
+                      <hr />
+                    </div>
+                    <div onClick={getReplyList}>
+                      답글 {replyCnt - replyCommentList.length}개 더보기{" "}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -200,7 +232,7 @@ const CommentItem: React.FC<CommentType> = (comment) => {
                 <>
                   {item.parentId === commentId && (
                     <ReplyCommentItem
-                      key={item.id}
+                      key={`reply-${item.id}-${item.date}`}
                       writerImg={item.profileImage}
                       writerNickname={item.nickname}
                       createdAt={item.date}
@@ -209,6 +241,7 @@ const CommentItem: React.FC<CommentType> = (comment) => {
                       userId={userId}
                       memeid={memeid}
                       id={item.id}
+                      deleteReply={deleteReply}
                     />
                   )}
                 </>

@@ -20,10 +20,11 @@ export type commentType = {
 interface initialStateInterface {
   commentNewList: commentType[];
   commentBestList: commentType[];
-  replyCommentList: commentType[];
   nowParentId: null | number;
   nowParentName: null | string;
+  replyComment: null | commentType
 
+  replyLastCommentRef: number,
   nextCommentNewList: boolean;
   nextReplyNewList: boolean;
   loadingNewCommentList: boolean;
@@ -34,10 +35,11 @@ interface initialStateInterface {
 const initialState: initialStateInterface = {
   commentNewList: [],
   commentBestList: [],
-  replyCommentList: [],
   nowParentId: null,
   nowParentName: null,
+  replyComment: null,
 
+  replyLastCommentRef: -1,
   nextCommentNewList: true,
   nextReplyNewList: true,
   loadingNewCommentList: false,
@@ -61,16 +63,6 @@ const commentListSlice = createSlice({
     getBestCommentList: (state, actions) => {
       state.commentBestList = actions.payload;
     },
-    updateReplyCommentList: (state, actions) => {
-      state.nextReplyNewList = actions.payload.hasNext;
-      if (actions.payload.lastPostRef === -1) {
-        state.replyCommentList = []
-      }
-      if (actions.payload.getList) {
-        state.replyCommentList = [...state.replyCommentList, ...actions.payload.getList]
-      }
-      console.log(state.replyCommentList)
-    },
 
     // 댓글 입력 시
     commentAddHandler: (state, actions) => {
@@ -79,19 +71,12 @@ const commentListSlice = createSlice({
     },
     // 대댓글 입력 시
     replyAddHandler: (state, actions) => {
-      state.replyCommentList = [...state.replyCommentList, actions.payload];
+      state.replyComment = actions.payload;
     },
 
     // 댓글 삭제
     commentDeleteHandler: (state, actions) => {
       state.commentNewList = state.commentNewList.filter(
-        (item) => item.id !== actions.payload
-      );
-    },
-
-    // 대댓글 삭제
-    replyDeleteHandler: (state, actions) => {
-      state.replyCommentList = state.replyCommentList.filter(
         (item) => item.id !== actions.payload
       );
     },
@@ -129,7 +114,6 @@ const commentListSlice = createSlice({
     resetCommentList: (state) => {
       state.commentNewList = [];
       state.commentBestList = [];
-      state.replyCommentList = [];
       state.nowParentId = null;
       state.nowParentName = null;
       
@@ -224,48 +208,48 @@ export const getBestCommentListAxiosThunk =
     }
   };
 
-export const getReplyListAxiosThunk =
-  (memeId: number, commentId: number, lastCommentRef:number): AppThunk =>
-  async (dispatch) => {
-    const sendRequest = async () => {
+// export const getReplyListAxiosThunk =
+//   (memeId: number, commentId: number, lastCommentRef:number): AppThunk =>
+//   async (dispatch) => {
+//     const sendRequest = async () => {
 
-      const userId = JSON.parse(sessionStorage.user).userId;
-      const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/reply?memeId=${memeId}&userId=${userId}&commentId=${commentId}${lastCommentRef !== -1 ?`&idx=${lastCommentRef}` : `&idx=0`}`;
+//       const userId = JSON.parse(sessionStorage.user).userId;
+//       const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/reply?memeId=${memeId}&userId=${userId}&commentId=${commentId}${lastCommentRef !== -1 ?`&idx=${lastCommentRef}` : `&idx=0`}`;
 
-      console.log("대댓글리스트 조회!", requestUrl);
+//       console.log("대댓글리스트 조회!", requestUrl);
 
-      const response = await axios.get(requestUrl, {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
-          "Access-Control-Allow-Credentials": true,
-          "Content-Type": "application/json",
-        },
-        validateStatus: (status) => status === 200 || status === 401,
-      });
+//       const response = await axios.get(requestUrl, {
+//         headers: {
+//           Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+//           "Access-Control-Allow-Credentials": true,
+//           "Content-Type": "application/json",
+//         },
+//         validateStatus: (status) => status === 200 || status === 401,
+//       });
 
-      if (response.status === 401) {
-        // 로그아웃
-        return false;
-      } else {
-        return response.data;
-      }
-    };
+//       if (response.status === 401) {
+//         // 로그아웃
+//         return false;
+//       } else {
+//         return response.data;
+//       }
+//     };
 
-    try {
-      const res = await sendRequest();
-      console.log("대댓글", res);
-      if (!res || res.empty) {
-        return;
-      }
-      dispatch(commentListActions.updateReplyCommentList({
-        getList: res.content,
-        lastPostId : lastCommentRef,
-        hasNext: !res.last,
-      }))
-    } catch (err) {
-      console.log(err);
-    }
-  };
+//     try {
+//       const res = await sendRequest();
+//       console.log("대댓글", res);
+//       if (!res || res.empty) {
+//         return;
+//       }
+//       dispatch(commentListActions.updateReplyCommentList({
+//         getList: res.content,
+//         lastPostId : lastCommentRef,
+//         hasNext: !res.last,
+//       }))
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   };
 
 export const commentListActions = commentListSlice.actions;
 export default commentListSlice.reducer;
