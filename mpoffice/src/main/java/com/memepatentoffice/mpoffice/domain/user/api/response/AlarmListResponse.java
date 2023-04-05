@@ -20,7 +20,7 @@ public class AlarmListResponse {
     private Long auctionId;
     @Enumerated(EnumType.STRING)
     private AlarmType type;
-    private String nikcname;
+    private String nickname;
     private String profileSrc;
     private String title;
     private String memeSrc;

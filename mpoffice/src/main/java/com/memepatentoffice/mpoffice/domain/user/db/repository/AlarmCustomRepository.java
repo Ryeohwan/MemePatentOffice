@@ -48,7 +48,7 @@ public class AlarmCustomRepository {
                         Expressions.stringTemplate(
                                 "DATE_FORMAT({0}, {1})"
                                 , alarm.createdAt
-                                , ConstantImpl.create("%Y-%m-%d'T'%H-%m-%s")).as("date")))
+                                , ConstantImpl.create("%Y-%m-%dT%H:%m:%s")).as("date")))
 
                 .from(alarm)
 
