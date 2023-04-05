@@ -45,6 +45,16 @@
     max-width: 100%;
 }
 
+.noticeMessage{
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #212c7b;
+    padding:10px 15px 10px 15px;
+    border: none;
+    border-radius: 10px;
+    max-width: 100%;
+}
+
 .avatar {
   background-color: #2196F3 !important;
   color: #ffffff !important;

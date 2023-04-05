@@ -2,16 +2,13 @@ import React, { useRef, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "store/configStore";
 
+import { chatList } from "store/chat";
 import ChatItem from "./ChatItem";
 import { ScrollPanel } from "primereact/scrollpanel";
 
 import styles from "components/auction/main/chat/ChatList.module.css";
 
-type chat = {
-  id: string;
-  message: string;
-  time: string;
-};
+type chat = chatList;
 
 interface ChatListProps  {
   chatVisible : boolean
