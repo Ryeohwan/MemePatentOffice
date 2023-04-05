@@ -5,11 +5,14 @@ import { RootState } from "store/configStore";
 import { auctionActions } from "store/auction";
 import { WebSocketProps } from "type";
 
+import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js";
+import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import { clone } from "three/examples/jsm/utils/SkeletonUtils";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { useLoader, useFrame } from "react-three-fiber";
 import { playersInfo } from "store/auction";
+import Nickname from "./Nickname";
 
 interface PlayerProps extends WebSocketProps {
   characters: React.MutableRefObject<playersInfo[]>;
@@ -60,7 +63,7 @@ const Player: React.FC<PlayerProps> = ({
   const playerState = useSelector<RootState, number>(
     (state) => state.auction.playerState
   );
-
+  const nickname = JSON.parse(sessionStorage.getItem("user")!).nickname;
   const actions = useRef<action>({
     handsup: null,
     walk: null,
@@ -68,6 +71,19 @@ const Player: React.FC<PlayerProps> = ({
     standup: null,
     normal: null,
   });
+
+  const font = useLoader(FontLoader, "Gmarket Sans TTF Medium_Regular.json");
+  const text = useMemo(() => {
+    const geometry = new TextGeometry(nickname, {
+      font: font,
+      size: 0.3,
+      height: 0.04,
+      curveSegments: 12,
+    });
+    const material = new THREE.MeshBasicMaterial({ color: "#000000" });
+    const newMesh = new THREE.Mesh(geometry, material);
+    return newMesh;
+  }, []);
 
   const gltf = useLoader(GLTFLoader, "/auction/model/character.glb");
   const character = useMemo(() => {
@@ -90,7 +106,6 @@ const Player: React.FC<PlayerProps> = ({
       actions.current.handsup = action;
     }
     if (name === "standup") {
-      action.repetitions = 1;
       action.clampWhenFinished = true;
       actions.current.standup = action;
     }
@@ -126,11 +141,21 @@ const Player: React.FC<PlayerProps> = ({
     // console.log(state)
     mixer.update(delta);
 
+    const box2 = new THREE.Box3().setFromObject(text); // object는 Object3D 객체
+    box2.setFromObject(text);
+    box2.getCenter(text.position);
+    box2.applyMatrix4(text.matrixWorld);
+    const textwidth = box2.max.x - box2.min.x;
+
+    text.position.x = player.current.position.x - textwidth / 2;
+    text.position.y = player.current.position.y + 1.2
+    text.position.z = player.current.position.z;
+
     client.current?.publish({
       destination: "/pub/character",
       body: JSON.stringify({
         auctionId: auctionId,
-        nickname: JSON.parse(sessionStorage.getItem("user")!).nickname,
+        nickname: nickname,
         x: player.current.position.x,
         y: player.current.position.y,
         z: player.current.position.z,
@@ -148,8 +173,8 @@ const Player: React.FC<PlayerProps> = ({
       let isIn;
       chairPoints.current.forEach((chair) => {
         if (
-          Math.abs(player.current.position.x - chair.position.x) < 0.6 &&
-          Math.abs(player.current.position.z - chair.position.z) < 0.6
+          Math.abs(player.current.position.x - chair.position.x) < 1 &&
+          Math.abs(player.current.position.z - chair.position.z) < 1
         ) {
           if (
             characters.current.find((c) => {
@@ -157,15 +182,14 @@ const Player: React.FC<PlayerProps> = ({
                 c.x === chair.position.x - 0.3 &&
                 c.y === chair.position.y + 0.8 &&
                 c.z === chair.position.z + 0.8
-                );
-              })
-              ) {
-                console.log(1)
-                canSitHandler(false)
-                return
-              }
+              );
+            })
+          ) {
+            canSitHandler(false);
+            return;
+          }
           if (!hasChange.current) {
-              canSitHandler(true);
+            canSitHandler(true);
             hasChange.current = true;
           }
           chairPoint.current = chair;
@@ -198,6 +222,7 @@ const Player: React.FC<PlayerProps> = ({
       camera.current.position.x = cameraPosition.x + player.current.position.x;
       camera.current.position.z = cameraPosition.z + player.current.position.z;
     } else if (playerState === 2) {
+      hasChange.current = false;
       if (status !== "SITDOWN")
         dispatch(auctionActions.changeStatus("SITDOWN"));
       clickPosition.current = player.current.position.clone();
@@ -211,6 +236,7 @@ const Player: React.FC<PlayerProps> = ({
         playerAnimation.current = actions.current.standup;
     } else if (playerState === 3) {
       dispatch(auctionActions.changeStatus("STANDUP"));
+      actions.current.sitdown?.stop();
       actions.current.standup?.play();
     } else if (playerState === 4) {
       dispatch(auctionActions.changeStatus("HANDSUP"));
@@ -220,7 +246,12 @@ const Player: React.FC<PlayerProps> = ({
         dispatch(auctionActions.changeStatus("SITDOWN"));
     }
   });
-  return <primitive object={character} />;
+  return (
+    <group>
+      <primitive object={text}/>
+      <primitive object={character} />
+    </group>
+  );
 };
 
 export default Player;

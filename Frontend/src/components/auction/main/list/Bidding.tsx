@@ -1,30 +1,66 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { InputNumber, InputNumberChangeEvent } from "primereact/inputnumber";
 import { Sidebar } from "primereact/sidebar";
 import styles from "components/auction/main/list/Bidding.module.css";
 import { Button } from "primereact/button";
+import { checkMyBalance } from "web3config";
+import { useNavigate } from "react-router-dom";
 
 interface BiddingProps {
   biddingVisible: boolean;
   biddingHandler: (state:boolean) => void;
   biddingSubmitHandler: (price:number) => void;
+  myBalance: React.MutableRefObject<number|undefined>
 }
 
 const Bidding: React.FC<BiddingProps> = ({
   biddingHandler,
   biddingVisible,
   biddingSubmitHandler,
+  myBalance,
 }) => {
   const [inputValue, setInputValue] = useState<number>(0);
   const inputHandler = (e: InputNumberChangeEvent) => {
     if (e.value) setInputValue(e.value);
   };
-
+  const navigate = useNavigate()
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 
+  const checkBalance = async () => {
+    const account = JSON.parse(sessionStorage.getItem("user")!).walletAddress;
+    try {
+      if (!account) return false;
+      console.log("upload 버튼에서 잔액조회 실행됨");
+      await checkMyBalance()
+        .then((balance) => {
+          console.log("내 지갑 잔액:", balance);
+          myBalance.current = balance;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      return myBalance.current;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  };
+  
+  const seeBalance = async () => {
+    await checkBalance();
+      if (!myBalance.current|| myBalance.current===undefined) {
+        console.log("지갑 연결이 필요합니다.")
+        navigate('/')
+      } else {
+        console.log(myBalance.current)
+      }
+  }
+  useEffect(()=>{
+    seeBalance()
+  },[])
   return (
     <Sidebar
       appendTo={document.getElementById("auction")}
@@ -44,7 +80,7 @@ const Bidding: React.FC<BiddingProps> = ({
         />
         <Button label="입찰" onClick={() => biddingSubmitHandler(inputValue)} />
       </form>
-      <p className={styles.mySSF}>보유 SSF: 124 SSF </p>
+      <p className={styles.mySSF}>보유 SSF: {myBalance.current!} SSF </p>
     </Sidebar>
   );
 };

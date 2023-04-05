@@ -9,7 +9,16 @@ interface FloorProps {
 
 const Floor: React.FC<FloorProps> = ({ position, pushMesh }) => {
   const mesh = useRef<THREE.Mesh>(null);
-
+  const [colorMap, displacementMap, normalMap, roughnessMap, aoMap] = useLoader(
+    THREE.TextureLoader,
+    [
+      "/auction/material/floor/Wood_Herringbone_Tiles_002_basecolor.jpg",
+      "/auction/material/floor/Wood_Herringbone_Tiles_002_height.png",
+      "/auction/material/floor/Wood_Herringbone_Tiles_002_normal.jpg",
+      "/auction/material/floor/Wood_Herringbone_Tiles_002_roughness.jpg",
+      "/auction/material/floor/Wood_Herringbone_Tiles_002_ambientOcclusion.jpg",
+    ]
+  );
   useEffect(() => {
     if (mesh.current) {
       mesh.current.name = "Floor";
@@ -24,8 +33,14 @@ const Floor: React.FC<FloorProps> = ({ position, pushMesh }) => {
       rotation={[-Math.PI / 2, 0, 0]}
     >
       <planeGeometry args={[30, 60]} />
-      {/* <meshStandardMaterial map={floorTexture} normalMap={normalMap} /> */}
-      <meshStandardMaterial color="#D0D0D0" />
+      <meshStandardMaterial
+        map={colorMap}
+        // displacementMap={displacementMap}
+        normalMap={normalMap}
+        roughnessMap={roughnessMap}
+        aoMap={aoMap}
+      />
+      {/* <meshStandardMaterial color="#FFFFFF" /> */}
     </mesh>
   );
 };

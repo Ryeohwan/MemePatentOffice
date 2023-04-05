@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
 import * as THREE from "three";
 
 import { useSelector } from "react-redux";
-import { auctionInfo, biddingHistory } from "store/auction";
+import { biddingHistory } from "store/auction";
 import { RootState } from "store/configStore";
 
 import { Canvas } from "react-three-fiber";
@@ -12,47 +12,28 @@ import { Button } from "primereact/button";
 import styles from "components/auction/main/FinishModal.module.css";
 import FinishModalCharacter from "./FinishModalCharacter";
 
-type action = {
-  buy: THREE.AnimationAction | null;
-  notbuy: THREE.AnimationAction | null;
-};
-
 const FinishModal: React.FC = () => {
   const navigate = useNavigate();
-  const { finishTime } = useSelector<RootState, auctionInfo>(
-    (state) => state.auction.auctionInfo
-  );
-  const biddingHistory = useSelector<RootState, biddingHistory[]>(
-    (state) => state.auction.biddingHistory
-  );
-  // 끝나는 시간 format
-  const finishFormat = finishTime ? finishTime.split("T")[1].substring(0, 5) : ''
 
+  const biddingHistory = useSelector<RootState, biddingHistory[]>(
+    (state) => state.auction.auctionInfo.biddingHistory
+  );
   // 모달창
-  const [visible, setVisible] = useState<boolean>(false);
+  const visible = useSelector<RootState, boolean>(state=>state.auction.finishModalVisible);
 
   // 남은 시간
   // const [remainTime, setRemainTime] = useState<number>(5);
-  const remainTime = useRef<number>(5);
+  const remainTime = useRef<number>(6);
   useEffect(() => {
-    const interval = setInterval(() => {
-      const currentTime = new Date()
-        .toISOString()
-        .split("T")[1]
-        .substring(0, 5);
-      if (currentTime === finishFormat) {
-        if (!visible) {
-          setVisible(true);
-          remainTime.current -= 1;
-          // setRemainTime((prev)=>prev-1)
+    if (visible){
+      const interval = setInterval(() => {
+        remainTime.current -= 1
+        if (remainTime.current === 0) {
+          navigate('/main')
         }
-      }
-      if (remainTime.current === 0) {
-        // navigate(`/meme-detail/${memeId}`)
-      }
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+      }, 1000);
+    }
+  }, [visible]);
   const camera = useRef<THREE.PerspectiveCamera>(
     new THREE.PerspectiveCamera(
       75,

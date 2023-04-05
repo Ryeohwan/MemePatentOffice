@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from "react";
 
+import { useDispatch } from "react-redux";
+import { auctionActions } from "store/auction";
 import { useSelector } from "react-redux";
 import { RootState } from "store/configStore";
 import { auctionInfo } from "store/auction";
@@ -10,7 +12,7 @@ import GifTexture from "three-gif-loader/lib/gif-texture";
 
 
 const Border: React.FC = () => {
-  // const texCanvas = document.createElement("canvas")
+  const dispatch = useDispatch()
   const texCanvas = document.createElement("canvas") as HTMLCanvasElement
   const texContext = texCanvas.getContext("2d")
   const nftTexture = useRef<THREE.Texture | GifTexture>();
@@ -90,6 +92,9 @@ const Border: React.FC = () => {
       texContext.font = "17px Gmarket Sans TTF";
       let timerProps = getRemainTime();
       let diff = timerProps[0];
+      if(diff === 0 ){
+        dispatch(auctionActions.controlFinishModal(true))
+      }
       let timerView = timerProps[1];
       if (diff as number <= 3 * 60) {
         texContext.fillStyle = "red"; // 물감

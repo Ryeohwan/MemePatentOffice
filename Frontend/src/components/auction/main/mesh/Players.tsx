@@ -6,6 +6,8 @@ import { useFrame, useLoader } from "react-three-fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { action } from "components/auction/main/mesh/Player";
 import { playersInfo } from "store/auction";
+import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js";
+import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 
 interface PlayersProps {
   info: playersInfo;
@@ -20,6 +22,19 @@ const Players: React.FC<PlayersProps> = ({
   characters,
   changeHandler,
 }) => {
+  const font = useLoader(FontLoader, "Gmarket Sans TTF Medium_Regular.json");
+  const text = useMemo(() => {
+    const geometry = new TextGeometry(info.nickname, {
+      font: font,
+      size: 0.3,
+      height: 0.04,
+      curveSegments: 12,
+    });
+    const material = new THREE.MeshBasicMaterial({ color: "#000000" });
+    const newMesh = new THREE.Mesh(geometry, material);
+    return newMesh;
+  }, []);
+
   const gltf = useLoader(GLTFLoader, "/auction/model/character.glb");
   const actions = useRef<action>({
     handsup: null,
@@ -29,9 +44,9 @@ const Players: React.FC<PlayersProps> = ({
     normal: null,
   });
   const [isSitting, setIsSitting] = useState<boolean>(false);
-  useEffect(()=>{
-    changeHandler()
-  },[info.status])
+  useEffect(() => {
+    changeHandler();
+  }, [info.status]);
   const character = useMemo(() => {
     return clone(gltf.scene);
   }, []);
@@ -68,6 +83,16 @@ const Players: React.FC<PlayersProps> = ({
     character.children[0].rotation.x = info.rotation_x;
     character.children[0].rotation.y = info.rotation_y;
     character.children[0].rotation.z = info.rotation_z;
+    const box2 = new THREE.Box3().setFromObject(text); // object는 Object3D 객체
+    box2.setFromObject(text);
+    box2.getCenter(text.position);
+    box2.applyMatrix4(text.matrixWorld);
+    const textwidth = box2.max.x - box2.min.x;
+
+    text.position.x = info.x - textwidth / 2;
+    text.position.y = info.y + 1.2
+    text.position.z = info.z;
+
     if (info.status === "DEFAULT") {
       if (actions.current.walk?.isRunning()) actions.current.walk?.stop();
       actions.current.normal?.play();
@@ -101,7 +126,10 @@ const Players: React.FC<PlayersProps> = ({
   return (
     <>
       {characters.current.find((c) => c.nickname === info.nickname) && (
-        <primitive object={character} />
+        <group>
+          <primitive object={text}/>
+          <primitive object={character} />
+        </group>
       )}
     </>
   );

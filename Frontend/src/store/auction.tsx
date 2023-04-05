@@ -35,15 +35,14 @@ export type playersInfo = {
 };
 
 interface initialStateInterface {
-  biddingHistory: biddingHistory[];
   playerState: number; // 0: default, 1: moving, 2: sitting, 4:handsup, 3: standup
   auctionInfo: auctionInfo;
   playersInfo: playersInfo[];
   status: string;
+  finishModalVisible: boolean;
 }
 
 const initialState: initialStateInterface = {
-  biddingHistory: [],
   playerState: 0,
   auctionInfo: {
     sellerNickname: null,
@@ -54,6 +53,7 @@ const initialState: initialStateInterface = {
   },
   playersInfo: [],
   status: "DEFAULT",
+  finishModalVisible:false,
 };
 
 const auctionSlice = createSlice({
@@ -62,11 +62,9 @@ const auctionSlice = createSlice({
   reducers: {
     closeAuction: (state) => {
       state.playerState = 0;
-      state.biddingHistory = [];
     },
     openAuction: (state) => {
       state.playerState = 0;
-      state.biddingHistory = [];
       state.status = "DEFAULT";
       state.auctionInfo = {
         sellerNickname: null,
@@ -79,11 +77,8 @@ const auctionSlice = createSlice({
     getAuctionInfo: (state, actions) => {
       state.auctionInfo = actions.payload; // api 통신 가져오기
     },
-    getBiddingHistory: (state, actions) => {
-      state.biddingHistory = actions.payload;
-    },
     putBiddingHistory: (state, actions) => {
-      state.biddingHistory = [actions.payload, ...state.biddingHistory];
+      state.auctionInfo.biddingHistory = [actions.payload, ...state.auctionInfo.biddingHistory];
     },
     controlPlayerState: (state, actions) => {
       state.playerState = actions.payload;
@@ -94,6 +89,9 @@ const auctionSlice = createSlice({
     changeStatus: (state, actions) => {
       state.status = actions.payload;
     },
+    controlFinishModal: (state, actions) => {
+      state.finishModalVisible = actions.payload
+    }
   },
 });
 
