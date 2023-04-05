@@ -229,9 +229,9 @@ public class MemeService {
 
     @Transactional
     public void addTransaction(TransactionRequest transactionRequest) throws NotFoundException{
-        userRepository.findById(transactionRequest.getBuyerId()).orElseThrow(()-> new NotFoundException("해당하는 구매자가 없읍니다."));
+        User buyer = userRepository.findById(transactionRequest.getBuyerId()).orElseThrow(()-> new NotFoundException("해당하는 구매자가 없읍니다."));
         userRepository.findById(transactionRequest.getSellerId()).orElseThrow(()-> new NotFoundException("해당하는 판매자가 없읍니다."));
-        memeRepository.findById(transactionRequest.getMemeId()).orElseThrow(()-> new NotFoundException("해당하는 밈이 없습니다."));
+        Meme a = memeRepository.findById(transactionRequest.getMemeId()).orElseThrow(()-> new NotFoundException("해당하는 밈이 없습니다."));
 
         Transaction transaction = Transaction.builder()
                 .buyerId(transactionRequest.getBuyerId())
@@ -241,6 +241,7 @@ public class MemeService {
                 .createdAt(LocalDateTime.parse(transactionRequest.getCreatedAt(),DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                 .build();
         transactionRepository.save(transaction);
+        a.setOwner(buyer);
     }
 
     public List<MemeListResponse> randomMeme(){
