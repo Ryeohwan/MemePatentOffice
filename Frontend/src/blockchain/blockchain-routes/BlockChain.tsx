@@ -1,6 +1,7 @@
 import BlockChainPage from "blockchain/blockchain-middler/BlockChainPage";
 import React, { useState, useEffect } from "react";
 import useAxios from "hooks/useAxios";
+import { checkMyBalance, giveSignInCoin } from "web3config";
 
 
 const BlockChain: React.FC = () => {
@@ -16,15 +17,16 @@ const BlockChain: React.FC = () => {
         method: "POST",
         data: {
           userId: 530,
-          walletAddress: "",
+          walletAddress: null,
         },
       });
       const user = JSON.parse(sessionStorage.getItem("user")!);
       user.walletAddress = null;
       sessionStorage.setItem("user", JSON.stringify(user));
     }
-  };
 
+  };
+  
   return (
     <div>
       <BlockChainPage account={account} />
