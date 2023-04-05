@@ -37,12 +37,12 @@ public class UserProfileService {
         for(Meme m : list){
             UserMemeResponse temp = UserMemeResponse.builder()
                     .id(m.getId())
-                    .nickname(m.getCreater().getNickname())
+                    .nickname(m.getOwner().getNickname())
                     .title(m.getTitle())
                     .imgUrl(m.getImageurl())
                     .description(m.getContent())
                     .example(m.getSituation())
-                    .userImg(m.getCreater().getProfileImage())
+                    .userImg(m.getOwner().getProfileImage())
                     .build();
 
             result.add(temp);
