@@ -47,7 +47,6 @@ public class Meme extends BaseEntity{
     public void setSearched(){
         this.searched += 1;
     }
-
     public void setOwner(User owner) {
         this.owner = owner;
     }
