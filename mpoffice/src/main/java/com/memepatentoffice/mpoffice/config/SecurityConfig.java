@@ -71,7 +71,10 @@ public class SecurityConfig {
                      .antMatchers(
                              "/api/mpoffice/user/signup",
                              "/api/mpoffice/user/server/**",
-                             "/api/mpoffice/alarm/auction/**"
+                             "/api/mpoffice/alarm/auction/**",
+                             "/api/mpoffice/user/*",
+                             "/api/mpoffice/meme/*",
+                             "/api/mpoffice/meme/addTransaction"
                      )
                          .permitAll()
                      .anyRequest()
