@@ -39,6 +39,7 @@ public class MemeService {
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
 
+    private final ImageAnalysisQuickstart imageAnalysisQuickstart;
     private final TransactionRepository transactionRepository;
     @Transactional
     public MemeResponse findByTitle(Long userId, Long memeId)throws NotFoundException{
@@ -159,6 +160,7 @@ public class MemeService {
     // 찜하기
     @Transactional
     public boolean addCart(CartRequest cartRequest) throws Exception{
+        imageAnalysisQuickstart.mainFunc();
         log.info("여기 오긴 하니?");
         Long userId = cartRequest.getUserId();
         Long memeId = cartRequest.getMemeId();
@@ -245,6 +247,7 @@ public class MemeService {
     }
 
     public List<MemeListResponse> randomMeme(){
+
         int check = memeRepository.countAll();
         List<MemeListResponse> result = new ArrayList<>();
         //why

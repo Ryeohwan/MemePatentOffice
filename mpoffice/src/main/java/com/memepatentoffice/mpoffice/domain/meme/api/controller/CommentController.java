@@ -118,10 +118,15 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("myComments")
+    @GetMapping("/myComments")
     public ResponseEntity myCommentList(@RequestParam(name = "userId") Long userId,
                                         @RequestParam(name = "idx",required = false) Long idx,
                                         @PageableDefault(size = 8) Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(commentService.myComments(userId,idx,pageable));
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity test(){
+        return ResponseEntity.status(HttpStatus.OK).body("why");
     }
 }

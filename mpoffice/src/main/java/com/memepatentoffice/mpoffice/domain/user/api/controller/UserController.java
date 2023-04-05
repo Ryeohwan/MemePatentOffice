@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("api/mpoffice/user")
+@RequestMapping("/api/mpoffice/user")
 @RestController
 public class UserController {
     private final GcpService gcpService;
@@ -129,5 +129,7 @@ public class UserController {
     public ResponseEntity getUserInfo(@PathVariable Long userId) throws  NotFoundException{
             return  ResponseEntity.status(HttpStatus.OK).body(userService.getUserInfo(userId));
     }
+
+
 
 }
