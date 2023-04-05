@@ -85,13 +85,14 @@ const AuctionPage: React.FC = () => {
     }
     client.current.subscribe(`/sub/chat/${auctionId}`, (body) => {
       const json_body = JSON.parse(body.body);
-      // console.log(json_body)
+      console.log(json_body)
       dispatch(
         chatActions.sendChat({
           chat: {
             id: json_body.nickname,
             message: json_body.message,
             time: json_body.createdAt,
+            profileImgUrl:json_body.profileImgUrl,
           },
         })
       );

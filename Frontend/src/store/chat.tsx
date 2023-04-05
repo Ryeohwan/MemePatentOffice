@@ -1,12 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+export type chatList= {
+  id: string;
+  message: string;
+  time: string;
+  profileImgUrl: string|null;
+}
+
 interface initialStateInterface {
   input: string;
-  chatList: {
-    id: string;
-    message: string;
-    time: string;
-  }[];
+  chatList: chatList[];
 }
 const initialState: initialStateInterface = {
   input: "",

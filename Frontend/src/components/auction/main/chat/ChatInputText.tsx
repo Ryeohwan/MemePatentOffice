@@ -23,12 +23,14 @@ const ChatInputText: React.FC<WebSocketProps> = ({client, auctionId}) => {
         console.log('sendSub: client.current is not connected')
         return
       }
+      console.log(JSON.parse(sessionStorage.getItem('user')!).imgUrl)
       client.current.publish({
         destination: "/pub/chat",
         body: JSON.stringify({ 
           auctionId: auctionId,
           nickname: JSON.parse(sessionStorage.getItem('user')!).nickname,
           message: value,
+          profileImgUrl: JSON.parse(sessionStorage.getItem('user')!).imgUrl,
         }),
       });
       

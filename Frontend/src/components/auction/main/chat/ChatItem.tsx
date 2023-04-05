@@ -1,19 +1,14 @@
 import React, { useEffect, useState } from "react";
 
 import { Avatar } from "primereact/avatar";
-
+import { chatList } from "store/chat";
 import styles from "components/auction/main/chat/ChatItem.module.css";
 
 interface ChatItemProps {
-  chat: {
-    id: string;
-    message: string;
-    time: string;
-  };
+  chat: chatList;
 }
 
 const ChatItem: React.FC<ChatItemProps> = ({ chat }) => {
-  const imgUrl = JSON.parse(sessionStorage.getItem("user")!).imgUrl;
   const formatDate = (date: string) => {
     const newDate = date.split("T");
     const thmms = newDate[1];
@@ -38,16 +33,24 @@ const ChatItem: React.FC<ChatItemProps> = ({ chat }) => {
           : styles.chatItems
       }
     >
-      <Avatar
-        image={imgUrl}
-        icon="pi pi-megaphone"
-        shape="circle"
-        className={styles.avatar}
-      />
+      {chat.profileImgUrl ? (
+        <Avatar
+          image={chat.profileImgUrl}
+          shape="circle"
+          className={styles.avatar}
+        />
+      ) : (
+        <Avatar
+          icon="pi pi-megaphone"
+          shape="circle"
+          className={styles.avatar}
+        />
+      )}
       <div className={styles.chip}>
         <p>{chat.id}</p>
         <div
           className={
+            !chat.profileImgUrl ? styles.noticeMessage :
             chat.id === JSON.parse(sessionStorage.getItem("user")!).nickname
               ? styles.myMessage
               : styles.message
