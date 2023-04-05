@@ -2,7 +2,9 @@ package com.memepatentoffice.mpoffice.domain.user.db.repository;
 
 
 import com.memepatentoffice.mpoffice.domain.user.api.response.AlarmListResponse;
+import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -41,9 +43,13 @@ public class AlarmCustomRepository {
                         alarm.type,
                         user.nickname,
                         user.profileImage.as("profileSrc"),
+                        meme.title,
                         meme.imageurl.as("memeSrc"),
-                        alarm.createdAt.as("date"))
-                )
+                        Expressions.stringTemplate(
+                                "DATE_FORMAT({0}, {1})"
+                                , alarm.createdAt
+                                , ConstantImpl.create("%Y-%m-%d'T'%H-%m-%s")).as("date")))
+
                 .from(alarm)
 
                 .where(user.id.eq(userId))
