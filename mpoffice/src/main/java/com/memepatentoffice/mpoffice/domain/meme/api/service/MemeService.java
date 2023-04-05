@@ -209,7 +209,6 @@ public class MemeService {
                     .build();
             if(a.getPrice()!= 0) before.add(temp);
         }
-        System.out.println(before.get(0).getNickName());
         if(before.size() > 0){
             List<Double> temp = transactionRepository.PricaRankList(meme.getId());
             Double high = temp.get(0);
