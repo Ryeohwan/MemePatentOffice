@@ -264,9 +264,9 @@ public class MemeService {
             MemeListResponse temp = MemeListResponse.builder()
                     .description(a.getContent())
                     .example(a.getSituation())
-                    .imgUrl(a.getImageurl())
+                    .imgUrl(a.getOwner().getProfileImage())
                     .id(a.getId())
-                    .nickname(a.getCreater().getNickname())
+                    .nickname(a.getOwner().getNickname())
                     .title(a.getTitle())
                     .build();
             result.add(temp);
