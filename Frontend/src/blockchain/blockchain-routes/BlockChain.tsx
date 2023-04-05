@@ -1,18 +1,34 @@
 import BlockChainPage from "blockchain/blockchain-middler/BlockChainPage";
 import React, { useState, useEffect } from "react";
-import { checkMyBalance } from "web3config";
+import useAxios from "hooks/useAxios";
+
 
 const BlockChain: React.FC = () => {
-  const [account, setAccount] = useState("");
+  const account = sessionStorage.user
+    ? JSON.parse(sessionStorage.user).walletAddress
+    : null;
+  const { sendRequest } = useAxios();
 
-  useEffect(() => {
-    const balance = checkMyBalance();
-    console.log(balance.then((b) => b))
-  }, []);
+  const postNull = () => {
+    if (account) {
+      sendRequest({
+        url: "/api/mpoffice/user/update/wallet",
+        method: "POST",
+        data: {
+          userId: 530,
+          walletAddress: "",
+        },
+      });
+      const user = JSON.parse(sessionStorage.getItem("user")!);
+      user.walletAddress = null;
+      sessionStorage.setItem("user", JSON.stringify(user));
+    }
+  };
 
   return (
     <div>
       <BlockChainPage account={account} />
+      <button onClick={postNull}> null로</button>
     </div>
   );
 };
