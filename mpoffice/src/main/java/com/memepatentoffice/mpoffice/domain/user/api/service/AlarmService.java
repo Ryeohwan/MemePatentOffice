@@ -54,9 +54,17 @@ public class AlarmService {
 
         List<UserMemeAuctionAlert> list = userMemeAuctionAlertRepository.findAllByMemeId(memeId);
 
+        Alarm alarm = Alarm
+                .builder()
+                .auctionId(auctionId)
+                .user(userRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId + " : User")))
+                .meme(memeRepository.findById(memeId).orElseThrow(() -> new NotFoundException(memeId + " : Meme")))
+                .type(type).build();
+        alarmRepository.save(alarm);
+
         for(UserMemeAuctionAlert a : list) {
             Long id = a.getUser().getId();
-            Alarm alarm = Alarm
+            alarm = Alarm
                     .builder()
                     .auctionId(auctionId)
                     .user(userRepository.findById(id).orElseThrow(() -> new NotFoundException(userId + " : User")))
