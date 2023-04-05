@@ -9,7 +9,7 @@ const MemeDetailPage: React.FC = () => {
   // 내가 작성한 댓글 or 알림에서 들어온 경우 댓글 탭까지 scroll
   useEffect(() => {
     if (location.state && location.state.from === "comment") {
-      window.scrollTo(0, 600)
+      window.scrollTo(0, document.documentElement.scrollHeight)
     }
   }, [])
 
