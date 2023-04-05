@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class WebSocketChatReq {
     private Long auctionId;
     private String nickname;
+    private String profileImgUrl;
     private String message;
 
 }

@@ -18,6 +18,8 @@ public class WebSocketChatRes {
     @JsonFormat
     private String nickname;
     @JsonFormat
+    private String profileImgUrl;
+    @JsonFormat
     private String message;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime createdAt;
