@@ -17,7 +17,7 @@ const BlockChain: React.FC = () => {
         method: "POST",
         data: {
           userId: 530,
-          walletAddress: "",
+          walletAddress: null,
         },
       });
       const user = JSON.parse(sessionStorage.getItem("user")!);
@@ -26,10 +26,6 @@ const BlockChain: React.FC = () => {
     }
 
   };
-  useEffect(() => {
-    const status = giveSignInCoin();
-    console.log(status)
-  }, [])
   
   return (
     <div>

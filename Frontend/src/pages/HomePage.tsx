@@ -1,5 +1,5 @@
 // home page (/home)
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Carousel } from "primereact/carousel";
 import { useSelector } from "react-redux";
 import { RootState } from "store/configStore";
@@ -45,6 +45,13 @@ const HomePage: React.FC = () => {
 
   const { sendRequest: postWalletRequest } = useAxios();
   const myBalance = useRef<number | undefined>();
+
+  // 돈 들어오고 있다고 모달로 알림
+  const [checkModalVisible, setCheckModalVisible] = useState<boolean>(false);
+  const controlCheckModal = (visible: boolean) => {
+    setCheckModalVisible(visible);
+  };
+
   const accountHandler = async () => {
     try {
       if (window.ethereum) {
@@ -75,8 +82,9 @@ const HomePage: React.FC = () => {
           const user = JSON.parse(sessionStorage.getItem("user")!);
           user.walletAddress = account;
           sessionStorage.setItem("user", JSON.stringify(user));
-          await giveSignInCoin();
-          console.log("최초 연결 지갑에 코인 지급");
+          const giveCoinStatus = await giveSignInCoin();
+          console.log("최초 연결 지갑에 코인 지급", giveCoinStatus);
+
         } else {
           // 이전에 등록했던 지갑과 동일한 경우, 패스
           if (walletAddress === account) {
@@ -98,8 +106,6 @@ const HomePage: React.FC = () => {
             sessionStorage.setItem("user", JSON.stringify(user));
           }
         }
-
-
         alert("지갑 연결 성공!");
       } else {
         alert("MetaMask를 설치해주세요.");
