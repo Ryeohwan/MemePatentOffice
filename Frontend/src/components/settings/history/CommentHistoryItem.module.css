@@ -9,8 +9,8 @@
 }
 
 .avatar {
-  width: 15% !important;
-  height: 100% !important;
+  width: 50px !important;
+  height: 50px !important;
   object-fit: cover;
   border-radius: 6px;
 }
@@ -24,22 +24,24 @@
 
 .itemtitle {
   display: flex;
+  width: 100%;
   flex-direction: row;
   justify-content: flex-start;
   align-items: flex-end;
   margin: 3%;
 }
-
-.elapsedText {
-  margin-left: 5%;
-  font-size: 8px;
-  color: var(--section-line-color);
-}
-
 .title {
   font-size: 15px;
+  width: 100%;
   font-weight: bold;
   min-width: 10%;
+}
+
+.elapsedText {
+  /* margin-left: 5%; */
+  width: 100%;
+  font-size: 8px;
+  color: var(--section-line-color);
 }
 
 .comment {
