@@ -8,7 +8,7 @@ interface AuctionProps {
   items: auctionCardType;
 }
 
-const getRemainTime = (targetTime: number) => {
+export const getRemainTime = (targetTime: number) => {
   const date = Math.floor(+new Date() / 1000);
   let diff;
   if (targetTime < date) {
