@@ -270,6 +270,7 @@ public class MemeService {
                     .title(a.getTitle())
                     .build();
             result.add(temp);
+            System.out.println(temp.getNickname());
         }
         return result;
     }
