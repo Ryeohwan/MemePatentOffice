@@ -8,7 +8,8 @@ import styles from './SearchRankingItem.module.css';
 interface Props {
   item: {
     rank: number;
-    text: string;
+    title: string;
+    count: number;
   }
 }
 
@@ -31,8 +32,8 @@ const SearchRankingItem: React.FC<Props> = ({item}) => {
       </span>
       
       <span className={styles.textItem}>
-        <span onClick={() => clickhandler(item.text)}>
-          {item.text.length > 15 ? item.text.substring(0, 15) + '...' : item.text}
+        <span onClick={() => clickhandler(item.title)}>
+          {item.title.length > 15 ? item.title.substring(0, 15) + '...' : item.title}
         </span>
       </span>
     </div>
