@@ -8,6 +8,7 @@ import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentInfoRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentLikeRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.CommentResponse;
+import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeResponse;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.ReplyResponse;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.CommentService;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.MemeService;
@@ -47,13 +48,20 @@ public class CommentController {
             System.out.println("hi this is reply");
             ReplyResponse reply = commentService.createReply(commentRequest);
             // Reply 알람 등록
-            alarmService.addReplyAlarm(reply.getId(), reply.getUserId(), commentRequest.getMemeId(), reply.getParentId());
+            // 대댓글을 단 사람과 댓글을 단 사람이 같지 않을때
+            if(reply.getUserId() != reply.getParentId()) {
+                alarmService.addReplyAlarm(reply.getId(), reply.getUserId(), commentRequest.getMemeId(), reply.getParentId());
+            }
             return ResponseEntity.status(HttpStatus.CREATED).body(reply);
         }else{
             System.out.println("this is comment");
             CommentResponse comment = commentService.createComment(commentRequest);
             // Comment 알람등록
-            alarmService.addCommentAlarm(comment.getId(), commentRequest.getMemeId());
+            // 밈의 주인과 댓글을 쓴 사람이 같지 않을 때
+            MemeResponse memeResponse  = memeService.findById(commentRequest.getMemeId());
+            if(!memeResponse.getOwnerNickname().equals(comment.getNickname())){
+                alarmService.addCommentAlarm(comment.getId(), commentRequest.getMemeId());
+            }
             return ResponseEntity.status(HttpStatus.CREATED).body(comment);
         }
 
