@@ -57,6 +57,8 @@ public class AuctionServiceImpl implements AuctionService{
     @Transactional
     @Override
     public Long registerAuction(AuctionCreationReq req) throws NotFoundException{
+        // TODO: 경매 등록 알림 요청 보내기
+        // TODO: 트랜잭션화하기
         JSONObject jsonObject = isp.findMemeById(req.getMemeId())
                 .orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
         String memeImgUrl = jsonObject.getString("memeImage");
@@ -285,6 +287,8 @@ public class AuctionServiceImpl implements AuctionService{
         @Override
         @Transactional
         public void run() {
+            // TODO: 경매 시작 알림 요청 보내기
+            // TODO: 트랜잭션화하기
             log.info("AuctionStarter가 실행되었습니다");
             Auction auction = auctionRepository.findById(auctionId)
                     .orElse(null);
@@ -305,7 +309,9 @@ public class AuctionServiceImpl implements AuctionService{
         @Transactional
         @Override
         public void run() {
-            //경매 체결하기 TODO: 트랜잭션화하기
+            //경매 체결하기
+            // TODO: 경매 체결 알림 요청 보내기
+            // TODO: 트랜잭션화하기
             log.info("AuctionTerminater가 시작되었습니다");
             Auction auction = auctionRepository.findById(auctionId)
                     .orElse(null);
