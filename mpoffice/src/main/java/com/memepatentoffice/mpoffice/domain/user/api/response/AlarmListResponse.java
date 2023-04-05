@@ -22,7 +22,8 @@ public class AlarmListResponse {
     private AlarmType type;
     private String nikcname;
     private String profileSrc;
+    private String title;
     private String memeSrc;
-    private LocalDateTime date;
+    private String date;
 
 }
