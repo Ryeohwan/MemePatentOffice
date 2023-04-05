@@ -39,6 +39,10 @@ dependencies {
 	/*json*/
 	implementation 'org.json:json:20230227'
 
+	/*web3*/
+	// https://mvnrepository.com/artifact/org.web3j/core
+	implementation 'org.web3j:core:5.0.0'
+
 
 
 
