@@ -2,6 +2,7 @@ package com.memepatentoffice.mpoffice.domain.meme.db.repository;
 
 import com.memepatentoffice.mpoffice.db.entity.Comment;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.CommentResponse;
+import com.memepatentoffice.mpoffice.domain.meme.api.response.MyCommentList;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +26,7 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
     int countAllByParentCommentIdAndMemeId(Long commentId,Long memeId);
 
     Boolean existsByParentCommentId(Long parentId);
-    @Query("select c from Comment c where c.id < :idx and c.user.id = :userId order by c.id desc ")
+    @Query("select c from Comment c where c.id < :idx and c.user.id = :userId order by c.createdAt desc ")
     List<Comment> findMyListByUserId(@Param("userId") Long userId, @Param("idx") Long idx,Pageable pageable);
 
     // 여기서 베스트 3개 id 를받습니다. - 여기서 인기순 정렬한 값
