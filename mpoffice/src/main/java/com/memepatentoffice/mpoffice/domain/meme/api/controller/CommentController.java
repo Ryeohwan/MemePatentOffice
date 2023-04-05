@@ -13,6 +13,7 @@ import com.memepatentoffice.mpoffice.domain.meme.api.response.ReplyResponse;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.CommentService;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.MemeService;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.CommentRepository;
+import com.memepatentoffice.mpoffice.domain.user.api.service.AlarmService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -31,6 +32,7 @@ import java.util.List;
 public class CommentController {
     private final MemeService memeService;
     private final CommentService commentService;
+    private final AlarmService alarmService;
 
     @GetMapping("/check/{title}")
     public ResponseEntity titleDuplicatedcheck(@PathVariable String title){
@@ -44,6 +46,12 @@ public class CommentController {
         if(commentRequest.getParentId() != null){
             System.out.println("hi this is reply");
             ReplyResponse reply = commentService.createReply(commentRequest);
+            // Reply 알람 등록
+            // 대댓글을 단 사람과 댓글을 단 사람이 같지 않을때
+
+            if(!reply.getNickname().equals(reply.getParentName())) {
+                alarmService.addReplyAlarm(reply.getId(), reply.getUserId(), commentRequest.getMemeId(), reply.getParentId());
+            }
             return ResponseEntity.status(HttpStatus.CREATED).body(reply);
         }else{
             System.out.println("this is comment");
@@ -51,6 +59,9 @@ public class CommentController {
             // Comment 알람등록
             // 밈의 주인과 댓글을 쓴 사람이 같지 않을 때
             MemeResponse memeResponse  = memeService.findById(commentRequest.getMemeId());
+            if(!memeResponse.getOwnerNickname().equals(comment.getNickname())){
+                alarmService.addCommentAlarm(comment.getId(), commentRequest.getMemeId(), commentRequest.getUserId());
+            }
             return ResponseEntity.status(HttpStatus.CREATED).body(comment);
         }
 
