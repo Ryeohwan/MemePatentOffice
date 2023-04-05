@@ -3,7 +3,6 @@ import ElapsedText from "components/common/elements/ElapsedText"
 import { myCommentList } from "store/history"
 
 import styles from 'components/settings/history/CommentHistoryItem.module.css'
-import { Avatar } from "primereact/avatar"
 
 interface CommentHistoryItemProps{
     item: myCommentList
@@ -11,15 +10,16 @@ interface CommentHistoryItemProps{
 
 const CommentHistoryItem:React.FC<CommentHistoryItemProps> = ({item}) => {
     const elapsedText = ElapsedText(item.date)
+    
     return (
     <div className={styles.itemWrapper}>
-        <Avatar className={styles.avatar} image={item.imgSrc} />
+        <img className={styles.avatar} alt="" src={item.memeImage} />
         <div className={styles.itemInfo}>
             <div className={styles.itemtitle}>
-                <p className={styles.title}>{item.title}</p>
+                <p className={styles.title}>{item.memeTitle}</p>
                 <p className={styles.elapsedText}>{elapsedText}</p>
             </div>
-            <p className={styles.comment}>{item.comment}</p>
+            <p className={styles.comment}>{item.content}</p>
         </div>
     </div>
     )
