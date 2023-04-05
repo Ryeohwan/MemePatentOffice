@@ -1,11 +1,15 @@
 package com.memepatentoffice.mpoffice.domain.user.db.repository;
 
 
+import com.memepatentoffice.mpoffice.db.entity.AlarmType;
 import com.memepatentoffice.mpoffice.domain.user.api.response.AlarmListResponse;
 import com.querydsl.core.types.ConstantImpl;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.EnumPath;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +23,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.memepatentoffice.mpoffice.db.entity.QAlarm.alarm;
+import static com.memepatentoffice.mpoffice.db.entity.QComment.comment;
 import static com.memepatentoffice.mpoffice.db.entity.QMeme.meme;
 import static com.memepatentoffice.mpoffice.db.entity.QUser.user;
 
@@ -40,6 +45,17 @@ public class AlarmCustomRepository {
         }
         return alarm.id.lt(alarmId);
     }
+
+//    private BooleanExpression neqUserId(Long userId) {
+//        if(alarm.type.equals(AlarmType.REPLY)) {
+//            return comment.user.id.ne(userId);
+//        } else if (alarm.type.equals(AlarmType.COMMENT)) {
+//            return meme.owner.id.ne(userId);
+//        }
+//        return null;
+//    }
+
+
 
     public Slice<AlarmListResponse> getAlarmList(Long lastAlarmId, Long userId, Pageable pageable) {
         log.info(lastAlarmId.toString());
