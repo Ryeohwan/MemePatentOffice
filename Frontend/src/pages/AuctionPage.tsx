@@ -1,19 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Client } from "@stomp/stompjs";
 import AuctionCanvas from "components/auction/main/AuctionCanvas";
-import styles from "pages/AuctionPage.module.css";
 import { chatActions } from "store/chat";
 import { auctionActions } from "store/auction";
 import { playersInfo } from "store/auction";
 import useAxios from "hooks/useAxios";
+
 const ENDPOINT = "wss://j8a305.p.ssafy.io/ws";
 const AuctionPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const characters = useRef<playersInfo[]>([]);
   const [userNum, setUserNum] = useState<number>(0);
-  const { data, sendRequest } = useAxios();
+  const { data, status, sendRequest } = useAxios();
+  const navigate = useNavigate()
   const userId = JSON.parse(sessionStorage.getItem("user")!).userId;
   const userNickName = JSON.parse(sessionStorage.getItem("user")!).nickname;
   const { auctionId } = useParams();
@@ -40,7 +41,15 @@ const AuctionPage: React.FC = () => {
       // 연결
       onConnect: async (frame) => {
         await sendRequest({ url: `/api/auction/info?auctionId=${auctionId}` });
-        subscribe();
+        await subscribe();
+        client.current?.publish({
+          destination: "/pub/chat",
+          body: JSON.stringify({ 
+            auctionId: auctionId,
+            nickname: '알림',
+            message: `${JSON.parse(sessionStorage.getItem('user')!).nickname}님이 입장하셨습니다.`,
+          }),
+        });
       },
 
       onStompError: (frame) => {
@@ -69,7 +78,7 @@ const AuctionPage: React.FC = () => {
     client.current?.deactivate();
   };
 
-  const subscribe = () => {
+  const subscribe = async () => {
     if (client.current == null) {
       console.log("subscribe: client.current is null");
       return;
@@ -107,7 +116,13 @@ const AuctionPage: React.FC = () => {
     });
     client.current.subscribe(`/sub/bid/${auctionId}`, (body) => {
       const json_body = JSON.parse(body.body);
-      console.log(json_body);
+      dispatch(
+        auctionActions.putBiddingHistory({
+          price: json_body.askingPrice,
+          nickname: json_body.nickname,
+          time: json_body.createdAt,
+        })
+      );
     });
     console.log(`subscribe()`);
   };
@@ -119,6 +134,13 @@ const AuctionPage: React.FC = () => {
       setIsLoading(false);
     }
   }, [data]);
+
+  useEffect(()=>{
+    if(status === 500){
+      alert('없는 경매입니다.')
+      navigate('/main')
+    }
+  },[status])
 
   useEffect(() => {
     connect();

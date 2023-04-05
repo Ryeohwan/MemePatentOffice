@@ -13,6 +13,7 @@ interface ChatItemProps {
 }
 
 const ChatItem: React.FC<ChatItemProps> = ({ chat }) => {
+  const imgUrl = JSON.parse(sessionStorage.getItem("user")!).imgUrl;
   const formatDate = (date: string) => {
     const newDate = date.split("T");
     const thmms = newDate[1];
@@ -37,10 +38,23 @@ const ChatItem: React.FC<ChatItemProps> = ({ chat }) => {
           : styles.chatItems
       }
     >
-      <Avatar icon="pi pi-user" shape="circle" className={styles.avatar} />
+      <Avatar
+        image={imgUrl}
+        icon="pi pi-megaphone"
+        shape="circle"
+        className={styles.avatar}
+      />
       <div className={styles.chip}>
         <p>{chat.id}</p>
-        <div className={styles.message}>{chat.message}</div>
+        <div
+          className={
+            chat.id === JSON.parse(sessionStorage.getItem("user")!).nickname
+              ? styles.myMessage
+              : styles.message
+          }
+        >
+          {chat.message}
+        </div>
       </div>
       <p className={styles.date}>{date}</p>
     </div>

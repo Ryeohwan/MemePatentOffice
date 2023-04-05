@@ -35,12 +35,24 @@
     max-width: 100%;
 }
 
+.myMessage{
+    display: flex;
+    flex-wrap: wrap;
+    background-color: var(--point-color);
+    padding:10px 15px 10px 15px;
+    border: none;
+    border-radius: 10px;
+    max-width: 100%;
+}
+
 .avatar {
   background-color: #2196F3 !important;
   color: #ffffff !important;
   min-width: 2rem;
 }
-
+.avatar > img {
+    object-fit: cover;
+}
 
 .chip > p{
     margin-bottom:0.2rem;

@@ -6,7 +6,7 @@ import { useLoader, useFrame } from "react-three-fiber";
 import { useSelector } from "react-redux";
 import { biddingHistory } from "store/auction";
 import { RootState } from "store/configStore";
-
+import { clone } from "three/examples/jsm/utils/SkeletonUtils";
 
 type action = {
     buy: THREE.AnimationAction | null;
@@ -15,7 +15,7 @@ type action = {
 
 const FinishModalCharacter:React.FC = () => {
     const biddingHistory = useSelector<RootState, biddingHistory[]>(
-        (state) => state.auction.biddingHistory
+        (state) => state.auction.auctionInfo.biddingHistory
       );
   
   const glb = useLoader(GLTFLoader, "/auction/model/character.glb");
@@ -24,22 +24,19 @@ const FinishModalCharacter:React.FC = () => {
     notbuy: null,
   });
   const character = useMemo(()=>{
-    const character = new THREE.Group()
-    character.add(glb.scene)
-    character.children.push(glb.scene.children[0].clone())
-    return character.children[0]
+    return clone(glb.scene)
   },[glb.scene])
+  
   const player = character.children[0];
-  console.log(player)
   player.position.set(0,0,0)
   player.rotation.set(0,0,0)
-  glb.scene.traverse((child) => {
+  character.traverse((child) => {
     if (child.isObject3D) {
       child.castShadow = true;
     }
   });
 
-  const mixer = new THREE.AnimationMixer(player);
+  const mixer = new THREE.AnimationMixer(character.children[0]);
 
   for (let i = 0; i < glb.animations.length; i++) {
     const action = mixer.clipAction(glb.animations[i]);
@@ -62,7 +59,7 @@ const FinishModalCharacter:React.FC = () => {
       actions.current.notbuy?.play()
     }
   })
-    return <primitive object={glb.scene} />
+    return <primitive object={character} />
 }
 
 export default FinishModalCharacter

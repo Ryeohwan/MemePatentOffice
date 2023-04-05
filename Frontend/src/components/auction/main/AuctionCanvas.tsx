@@ -4,7 +4,8 @@ import React, { useRef, useState, useCallback, useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "store/configStore";
-import { auctionActions, auctionInfo, biddingHistory } from "store/auction";
+import { auctionActions, auctionInfo } from "store/auction";
+import { chatActions } from "store/chat";
 import useAxios from "hooks/useAxios";
 
 import Scene from "components/auction/main/Scene";
@@ -69,34 +70,38 @@ const AuctionCanvas: React.FC<Characters> = ({
     (state) => state.auction.auctionInfo
   );
   const [fullScreen, setFullScreen] = useState(false);
+  const myBalance = useRef<number | undefined>();
 
   const [playerStatus, setPlayerState] = useState<number>(0);
   const changeHandler = () => {
     setPlayerState((prev) => prev + 1);
   };
-  // useEffect(() => {
-  //   const elem = document.getElementById("auction");
-  //   if (elem) {
-  //     elem.addEventListener("click", () => {
-  //       if (elem.requestFullscreen) {
-  //         elem.requestFullscreen();
-  //       }
-  //     });
-  //   }
-  //   setFullScreen(true)
-  //   return () => {
-  //     if (document.fullscreenElement)
-  //     document.exitFullscreen();
-  // dispatch(auctionActions.closeAuction())
-  // dispatch(chatActions.closeAuction())
-  //   };
-  // }, []);
+  useEffect(() => {
+    const elem = document.getElementById("auction");
+    if (elem) {
+      elem.addEventListener("click", () => {
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        }
+      });
+    }
+    setFullScreen(true)
+    return () => {
+      if (document.fullscreenElement)
+      document.exitFullscreen();
+      dispatch(auctionActions.closeAuction())
+      dispatch(chatActions.closeAuction())
+    };
+  }, []);
 
   const biddingHandler = (state: boolean) => {
     setBiddingVisible(state);
   };
   const biddingSubmitHandler = (price: number) => {
-    if (
+    if (myBalance.current! / 10 ** 16 < price) {
+      alert("잔액이 부족합니다.");
+      return;
+    } else if (
       price <=
       (auctionInfo.biddingHistory.length > 0
         ? auctionInfo.biddingHistory[0].price
@@ -137,10 +142,10 @@ const AuctionCanvas: React.FC<Characters> = ({
     ];
     playerCamera.current.position.set(
       chairPoint.current.position.x > 0
-        ? chairPoint.current.position.x + 0.5
+        ? chairPoint.current.position.x + 1
         : chairPoint.current.position.x - 1,
-      chairPoint.current.position.y + 2,
-      chairPoint.current.position.z + 5
+      chairPoint.current.position.y + 3,
+      chairPoint.current.position.z + 7
     );
     playerCamera.current.lookAt(0, 3, -30);
     camera.current = playerCamera.current.clone();
@@ -153,7 +158,7 @@ const AuctionCanvas: React.FC<Characters> = ({
         z: player.current.position.z,
       },
       {
-        x: chairPoint.current.position.x - 0.3,
+        x: chairPoint.current.position.x + 0.05,
         y: chairPoint.current.position.y + 0.8,
         z: chairPoint.current.position.z + 0.8,
         duration: 1,
@@ -203,19 +208,27 @@ const AuctionCanvas: React.FC<Characters> = ({
 
   const fullMoniter = () => {
     gsap.to(camera.current.position, {
-      z: 30,
-      y: 5,
+      z: 40,
+      y: 10,
+      x: 0,
       duration: 2,
     });
-    setIsFull(true);
+    setTimeout(() => {
+      camera.current.lookAt(0, 3, -30);
+      setIsFull(true);
+    }, 2000);
   };
   const notFullMoniter = () => {
     gsap.to(camera.current.position, {
       z: playerCamera.current.position.z,
       y: playerCamera.current.position.y,
+      x: playerCamera.current.position.x,
       duration: 2,
     });
-    setIsFull(false);
+    setTimeout(() => {
+      camera.current.lookAt(0, 3, -30);
+      setIsFull(false);
+    }, 2000);
   };
   return (
     <section id="auction" className={styles.auctionWrapper}>
@@ -258,6 +271,7 @@ const AuctionCanvas: React.FC<Characters> = ({
           biddingHandler={biddingHandler}
           biddingSubmitHandler={biddingSubmitHandler}
           biddingVisible={biddingVisible}
+          myBalance={myBalance}
         />
         <ChatMain client={client} auctionId={auctionId} />
       </div>

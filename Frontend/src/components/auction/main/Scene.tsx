@@ -179,7 +179,7 @@ const Scene: React.FC<SceneProps> = ({
         auctionId={auctionId}
         characters={characters}
       />
-      <Box position={[0, 15, 0]} />
+      <Box position={[0, 10, 0]} />
       <Table
         table={table}
         pushMesh={pushMesh}

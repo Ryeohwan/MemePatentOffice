@@ -26,8 +26,9 @@
 }
 
 .canvasDiv {
-  width: 80%;
-  height: 60%;
+  margin-top: 10px;
+  width: 100%;
+  height: 50%;
 }
 
 /* .canvas{
