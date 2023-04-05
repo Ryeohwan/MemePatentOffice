@@ -83,6 +83,7 @@ const UploadDropDown: React.FC<UploadDropDownProps> = ({visible}) => {
           }}
           valueTemplate={selectedMemeTemplate}
           itemTemplate={optionMemeTemplate}
+          panelClassName={styles.panel}
         />
       )}
     </>

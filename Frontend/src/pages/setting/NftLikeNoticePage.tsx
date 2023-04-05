@@ -8,7 +8,6 @@ import styles from "pages/setting/NftLikeNoticePage.module.css";
 import "pages/setting/Setting.css";
 import useAxios from "hooks/useAxios";
 import NftCard from "components/common/card/NftCard";
-import { Skeleton } from "primereact/skeleton";
 import SkeletonCard from "components/common/card/SkeletonCard";
 
 const NftLikePage: React.FC = () => {

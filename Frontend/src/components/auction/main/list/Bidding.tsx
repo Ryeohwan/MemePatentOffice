@@ -32,7 +32,10 @@ const Bidding: React.FC<BiddingProps> = ({
   const checkBalance = async () => {
     const account = JSON.parse(sessionStorage.getItem("user")!).walletAddress;
     try {
-      if (!account) return false;
+      if (!account){
+        myBalance.current = -1
+        return
+      };
       console.log("upload 버튼에서 잔액조회 실행됨");
       await checkMyBalance()
         .then((balance) => {
@@ -44,6 +47,7 @@ const Bidding: React.FC<BiddingProps> = ({
         });
       return myBalance.current;
     } catch (e) {
+      myBalance.current = 0;
       console.log(e);
       return false;
     }
@@ -51,12 +55,6 @@ const Bidding: React.FC<BiddingProps> = ({
   
   const seeBalance = async () => {
     await checkBalance();
-      if (!myBalance.current|| myBalance.current===undefined) {
-        console.log("지갑 연결이 필요합니다.")
-        navigate('/')
-      } else {
-        console.log(myBalance.current)
-      }
   }
   useEffect(()=>{
     seeBalance()
