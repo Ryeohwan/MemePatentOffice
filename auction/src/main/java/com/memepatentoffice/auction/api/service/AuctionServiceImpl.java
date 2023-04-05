@@ -57,7 +57,6 @@ public class AuctionServiceImpl implements AuctionService{
     @Transactional
     @Override
     public Long registerAuction(AuctionCreationReq req) throws NotFoundException{
-        // TODO: 경매 등록 알림 요청 보내기
         // TODO: 트랜잭션화하기
         JSONObject jsonObject = isp.findMemeById(req.getMemeId())
                 .orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
@@ -92,6 +91,8 @@ public class AuctionServiceImpl implements AuctionService{
                 new AuctionTerminater(auction.getId()),
                 terminateDate
         );
+
+        isp.setAlarm("register", auction.getId(), auction.getSellerId(),auction.getMemeId());
         return auction.getId();
     }
 
@@ -287,11 +288,10 @@ public class AuctionServiceImpl implements AuctionService{
         @Override
         @Transactional
         public void run() {
-            // TODO: 경매 시작 알림 요청 보내기
             // TODO: 트랜잭션화하기
             log.info("AuctionStarter가 실행되었습니다");
             Auction auction = auctionRepository.findById(auctionId)
-                    .orElse(null);
+                    .orElseThrow(()->new RuntimeException("auctionID가 없습니다"));
             log.info("실행할 Auction id는 "+auction.getId()+"입니다.");
             if(AuctionStatus.ENROLLED.equals(auction.getStatus())){
                 auctionRepository.updateStatusToProceeding(auctionId);
@@ -299,7 +299,7 @@ public class AuctionServiceImpl implements AuctionService{
             }else{
                 log.info("경매 번호 "+auction.getId()+"번 경매를 시작이 실패해서 아직 ENROLLED상태입니다");
             }
-
+            isp.setAlarm("start", auction.getId(), auction.getSellerId(),auction.getMemeId());
         }
     }
     @AllArgsConstructor
@@ -309,12 +309,10 @@ public class AuctionServiceImpl implements AuctionService{
         @Transactional
         @Override
         public void run() {
-            //경매 체결하기
-            // TODO: 경매 체결 알림 요청 보내기
             // TODO: 트랜잭션화하기
             log.info("AuctionTerminater가 시작되었습니다");
             Auction auction = auctionRepository.findById(auctionId)
-                    .orElse(null);
+                    .orElseThrow(()->new RuntimeException("auctionID가 없습니다"));
             log.info("종료할 Auction id는 "+auction.getId()+"입니다.");
             //3. state 바꾸기
             if(AuctionStatus.PROCEEDING.equals(auction.getStatus())){
@@ -344,9 +342,7 @@ public class AuctionServiceImpl implements AuctionService{
             }catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
-
-
-
+            isp.setAlarm("end", auction.getId(), auction.getSellerId(),auction.getMemeId());
         }
     }
     public static <T> T streamExceptionHandler(ExceptionSupplier<T> z){
