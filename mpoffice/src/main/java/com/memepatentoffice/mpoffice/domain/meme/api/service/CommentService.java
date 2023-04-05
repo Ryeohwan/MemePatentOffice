@@ -6,6 +6,7 @@ import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentDeleteReques
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentLikeRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.CommentRequest;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.CommentResponse;
+import com.memepatentoffice.mpoffice.domain.meme.api.response.MyCommentList;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.ReplyResponse;
 import com.memepatentoffice.mpoffice.domain.meme.db.repository.*;
 import com.memepatentoffice.mpoffice.domain.user.db.repository.UserRepository;
@@ -195,32 +196,30 @@ public class CommentService {
         }
     }
 
-    public Slice<CommentResponse> myComments(Long userId,Long idx,Pageable pageable){
+    public Slice<MyCommentList> myComments(Long userId,Long idx,Pageable pageable){
         if(idx == null || idx == 0L){
             idx = Long.MAX_VALUE;
         }
-        List<CommentResponse> list = convertToCR(commentRepository.findMyListByUserId(userId,idx,PageRequest.of(0,8)));
-        return checkLastPage(pageable,list);
+        List<MyCommentList> list = convertToCR(commentRepository.findMyListByUserId(userId,idx,PageRequest.of(0,8)));
+        return checkMyPage(pageable,list);
     }
 
-    public List<CommentResponse> convertToCR(List<Comment> list){
-        List<CommentResponse> all = new ArrayList<>();
+    public List<MyCommentList> convertToCR(List<Comment> list){
+        List<MyCommentList> all = new ArrayList<>();
         for(Comment a : list){
             Comment c = commentRepository.findById(a.getId()).get();
-            int count = 0;
-            if(userCommentLikeRepository.existsByUserIdAndCommentId(c.getUser().getId(),c.getId())){
-                count = userCommentLikeRepository.countUserCommentLikesByCommentId(c.getId());
-            }
-            int replyCount = commentRepository.countAllByParentCommentIdAndMemeId(c.getId(),c.getMeme().getId());
-            CommentResponse temp = CommentResponse.builder()
-                    .id(a.getId())
-                    .memeId(a.getMeme().getId())
-                    .userId(a.getUser().getId())
-                    .heartCnt(count)
-                    .content(a.getContent())
-                    .date(a.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-                    .replyCommentCnt(replyCount)
+
+            MyCommentList temp = MyCommentList.builder()
+                    .id(c.getId())
+                    .memeId(c.getMeme().getId())
+                    .memeImage(c.getMeme().getImageurl())
+                    .memeTitle(c.getMeme().getTitle())
+                    .content(c.getContent())
+                    .date(c.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                     .build();
+            if(c.getParentComment() != null && commentRepository.existsByParentCommentId(c.getParentComment().getId())){
+                temp.setParentId(c.getParentComment().getId());
+            }
             all.add(temp);
         }
         return all;
@@ -360,6 +359,19 @@ public class CommentService {
         if (results.size() < pageable.getPageSize()) {
             hasNext = false;
         }
+        return new SliceImpl<>(results, pageable, hasNext);
+    }
+
+    private Slice<MyCommentList> checkMyPage(Pageable pageable, List<MyCommentList> results) {
+
+        boolean hasNext = true;
+
+        // 조회한 결과 개수가 요청한 페이지 사이즈보다 크면 뒤에 더 있음, next = true
+        if (results.size() < pageable.getPageSize()) {
+            System.out.println("why list here");
+            hasNext = false;
+        }
+        System.out.println(hasNext);
         return new SliceImpl<>(results, pageable, hasNext);
     }
 
