@@ -268,6 +268,7 @@ public class AuctionServiceImpl implements AuctionService{
                 .auctionId(auctionId)
                 .nickname(req.getNickname())
                 .message(req.getMessage())
+                .profileImgUrl(req.getProfileImgUrl())
                 .createdAt(LocalDateTime.now()).build();
         simpMessageSendingOperations.convertAndSend("/sub/chat/"+auctionId, res);
 
