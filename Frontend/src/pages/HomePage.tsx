@@ -37,58 +37,11 @@ const HomePage: React.FC = () => {
 
   // 지금 HOT 한 경매
   // dummy data
-  const auctionPopularList = [
-    {
-      memeId: 1,
-      auctionId: 1,
-      title:
-        "귀여운 토토로 삼형제와 발랄한 자매 사츠키, 메이의 우당탕탕 가족사진입니다",
-      time: "16시간 32분",
-      highestBid: 430,
-      imgUrl: "totoro.jpg",
-    },
-    {
-      memeId: 2,
-      auctionId: 3,
-      title: "누가 이렇게 예쁘게 낳았어? 엄마엄마가~",
-      time: "5시간 32분",
-      highestBid: 200,
-      imgUrl: "newjeans.jpg",
-    },
-    {
-      memeId: 3,
-      auctionId: 2,
-      title: "알아들었으면 끄덕여",
-      time: "20시간 32분",
-      highestBid: 500,
-      imgUrl: "theglory.jpeg",
-    },
-    {
-      memeId: 4,
-      auctionId: 1,
-      title:
-        "귀여운 토토로 삼형제와 발랄한 자매 사츠키, 메이의 우당탕탕 가족사진입니다",
-      time: "16시간 32분",
-      highestBid: 430,
-      imgUrl: "totoro.jpg",
-    },
-    {
-      memeId: 5,
-      auctionId: 3,
-      title: "누가 이렇게 예쁘게 낳았어? 엄마엄마가~",
-      time: "5시간 32분",
-      highestBid: 200,
-      imgUrl: "newjeans.jpg",
-    },
-    {
-      memeId: 6,
-      auctionId: 2,
-      title: "알아들었으면 끄덕여",
-      time: "20시간 32분",
-      highestBid: 500,
-      imgUrl: "theglory.jpeg",
-    },
-  ];
+  const {
+    data: hotAuction,
+    isLoading: hotAuctionLoading,
+    sendRequest: hotAuctionRequest,
+  } = useAxios();
 
   const { sendRequest: postWalletRequest } = useAxios();
   const myBalance = useRef<number | undefined>();
@@ -148,12 +101,11 @@ const HomePage: React.FC = () => {
         alert("MetaMask를 설치해주세요.");
       }
       await checkBalance();
-      if (!myBalance.current|| myBalance.current===undefined) {
-        console.log("잔액 조회에 실패했습니다, 지갑 다시 연결해보셈")
+      if (!myBalance.current || myBalance.current === undefined) {
+        console.log("잔액 조회에 실패했습니다, 지갑 다시 연결해보셈");
       } else {
-        console.log("지갑 연결하자마자 잔액 조회", myBalance.current)
+        console.log("지갑 연결하자마자 잔액 조회", myBalance.current);
       }
-
     } catch (error) {
       console.log(error);
     }
@@ -186,7 +138,9 @@ const HomePage: React.FC = () => {
       url: "/api/mpoffice/meme/search/expensive?days=week",
     });
     viewsMemeRequest({ url: "/api/mpoffice/meme/search/views?days=week" });
+    hotAuctionRequest({ url: "/api/auction/carousel" });
   }, []);
+
 
   // Main Carousel에 내려보낼 props
   const MAIN_INFO = [
@@ -317,19 +271,25 @@ const HomePage: React.FC = () => {
       <hr />
 
       {/* auction carousel */}
-      <div className={styles.homeMenuWrapper}>
-        <div className={styles.homeMenuTitle}>지금 HOT한 경매</div>
-      </div>
-      <Carousel
-        value={auctionPopularList}
-        numVisible={3}
-        numScroll={3}
-        itemTemplate={(page) => nftCarousel(page)}
-        orientation={"horizontal"}
-        showIndicators={false}
-        responsiveOptions={responsiveOptions}
-        circular={true}
-      />
+      {/* 여기 데이터 없을 수도 있어서 없으면 아예 영역 자체 안띄우도록 해돔 */}
+      {!hotAuctionLoading && hotAuction && hotAuction.length > 0 && (
+        <>
+          <div className={styles.homeMenuWrapper}>
+            <div className={styles.homeMenuTitle}>지금 HOT한 경매</div>
+          </div>
+          <Carousel
+            value={hotAuction}
+            numVisible={3}
+            numScroll={3}
+            itemTemplate={(page) => nftCarousel(page)}
+            orientation={"horizontal"}
+            showIndicators={false}
+            responsiveOptions={responsiveOptions}
+            circular={true}
+          />
+        </>
+      )}
+
     </div>
   );
 };
