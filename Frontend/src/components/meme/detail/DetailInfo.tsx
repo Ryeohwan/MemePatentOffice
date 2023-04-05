@@ -11,6 +11,7 @@ const DetailInfo: React.FC = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [isFromNotice, setIsFromNotice] = useState<boolean>();
+  
   // get memid from params
   const params = useParams();
   const memeid = parseInt(params.meme_id!, 10);
@@ -42,8 +43,11 @@ const DetailInfo: React.FC = () => {
   // 경매에 등록된 상태인지
   const [auctionState, setAuctionState] = useState<string | null>();
 
+
+  // 어디서 온건지 확인
   useEffect(() => {
-    setIsFromNotice(location.state ? true : false);
+    // 알림 > 경매에서 온 경우
+    // setIsFromNotice(location.state ? true : false);
   }, []);
 
   // get Meme detail info
@@ -236,7 +240,7 @@ const DetailInfo: React.FC = () => {
             <UploadModal visible={visible} modalHandler={modalVisibleHandler}/>
           </>
         ) : (
-          <p>loading중</p>
+          <></>
         )}
       </div>
     </>
