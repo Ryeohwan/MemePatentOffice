@@ -17,9 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -206,6 +204,7 @@ public class CommentService {
 
     public List<MyCommentList> convertToCR(List<Comment> list){
         List<MyCommentList> all = new ArrayList<>();
+
         for(Comment a : list){
             Comment c = commentRepository.findById(a.getId()).get();
 
@@ -220,8 +219,10 @@ public class CommentService {
             if(c.getParentComment() != null && commentRepository.existsByParentCommentId(c.getParentComment().getId())){
                 temp.setParentId(c.getParentComment().getId());
             }
+
             all.add(temp);
         }
+
         return all;
     }
 
