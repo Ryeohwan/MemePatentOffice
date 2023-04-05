@@ -286,6 +286,9 @@ public class MemeService {
     public List<MemeListResponse> findLiked(Long userId){
         List<UserMemeLike> all = userMemeLikeRepository.findAllByUserId(userId);
         List<MemeListResponse> result = new ArrayList<>();
+        User tempU = userRepository.findById(userId).get();
+        System.out.println(tempU.getNickname());
+        System.out.println();
         for(UserMemeLike a: all){
             if(a.getMemeLike() != null && a.getMemeLike().equals(MemeLike.LIKE)){
                 MemeListResponse temp = MemeListResponse.builder()
@@ -294,6 +297,7 @@ public class MemeService {
                         .imgUrl(a.getMeme().getImageurl())
                         .id(a.getMeme().getId())
                         .nickname(a.getUser().getNickname())
+                        .userImg(tempU.getProfileImage())
                         .title(a.getMeme().getTitle())
                         .build();
                 result.add(temp);
@@ -304,6 +308,7 @@ public class MemeService {
 
     public List<MemeListResponse> findCarted(Long userId){
         List<UserMemeAuctionAlert> all = cartRepository.findAllByUserId(userId);
+        User tempU = userRepository.findById(userId).get();
         List<MemeListResponse> result = new ArrayList<>();
         for(UserMemeAuctionAlert a:all){
             if(a.getCart() != null && a.getCart().equals(Cart.ADD)){
@@ -313,6 +318,7 @@ public class MemeService {
                         .imgUrl(a.getMeme().getImageurl())
                         .id(a.getMeme().getId())
                         .nickname(a.getUser().getNickname())
+                        .userImg(tempU.getProfileImage())
                         .title(a.getMeme().getTitle())
                         .build();
                 result.add(temp);
