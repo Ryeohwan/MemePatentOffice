@@ -2,13 +2,12 @@ import { useState, useEffect, useRef } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { memeListActions } from "store/memeList";
+import useAxios from "hooks/useAxios";
 
 import { Icon } from "@iconify/react";
 import { Sidebar } from "primereact/sidebar";
 import styles from "./NavbarHamburger.module.css";
 import { checkMyBalance, giveSignInCoin, web3 } from "web3config";
-import useAxios from "hooks/useAxios";
-import { Divider } from "primereact/divider";
 
 interface RoutePath {
   pathname: string;
@@ -19,12 +18,9 @@ const NavbarHamburger: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { sendRequest } = useAxios();
-  const myBalance = useRef<number | undefined>();
-  // true일 땐 잔액을 보여주고, false일 땐 지갑 연결하기를 띄움
-  const [ showBalance, setShowBalance ] = useState(false);
+  // const myBalance = useRef<number | undefined>();
+  const [ myBalance, setMyBalance ] = useState<any>();
 
-  // 흠.. 내 지갑주소가 연결되어 있을 땐 잔액 조회로 수정해야 할듯
-  // 요기 수정햇읍니다 
   // login 페이지에서는 user 없어서 일단 session에 user 없으면 null 박아둠
   const myAccount = sessionStorage.user ? JSON.parse(sessionStorage.user).walletAddress : null;
 
@@ -67,7 +63,7 @@ const NavbarHamburger: React.FC = () => {
         if (typeof accounts[0] === "string") {
           account = web3.utils.toChecksumAddress(accounts[0]);
           console.log(account);
-        }
+        };
         // 유저 디비에 wallet_address가 null일 때만 코인 지급
         const walletAddress = JSON.parse(
           sessionStorage.getItem("user")!
@@ -103,7 +99,6 @@ const NavbarHamburger: React.FC = () => {
             console.log("1인당 코인 1회만 지급");
           }
         }
-
         const user = JSON.parse(sessionStorage.getItem("user")!);
         user.walletAddress = account;
         sessionStorage.setItem("user", JSON.stringify(user));
@@ -113,13 +108,11 @@ const NavbarHamburger: React.FC = () => {
         alert("MetaMask를 설치해주세요.");
       }
       await checkBalance();
-      console.log("지갑 연결하자마자 잔액 조회", myBalance.current)
-      if (!myBalance.current|| myBalance.current===undefined) {
+      console.log("지갑 연결하자마자 잔액 조회", myBalance)
+      if (!myBalance || myBalance===undefined) {
         console.log("잔액 조회에 실패했습니다, 지갑 다시 연결해보셈")
-        setShowBalance(false);
       } else {
-        setShowBalance(true);
-        console.log(myBalance.current)
+        console.log(myBalance)
       }
 
     } catch (error) {
@@ -131,7 +124,7 @@ const NavbarHamburger: React.FC = () => {
     sessionStorage.clear();
     navigate("/");
   };
-
+  
   // 잔액 조회
   const checkBalance = async () => {
     const account = JSON.parse(sessionStorage.getItem("user")!).walletAddress;
@@ -141,17 +134,23 @@ const NavbarHamburger: React.FC = () => {
       await checkMyBalance()
         .then((balance) => {
           console.log("내 지갑 잔액:", balance);
-          myBalance.current = balance;
+          setMyBalance(balance);
         })
         .catch((error) => {
           console.error(error);
         });
-      return myBalance.current;
+      return myBalance;
     } catch (e) {
       console.log(e);
       return false;
     }
   };
+
+  useEffect(() => {
+    if (myAccount !== null && open) {
+      checkBalance();
+    };
+  }, [pathname, open]);
 
   return (
     <>
@@ -189,10 +188,8 @@ const NavbarHamburger: React.FC = () => {
           >
             경매 둘러보기
           </NavLink>
-
-          {/* {!account && <div onClick={accountHandler}>지갑 연결하기</div>} */}
           
-          {!showBalance ? <div onClick={accountHandler}>지갑 연결하기</div> : <div>내 잔액 : {myBalance.current}</div> }
+          {myAccount !== null ? <div>내 잔액 : {myBalance/(10**18)} SSF</div> : <div onClick={accountHandler}>지갑 연결하기</div> }
 
           <div className={styles.navLink} onClick={mypageHandler}>
             마이페이지

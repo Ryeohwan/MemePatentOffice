@@ -64,8 +64,7 @@ const HomePage: React.FC = () => {
 
         // 최초로 연결한 지갑인 경우, 코인 지급하고 post address
         if (walletAddress === null) {
-          giveSignInCoin();
-          postWalletRequest({
+          await postWalletRequest({
             url: "/api/mpoffice/user/update/wallet",
             method: "POST",
             data: {
@@ -73,11 +72,16 @@ const HomePage: React.FC = () => {
               walletAddress: account,
             },
           });
+          const user = JSON.parse(sessionStorage.getItem("user")!);
+          user.walletAddress = account;
+          sessionStorage.setItem("user", JSON.stringify(user));
+          await giveSignInCoin();
           console.log("최초 연결 지갑에 코인 지급");
         } else {
           // 이전에 등록했던 지갑과 동일한 경우, 패스
           if (walletAddress === account) {
             console.log("이전에 등록한 지갑과 동일합니다");
+            
           } else if (walletAddress !== account) {
             // 이전에 등록한 지갑은 존재하지만 지금 지갑과 다를 경우, 새로 post
             postWalletRequest({
@@ -89,12 +93,12 @@ const HomePage: React.FC = () => {
               },
             });
             console.log("1인당 코인 1회만 지급");
+            const user = JSON.parse(sessionStorage.getItem("user")!);
+            user.walletAddress = account;
+            sessionStorage.setItem("user", JSON.stringify(user));
           }
         }
 
-        const user = JSON.parse(sessionStorage.getItem("user")!);
-        user.walletAddress = account;
-        sessionStorage.setItem("user", JSON.stringify(user));
 
         alert("지갑 연결 성공!");
       } else {
@@ -114,7 +118,7 @@ const HomePage: React.FC = () => {
     const account = JSON.parse(sessionStorage.getItem("user")!).walletAddress;
     try {
       if (!account) return false;
-      console.log("upload 버튼에서 잔액조회 실행됨");
+      console.log("home에서 잔액조회 실행됨");
       await checkMyBalance()
         .then((balance) => {
           console.log("내 지갑 잔액:", balance);
@@ -129,6 +133,8 @@ const HomePage: React.FC = () => {
       return false;
     }
   };
+
+
 
   // landering 될때 data get 하기
   // loading 중에는 skeleton
