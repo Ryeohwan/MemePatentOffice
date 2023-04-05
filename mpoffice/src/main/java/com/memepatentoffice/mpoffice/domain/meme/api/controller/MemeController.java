@@ -4,6 +4,7 @@ import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
 import com.memepatentoffice.mpoffice.domain.meme.api.request.*;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.MemeResponse;
 import com.memepatentoffice.mpoffice.domain.meme.api.response.PriceListResponse;
+import com.memepatentoffice.mpoffice.domain.meme.api.service.ImageAnalysisQuickstart;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.MemeService;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.GcpService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,8 @@ import java.util.List;
 public class MemeController {
     private final MemeService memeService;
     private final GcpService gcpService;
+
+    private final ImageAnalysisQuickstart imageAnalysisQuickstart;
 
     @GetMapping("/")
     public ResponseEntity<?> getAllMemes(){
@@ -48,6 +51,9 @@ public class MemeController {
         }
         String img = gcpService.uploadFile(uploadFile);
         memeCreateRequest.setImageUrl(img);
+
+        imageAnalysisQuickstart.mainFunc();
+
         Long id = memeService.createMeme(memeCreateRequest);
         return ResponseEntity.status(HttpStatus.OK).body(id);
         
