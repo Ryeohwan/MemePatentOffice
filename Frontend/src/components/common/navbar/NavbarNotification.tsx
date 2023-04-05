@@ -15,7 +15,9 @@ const NavbarNotification: React.FC = () => {
 
   // pathname 변할때마다 확인
   useEffect(() => {
-    if (location.pathname === "/notification-list") {
+    if (location.pathname.includes("redirect")) {
+      return;
+    } else if (location.pathname === "/notification-list") {
       setNew(false);
     } else {
       sendRequest({url: `/api/mpoffice/alarm/check/${JSON.parse(sessionStorage.user).userId}`})
