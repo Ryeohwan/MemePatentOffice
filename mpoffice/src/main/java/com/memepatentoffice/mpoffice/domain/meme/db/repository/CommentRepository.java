@@ -23,6 +23,8 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             "where e.id = e2.comment.id ORDER BY e.createdAt ASC")
     List<Comment> findCommentsByMemeId(Long id);
     int countAllByParentCommentIdAndMemeId(Long commentId,Long memeId);
+
+    Boolean existsByParentCommentId(Long parentId);
     @Query("select c from Comment c where c.id < :idx and c.user.id = :userId order by c.id desc ")
     List<Comment> findMyListByUserId(@Param("userId") Long userId, @Param("idx") Long idx,Pageable pageable);
 
