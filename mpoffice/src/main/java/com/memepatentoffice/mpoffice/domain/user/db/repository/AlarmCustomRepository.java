@@ -4,6 +4,7 @@ package com.memepatentoffice.mpoffice.domain.user.db.repository;
 import com.memepatentoffice.mpoffice.domain.user.api.response.AlarmListResponse;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,15 @@ public class AlarmCustomRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    private BooleanExpression ltAlarmId(Long alarmId) {
+        if (alarmId == 0) {
+            return alarm.id.lt(Long.MAX_VALUE);
+        }
+        return alarm.id.lt(alarmId);
+    }
+
     public Slice<AlarmListResponse> getAlarmList(Long lastAlarmId, Long userId, Pageable pageable) {
+        log.info(lastAlarmId.toString());
         List<AlarmListResponse> results = queryFactory.select(
                 Projections.constructor(AlarmListResponse.class,
                         alarm.id.as("alarmId"),
@@ -52,7 +61,10 @@ public class AlarmCustomRepository {
 
                 .from(alarm)
 
-                .where(user.id.eq(userId))
+                .where(
+                        // no-offset 페이징 처리
+                        ltAlarmId(lastAlarmId),
+                        user.id.eq(userId))
 
                 .innerJoin(user).fetchJoin()
                 .on(alarm.user.id.eq(user.id))
