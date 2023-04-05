@@ -51,13 +51,15 @@ public class AlarmService {
 
     @Transactional
     public void addAuctionAlarm(Long auctionId, Long userId, Long memeId, AlarmType type) throws NotFoundException {
-
+        // 경매를 찐한 사용자의 리스트를 가져온다
         List<UserMemeAuctionAlert> list = userMemeAuctionAlertRepository.findAllByMemeId(memeId);
 
+        // 경매를 등록한 사람에게 알람을 등록한다
         Alarm alarm = Alarm
                 .builder()
                 .auctionId(auctionId)
-                .user(userRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId + " : User")))
+                .userId(userId)// 알람을 받는 사람과 발생 시킨 사람이 모두 같다
+                .creater(userRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId + " : User")))
                 .meme(memeRepository.findById(memeId).orElseThrow(() -> new NotFoundException(memeId + " : Meme")))
                 .type(type).build();
         alarmRepository.save(alarm);
@@ -67,7 +69,8 @@ public class AlarmService {
             alarm = Alarm
                     .builder()
                     .auctionId(auctionId)
-                    .user(userRepository.findById(id).orElseThrow(() -> new NotFoundException(userId + " : User")))
+                    .userId(id) // 알람을 받는 사람
+                    .creater(userRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId + " : User")))
                     .meme(memeRepository.findById(memeId).orElseThrow(() -> new NotFoundException(memeId + " : Meme")))
                     .type(type).build();
 
@@ -76,15 +79,20 @@ public class AlarmService {
     }
 
     @Transactional
-    public void addCommentAlarm(Long commentId, Long memeId) throws NotFoundException {
+    // 누가댓글을 썻는지 userId
+    // 누구에게 알림을 보내는지 ( 밈의 주인 )
+    // 무슨 밈에 썼는지
+    // 무슨 댓글인지
+    public void addCommentAlarm(Long commentId, Long memeId, Long userId) throws NotFoundException {
         Meme meme = memeRepository.findById(memeId).orElseThrow(() -> new NotFoundException(memeId + " : Meme"));
         User user = meme.getOwner();
         // 밈의 주인에게 알람을 등록한다
         Alarm alarm = Alarm
                 .builder()
                 .comment(commentRepository.findById(commentId).orElseThrow(() -> new NotFoundException(commentId + " : Comment")))
-                .user(user)
-                .meme(memeRepository.findById(memeId).orElseThrow(() -> new NotFoundException(memeId + " : Meme")))
+                .creater(userRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId + " : User")))// 댓글 작성자
+                .userId(user.getId()) // 밈의 주인에게 알람을 보낸다
+                .meme(meme)
                 .type(AlarmType.COMMENT).build();
 
         alarmRepository.save(alarm);
@@ -94,10 +102,12 @@ public class AlarmService {
     public void addReplyAlarm(Long commentId, Long userId, Long memeId, Long parentId) throws NotFoundException {
         // 댓글의 주인에게 알림을 등록한다
         // REPLY 일때 auctionId에 parent comment 의 id 값이 들어가 있다.
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new NotFoundException(commentId + ":Comment"));
         Alarm alarm = Alarm
                 .builder()
-                .comment(commentRepository.findById(commentId).orElseThrow(() -> new NotFoundException(commentId + " : Comment")))
-                .user(userRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId + " : User")))
+                .comment(comment)
+                .creater(userRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId + " : User")))
+                .userId(comment.getUser().getId()) // Comment의 주인에게 알림을 보낸다
                 .meme(memeRepository.findById(memeId).orElseThrow(() -> new NotFoundException(memeId + " : Meme")))
                 .auctionId(parentId)
                 .type(AlarmType.REPLY).build();

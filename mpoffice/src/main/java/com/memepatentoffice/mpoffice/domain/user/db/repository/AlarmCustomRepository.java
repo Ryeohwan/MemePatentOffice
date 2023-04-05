@@ -46,19 +46,8 @@ public class AlarmCustomRepository {
         return alarm.id.lt(alarmId);
     }
 
-//    private BooleanExpression neqUserId(Long userId) {
-//        if(alarm.type.equals(AlarmType.REPLY)) {
-//            return comment.user.id.ne(userId);
-//        } else if (alarm.type.equals(AlarmType.COMMENT)) {
-//            return meme.owner.id.ne(userId);
-//        }
-//        return null;
-//    }
-
-
-
+    // userId의 알람리스트를 가져온다
     public Slice<AlarmListResponse> getAlarmList(Long lastAlarmId, Long userId, Pageable pageable) {
-        log.info(lastAlarmId.toString());
         List<AlarmListResponse> results = queryFactory.select(
                 Projections.constructor(AlarmListResponse.class,
                         alarm.id.as("alarmId"),
@@ -73,18 +62,21 @@ public class AlarmCustomRepository {
                         Expressions.stringTemplate(
                                 "DATE_FORMAT({0}, {1})"
                                 , alarm.createdAt
-                                , ConstantImpl.create("%Y-%m-%dT%H:%m:%s")).as("date")))
+                                , ConstantImpl.create("%Y-%m-%dT%hh:%mm:%ss")).as("date")))
 
                 .from(alarm)
 
                 .where(
                         // no-offset 페이징 처리
                         ltAlarmId(lastAlarmId),
-                        user.id.eq(userId))
+                        // userId가 받는 알림을 가져온다
+                        alarm.userId.eq(userId))
 
+                // 알람을 발생 시킨 유저의 정보를 가져오기위해
                 .innerJoin(user).fetchJoin()
-                .on(alarm.user.id.eq(user.id))
+                .on(alarm.creater.id.eq(user.id))
 
+                // 밈정보를 가져오기 위해
                 .innerJoin(meme).fetchJoin()
                 .on(alarm.meme.id.eq(meme.id))
 

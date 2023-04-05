@@ -1,5 +1,6 @@
 package com.memepatentoffice.mpoffice.db.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,8 +18,11 @@ import javax.persistence.*;
 public class Alarm extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "creater_id", nullable = false) // 알람 보내는 사람
+    private User creater;
+
+    @JoinColumn(name = "user_id") // 알람을 받는 사람
+    private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "meme_id", nullable = false)

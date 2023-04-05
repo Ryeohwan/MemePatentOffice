@@ -49,6 +49,7 @@ public class CommentController {
             ReplyResponse reply = commentService.createReply(commentRequest);
             // Reply 알람 등록
             // 대댓글을 단 사람과 댓글을 단 사람이 같지 않을때
+
             if(!reply.getNickname().equals(reply.getParentName())) {
                 alarmService.addReplyAlarm(reply.getId(), reply.getUserId(), commentRequest.getMemeId(), reply.getParentId());
             }
@@ -60,7 +61,7 @@ public class CommentController {
             // 밈의 주인과 댓글을 쓴 사람이 같지 않을 때
             MemeResponse memeResponse  = memeService.findById(commentRequest.getMemeId());
             if(!memeResponse.getOwnerNickname().equals(comment.getNickname())){
-                alarmService.addCommentAlarm(comment.getId(), commentRequest.getMemeId());
+                alarmService.addCommentAlarm(comment.getId(), commentRequest.getMemeId(), commentRequest.getUserId());
             }
             return ResponseEntity.status(HttpStatus.CREATED).body(comment);
         }
