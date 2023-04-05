@@ -29,7 +29,6 @@ public class CommentService {
     private final UserRepository userRepository;
     private final MemeRepository memeRepository;
     private final UserCommentLikeRepository userCommentLikeRepository;
-    private final UserMemeLikeRepository userMemeLikeRepository;
     @Transactional
     public ReplyResponse createReply(CommentRequest commentRequest) throws NotFoundException {
         User user = userRepository.findById(commentRequest.getUserId())
@@ -200,7 +199,7 @@ public class CommentService {
         if(idx == null || idx == 0L){
             idx = Long.MAX_VALUE;
         }
-        List<MyCommentList> list = convertToCR(commentRepository.findMyListByUserId(userId,idx,PageRequest.of(0,8)));
+        List<MyCommentList> list = convertToCR(commentRepository.findMyListByUserId(userId,idx,PageRequest.of(0,10)));
         return checkMyPage(pageable,list);
     }
 
