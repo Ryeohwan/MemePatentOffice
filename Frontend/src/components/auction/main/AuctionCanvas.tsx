@@ -98,7 +98,10 @@ const AuctionCanvas: React.FC<Characters> = ({
     setBiddingVisible(state);
   };
   const biddingSubmitHandler = (price: number) => {
-    if (myBalance.current! / 10 ** 16 < price) {
+    if(myBalance.current === -1){
+      alert('지갑 연결이 필요합니다.')
+    }
+    else if (myBalance.current!< price) {
       alert("잔액이 부족합니다.");
       return;
     } else if (
