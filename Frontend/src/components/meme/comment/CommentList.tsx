@@ -66,16 +66,16 @@ const CommentList: React.FC = () => {
         <>
           {bestCommentList.map((comment: commentType) => {
             return (
-              <div className={styles.commentItemWrapper}>
-                <CommentItem key={comment.id} items={comment} />
+              <div key={comment.id} className={styles.commentItemWrapper}>
+                <CommentItem key={`bestcomment-${comment.id}`} items={comment} />
               </div>
             );
           })}
 
           {recentCommentList.map((comment: commentType) => {
             return (
-              <div className={styles.commentItemWrapper}>
-                <CommentItem key={comment.id} items={comment} />
+              <div  key={comment.id} className={styles.commentItemWrapper}>
+                <CommentItem key={`comment-${comment.id}`} items={comment} />
               </div>
             );
           })}

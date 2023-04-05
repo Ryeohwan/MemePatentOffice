@@ -14,10 +14,11 @@ interface ReplyCommentItemProps {
     userId: number;
     memeid: number;
     id: number;
+    deleteReply:(id:number)=>void
 };
 
 
-const ReplyCommentItem:React.FC<ReplyCommentItemProps> = ({ writerImg, writerNickname, createdAt, content, userNickname, userId, memeid, id }) => {
+const ReplyCommentItem:React.FC<ReplyCommentItemProps> = ({ writerImg, writerNickname, createdAt, content, userNickname, userId, memeid, id, deleteReply }) => {
   const {sendRequest} = useAxios();
   const dispatch = useDispatch();
   const elapsedText = ElapsedText(createdAt);
@@ -33,7 +34,7 @@ const ReplyCommentItem:React.FC<ReplyCommentItemProps> = ({ writerImg, writerNic
       }
     });
     console.log("대댓글 id ", id)
-    dispatch(commentListActions.replyDeleteHandler(id));
+
   };
 
   return (
@@ -51,7 +52,7 @@ const ReplyCommentItem:React.FC<ReplyCommentItemProps> = ({ writerImg, writerNic
         <div className={styles.commentBody}>
           <div className={styles.commentText}>{content}</div>
           <div className={styles.userReaction}>
-            {userNickname === writerNickname && <div onClick={deleteReplyHandler}>삭제</div>}
+            {userNickname === writerNickname && <div onClick={()=>deleteReply(id)}>삭제</div>}
           </div>
         </div>
 
