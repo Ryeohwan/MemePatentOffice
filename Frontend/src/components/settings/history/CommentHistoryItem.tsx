@@ -23,8 +23,9 @@ const CommentHistoryItem: React.FC<CommentHistoryItemProps> = ({ item }) => {
       <img className={styles.avatar} alt="" src={item.memeImage} />
       <div className={styles.itemInfo}>
         <div className={styles.itemtitle}>
-          <p className={styles.title}>{item.memeTitle}</p>
-          <p className={styles.elapsedText}>{elapsedText}</p>
+          <span className={styles.title}>{item.memeTitle} {"     "}
+            <span className={styles.elapsedText}>{elapsedText}</span>
+          </span>
         </div>
         <p className={styles.comment}>{item.content}</p>
       </div>

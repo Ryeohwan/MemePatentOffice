@@ -12,7 +12,9 @@ const CommentTab:React.FC = () => {
 
     return (
         <div className={styles.commentTabContainer}>
-            <CommentList/>
+            <div className={styles.commentWrapper}>
+                <CommentList/>
+            </div>
             <NewComment/>
         </div>
     );

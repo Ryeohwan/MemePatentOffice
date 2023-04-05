@@ -53,11 +53,11 @@ const historySlice = createSlice({
         // getList 돌면서 date 확인 후 today or week or month 배열에 삽입
         actions.payload.getList.forEach((item: myCommentList) => {
           const targetTime = Math.floor(+new Date(item.date) / 1000);
-          const remainTime = getRemainTime(targetTime)
+          const calcTime = Math.floor(+new Date() / 1000) - targetTime;
 
-          if (remainTime < 60 * 60 * 24) {
+          if (calcTime < 60 * 60 * 24) {
             state.today = [...state.today, item]
-          } else if (remainTime < 60 * 60 * 24 * 7) {
+          } else if (calcTime < 60 * 60 * 24 * 7) {
             state.week = [...state.week, item]
           } else {
             state.previous = [...state.previous, item]

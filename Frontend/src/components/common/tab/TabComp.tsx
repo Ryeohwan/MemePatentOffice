@@ -41,6 +41,10 @@ const TabComp: React.FC<Props> = ({ items, children }) => {
 
     setSlideDirection(direction);
     setHistoryArr((prev) => [...prev, item.path]);
+
+    if (!location.pathname.includes("/auction/")) {
+      window.scrollTo({left: 0, top: document.documentElement.scrollHeight, behavior: "smooth"})
+    }
   };
 
   useEffect(() => {

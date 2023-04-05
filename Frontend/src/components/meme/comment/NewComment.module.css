@@ -1,7 +1,6 @@
 .newCommentContainer {
     position: sticky;
     height: 60px;
-    margin-top: 20%;
     bottom: 0px;
     background-color: var(--white-color);
 

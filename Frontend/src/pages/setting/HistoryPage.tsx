@@ -23,8 +23,7 @@ const HistoryPage: React.FC = () => {
       </div>
 
         <div onClick={() => navigate("nft-notification")} className="router-wrapper">
-          <i className="pi pi-bookmark
-" />
+          <i className="pi pi-bookmark" />
           <p>알림 받을 NFT</p>
         </div>
       </div>

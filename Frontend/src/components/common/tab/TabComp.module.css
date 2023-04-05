@@ -16,7 +16,7 @@
 
 .transitionsWrapper {
   overflow-x: hidden;
-  height: calc(var(--vh, 1vh) * 75);
+  height: calc(var(--vh, 1vh) * 80);
   width: 100%;
   position: relative;
 }

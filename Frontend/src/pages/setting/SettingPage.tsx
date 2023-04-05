@@ -29,10 +29,10 @@ const SettingPage: React.FC = () => {
           <p>거래 내역</p>
         </div>
 
-        <div onClick={()=>navigate('notification')} className="router-wrapper">
+        {/* <div onClick={()=>navigate('notification')} className="router-wrapper">
           <i className="pi pi-bell" />
           <p>알림 설정</p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

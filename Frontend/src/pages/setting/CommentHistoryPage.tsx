@@ -99,7 +99,6 @@ const CommentHistoryPage: React.FC = () => {
           {previous.map((item) => {
             return <CommentHistoryItem item={item} key={item.id} />;
           })}
-          x
         </>
       )}
 
