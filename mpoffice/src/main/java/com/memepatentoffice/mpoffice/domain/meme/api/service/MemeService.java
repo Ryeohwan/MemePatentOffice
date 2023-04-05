@@ -211,7 +211,6 @@ public class MemeService {
         Double high = temp.get(0);
         Double low = temp.get(temp.size()-1);
         PriceListResponse result = PriceListResponse.builder()
-                .priceList(transactionRepository.findPriceList(meme.getId()))
                 .buyerList(buyerList)
                 .highPrice(high)
                 .lowPrice(low)
