@@ -25,10 +25,12 @@ import java.util.Objects;
 public class MemeSearchService {
     private final MemeSearchRepository memeSearchRepository;
     private final SearchRepository searchRepository;
+
     public Slice<MemeListResponse> getMemeList(Long lastId, Pageable pageable, String searchText) {
         if(searchText != null){
             checkingSearched(searchText);
         }
+
         return memeSearchRepository.searchMemeList(lastId, searchText, pageable);
     }
 

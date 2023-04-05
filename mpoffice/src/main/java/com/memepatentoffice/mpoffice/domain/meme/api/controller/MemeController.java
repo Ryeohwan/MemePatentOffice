@@ -23,6 +23,7 @@ import java.util.List;
 public class MemeController {
     private final MemeService memeService;
     private final GcpService gcpService;
+
     @GetMapping("/")
     public ResponseEntity<?> getAllMemes(){
         return ResponseEntity.status(HttpStatus.OK).body(

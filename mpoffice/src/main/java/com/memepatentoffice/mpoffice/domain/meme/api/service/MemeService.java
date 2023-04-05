@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -197,25 +198,34 @@ public class MemeService {
 
     public PriceListResponse priceGraph(Long titleId) throws NotFoundException{
         Meme meme = memeRepository.findById(titleId).orElseThrow(()-> new NotFoundException("해당하는 밈이 없습니다."));
-        List<Transaction> en = transactionRepository.findBuyerList();
-        List<TransactionResponse> buyerList = new ArrayList<>();
+        List<Transaction> en = transactionRepository.findBuyerList(meme.getId());
+
+        List<TransactionResponse> before = new ArrayList<>();
         for(Transaction a : en){
             TransactionResponse temp = TransactionResponse.builder()
                     .nickName(userRepository.findById(a.getBuyerId()).orElseThrow(()->new NotFoundException("유효하지 않은 구매자 입니다.")).getNickname())
                     .price(a.getPrice())
                     .createdAt(a.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                     .build();
-            if(a.getPrice()!= 0) buyerList.add(temp);
+            if(a.getPrice()!= 0) before.add(temp);
         }
-        List<Double> temp = transactionRepository.PricaRankList(meme.getId());
-        Double high = temp.get(0);
-        Double low = temp.get(temp.size()-1);
-        PriceListResponse result = PriceListResponse.builder()
-                .buyerList(buyerList)
-                .highPrice(high)
-                .lowPrice(low)
-                .build();
-        return result;
+        System.out.println(before.get(0).getNickName());
+        if(before.size() > 0){
+            List<Double> temp = transactionRepository.PricaRankList(meme.getId());
+            Double high = temp.get(0);
+            Double low = temp.get(temp.size()-1);
+            PriceListResponse result = PriceListResponse.builder()
+                    .buyerList(before)
+                    .highPrice(high)
+                    .lowPrice(low)
+                    .build();
+            return result;
+        }else{
+            PriceListResponse result = new PriceListResponse();
+            return result;
+        }
+
+
     }
 
     @Transactional
@@ -224,7 +234,6 @@ public class MemeService {
         userRepository.findById(transactionRequest.getSellerId()).orElseThrow(()-> new NotFoundException("해당하는 판매자가 없읍니다."));
         memeRepository.findById(transactionRequest.getMemeId()).orElseThrow(()-> new NotFoundException("해당하는 밈이 없습니다."));
 
-        transactionRequest.getBuyerId();
         Transaction transaction = Transaction.builder()
                 .buyerId(transactionRequest.getBuyerId())
                 .sellerId(transactionRequest.getSellerId())
