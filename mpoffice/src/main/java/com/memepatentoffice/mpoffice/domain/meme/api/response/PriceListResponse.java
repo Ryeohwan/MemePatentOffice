@@ -14,6 +14,5 @@ import java.util.List;
 public class PriceListResponse {
     private double lowPrice;
     private double highPrice;
-    private List<Double> priceList;
     private List<TransactionResponse> buyerList;
 }
