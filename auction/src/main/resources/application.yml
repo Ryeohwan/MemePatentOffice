@@ -24,7 +24,9 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-
+  jackson:
+    deserialization:
+      adjust-dates-to-context-time-zone: false
 app:
   business:
     url: https://j8a305.p.ssafy.io/api/mpoffice
