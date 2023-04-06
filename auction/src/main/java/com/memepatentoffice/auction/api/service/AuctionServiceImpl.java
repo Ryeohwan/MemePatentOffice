@@ -14,6 +14,7 @@ import com.memepatentoffice.auction.api.dto.response.AuctionListRes;
 import com.memepatentoffice.auction.api.dto.response.AuctionRes;
 import com.memepatentoffice.auction.api.dto.response.MemeRes;
 import com.memepatentoffice.auction.api.dto.status.MemeStatus;
+import com.memepatentoffice.auction.common.exception.AuctionException;
 import com.memepatentoffice.auction.common.exception.BiddingException;
 import com.memepatentoffice.auction.common.exception.NotFoundException;
 import com.memepatentoffice.auction.common.util.ExceptionSupplier;
@@ -101,8 +102,8 @@ public class AuctionServiceImpl implements AuctionService{
     public AuctionRes getInfo(Long auctionId) throws Exception {
         Auction auction = auctionRepository.findById(auctionId)
                 .orElseThrow(()->new NotFoundException("auctionId가 유효하지 않습니다"));
-        if(AuctionStatus.TERMINATED.equals(auction.getStatus())){
-            throw new Exception("경매가 이미 종료되었습니다");
+        if(!AuctionStatus.PROCEEDING.equals(auction.getStatus())){
+            throw new AuctionException("지금 경매장에 들어갈 수 없습니다");
         }
         AuctionRes auctionRes =  AuctionRes.builder()
                 .sellerNickname(auction.getSellerNickname())
