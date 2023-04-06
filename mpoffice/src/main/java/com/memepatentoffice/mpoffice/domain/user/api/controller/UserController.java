@@ -54,7 +54,7 @@ public class UserController {
     @GetMapping("/info/{id}")
     public ResponseEntity getUser(@PathVariable("id") Long id, Authentication authentication) throws NotFoundException {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        //System.out.println(userPrincipal.getId());
+        System.out.println(userPrincipal.getId());
         id = userPrincipal.getId();
         UserResponse userResponse = userService.getUserInfo(id);
         return ResponseEntity.ok().body(userResponse);
