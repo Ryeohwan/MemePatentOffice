@@ -13,7 +13,7 @@ COPY auction/build.gradle .
 COPY auction/settings.gradle .
 COPY auction/src src
 RUN chmod +x ./gradlew
-RUN ./gradlew clean bootJar
+RUN ./gradlew clean bootJar add tzdata
 
 FROM adoptopenjdk:11-hotspot
 COPY --from=builder build/libs/*.jar app.jar
