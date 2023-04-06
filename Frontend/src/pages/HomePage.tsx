@@ -73,17 +73,16 @@ const HomePage: React.FC = () => {
         }
 
         // 유저 디비에서 가져온 wallet_address
-        const walletAddress = JSON.parse(
-          sessionStorage.getItem("user")!
-        ).walletAddress;
+        let walletAddress;
         const userId = JSON.parse(sessionStorage.getItem("user")!).userId;
+        await getUserInfo({
+          url: `/api/mpoffice/user/info/${userId}`
+        });
+        if (againUserInfo) walletAddress = againUserInfo.walletAddress;
 
-        // await getUserInfo({
-        //   url: `/api/mpoffice/user/info/${userId}`
-        // });
 
         controlCheckModal(true);
-        // 최초로 연결한 지갑인 경우, 코인 지급하고 post address      ///  && !againUserInfo.walletAddress
+        // 최초로 연결한 지갑인 경우, 코인 지급하고 post address
         if (walletAddress === null) {
           await postWalletRequest({
             url: "/api/mpoffice/user/update/wallet",
@@ -104,11 +103,11 @@ const HomePage: React.FC = () => {
           const giveCoinStatus = await giveSignInCoin();
           if (giveCoinStatus) {
             setModalTxt("500SSF를 받았습니다!");
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+            await new Promise((resolve) => setTimeout(resolve, 2000));
             controlCheckModal(false);
           } else {
             setModalTxt("네트워크가 불안정해 선물을 받지 못했습니다.");
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+            await new Promise((resolve) => setTimeout(resolve, 2000));
             controlCheckModal(false);
           }
         } else {
@@ -127,7 +126,7 @@ const HomePage: React.FC = () => {
                 walletAddress: account,
               },
             });
-            setModalTxt("최초 등록된 지갑에 한해서만 10SSF가 지급됩니다");
+            setModalTxt("최초 등록된 지갑에 한해서만 500SSF가 지급됩니다");
             await new Promise((resolve) => setTimeout(resolve, 2000));
             controlCheckModal(false);
             const user = JSON.parse(sessionStorage.getItem("user")!);
@@ -140,7 +139,7 @@ const HomePage: React.FC = () => {
         controlCheckModal(false);
       } else {
         setModalTxt("Metamask를 설치해 주세요.");
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 2000));
         controlCheckModal(false);
       }
       controlCheckModal(false);
