@@ -16,7 +16,9 @@ const ChatSideBar: React.FC<ChatSideBarProps> = ({
   chatVisible,
   chatVisibleHandlerFalse,
   client,
-  auctionId
+  auctionId,
+  seeChat,
+  seeChatHandler
 }) => {
 
   return (
@@ -29,7 +31,7 @@ const ChatSideBar: React.FC<ChatSideBarProps> = ({
         onHide={() => chatVisibleHandlerFalse()}
       >
         <ChatList chatVisible={chatVisible}/>
-        <ChatInputText client={client} auctionId={auctionId}/>
+        <ChatInputText seeChat={seeChat} seeChatHandler={seeChatHandler} client={client} auctionId={auctionId}/>
       </Sidebar>
     </>
   );

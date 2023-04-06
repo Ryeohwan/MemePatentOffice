@@ -49,6 +49,8 @@ const Scene: React.FC<SceneProps> = ({
   characters,
   userNum,
   chairPoints,
+  seeChat,
+  seeChatHandler,
 }) => {
   const dispatch = useDispatch();
   const canvas = useRef<any>();
@@ -178,6 +180,8 @@ const Scene: React.FC<SceneProps> = ({
         client={client}
         auctionId={auctionId}
         characters={characters}
+        seeChat={seeChat}
+        seeChatHandler={seeChatHandler}
       />
       <Box position={[0, 10, 0]} />
       <Table

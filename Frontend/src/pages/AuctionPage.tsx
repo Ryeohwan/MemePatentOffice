@@ -14,13 +14,16 @@ const AuctionPage: React.FC = () => {
   const characters = useRef<playersInfo[]>([]);
   const [userNum, setUserNum] = useState<number>(0);
   const { data, status, sendRequest } = useAxios();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const userId = JSON.parse(sessionStorage.getItem("user")!).userId;
   const userNickName = JSON.parse(sessionStorage.getItem("user")!).nickname;
   const { auctionId } = useParams();
   const client = useRef<Client>();
   const dispatch = useDispatch();
-
+  const [seeChat, setSeeChat] = useState<boolean>(false);
+  const seeChatHandelr = () => {
+    setSeeChat(false);
+  };
   useEffect(() => {
     dispatch(auctionActions.openAuction());
   }, []);
@@ -44,10 +47,12 @@ const AuctionPage: React.FC = () => {
         await subscribe();
         client.current?.publish({
           destination: "/pub/chat",
-          body: JSON.stringify({ 
+          body: JSON.stringify({
             auctionId: auctionId,
-            nickname: '알림',
-            message: `${JSON.parse(sessionStorage.getItem('user')!).nickname}님이 입장하셨습니다.`,
+            nickname: "알림",
+            message: `${
+              JSON.parse(sessionStorage.getItem("user")!).nickname
+            }님이 입장하셨습니다.`,
           }),
         });
       },
@@ -85,14 +90,15 @@ const AuctionPage: React.FC = () => {
     }
     client.current.subscribe(`/sub/chat/${auctionId}`, (body) => {
       const json_body = JSON.parse(body.body);
-      console.log(json_body)
+      // console.log(json_body)
+      setSeeChat(true);
       dispatch(
         chatActions.sendChat({
           chat: {
             id: json_body.nickname,
             message: json_body.message,
             time: json_body.createdAt,
-            profileImgUrl:json_body.profileImgUrl,
+            profileImgUrl: json_body.profileImgUrl,
           },
         })
       );
@@ -127,6 +133,13 @@ const AuctionPage: React.FC = () => {
     });
     console.log(`subscribe()`);
   };
+  useEffect(() => {
+    connect();
+
+    return () => {
+      disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     if (data) {
@@ -136,25 +149,20 @@ const AuctionPage: React.FC = () => {
     }
   }, [data]);
 
-  useEffect(()=>{
-    if(status === 500){
-      alert('없는 경매입니다.')
-      navigate('/main')
-    }
-  },[status])
-
   useEffect(() => {
-    connect();
+    if (status === 500) {
+      alert("없는 경매입니다.");
+      navigate("/main");
+    }
+  }, [status]);
 
-    return () => {
-      disconnect();
-    };
-  }, []);
   return (
     <>
       {isLoading && <p>loading,,,</p>}
       {!isLoading && (
         <AuctionCanvas
+          seeChat={seeChat}
+          seeChatHandler={seeChatHandelr}
           client={client}
           auctionId={Number(auctionId)}
           characters={characters}

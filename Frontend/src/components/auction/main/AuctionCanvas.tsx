@@ -25,6 +25,8 @@ const AuctionCanvas: React.FC<Characters> = ({
   auctionId,
   characters,
   userNum,
+  seeChat,
+  seeChatHandler,
 }) => {
   const width = window.innerWidth;
   const height = window.innerHeight;
@@ -76,23 +78,23 @@ const AuctionCanvas: React.FC<Characters> = ({
   const changeHandler = () => {
     setPlayerState((prev) => prev + 1);
   };
-  useEffect(() => {
-    const elem = document.getElementById("auction");
-    if (elem) {
-      elem.addEventListener("click", () => {
-        if (elem.requestFullscreen) {
-          elem.requestFullscreen();
-        }
-      });
-    }
-    setFullScreen(true)
-    return () => {
-      if (document.fullscreenElement)
-      document.exitFullscreen();
-      dispatch(auctionActions.closeAuction())
-      dispatch(chatActions.closeAuction())
-    };
-  }, []);
+  // useEffect(() => {
+  //   const elem = document.getElementById("auction");
+  //   if (elem) {
+  //     elem.addEventListener("click", () => {
+  //       if (elem.requestFullscreen) {
+  //         elem.requestFullscreen();
+  //       }
+  //     });
+  //   }
+  //   setFullScreen(true)
+  //   return () => {
+  //     if (document.fullscreenElement)
+  //     document.exitFullscreen();
+  //     dispatch(auctionActions.closeAuction())
+  //     dispatch(chatActions.closeAuction())
+  //   };
+  // }, []);
 
   const biddingHandler = (state: boolean) => {
     setBiddingVisible(state);
@@ -249,6 +251,8 @@ const AuctionCanvas: React.FC<Characters> = ({
         userNum={userNum}
         chairPoints={chairPoints}
         changeHandler={changeHandler}
+        seeChat={seeChat}
+        seeChatHandler={seeChatHandler}
       />
       <div className={styles.buttonWrapper}>
         {/* {document.getElementById("auction") && <AuctionSlideMenu />} */}
@@ -276,7 +280,7 @@ const AuctionCanvas: React.FC<Characters> = ({
           biddingVisible={biddingVisible}
           myBalance={myBalance}
         />
-        <ChatMain client={client} auctionId={auctionId} />
+        <ChatMain seeChat={seeChat} seeChatHandler={seeChatHandler} client={client} auctionId={auctionId} />
       </div>
       <div className={styles.fullMoniterBtn}>
         {playerState === 5 ? (

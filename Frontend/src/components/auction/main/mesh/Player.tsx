@@ -29,6 +29,8 @@ interface PlayerProps extends WebSocketProps {
   playerAnimation: React.MutableRefObject<THREE.AnimationAction | undefined>;
   tableAndChairs: React.MutableRefObject<THREE.Mesh[]>;
   isSitting: React.MutableRefObject<boolean>;
+  seeChatHandler: () => void
+  seeChat: boolean
 }
 
 export type action = {
@@ -54,6 +56,8 @@ const Player: React.FC<PlayerProps> = ({
   isSitting,
   auctionId,
   client,
+  seeChat,
+  seeChatHandler
 }) => {
   const dispatch = useDispatch();
   const status = useSelector<RootState, string>(
