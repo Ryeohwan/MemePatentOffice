@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
-public class WalletResponse {
+public class TransferInfoResponse {
     private String fromAddress;
     private String toAddress;
+    private int memeTokenId;
 }
