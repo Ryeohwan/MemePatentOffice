@@ -279,12 +279,11 @@ public class AuctionServiceImpl implements AuctionService{
             if(auction.getStatus().equals(AuctionStatus.ENROLLED)){
                 return MemeRes.builder()
                         .memeStatus(MemeStatus.HASENROLLEDAUCTION)
-                        .finishTime(auction.getFinishTime())
+                        .startTime(auction.getStartTime())
                         .build();
             }else if(auction.getStatus().equals(AuctionStatus.PROCEEDING)){
                 return MemeRes.builder()
                         .memeStatus(MemeStatus.AUCTIONPROCEEDING)
-                        .finishTime(auction.getFinishTime())
                         .build();
             }else{//auction.getStatus().equals(AuctionStatus.TERMINATED)
                 return MemeRes.builder()
