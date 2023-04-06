@@ -974,9 +974,8 @@ export const transferNftCoin = async ( toAccount:string, fromAccount:string, pri
 	const ownerAddress = "0xd8df17B6a1758c52eA81219b001547A2c2e3d789";
 	const privateKey = "0xcd3352d522fb229242472dddc60abc0831ba87db490573616e7cc43f4d179a28";
 	
-	// const gasPrice = 1500000000;
-	// console.log(gasPrice);
-	const gasLimit = 3000000;
+	const gasPrice = await web3.eth.getGasPrice();
+    const gasLimit = 3000000;
     console.log("sale");
     
 	let data;
@@ -995,6 +994,7 @@ export const transferNftCoin = async ( toAccount:string, fromAccount:string, pri
       from: ownerAddress,
       to: mintMemeTokenAddress,
       data: data,
+	  gasPrice: gasPrice,
       gas: gasLimit,
       nonce: newNonce,
     }, privateKey);
