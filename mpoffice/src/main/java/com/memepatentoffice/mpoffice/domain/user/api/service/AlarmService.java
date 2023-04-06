@@ -114,4 +114,9 @@ public class AlarmService {
 
         alarmRepository.save(alarm);
     }
+
+    public String getWalletAddressByUserId(Long toId) throws NotFoundException {
+        User user = userRepository.findById(toId).orElseThrow(() -> new NotFoundException(toId + " : User"));
+        return user.getWalletAddress();
+    }
 }
