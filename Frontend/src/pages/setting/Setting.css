@@ -6,7 +6,7 @@
 }
 
 .pageName{
-    font-size:25px;
+    font-size:20px;
     font-weight: bolder;
     text-align: center;
     margin-top: 10px;
@@ -19,14 +19,14 @@
 .router-wrapper{
     display: flex;
     align-items: center;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     margin: 10% 0 10% 5%;
     flex-direction: row;
 }
 
 .router-wrapper > i {
-    font-size: 25px;
+    font-size: 20px;
     font-weight: bolder;
     margin-right: 5%;
 }

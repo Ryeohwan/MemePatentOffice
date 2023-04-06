@@ -97,7 +97,7 @@ const NftChart: React.FC<NftChartProps> = ({ tradeData }) => {
                 {slice.points.map((point) => (
                   <div
                     key={point.id}
-                    style={{ color: point.serieColor, marginTop: "5px" }}
+                    style={{ color: "#043763", marginTop: "5px" }}
                   >
                     {point.data.yFormatted} SSF
                   </div>
@@ -117,7 +117,7 @@ const NftChart: React.FC<NftChartProps> = ({ tradeData }) => {
               itemWidth: 80,
               itemHeight: 20,
               itemOpacity: 0.75,
-              symbolSize: 12,
+              symbolSize: 10,
               symbolShape: "circle",
               symbolBorderColor: "rgba(0, 0, 0, .5)",
               onClick: () => {},

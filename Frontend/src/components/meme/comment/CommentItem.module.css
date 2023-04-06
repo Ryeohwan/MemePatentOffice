@@ -35,7 +35,7 @@
 
 .bestComment {
     border-radius: 2px;
-    background-color: var(--point-color);
+    background-color: var(--navy-color);
     color: var(--white-color);
     font-size: 11px;
     padding: 3px;
@@ -65,8 +65,8 @@
 
 .heartFilledIcon {
     font-size: 20px;
-    color: var(--impossible-color);
-    border: var(--impossible-color);
+    color: var(--red-color);
+    border: var(--red-color);
 }
 
 .userReaction {

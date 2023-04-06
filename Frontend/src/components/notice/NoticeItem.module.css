@@ -8,13 +8,14 @@
 }
 
 .avatar{
-    width: 4rem !important;
-    height: 100% !important;
-    margin: 0 3% 0 3%;
+    width: 65px !important;
+    height: 65px !important;
+    padding: 3.3% 2% 3.3% 2%;
+    object-fit: cover;
 }
 .memeImg > img {
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: 4px;
 }
 
 .textWrapper{
@@ -29,11 +30,13 @@
     position: static;
     font-weight: bold;
     font-size:14px;
+    line-height: 18px;
     z-index: 1;
 }
 
 .textWrapper > .elapsedText {
     font-size:8px;
+    padding-top: 8px;
     text-align: end;
     opacity: 0.3;
 }

@@ -25,7 +25,7 @@ const HomeCarousel: React.FC<HomeCarouselProps> = ({ info }) => {
         setCurrentImageIndex(currentImageIndex=>
             currentImageIndex === info.length - 1 ? 0 : currentImageIndex + 1
           );
-    }, 5000);
+    }, 7000);
     return () => {
         clearInterval(intervalId);
     }
