@@ -9,6 +9,7 @@ import com.memepatentoffice.auction.api.dto.request.AuctionCreationReq;
 import com.memepatentoffice.auction.api.dto.message.WebSocketChatReq;
 import com.memepatentoffice.auction.api.dto.message.WebSocketChatRes;
 import com.memepatentoffice.auction.api.dto.request.BidReq;
+import com.memepatentoffice.auction.api.dto.response.AuctionClosingRes;
 import com.memepatentoffice.auction.api.dto.response.AuctionListRes;
 import com.memepatentoffice.auction.api.dto.response.AuctionRes;
 import com.memepatentoffice.auction.api.dto.response.MemeRes;
@@ -287,6 +288,26 @@ public class AuctionServiceImpl implements AuctionService{
                         .memeStatus(MemeStatus.AUCTIONDOESNOTEXISTS).build();
             }
         }
+    }
+
+    @Override
+    public AuctionClosingRes getResultById(Long auctionId) throws Exception{
+        Optional<Bid> currentTopBid = bidRepository.findTopByAuctionIdOrderByAskingpriceDesc(auctionId);
+        if(currentTopBid.isPresent()){
+            Auction auction = auctionRepository.findById(auctionId).orElseThrow(()->new NotFoundException("옥션 아이디 없음"));
+            JSONObject jsonObject = isp.findFromAddressAndToAddress(auction.getSellerId(),
+                            currentTopBid.get().getUserId(), auction.getMemeId())
+                    .orElseThrow(()->new Exception("데이터 틀림"));
+            String fromAddress = jsonObject.getString("fromAddress");
+            String toAddress = jsonObject.getString("toAddress");
+            Long memeTokenId = jsonObject.getLong("memeTokenId");
+            return AuctionClosingRes.builder()
+                    .fromAccount(fromAddress)
+                    .toAccount(toAddress)
+                    .memeTokenId(memeTokenId)
+                    .price(currentTopBid.get().getAskingprice()).build();
+        }
+        return null;
     }
 
 

@@ -4,6 +4,7 @@ import com.memepatentoffice.auction.api.dto.message.WebSocketCharacter;
 import com.memepatentoffice.auction.api.dto.request.AuctionCreationReq;
 import com.memepatentoffice.auction.api.dto.message.WebSocketChatReq;
 import com.memepatentoffice.auction.api.dto.request.BidReq;
+import com.memepatentoffice.auction.api.dto.response.AuctionClosingRes;
 import com.memepatentoffice.auction.api.dto.response.AuctionListRes;
 import com.memepatentoffice.auction.api.dto.response.AuctionRes;
 import com.memepatentoffice.auction.api.dto.response.MemeRes;
@@ -26,6 +27,7 @@ public interface AuctionService {
     List<AuctionListRes> getListForCarousel();
 
     MemeRes searchByMemeId(Long memeId);
+    AuctionClosingRes getResultById(Long auctionId) throws Exception;
 
     void sendChat(WebSocketChatReq req);
     void sendCharacter(WebSocketCharacter dto);
