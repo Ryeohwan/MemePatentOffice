@@ -6,6 +6,7 @@ import com.memepatentoffice.auction.api.dto.message.WebSocketChatReq;
 import com.memepatentoffice.auction.api.dto.request.BidReq;
 import com.memepatentoffice.auction.api.dto.response.AuctionListRes;
 import com.memepatentoffice.auction.api.dto.response.AuctionRes;
+import com.memepatentoffice.auction.api.dto.response.MemeRes;
 import com.memepatentoffice.auction.common.exception.BiddingException;
 import com.memepatentoffice.auction.common.exception.NotFoundException;
 
@@ -23,6 +24,8 @@ public interface AuctionService {
     List<AuctionListRes> findAllProceedingByFinishTimeLatest() throws NotFoundException;
     List<AuctionListRes> findAllProceedingByFinishTimeOldest() throws NotFoundException;
     List<AuctionListRes> getListForCarousel();
+
+    MemeRes searchByMemeId(Long memeId);
 
     void sendChat(WebSocketChatReq req);
     void sendCharacter(WebSocketCharacter dto);
