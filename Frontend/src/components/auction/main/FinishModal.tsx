@@ -40,7 +40,7 @@ const FinishModal: React.FC = () => {
       const memeTokenId = resultData.memeTokenId;
 
       // 판매자 : fromAccount, 구매자 : toAccount
-      if (walletAddress === fromAccount || walletAddress === toAccount) {
+      if (walletAddress === toAccount) {
         await transferNftCoin(fromAccount, toAccount, price);
         await transferNftOwnership(toAccount, memeTokenId);
         // 모달 닫기
