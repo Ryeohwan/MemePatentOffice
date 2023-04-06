@@ -40,11 +40,10 @@ public class Alarm extends BaseEntity{
     private AlarmType type;
     @Column(name = "checked", nullable = false)
     private int checked;
-
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     public void setChecked(int checked) {
         this.checked = checked;
-    } 
+    }
 }

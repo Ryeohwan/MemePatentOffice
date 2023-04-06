@@ -16,6 +16,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -60,6 +61,7 @@ public class AlarmService {
                 .userId(userId)// 알람을 받는 사람과 발생 시킨 사람이 모두 같다
                 .creater(userRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId + " : User")))
                 .meme(memeRepository.findById(memeId).orElseThrow(() -> new NotFoundException(memeId + " : Meme")))
+                .createdAt(LocalDateTime.now())
                 .type(type).build();
         alarmRepository.save(alarm);
 
@@ -71,6 +73,7 @@ public class AlarmService {
                     .userId(id) // 알람을 받는 사람
                     .creater(userRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId + " : User")))
                     .meme(memeRepository.findById(memeId).orElseThrow(() -> new NotFoundException(memeId + " : Meme")))
+                    .createdAt(LocalDateTime.now())
                     .type(type).build();
 
             alarmRepository.save(alarm);
@@ -92,6 +95,7 @@ public class AlarmService {
                 .creater(userRepository.findById(userId).orElseThrow(() -> new NotFoundException(userId + " : User")))// 댓글 작성자
                 .userId(user.getId()) // 밈의 주인에게 알람을 보낸다
                 .meme(meme)
+                .createdAt(LocalDateTime.now())
                 .type(AlarmType.COMMENT).build();
 
         alarmRepository.save(alarm);
@@ -110,6 +114,7 @@ public class AlarmService {
                 .userId(parentComment.getUser().getId()) // Comment의 주인에게 알림을 보낸다
                 .meme(memeRepository.findById(memeId).orElseThrow(() -> new NotFoundException(memeId + " : Meme")))
                 .auctionId(parentId)
+                .createdAt(LocalDateTime.now())
                 .type(AlarmType.REPLY).build();
 
         alarmRepository.save(alarm);
