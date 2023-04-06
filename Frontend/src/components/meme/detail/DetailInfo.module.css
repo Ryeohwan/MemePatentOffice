@@ -67,6 +67,7 @@
 
 .memeGuide {
     font-size: 14px;
+    font-weight: bold;
     margin-top: 12px;
     margin-bottom: 5px;
 }
@@ -80,13 +81,29 @@
 .memeOwner {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     font-size: 13px;
     margin-bottom: 10px;
     
 }
 
+.memeOwner > div:first-child {
+    font-weight : bold;
+}
+
+
 .ownerName {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     width: 235px;
+}
+
+.ownerName > img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid var(--section-line-color)
 }
 
 .heartGroup {

@@ -18,7 +18,7 @@ const ProfileAuction: React.FC<Props> = ({ nickname }) => {
   useEffect(() => {
     sendRequest({url: `/api/auction/list?userNickname=${nickname}`})
   }, [])
-
+  
   return (
     <div className={styles.cardContainer}>
       {/* loading 중 */}
