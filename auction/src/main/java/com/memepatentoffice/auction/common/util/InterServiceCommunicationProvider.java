@@ -28,7 +28,7 @@ public class InterServiceCommunicationProvider {
         try(Response response = client.newCall(request).execute()){
             if(response.isSuccessful()){
                 String respBody = response.body().string();
-                log.info(respBody);
+                //log.info(respBody);
                 return Optional.of(respBody);
             }
             else{
@@ -59,7 +59,7 @@ public class InterServiceCommunicationProvider {
         try(Response response = client.newCall(request).execute()){
             if(response.isSuccessful()){
                 String respBody = response.body().string();
-                log.info(respBody);
+                //log.info(respBody);
                 return Optional.of(respBody);
             }
             else{
