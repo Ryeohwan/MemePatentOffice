@@ -14,6 +14,7 @@ import * as THREE from "three";
 import gsap from "gsap";
 import AuctionSlideMenu from "components/auction/main/list/AuctionSlideMenu";
 
+import { Icon } from "@iconify/react";
 import { Button } from "primereact/button";
 import ChatMain from "components/auction/main/chat/ChatMain";
 import Bidding from "components/auction/main/list/Bidding";
@@ -25,6 +26,8 @@ const AuctionCanvas: React.FC<Characters> = ({
   auctionId,
   characters,
   userNum,
+  seeChat,
+  seeChatHandler,
 }) => {
   const width = window.innerWidth;
   const height = window.innerHeight;
@@ -69,39 +72,20 @@ const AuctionCanvas: React.FC<Characters> = ({
   const auctionInfo = useSelector<RootState, auctionInfo>(
     (state) => state.auction.auctionInfo
   );
-  const [fullScreen, setFullScreen] = useState(false);
   const myBalance = useRef<number | undefined>();
 
   const [playerStatus, setPlayerState] = useState<number>(0);
   const changeHandler = () => {
     setPlayerState((prev) => prev + 1);
   };
-  useEffect(() => {
-    const elem = document.getElementById("auction");
-    if (elem) {
-      elem.addEventListener("click", () => {
-        if (elem.requestFullscreen) {
-          elem.requestFullscreen();
-        }
-      });
-    }
-    setFullScreen(true)
-    return () => {
-      if (document.fullscreenElement)
-      document.exitFullscreen();
-      dispatch(auctionActions.closeAuction())
-      dispatch(chatActions.closeAuction())
-    };
-  }, []);
 
   const biddingHandler = (state: boolean) => {
     setBiddingVisible(state);
   };
   const biddingSubmitHandler = (price: number) => {
-    if(myBalance.current === -1){
-      alert('지갑 연결이 필요합니다.')
-    }
-    else if (myBalance.current!< price) {
+    if (myBalance.current === -1) {
+      alert("지갑 연결이 필요합니다.");
+    } else if (myBalance.current! < price) {
       alert("잔액이 부족합니다.");
       return;
     } else if (
@@ -121,6 +105,17 @@ const AuctionCanvas: React.FC<Characters> = ({
           userId: JSON.parse(sessionStorage.getItem("user")!).userId,
           askingprice: price,
         },
+      });
+      client.current?.publish({
+        destination: "/pub/chat",
+        body: JSON.stringify({
+          auctionId: auctionId,
+          nickname: "알림",
+          message: `${
+            JSON.parse(sessionStorage.getItem("user")!).nickname
+          }님이 ${price}(SSF)을 입찰했읍니다.`,
+          profileImgUrl: null,
+        }),
       });
 
       setBiddingVisible(false);
@@ -249,25 +244,29 @@ const AuctionCanvas: React.FC<Characters> = ({
         userNum={userNum}
         chairPoints={chairPoints}
         changeHandler={changeHandler}
+        seeChat={seeChat}
+        seeChatHandler={seeChatHandler}
       />
       <div className={styles.buttonWrapper}>
         {/* {document.getElementById("auction") && <AuctionSlideMenu />} */}
         <AuctionSlideMenu />
         {visible && playerState === 0 && (
-          <Button
-            label="앉기"
-            className={styles.sitBtn}
-            onClick={sitDownHandler}
-          />
+          <Button className={styles.sitBtn} onClick={sitDownHandler}>
+            <Icon icon="ic:round-chair-alt" className={styles.sitIcon} />
+          </Button>
         )}
+
         {playerState === 5 && (
           <>
-            <Button icon="pi pi-dollar" onClick={() => biddingHandler(true)} />
-            <Button
-              label="일어나"
-              className={styles.sitBtn}
-              onClick={standUpHandler}
-            />
+            <Button onClick={() => biddingHandler(true)}>
+              <Icon
+                icon="streamline:money-cash-dollar-coin-accounting-billing-payment-cash-coin-currency-money-finance"
+                className={styles.bidIcon}
+              />
+            </Button>
+            <Button className={styles.sitBtn} onClick={standUpHandler}>
+              <Icon icon="ph:person-bold" className={styles.sitIcon} />
+            </Button>
           </>
         )}
         <Bidding
@@ -276,14 +275,27 @@ const AuctionCanvas: React.FC<Characters> = ({
           biddingVisible={biddingVisible}
           myBalance={myBalance}
         />
-        <ChatMain client={client} auctionId={auctionId} />
+        <ChatMain
+          seeChat={seeChat}
+          seeChatHandler={seeChatHandler}
+          client={client}
+          auctionId={auctionId}
+        />
       </div>
       <div className={styles.fullMoniterBtn}>
         {playerState === 5 ? (
           isFull ? (
-            <Button onClick={() => notFullMoniter()}>확대</Button>
+            <Button
+              rounded
+              icon="pi pi-search-plus"
+              onClick={() => notFullMoniter()}
+            ></Button>
           ) : (
-            <Button onClick={() => fullMoniter()}>전체 화면</Button>
+            <Button
+              rounded
+              icon="pi pi-search-minus"
+              onClick={() => fullMoniter()}
+            ></Button>
           )
         ) : (
           <></>

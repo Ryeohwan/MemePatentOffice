@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 import { useDispatch } from "react-redux";
 import { auctionActions } from "store/auction";
@@ -10,11 +10,10 @@ import { useFrame, useLoader } from "react-three-fiber";
 import GifLoader from "three-gif-loader";
 import GifTexture from "three-gif-loader/lib/gif-texture";
 
-
 const Border: React.FC = () => {
-  const dispatch = useDispatch()
-  const texCanvas = document.createElement("canvas") as HTMLCanvasElement
-  const texContext = texCanvas.getContext("2d")
+  const dispatch = useDispatch();
+  const texCanvas = document.createElement("canvas") as HTMLCanvasElement;
+  const texContext = texCanvas.getContext("2d");
   const nftTexture = useRef<THREE.Texture | GifTexture>();
   texCanvas.width = 100;
   texCanvas.height = 100;
@@ -29,11 +28,9 @@ const Border: React.FC = () => {
   const loader = new GifLoader();
   // const loader2 = new THREE.TextureLoader()
   // const texture = loader2.load(memeImgUrl!)
- nftTexture.current = useLoader(THREE.TextureLoader, memeImgUrl!)
- console.log(memeImgUrl)
-  // if (mime === "gif") {
-  // nftTexture.current! = loader.load(memeImgSrc!, (reader) => {});
-  // }
+  const texture = useLoader(THREE.TextureLoader, memeImgUrl!);
+  const reader: FileReader = new FileReader();
+  nftTexture.current = texture;
 
   const border = new THREE.Mesh(
     new THREE.PlaneGeometry(10, 10),
@@ -74,7 +71,7 @@ const Border: React.FC = () => {
     const minutes = remainTime.getUTCMinutes().toString().padStart(2, "0");
     const seconds = remainTime.getUTCSeconds().toString().padStart(2, "0");
 
-    return [diff, `${hours}:${minutes}:${seconds}`];
+    return [diff, `${minutes}:${seconds}`];
   };
   // useEffect(() => {
   //   if (texContext) {
@@ -86,22 +83,28 @@ const Border: React.FC = () => {
     if (texContext) {
       texContext.fillStyle = "#0277BD"; // 물감
       texContext.fillRect(0, 0, 100, 100); // 좌표0,0, 크기
-      texContext.font = "10px Gmarket Sans TTF";
+      texContext.font = "14px Gmarket Sans TTF";
       texContext.fillStyle = "white"; // 물감
-      texContext.fillText(`${biddingHistory.length>0 ? biddingHistory[0].price : startingPrice} SSF`, 30, 37);
-      texContext.font = "17px Gmarket Sans TTF";
+      texContext.fillText(
+        `${
+          biddingHistory.length > 0 ? biddingHistory[0].price : startingPrice
+        } SSF`,
+        21,
+        39
+      );
+      texContext.font = "14px Gmarket Sans TTF";
       let timerProps = getRemainTime();
       let diff = timerProps[0];
       if(diff === 0 ){
         dispatch(auctionActions.controlFinishModal(true))
       }
       let timerView = timerProps[1];
-      if (diff as number <= 3 * 60) {
+      if ((diff as number) <= 3 * 60) {
         texContext.fillStyle = "red"; // 물감
       } else {
         texContext.fillStyle = "white"; // 물감
       }
-      texContext.fillText(`${timerView}`, 15, 20);
+      texContext.fillText(`${timerView}`, 30, 20);
     }
   });
 
@@ -111,7 +114,7 @@ const Border: React.FC = () => {
   return (
     <>
       <primitive castShadow object={border} />
-      <primitive object={NFT}/>
+      <primitive object={NFT} />
       <primitive object={timer} />
     </>
   );

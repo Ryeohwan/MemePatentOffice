@@ -39,8 +39,7 @@ const Bidding: React.FC<BiddingProps> = ({
       console.log("upload 버튼에서 잔액조회 실행됨");
       await checkMyBalance()
         .then((balance) => {
-          console.log("내 지갑 잔액:", balance);
-          myBalance.current = balance;
+          myBalance.current = balance /(10**18);
         })
         .catch((error) => {
           console.error(error);
@@ -48,7 +47,6 @@ const Bidding: React.FC<BiddingProps> = ({
       return myBalance.current;
     } catch (e) {
       myBalance.current = 0;
-      console.log(e);
       return false;
     }
   };

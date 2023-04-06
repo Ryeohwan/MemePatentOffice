@@ -1,33 +1,46 @@
-.auctionWrapper{
-    position: absolute;
-    width: 100vw;
-    height:100vh;
+.auctionWrapper {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
 }
 
-.buttonWrapper{
-    position:absolute;
-    background-color: var(--setting-color);
-    display: flex;
-    width:100%;
-    bottom:0;
-    flex-direction: row-reverse;
-    justify-content: space-between;
+.buttonWrapper {
+  position: absolute;
+  background-color: #ffffff71;
+  display: flex;
+  width: 100%;
+  height: 8%;
+  bottom: 0;
+  flex-direction: row-reverse;
+  justify-content: space-between;
 }
 
-.buttonWrapper > button{
-    background-color: var(--button-color);
+.buttonWrapper > button {
+  background-color: var(--button-color);
+  width: 15%;
+  height: 100%;
+  padding: 0;
+  justify-content: center;
 }
 
-.sitBtn{
-    z-index:1;
+.sitBtn {
+  z-index: 1;
 }
 
-.fullMoniterBtn{
-    position: absolute;
-    top:5%;
-    left:35%;
+.fullMoniterBtn {
+  position: absolute;
+  bottom: 10%;
+  right: 5%;
 }
 
-.fullMoniterBtn > button{
-    background-color: var(--button-color);
+.fullMoniterBtn > button {
+  background-color: var(--button-color);
+  font-size: 10px;
+}
+
+.sitIcon {
+  font-size: 2rem;
+}
+.bidIcon{
+    font-size: 2rem;
 }

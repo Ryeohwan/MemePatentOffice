@@ -10,11 +10,15 @@ export type chatList= {
 interface initialStateInterface {
   input: string;
   chatList: chatList[];
+  chatcnt: number;
+  isLooking: boolean
 }
 const initialState: initialStateInterface = {
   input: "",
   chatList: [
   ],
+  chatcnt: 0,
+  isLooking: false,
 };
 
 const chatSlice = createSlice({
@@ -23,6 +27,8 @@ const chatSlice = createSlice({
   reducers: {
     closeAuction: (state) => {
       state.chatList = [];
+      state.chatcnt = 0;
+      state.isLooking = false
     },
     inputText: (state, actions) => {
       state.input = actions.payload.input;
@@ -31,6 +37,16 @@ const chatSlice = createSlice({
       state.chatList = [...state.chatList, actions.payload.chat];
       state.input = "";
     },
+    getChat: ( state) => {
+      state.chatcnt += 1
+    },
+    resetChatcnt: (state) => {
+      state.chatcnt = 0
+      state.isLooking = true
+    },
+    isNotLooking: (state) => {
+      state.isLooking = false
+    }
   },
 });
 

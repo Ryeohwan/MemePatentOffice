@@ -3,6 +3,8 @@ import { playersInfo } from "store/auction";
 export interface WebSocketProps{
   client: React.MutableRefObject<Client|undefined>
   auctionId: number
+  seeChat: boolean
+  seeChatHandler: () => void
 }
 
 export interface Characters extends WebSocketProps{
