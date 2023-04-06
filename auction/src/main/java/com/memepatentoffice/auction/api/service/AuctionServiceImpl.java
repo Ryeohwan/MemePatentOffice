@@ -380,21 +380,21 @@ public class AuctionServiceImpl implements AuctionService{
             }
             //1. 스마트 컨트랙트 호출
             //2. mpoffice에 체결 요청 보냄(배팅한 사람 있을때만)
-            bidRepository.findTopByAuctionIdOrderByAskingpriceDesc(auctionId)
-                    .ifPresent(currentTopBid->{
-                        AuctionClosing auctionClosing = AuctionClosing.builder()
-                                .memeId(auction.getMemeId())
-                                .buyerId(currentTopBid.getUserId())
-                                .sellerId(auction.getSellerId())
-                                .createdAt(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-                                .price(currentTopBid.getAskingprice())
-                                .build();
-                        try{
-                            isp.addTransaction(auctionClosing);
-                        }catch (JsonProcessingException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
+//            bidRepository.findTopByAuctionIdOrderByAskingpriceDesc(auctionId)
+//                    .ifPresent(currentTopBid->{
+//                        AuctionClosing auctionClosing = AuctionClosing.builder()
+//                                .memeId(auction.getMemeId())
+//                                .buyerId(currentTopBid.getUserId())
+//                                .sellerId(auction.getSellerId())
+//                                .createdAt(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+//                                .price(currentTopBid.getAskingprice())
+//                                .build();
+//                        try{
+//                            isp.addTransaction(auctionClosing);
+//                        }catch (JsonProcessingException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    });
             //경매 끝났다는 알람 보내기
             isp.setAlarm("end", auction.getId(), auction.getSellerId(),auction.getMemeId());
         }
