@@ -286,6 +286,7 @@ public class AuctionServiceImpl implements AuctionService{
             }else if(auction.getStatus().equals(AuctionStatus.PROCEEDING)){
                 return MemeRes.builder()
                         .memeStatus(MemeStatus.AUCTIONPROCEEDING)
+                        .auctionId(auction.getId())
                         .build();
             }else{//auction.getStatus().equals(AuctionStatus.TERMINATED)
                 return MemeRes.builder()
