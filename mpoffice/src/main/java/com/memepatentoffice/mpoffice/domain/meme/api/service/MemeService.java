@@ -383,4 +383,10 @@ public class MemeService {
                 .build();
         return result;
     }
+
+    public int getMemeTokeId(Long memeId) throws NotFoundException {
+        Meme meme = memeRepository.findById(memeId).orElseThrow(() -> new NotFoundException(memeId + " : Meme"));
+        return meme.getTokenId();
+    }
+
 }
