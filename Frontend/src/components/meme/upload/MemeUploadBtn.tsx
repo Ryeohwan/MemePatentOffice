@@ -6,7 +6,8 @@ import { memeUploadActions } from "store/memeUpload";
 import { RootState } from "store/configStore";
 import { checkMyBalance, memeOwnerAccess, mintMemeTokenContract } from "web3config";
 
-import SubmitBtn from "components/common/elements/SubmitBtn";
+import check from "assets/icon_check.png";
+// import SubmitBtn from "components/common/elements/SubmitBtn";
 import CheckingModal from "components/auction/upload/CheckingModal";
 
 import styles from "./MemeUploadBtn.module.css";
@@ -283,7 +284,13 @@ const MemeUploadBtn: React.FC = () => {
     <>
       <div className={styles.uploadBtnContainer}>
         <div className={styles.btnContainer} onClick={uploadHandler}>
-          <SubmitBtn />
+          <div className={styles.submit}>
+            <div
+              className={(titleChecked && imgUrl && info && situation && checkbox) ? styles.submitTrue : styles.submitFalse}
+            >
+              <img src={check} alt="#" />
+            </div>
+          </div>
         </div>
       </div>
       <CheckingModal

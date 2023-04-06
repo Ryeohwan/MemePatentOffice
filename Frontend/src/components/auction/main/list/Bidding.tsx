@@ -38,7 +38,7 @@ const Bidding: React.FC<BiddingProps> = ({
       };
       await checkMyBalance()
         .then((balance) => {
-          myBalance.current = balance;
+          myBalance.current = balance/(10**18);
         })
         .catch((error) => {
         });
