@@ -16,4 +16,6 @@ public class MemeRes {
     MemeStatus memeStatus;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm")
     LocalDateTime startTime;
+    @JsonFormat
+    Long auctionId;
 }
