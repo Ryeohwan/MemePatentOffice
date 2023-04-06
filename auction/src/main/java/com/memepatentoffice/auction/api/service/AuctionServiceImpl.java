@@ -65,9 +65,11 @@ public class AuctionServiceImpl implements AuctionService{
         JSONObject jsonObject = isp.findMemeById(req.getMemeId())
                 .orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
         String memeImgUrl = jsonObject.getString("memeImage");
+        Long memeOwnerId = jsonObject.getLong("ownerId");
 
         jsonObject = isp.findUserById(req.getSellerId())
                 .orElseThrow(()->new NotFoundException("sellerId가 유효하지 않습니다"));
+        if(!memeOwnerId.equals(req.getSellerId())) throw new AuctionException("밈의 소유자와 팔려는 사람이 다릅니다");
         String sellerNickname = jsonObject.getString("nickname");
 
         List<Auction> existingAuctionList = auctionRepository.findAllByMemeIdWhereStatusIsNotTerminated(req.getMemeId());
