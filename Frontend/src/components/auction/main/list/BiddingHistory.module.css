@@ -1,3 +1,15 @@
 .sideBar{
-    height:70vh !important;
+    height:30vh !important;
+}
+
+.header {
+    height:0.1rem;
+    padding:0 !important;
+    background-color: rgba(255, 255, 255, 0.35) !important;
+}
+
+.content{
+    padding: 0.5rem !important;
+    background-color: rgba(255, 255, 255, 0.35) !important;
+
 }

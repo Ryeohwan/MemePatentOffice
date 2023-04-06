@@ -215,8 +215,8 @@ const Player: React.FC<PlayerProps> = ({
         clickPosition.current.z - player.current.position.z,
         clickPosition.current.x - player.current.position.x
       );
-      player.current.position.x += Math.cos(angle) * 0.06;
-      player.current.position.z += Math.sin(angle) * 0.06;
+      player.current.position.x += Math.cos(angle) * 0.075;
+      player.current.position.z += Math.sin(angle) * 0.075;
       if (
         Math.abs(clickPosition.current.x - player.current.position.x) < 0.03 &&
         Math.abs(clickPosition.current.z - player.current.position.z) < 0.03

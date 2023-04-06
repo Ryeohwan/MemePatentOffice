@@ -14,13 +14,13 @@ import BiddingHistory from "components/auction/main/list/BiddingHistory";
 
 const AuctionSlideMenu: React.FC = () => {
   const navigate = useNavigate();
-  const menu = useRef<SlideMenu>(null);
+  const menu = useRef<SlideMenu|null>(null);
   const { sellerNickname } = useSelector<RootState, auctionInfo>(
     (state) => state.auction.auctionInfo
   );
   const [sellerInfoVisible, setSellerInfoVisible] = useState(false);
   const [biddingHistoryInfoVisible, setBiddingHistoryInfoVisible] =
-    useState(false);
+    useState(true);
   const sellerInfoHandler = () => {
     setSellerInfoVisible(true);
     navigate(`${sellerNickname}/tab=nft`);
@@ -29,7 +29,7 @@ const AuctionSlideMenu: React.FC = () => {
     setSellerInfoVisible(false);
   };
   const biddingInfoHandler = () => {
-    setBiddingHistoryInfoVisible(true);
+    setBiddingHistoryInfoVisible(!biddingHistoryInfoVisible);
   };
   const biddingHistoryInfoHandlerFalse = () => {
     setBiddingHistoryInfoVisible(false);

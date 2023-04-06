@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "store/configStore";
 import { Client } from "@stomp/stompjs";
 import AuctionCanvas from "components/auction/main/AuctionCanvas";
 import { chatActions } from "store/chat";
@@ -21,6 +22,7 @@ const AuctionPage: React.FC = () => {
   const client = useRef<Client>();
   const dispatch = useDispatch();
   const [seeChat, setSeeChat] = useState<boolean>(false);
+  const isLooking = useSelector<RootState,boolean>(state=>state.chat.isLooking)
   const seeChatHandelr = () => {
     setSeeChat(false);
   };
@@ -43,6 +45,7 @@ const AuctionPage: React.FC = () => {
       heartbeatOutgoing: 2000,
       // 연결
       onConnect: async (frame) => {
+        console.log(`/api/auction/info?auctionId=${auctionId}`)
         await sendRequest({ url: `/api/auction/info?auctionId=${auctionId}` });
         await subscribe();
         client.current?.publish({
@@ -91,7 +94,12 @@ const AuctionPage: React.FC = () => {
     client.current.subscribe(`/sub/chat/${auctionId}`, (body) => {
       const json_body = JSON.parse(body.body);
       // console.log(json_body)
-      setSeeChat(true);
+      if(json_body.nickname !== userNickName){
+        if(!isLooking){
+          dispatch(chatActions.getChat())
+          setSeeChat(true);
+        }
+      }
       dispatch(
         chatActions.sendChat({
           chat: {
@@ -135,9 +143,10 @@ const AuctionPage: React.FC = () => {
   };
   useEffect(() => {
     connect();
-
+    dispatch(chatActions.closeAuction())
     return () => {
       disconnect();
+      dispatch(chatActions.closeAuction())
     };
   }, []);
 

@@ -20,21 +20,20 @@ const BiddingHistoryList: React.FC = () => {
   );
 
   return (
-    <section className={styles.wraper}>
-      <header className={styles.container}>
-        <p/>
-        <p>입찰자</p>
-        <p/>
-        <p>
-          금액 <span>(SSF)</span>
-        </p>
-        <p className={styles.time}>입찰 시간</p>
-      </header>
-      <Divider />
+    <>
+      <section className={styles.wraper}>
+        <header className={styles.container}>
+          <p>입찰자</p>
+          <p>(SSF)</p>
+        </header>
+        <Divider className={styles.divider} />
+      </section>
+      <div className={styles.historyWraper}>
         {biddingHistory.map((history, index) => {
           return <BiddingHistoryItem key={index} history={history} />;
         })}
-    </section>
+      </div>
+    </>
   );
 };
 

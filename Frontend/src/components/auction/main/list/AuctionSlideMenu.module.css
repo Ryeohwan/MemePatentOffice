@@ -10,5 +10,5 @@
 }
 
 .slideBtn{
-    background-color: var(--button-color);
+    background-color: var(--button-color) !important;
 }
