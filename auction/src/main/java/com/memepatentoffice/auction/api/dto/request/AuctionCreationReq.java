@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @ToString
 public class AuctionCreationReq {
     private Long memeId;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm", timezone = "Asia/Seoul")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, timezone = "Asia/Seoul")
     private LocalDateTime startDateTime;
     private Long sellerId;
     private Long startingPrice;
