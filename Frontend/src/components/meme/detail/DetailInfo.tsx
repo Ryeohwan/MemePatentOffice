@@ -22,6 +22,7 @@ const DetailInfo: React.FC = () => {
   const { data, isLoading, status, sendRequest } = useAxios();
   // get auction info
   const { data: auctionData, sendRequest: auctionRequest } = useAxios();
+  console.log(auctionData)
 
   // post like meme
   const { sendRequest: likeRequest } = useAxios();

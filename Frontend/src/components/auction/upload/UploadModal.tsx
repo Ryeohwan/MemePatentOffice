@@ -42,7 +42,19 @@ const UploadModal: React.FC<UploadModalProps> = ({visible, modalHandler}) => {
   //최종 제출 누르면 모달 키는 함수
   const controlCheckModal = async (visible: boolean) => {
     setCheckModalVisible(visible);
-
+    const data = {
+      sellerId: submitMeme.sellerId,
+      memeId: submitMeme.memeId,
+      startingPrice: submitMeme.startingPrice,
+      startDateTime: new Date(submitMeme.startDateTime! )
+    }
+    const time_diff = 9*60*60*1000
+    const cur_date = new Date(submitMeme.startDateTime!)
+    // console.log(data)
+    const utc = cur_date.getTime()
+    // console.log(utc+time_diff)
+    // console.log(new Date(utc))
+    // console.log(new Date(utc+time_diff ))
     await sendRequest({
       url: `/api/auction/register`,
       method: "POST",
@@ -50,10 +62,9 @@ const UploadModal: React.FC<UploadModalProps> = ({visible, modalHandler}) => {
         sellerId: submitMeme.sellerId,
         memeId: submitMeme.memeId,
         startingPrice: submitMeme.startingPrice,
-        startDateTime: new Date(submitMeme.startDateTime!)
+        startDateTime: new Date(utc+time_diff )
       }
     })
-    console.log(new Date(submitMeme.startDateTime!))
     setCheckModalVisible(false)
   };
 
