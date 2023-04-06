@@ -13,7 +13,7 @@ const NftCard: React.FC<NftProps> = (nft) => {
   const onClickHandler = (flipped: boolean) => {
     setFlipped(!flipped);
   };
-
+  
   return (
     <div
       className={`${styles.nftCardContainer} ${

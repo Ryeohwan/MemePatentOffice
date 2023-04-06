@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { auctionUploadActions } from "store/auctionUpload";
 import useAxios from "hooks/useAxios";
@@ -10,14 +10,15 @@ import { Icon } from "@iconify/react";
 const DetailInfo: React.FC = () => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
   const [auctionPoint, setAuctionPoint] = useState<boolean>();
-  
+
   // get memid from params
   const params = useParams();
   const memeid = parseInt(params.meme_id!, 10);
   const userId = JSON.parse(sessionStorage.user).userId;
   const userNickname = JSON.parse(sessionStorage.getItem("user")!).nickname;
-  const [visible, setVisible] = useState<boolean>(false)
+  const [visible, setVisible] = useState<boolean>(false);
   // get meme detail info
   const { data, isLoading, status, sendRequest } = useAxios();
   // post like meme
@@ -43,10 +44,9 @@ const DetailInfo: React.FC = () => {
   // 경매에 등록된 상태인지
   const [auctionState, setAuctionState] = useState<string | null>();
 
-
   // 경매 버튼 포인트 줄건지 확인
   useEffect(() => {
-    setAuctionPoint(location.state && location.state.from === "auction")
+    setAuctionPoint(location.state && location.state.from === "auction");
   }, []);
 
   // get Meme detail info
@@ -147,9 +147,14 @@ const DetailInfo: React.FC = () => {
     }
   };
 
-  const modalVisibleHandler = (visible:boolean) => {
-    setVisible(visible)
-  }
+  const modalVisibleHandler = (visible: boolean) => {
+    setVisible(visible);
+  };
+
+  const profileNavigateHandler = (nickname: string) => {
+    navigate(`/profile/${nickname}/tab=nft`);
+  };
+
   return (
     <>
       <div className={styles.memeDetailPage}>
@@ -184,11 +189,21 @@ const DetailInfo: React.FC = () => {
 
             <div className={styles.memeOwner}>
               <div>최초 등록자</div>
-              <div className={styles.ownerName}>{data.createrNickname}</div>
+              <div
+                className={styles.ownerName}
+                onClick={() => profileNavigateHandler(data.createrNickname)}
+              >
+                {data.createrNickname}
+              </div>
             </div>
             <div className={styles.memeOwner}>
               <div>현재 소유자</div>
-              <div className={styles.ownerName}>{data.ownerNickname}</div>
+              <div
+                className={styles.ownerName}
+                onClick={() => profileNavigateHandler(data.ownerNickname)}
+              >
+                {data.ownerNickname}
+              </div>
             </div>
             <div className={styles.heartGroup}>
               <div className={styles.heartWrapper}>
@@ -227,16 +242,17 @@ const DetailInfo: React.FC = () => {
                     auctionUploadActions.controlModal({
                       visible: true,
                       memeid: memeid,
-                      sellerId: JSON.parse(sessionStorage.getItem('user')!).userId,
+                      sellerId: JSON.parse(sessionStorage.getItem("user")!)
+                        .userId,
                     })
                   );
-                  modalVisibleHandler(true)
+                  modalVisibleHandler(true);
                 }}
               >
                 이 NFT 경매 등록하러 가기
               </div>
             )}
-            <UploadModal visible={visible} modalHandler={modalVisibleHandler}/>
+            <UploadModal visible={visible} modalHandler={modalVisibleHandler} />
           </>
         ) : (
           <></>

@@ -64,7 +64,7 @@ const useAxios = () => {
     }
     setIsLoading(false);
   }, []);
-  console.log(data)
+  // console.log(data)
   return { data, status, isLoading, sendRequest };
 }
 
