@@ -32,3 +32,11 @@
     margin-top: 30px;
     /* overflow-x: auto; */
 }
+
+.noTradeData {
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+}

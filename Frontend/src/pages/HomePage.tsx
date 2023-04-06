@@ -51,6 +51,8 @@ const HomePage: React.FC = () => {
   const { sendRequest: postWalletRequest } = useAxios();
   const myBalance = useRef<number | undefined>();
 
+  const { data: againUserInfo, sendRequest: getUserInfo } = useAxios();
+
   // 돈 들어오고 있다고 모달로 알림
   const [modalTxt, setModalTxt] = useState("");
   const [checkModalVisible, setCheckModalVisible] = useState<boolean>(false);
@@ -78,7 +80,7 @@ const HomePage: React.FC = () => {
 
         controlCheckModal(true);
         // 최초로 연결한 지갑인 경우, 코인 지급하고 post address
-        if (walletAddress === null) {
+        if (walletAddress === null && account !== walletAddress) {
           await postWalletRequest({
             url: "/api/mpoffice/user/update/wallet",
             method: "POST",

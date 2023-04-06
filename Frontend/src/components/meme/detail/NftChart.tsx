@@ -8,12 +8,12 @@ import { Serie } from "@nivo/line";
 
 interface NftChartProps {
   tradeData: any;
-};
+}
 
-const NftChart:React.FC<NftChartProps> = ({tradeData}) => {
+const NftChart: React.FC<NftChartProps> = ({ tradeData }) => {
   const params = useParams();
   const memeid = parseInt(params.meme_id!, 10);
-  
+
   // 거래날짜 : createdAt , 구매자 : nickName, 가격: price
 
   const [data, setData] = useState<Serie[]>();
@@ -23,7 +23,7 @@ const NftChart:React.FC<NftChartProps> = ({tradeData}) => {
   useEffect(() => {
     console.log("하위페이지 tradeData", tradeData);
     let getData: Serie[];
-    if (tradeData && tradeData.buyerList?.length > 0) {
+    if (tradeData) {
       const newBuyerList = tradeData.buyerList.reverse().map((item: any) => {
         return { x: item.createdAt, y: item.price };
       });
@@ -60,7 +60,7 @@ const NftChart:React.FC<NftChartProps> = ({tradeData}) => {
           </span>
         </div>
       </div>
-      {data && tradeData && tradeData.buyerList.length > 0 && (
+      {data && tradeData && tradeData.buyerList.length > 0 ? (
         <ResponsiveLine
           data={data!}
           margin={{ top: 25, right: 15, bottom: 50, left: 35 }}
@@ -137,6 +137,10 @@ const NftChart:React.FC<NftChartProps> = ({tradeData}) => {
             format: () => "",
           }}
         />
+      ) : (
+        <div className={styles.noTradeData}>
+          <div>거래된 이력이 없습니다</div>
+        </div>
       )}
     </>
   );
