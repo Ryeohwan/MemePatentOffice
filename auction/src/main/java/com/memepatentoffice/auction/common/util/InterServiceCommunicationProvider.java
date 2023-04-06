@@ -90,7 +90,7 @@ public class InterServiceCommunicationProvider {
     }
     public Optional<JSONObject> findFromAddressAndToAddress(Long from, Long to, Long meme){
         String url = MPOFFICE_SERVER_URL+"/alarm/auction/transferinfo?from="+from+"&to="+to+"&meme="+meme;
-        return getRequestToUrl(url);
+        return getRequestToUrlGetJsonObject(url);
     }
 }
 
