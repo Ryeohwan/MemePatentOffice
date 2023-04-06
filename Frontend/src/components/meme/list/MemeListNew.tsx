@@ -63,7 +63,7 @@ const MemeListNew: React.FC = () => {
             marginLeft: "0",
             bottom: "10%",
             right: "16px",
-            background: "var(--button-color)",
+            background: "var(--navy-color)",
             width: "44px",
             height: "44px",
           }}
