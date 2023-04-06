@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class MemeRes {
     @JsonFormat
     MemeStatus memeStatus;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm", timezone = "Asia/Seoul")
     LocalDateTime startTime;
     @JsonFormat
     Long auctionId;
