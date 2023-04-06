@@ -7,6 +7,7 @@ import NotInputArea from "components/meme/list/NotInputArea";
 import MemeListTabComp from "components/meme/list/MemeListTabComp";
 import MemeAddBtn from "components/meme/list/MemeAddBtn";
 import MemeNotFound from "components/meme/list/MemeNotFound";
+import uploadMemeImg from "assets/uploadmeme.jpg"
 import styles from "./MemeListPage.module.css";
 
 
@@ -16,41 +17,17 @@ const MemeListPage: React.FC = () => {
   const newResult = useSelector<RootState, boolean|null>((state) => state.memeList.newListResult);
   const popularResult = useSelector<RootState, boolean|null>((state) => state.memeList.popularListResult);
 
-  // 디테일 -> 뒤로가기 했을때 데이터 살려놓으려면 고쳐야할듯....
-  // unmount시 redux reset 시키기
-  // useEffect(() => {
-  //   return () => {
-  //     dispatch(memeListActions.resetAll());
-  //   };
-  // }, []);
-
-
-  // input 변경시 new get axios dispatch (lastPost = -1 시작 의미) new / popular 둘다
-  // useEffect(() => {
-  //   if (!input) return;
-  //   console.log('input 바겼음!')
-  //   appDispatch(getMemeNewListAxiosThunk(input, -1));
-  //   appDispatch(getMemePopularListAxiosThunk(input, range, false, -1))
-  // }, [input]);
-
-  // input 또는 range 변경시 popular get (lastPost = -1 시작 의미)
-  // useEffect(() => {
-  //   if (!input) return;
-  //   console.log('raneg 바꼈음!')
-  //   appDispatch(getMemePopularListAxiosThunk(input, range, true, -1))
-  // }, [range])
-
-
   return (
     <div className={styles.pageContainer}>
-      <p className={styles.pageHeader}>밈 사전</p>
+      {/* <p className={styles.pageHeader}>밈 사전</p> */}
 
       {/* input값 없는 경우 -> 햄버거/밈사전으로 들어온 경우 */}
       {!input && (
-        <div className={styles.notInputTxt}>
-          설명글입니다. 설명글입니다. 설명글입니다. 설명글입니다. 설명글입니다.
-          설명글입니다. 설명글입니다. 설명글입니다.
-        </div>
+        // <div className={styles.notInputTxt}>
+        //   설명글입니다. 설명글입니다. 설명글입니다. 설명글입니다. 설명글입니다.
+        //   설명글입니다. 설명글입니다. 설명글입니다.
+        // </div>
+        <img src={uploadMemeImg} alt="" className={styles.uploadMemeImg} />
       )}
 
       <MemeListSearch />
