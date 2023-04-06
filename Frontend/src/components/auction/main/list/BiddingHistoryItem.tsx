@@ -1,7 +1,5 @@
 import React from "react";
 
-import { Avatar } from "primereact/avatar";
-
 import styles from "components/auction/main/list/BiddingHistoryItem.module.css";
 
 interface BiddingHistoryItemProps {

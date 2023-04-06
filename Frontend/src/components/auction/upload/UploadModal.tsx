@@ -71,8 +71,7 @@ const UploadModal: React.FC<UploadModalProps> = ({visible, modalHandler}) => {
   };
 
   useEffect(()=>{
-    console.log(isLoading)
-    if (!isLoading) return;
+    if (isLoading) return;
     if(status === 201){
       alert('등록되었습니다.')
       modalHandler(false)

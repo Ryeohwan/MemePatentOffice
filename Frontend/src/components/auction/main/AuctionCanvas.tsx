@@ -1,11 +1,10 @@
 // auction page (/auction/:auction_id)
 
-import React, { useRef, useState, useCallback, useEffect } from "react";
+import React, { useRef, useState, useCallback } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "store/configStore";
 import { auctionActions, auctionInfo } from "store/auction";
-import { chatActions } from "store/chat";
 import useAxios from "hooks/useAxios";
 
 import Scene from "components/auction/main/Scene";
@@ -35,7 +34,6 @@ const AuctionCanvas: React.FC<Characters> = ({
   const playerState = useSelector<RootState, number>(
     (state) => state.auction.playerState
   );
-
   const { data, sendRequest } = useAxios();
   const [isFull, setIsFull] = useState<Boolean>(false);
   const [visible, setVisible] = useState<Boolean>(false);
@@ -82,6 +80,7 @@ const AuctionCanvas: React.FC<Characters> = ({
   const biddingHandler = (state: boolean) => {
     setBiddingVisible(state);
   };
+
   const biddingSubmitHandler = (price: number) => {
     if (myBalance.current === -1) {
       alert("지갑 연결이 필요합니다.");
@@ -216,6 +215,7 @@ const AuctionCanvas: React.FC<Characters> = ({
       setIsFull(true);
     }, 2000);
   };
+
   const notFullMoniter = () => {
     gsap.to(camera.current.position, {
       z: playerCamera.current.position.z,
@@ -228,6 +228,8 @@ const AuctionCanvas: React.FC<Characters> = ({
       setIsFull(false);
     }, 2000);
   };
+  console.log(auctionInfo.sellerNickname)
+  console.log(JSON.parse(sessionStorage.getItem("user")!).nickname)
   return (
     <section id="auction" className={styles.auctionWrapper}>
       <Scene
@@ -259,25 +261,39 @@ const AuctionCanvas: React.FC<Characters> = ({
 
         {playerState === 5 && (
           <>
-            <Button onClick={() => biddingHandler(true)} className={styles.bidBtn}>
+          {auctionInfo.sellerNickname ===
+        JSON.parse(sessionStorage.getItem("user")!).nickname ? (
+          <></>
+        ) : (
+
+          <Button
+          onClick={() => biddingHandler(true)}
+          className={styles.bidBtn}
+          >
               <Icon
                 icon="streamline:money-cash-dollar-coin-accounting-billing-payment-cash-coin-currency-money-finance"
                 className={styles.bidIcon}
                 />
-                <p>입찰</p>
+              <p>입찰</p>
             </Button>
+              )}
             <Button className={styles.sitBtn} onClick={standUpHandler}>
               <Icon icon="ph:person-bold" className={styles.sitIcon} />
               <p>일어서</p>
             </Button>
           </>
         )}
-        <Bidding
-          biddingHandler={biddingHandler}
-          biddingSubmitHandler={biddingSubmitHandler}
-          biddingVisible={biddingVisible}
-          myBalance={myBalance}
-        />
+        {auctionInfo.sellerNickname ===
+        JSON.parse(sessionStorage.getItem("user")!).nickname ? (
+          <></>
+        ) : (
+          <Bidding
+            biddingHandler={biddingHandler}
+            biddingSubmitHandler={biddingSubmitHandler}
+            biddingVisible={biddingVisible}
+            myBalance={myBalance}
+          />
+        )}
         <ChatMain
           seeChat={seeChat}
           seeChatHandler={seeChatHandler}
@@ -293,9 +309,7 @@ const AuctionCanvas: React.FC<Characters> = ({
               icon="pi pi-search-plus"
               onClick={() => notFullMoniter()}
             >
-              <p>
-                확대
-              </p>
+              <p>확대</p>
             </Button>
           ) : (
             <Button
