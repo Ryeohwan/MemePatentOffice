@@ -22,7 +22,7 @@ const FinishModal: React.FC = () => {
 
   // 경매 끝나자마자 get으로 경매 결과 받아옴
   const { data: resultData, sendRequest: getResultData } = useAxios();
-
+  const { data: postDataStatus , sendRequest: postResultData } = useAxios();
   const biddingHistory = useSelector<RootState, biddingHistory[]>(
     (state) => state.auction.auctionInfo.biddingHistory
   );
@@ -41,9 +41,11 @@ const FinishModal: React.FC = () => {
 
       // 판매자 : fromAccount, 구매자 : toAccount
       if (walletAddress === toAccount) {
-        await transferNftCoin(fromAccount, toAccount, price);
-        await transferNftOwnership(toAccount, memeTokenId);
-        // 모달 닫기
+        const transferCoinStatus = await transferNftCoin(fromAccount, toAccount, price);
+        const transferOwnershipStatus = await transferNftOwnership(toAccount, memeTokenId);
+        if (transferCoinStatus && transferCoinStatus) {
+
+        }
       } 
     }  
 
