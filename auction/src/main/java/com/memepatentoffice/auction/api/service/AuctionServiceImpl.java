@@ -69,6 +69,7 @@ public class AuctionServiceImpl implements AuctionService{
                 .orElseThrow(()->new NotFoundException("sellerId가 유효하지 않습니다"));
         String sellerNickname = jsonObject.getString("nickname");
 
+        log.info(LocalDateTime.now().toString());
         log.info(req.toString());
         Auction auction = auctionRepository.save(Auction.builder()
                         .memeId(req.getMemeId())
@@ -94,7 +95,7 @@ public class AuctionServiceImpl implements AuctionService{
                 new AuctionTerminater(auction.getId()),
                 terminateDate
         );
-
+        log.info(auction.getStartTime().toString());
         isp.setAlarm("register", auction.getId(), auction.getSellerId(),auction.getMemeId());
         return auction.getId();
     }
