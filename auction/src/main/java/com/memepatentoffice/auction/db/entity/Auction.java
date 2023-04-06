@@ -37,7 +37,7 @@ public class Auction extends BaseEntity{
     @Column(name = "status")
     private AuctionStatus status;
 
-    private static final Integer AUCTION_DURATION_MINUTES = 1;
+    private static final Integer AUCTION_DURATION_MINUTES = 3;
     @Builder
     public Auction(Long memeId, LocalDateTime startTime, Long sellerId,
                    String memeImgUrl, String sellerNickname, Long startingPrice) {
