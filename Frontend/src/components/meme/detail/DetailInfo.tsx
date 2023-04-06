@@ -84,7 +84,6 @@ const DetailInfo: React.FC = () => {
   }, [])
   // 경매 상태 변경
   useEffect(() => {
-    console.log('요기', auctionData)
     if (!auctionData) {
       return;
     } else if (auctionData.memeStatus === "AUCTIONDOESNOTEXISTS") {
@@ -97,6 +96,16 @@ const DetailInfo: React.FC = () => {
       setAuctionState(`${date.getMonth()+1}월 ${date.getDate()}일 ${date.getHours()}시 ${date.getMinutes()}분 예정`)
     }
   }, [auctionData])
+
+  // 등록자 / 소유자 profile img get
+  const {data: creatorImg, sendRequest: creatorImgRequest} = useAxios();
+  const {data: ownerImg, sendRequest: sendImgRequest} = useAxios();
+  useEffect(() => {
+    if (data && status === 200)  {
+      if (!creatorImg) creatorImgRequest({url: `/api/mpoffice/user/profile/image/${data.createrNickname}`})
+      if (!ownerImg) sendImgRequest({url: `/api/mpoffice/user/profile/image/${data.ownerNickname}`})
+    }
+  }, [data])
 
   const onClickGetAlarm = () => {
     alarmRequest({
@@ -214,7 +223,8 @@ const DetailInfo: React.FC = () => {
               <div
                 className={styles.ownerName}
                 onClick={() => profileNavigateHandler(data.createrNickname)}
-              >
+              >  
+                {creatorImg && <img src={creatorImg.imgUrl} alt=""/>}
                 {data.createrNickname}
               </div>
             </div>
@@ -223,7 +233,8 @@ const DetailInfo: React.FC = () => {
               <div
                 className={styles.ownerName}
                 onClick={() => profileNavigateHandler(data.ownerNickname)}
-              >
+              > 
+                {ownerImg && <img src={ownerImg.imgUrl} alt=""/>}
                 {data.ownerNickname}
               </div>
             </div>
