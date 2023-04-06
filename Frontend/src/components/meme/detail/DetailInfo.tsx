@@ -9,7 +9,6 @@ import { Icon } from "@iconify/react";
 
 const DetailInfo: React.FC = () => {
   const dispatch = useDispatch();
-  const location = useLocation();
   const navigate = useNavigate();
   const [auctionPoint, setAuctionPoint] = useState<boolean>();
 
@@ -21,6 +20,9 @@ const DetailInfo: React.FC = () => {
   const [visible, setVisible] = useState<boolean>(false);
   // get meme detail info
   const { data, isLoading, status, sendRequest } = useAxios();
+  // get auction info
+  const { data: auctionData, sendRequest: auctionRequest } = useAxios();
+
   // post like meme
   const { sendRequest: likeRequest } = useAxios();
   // post dislike meme
@@ -41,13 +43,8 @@ const DetailInfo: React.FC = () => {
   // 경매 알림 상태
   const [cart, setCart] = useState<string>("");
 
-  // 경매에 등록된 상태인지
-  const [auctionState, setAuctionState] = useState<string | null>();
-
-  // 경매 버튼 포인트 줄건지 확인
-  useEffect(() => {
-    setAuctionPoint(location.state && location.state.from === "auction");
-  }, []);
+  // 경매 등록 상태 (txt)
+  const [auctionState, setAuctionState] = useState<string>("");
 
   // get Meme detail info
   useEffect(() => {
@@ -56,10 +53,8 @@ const DetailInfo: React.FC = () => {
       params: { memeId: memeid, userId: userId },
     });
   }, []);
-
   useEffect(() => {
     if (status !== 200) return;
-    setAuctionState(data.auctionState);
     setCart(data.cart);
     setLikes(data.likeCount);
     setDislikes(data.hateCount);
@@ -79,10 +74,29 @@ const DetailInfo: React.FC = () => {
       setDislikeAction(true);
     }
   }, [isLoading]);
-
   useEffect(() => {
-    console.log("data", data);
+    console.log("MEME INFO", data);
   }, [data]);
+
+  // get auction info
+  useEffect(() => {
+    auctionRequest({url: `/api/auction/search?memeId=${memeid}`})
+  }, [])
+  // 경매 상태 변경
+  useEffect(() => {
+    console.log('요기', auctionData)
+    if (!auctionData) {
+      return;
+    } else if (auctionData.memeStatus === "AUCTIONDOESNOTEXISTS") {
+      setAuctionState("경매 예정 없음")
+    } else if (auctionData.memeStatus === "AUCTIONPROCEEDING") {
+      setAuctionState("경매 입장하기")
+      setAuctionPoint(true);  
+    } else if (auctionData.memeStatus === "HASENROLLEDAUCTION") {
+      const date = new Date(auctionData.startTime)
+      setAuctionState(`${date.getMonth()+1}월 ${date.getDate()}일 ${date.getHours()}시 ${date.getMinutes()}분 예정`)
+    }
+  }, [auctionData])
 
   const onClickGetAlarm = () => {
     alarmRequest({
@@ -155,6 +169,13 @@ const DetailInfo: React.FC = () => {
     navigate(`/profile/${nickname}/tab=nft`);
   };
 
+  const auctionNavigateHandler = () => {
+    if (auctionData && auctionData.memeStatus === "AUCTIONPROCEEDING") {
+      // auction id 받아서 auction으로 이동시키기
+      navigate(`/auction/${auctionData.auctionId}`)
+    }
+  };
+
   return (
     <>
       <div className={styles.memeDetailPage}>
@@ -168,8 +189,9 @@ const DetailInfo: React.FC = () => {
                 className={
                   auctionPoint ? styles.auctionInfoBtn2 : styles.auctionInfoBtn
                 }
+                onClick={() => auctionNavigateHandler()}
               >
-                12월 28일 13시 경매 예정
+                {auctionState}
               </div>
             </div>
 

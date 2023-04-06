@@ -27,24 +27,17 @@ const NoticeItem: React.FC<NoticeItemProps> = ({ item }) => {
       navigate(`/meme-detail/${item.memeId}/tab=trade`)
     } else if (type === "toDetailComment") {
       navigate(`/meme-detail/${item.memeId}/tab=comment`, {state:{from: "comment"}})
-    } else if (type === "toDetailAuction") {
-      navigate (`/meme-detail/${item.memeId}/tab=trade`, {state:{from: "auction"}})
-    // } else if (type === "toAuction") {
-    //   navigate(`/meme-detail/${item.auctionId}`)
     } else {
       return;
     }
-    return;
   };
 
   const clickHandler = () => {
     if (key === "COMMENT" || key === "REPLY") {
       navigateHandler("toDetailComment")
-    } else if (key === "AUCTION_START" || key === "AUCTION_REG") {
-      navigateHandler("toDetailAuction")
-    } else if (key === "AUCTION_END") {
+    } else {
       navigateHandler("toDetail")
-    } 
+    }
   }
 
   return (
@@ -99,7 +92,6 @@ const NoticeItem: React.FC<NoticeItemProps> = ({ item }) => {
           // 경매 시작
           <div className={styles.textWrapper}>
             <p className={styles.text}>
-              회원님이 찜한 {" "}
               <span>{item.title}</span>
               밈의 경매가 시작되었습니다.
             </p>
@@ -110,7 +102,6 @@ const NoticeItem: React.FC<NoticeItemProps> = ({ item }) => {
           // 경매 끝
           <div className={styles.textWrapper}>
             <p className={styles.text}>
-              회원님이 찜한 {" "}
               <span>{item.title}</span>
               밈의 경매가 종료되었습니다.
             </p>
@@ -121,7 +112,6 @@ const NoticeItem: React.FC<NoticeItemProps> = ({ item }) => {
           // 경매 등록
           <div className={styles.textWrapper}>
             <p className={styles.text}>
-              회원님이 찜한 {" "}
               <span>{item.title}</span>
               밈의 경매가 등록되었습니다.
             </p>
