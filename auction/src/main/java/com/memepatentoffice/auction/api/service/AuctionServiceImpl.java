@@ -68,9 +68,6 @@ public class AuctionServiceImpl implements AuctionService{
         jsonObject = isp.findUserById(req.getSellerId())
                 .orElseThrow(()->new NotFoundException("sellerId가 유효하지 않습니다"));
         String sellerNickname = jsonObject.getString("nickname");
-
-        log.info(LocalDateTime.now().toString());
-        log.info(req.toString());
         Auction auction = auctionRepository.save(Auction.builder()
                         .memeId(req.getMemeId())
                         .memeImgUrl(memeImgUrl)
