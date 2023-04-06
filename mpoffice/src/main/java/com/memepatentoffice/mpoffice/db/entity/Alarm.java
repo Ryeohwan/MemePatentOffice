@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -40,7 +41,10 @@ public class Alarm extends BaseEntity{
     @Column(name = "checked", nullable = false)
     private int checked;
 
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
     public void setChecked(int checked) {
         this.checked = checked;
-    }
+    } 
 }
