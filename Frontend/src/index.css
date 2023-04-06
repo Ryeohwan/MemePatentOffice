@@ -20,9 +20,14 @@ p {
 }
 
 * {
-  font-family: 'Gmarket Sans TTF';
+  font-family: 'MyWebFont', sans-serif;
 }
 
 .Scene_scene__mRBD8{
   position: absolute !important;
+}
+
+@font-face {
+  font-family: 'MyWebFont';
+  src: url('/public/GmarketSansTTFMedium.ttf') format('truetype');
 }
