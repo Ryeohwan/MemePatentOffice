@@ -73,8 +73,7 @@ public class InterServiceCommunicationProvider {
         return getRequestToUrl(MPOFFICE_SERVER_URL+"/meme/"+memeId);
     }
     public Optional<JSONObject> findFromAddressAndToAddress(Long from, Long to, Long meme){
-        return getRequestToUrl(MPOFFICE_SERVER_URL+"/alarm/auction/transferinfo?from="+from
-                +"&to="+to+"&meme="+meme);
+        return getRequestToUrl(MPOFFICE_SERVER_URL+"/alarm/auction/transferinfo?from="+from+"&to="+to+"&meme="+meme);
     }
 }
 
