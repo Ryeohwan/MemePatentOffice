@@ -87,6 +87,14 @@ const FinishModal: React.FC = () => {
         {biddingHistory.length === 0? (
           <>
             <p>경매가 종료되었습니다.</p>
+            <Button
+                className={styles.exitBtn}
+                onClick={() => {
+                  navigate(`/main`);
+                }}
+              >
+                나가기
+              </Button>
           </>
         ) : (
           <>
@@ -99,7 +107,7 @@ const FinishModal: React.FC = () => {
               </Canvas>
             </div>
             <div className={styles.exitContainer}>
-              <p className={styles.remainTime}>5초 후에 종료됩니다.</p>
+              <p className={styles.remainTime}>거래 완료 후 종료됩니다.</p>
               <Button
                 className={styles.exitBtn}
                 onClick={() => {
