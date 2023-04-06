@@ -8,6 +8,7 @@ import { Icon } from "@iconify/react";
 import { Sidebar } from "primereact/sidebar";
 import styles from "./NavbarHamburger.module.css";
 import { checkMyBalance, giveSignInCoin, web3 } from "web3config";
+import CheckingModal from "components/auction/upload/CheckingModal";
 
 interface RoutePath {
   pathname: string;
@@ -18,8 +19,28 @@ const NavbarHamburger: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { sendRequest } = useAxios();
+  const { sendRequest: postWalletRequest } = useAxios();
+  const { data: againUserInfo, sendRequest: getUserInfo } = useAxios();
   // const myBalance = useRef<number | undefined>();
   const [ myBalance, setMyBalance ] = useState<any>();
+
+  const userId = JSON.parse(sessionStorage.getItem("user")!).userId;
+  const [ walletAddress, setWalletAddress ] = useState("");
+  const [modalTxt, setModalTxt] = useState("");
+  const [checkModalVisible, setCheckModalVisible] = useState<boolean>(false);
+  const controlCheckModal = (visible: boolean) => {
+    setCheckModalVisible(visible);
+  };
+
+  useEffect(() => {
+    getUserInfo({
+      url: `/api/mpoffice/user/info/${userId}`
+    })
+  }, []);
+  useEffect(() => {
+    if (againUserInfo)
+    setWalletAddress(againUserInfo.walletAddress);
+  }, [againUserInfo]);
 
   // login 페이지에서는 user 없어서 일단 session에 user 없으면 null 박아둠
   const myAccount = sessionStorage.user ? JSON.parse(sessionStorage.user).walletAddress : null;
@@ -64,16 +85,12 @@ const NavbarHamburger: React.FC = () => {
           account = web3.utils.toChecksumAddress(accounts[0]);
           console.log(account);
         };
-        // 유저 디비에 wallet_address가 null일 때만 코인 지급
-        const walletAddress = JSON.parse(
-          sessionStorage.getItem("user")!
-        ).walletAddress;
-        const userId = JSON.parse(sessionStorage.getItem("user")!).userId;
 
         // 최초로 연결한 지갑인 경우, 코인 지급하고 post address
+        controlCheckModal(true);
+        // 최초로 연결한 지갑인 경우, 코인 지급하고 post address
         if (walletAddress === null) {
-          giveSignInCoin();
-          sendRequest({
+          await postWalletRequest({
             url: "/api/mpoffice/user/update/wallet",
             method: "POST",
             data: {
@@ -81,14 +98,33 @@ const NavbarHamburger: React.FC = () => {
               walletAddress: account,
             },
           });
-          console.log("최초 연결 지갑에 코인 지급");
+          const user = JSON.parse(sessionStorage.getItem("user")!);
+          user.walletAddress = account;
+          sessionStorage.setItem("user", JSON.stringify(user));
+          setModalTxt(
+            "최초로 연결된 지갑이네요. 500SSF를 선물로 받는 중입니다!"
+          );
+
+          const giveCoinStatus = await giveSignInCoin(account);
+          if (giveCoinStatus) {
+            setModalTxt("500SSF를 받았습니다!");
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            controlCheckModal(false);
+          } else {
+            setModalTxt("네트워크가 불안정해 선물을 받지 못했습니다.");
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            controlCheckModal(false);
+          }
         } else {
           // 이전에 등록했던 지갑과 동일한 경우, 패스
           if (walletAddress === account) {
-            console.log("이전에 등록한 지갑과 동일합니다");
+            setModalTxt("이전에 등록한 지갑과 동일한 지갑에 연결 중입니다.");
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            controlCheckModal(false);
           } else if (walletAddress !== account) {
+            console.log(walletAddress, account)
             // 이전에 등록한 지갑은 존재하지만 지금 지갑과 다를 경우, 새로 post
-            sendRequest({
+            postWalletRequest({
               url: "/api/mpoffice/user/update/wallet",
               method: "POST",
               data: {
@@ -96,27 +132,34 @@ const NavbarHamburger: React.FC = () => {
                 walletAddress: account,
               },
             });
-            console.log("1인당 코인 1회만 지급");
+            setModalTxt("최초 등록된 지갑에 한해서만 500SSF가 지급됩니다");
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            controlCheckModal(false);
+            const user = JSON.parse(sessionStorage.getItem("user")!);
+            user.walletAddress = account;
+            sessionStorage.setItem("user", JSON.stringify(user));
           }
         }
-        const user = JSON.parse(sessionStorage.getItem("user")!);
-        user.walletAddress = account;
-        sessionStorage.setItem("user", JSON.stringify(user));
-
-        alert("지갑 연결 성공!");
+        setModalTxt("지갑 연결 성공!");
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        controlCheckModal(false);
       } else {
-        alert("MetaMask를 설치해주세요.");
+        setModalTxt("Metamask를 설치해 주세요.");
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        controlCheckModal(false);
       }
+      controlCheckModal(false);
       await checkBalance();
-      console.log("지갑 연결하자마자 잔액 조회", myBalance)
-      if (!myBalance || myBalance===undefined) {
-        console.log("잔액 조회에 실패했습니다, 지갑 다시 연결해보셈")
+      if (!myBalance.current || myBalance.current === undefined) {
+        console.log("잔액 조회에 실패했습니다, 지갑 다시 연결해보셈");
       } else {
-        console.log(myBalance)
+        console.log("지갑 연결하자마자 잔액 조회", myBalance.current);
       }
-
     } catch (error) {
       console.log(error);
+      setModalTxt("이전에 등록한 지갑이 있는 걸로 보입니다.");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      controlCheckModal(false);
     }
   };
 
@@ -154,48 +197,56 @@ const NavbarHamburger: React.FC = () => {
 
   return (
     <>
-      <Icon
-        icon="system-uicons:menu-hamburger"
-        className={styles.hamburger}
-        onClick={() => {
-          setOpen(!open);
-        }}
+      <>
+        <Icon
+          icon="system-uicons:menu-hamburger"
+          className={styles.hamburger}
+          onClick={() => {
+            setOpen(!open);
+          }}
+        />
+
+        <Sidebar
+          // className={account ? styles.loginDropContainer : styles.dropContainer}
+          className={styles.dropContainer}
+          visible={open}
+          position="top"
+          showCloseIcon={false}
+          onHide={() => setOpen(false)}
+        >
+          <hr />
+
+          <div className={styles.dropMenu}>
+
+            {myAccount !== null ? <div>내 잔액 : {myBalance ? myBalance/(10**18) : 0} SSF</div> : <div onClick={accountHandler}>지갑 연결하기</div> }
+
+            <div className={styles.navLink} onClick={memeListHandler}>
+              밈 사전
+            </div>
+
+            <NavLink
+              onClick={() => setOpen(!open)}
+              to="/auction-list/type=new"
+              className={styles.navLink}
+            >
+              경매 둘러보기
+            </NavLink>
+            
+            <div className={styles.navLink} onClick={mypageHandler}>
+              마이페이지
+            </div>
+            <p className={styles.navLink} onClick={logoutHandler}>
+              로그아웃
+            </p>
+          </div>
+        </Sidebar>
+      </>
+      <CheckingModal
+        checkModalVisible={checkModalVisible}
+        controlCheckModal={controlCheckModal}
+        headerInput="지갑 조회 중..."
+        textInput={modalTxt}
       />
-
-      <Sidebar
-        // className={account ? styles.loginDropContainer : styles.dropContainer}
-        className={styles.dropContainer}
-        visible={open}
-        position="top"
-        showCloseIcon={false}
-        onHide={() => setOpen(false)}
-      >
-        <hr />
-
-        <div className={styles.dropMenu}>
-
-          {myAccount !== null ? <div>내 잔액 : {myBalance/(10**18)} SSF</div> : <div onClick={accountHandler}>지갑 연결하기</div> }
-
-          <div className={styles.navLink} onClick={memeListHandler}>
-            밈 사전
-          </div>
-
-          <NavLink
-            onClick={() => setOpen(!open)}
-            to="/auction-list/type=new"
-            className={styles.navLink}
-          >
-            경매 둘러보기
-          </NavLink>
-          
-          <div className={styles.navLink} onClick={mypageHandler}>
-            마이페이지
-          </div>
-          <p className={styles.navLink} onClick={logoutHandler}>
-            로그아웃
-          </p>
-        </div>
-      </Sidebar>
     </>
   );
 };

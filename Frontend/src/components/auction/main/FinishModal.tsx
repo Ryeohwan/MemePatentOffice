@@ -27,24 +27,18 @@ const FinishModal: React.FC = () => {
     (state) => state.auction.auctionInfo.biddingHistory
   );
   // 모달창
-  const visible = useSelector<RootState, boolean>(state=>state.auction.finishModalVisible);
-  // const visible = true;
+  // const visible = useSelector<RootState, boolean>(state=>state.auction.finishModalVisible);
+  const visible = true;
 
   // 남은 시간
   // const [remainTime, setRemainTime] = useState<number>(5);
   const remainTime = useRef<number>(6);
   
   const memeTransaction = async (resultData:any) => {
-    let fromAccount;
-    let toAccount;
-    let price;
-    let memeTokenId;
-
-    if (resultData) {
-      fromAccount = resultData.fromAccount;
-      toAccount = resultData.toAccount;
-      price = resultData.price;
-      memeTokenId = resultData.memeTokenId;
+      const fromAccount = resultData.fromAccount;
+      const toAccount = resultData.toAccount;
+      const price = resultData.price;
+      const memeTokenId = resultData.memeTokenId;
 
       // 판매자 : fromAccount, 구매자 : toAccount
       if (walletAddress === fromAccount || walletAddress === toAccount) {
@@ -54,26 +48,22 @@ const FinishModal: React.FC = () => {
       } 
     }  
 
-
-  };
-
-
   useEffect(() => {
-
-
     if (visible){
       getResultData({
         url: `/api/auction/result?auctionId=${auctionId}`
       });
-  
-        console.log(resultData)
-        if (resultData) {
-
-        }
-
-
     }
-  }, [visible]);
+  }, []);
+
+
+  useEffect(() => {
+    console.log(resultData)
+    if (resultData) {
+      memeTransaction(resultData);
+    };
+  }, [resultData]);
+
   const camera = useRef<THREE.PerspectiveCamera>(
     new THREE.PerspectiveCamera(
       75,
