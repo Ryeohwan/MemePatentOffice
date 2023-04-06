@@ -2,7 +2,6 @@ package com.memepatentoffice.auction.common.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.memepatentoffice.auction.api.dto.AuctionClosing;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.json.JSONObject;

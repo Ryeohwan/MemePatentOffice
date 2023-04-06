@@ -1,7 +1,5 @@
 package com.memepatentoffice.auction.api.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.memepatentoffice.auction.api.dto.AuctionClosing;
 import com.memepatentoffice.auction.api.dto.BiddingHistory;
 import com.memepatentoffice.auction.api.dto.message.WebSocketBidRes;
 import com.memepatentoffice.auction.api.dto.message.WebSocketCharacter;
@@ -31,7 +29,6 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -194,7 +191,7 @@ public class AuctionServiceImpl implements AuctionService{
     }
 
     @Override
-    public List<AuctionListRes> findAllByHit(){
+    public List<AuctionListRes> findAllProceedingByHit(){
         return auctionRepository.findAllProceeding().stream()
                 .map(auction -> streamExceptionHandler(()->{
                     JSONObject jsonObject = isp.findMemeById(auction.getMemeId()).orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
@@ -272,7 +269,7 @@ public class AuctionServiceImpl implements AuctionService{
 
     @Override
     public List<AuctionListRes> getListForCarousel() {
-        List<AuctionListRes> listSortedByHit = this.findAllByHit();
+        List<AuctionListRes> listSortedByHit = this.findAllProceedingByHit();
         return new ArrayList<>(listSortedByHit.subList(0, Math.min(5, listSortedByHit.size())));
     }
 
@@ -304,13 +301,20 @@ public class AuctionServiceImpl implements AuctionService{
         Optional<Bid> currentTopBid = bidRepository.findTopByAuctionIdOrderByAskingpriceDesc(auctionId);
         if(currentTopBid.isPresent()){
             Auction auction = auctionRepository.findById(auctionId).orElseThrow(()->new NotFoundException("옥션 아이디 없음"));
-            JSONObject jsonObject = isp.findFromAddressAndToAddress(auction.getSellerId(),
-                            currentTopBid.get().getUserId(), auction.getMemeId())
+            Long sellerUserId = auction.getSellerId();
+            Long buyerUserId = currentTopBid.get().getUserId();
+            Long memeId = auction.getMemeId();
+
+            JSONObject jsonObject = isp.findFromAddressAndToAddress(sellerUserId,
+                            buyerUserId, memeId)
                     .orElseThrow(()->new Exception("데이터 틀림"));
             String fromAddress = jsonObject.getString("fromAddress");
             String toAddress = jsonObject.getString("toAddress");
             Long memeTokenId = jsonObject.getLong("memeTokenId");
             return AuctionClosingRes.builder()
+                    .memeId(memeId)
+                    .sellerUserId(sellerUserId)
+                    .buyerUserId(buyerUserId)
                     .fromAccount(fromAddress)
                     .toAccount(toAddress)
                     .memeTokenId(memeTokenId)

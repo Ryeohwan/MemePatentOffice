@@ -22,7 +22,7 @@ public interface AuctionService {
     Long bid(BidReq bidReq) throws NotFoundException, BiddingException;
 
     List<AuctionListRes> findAllProceedingBySellerNickname(String sellerNickname) throws NotFoundException;
-    List<AuctionListRes> findAllByHit() throws NotFoundException;
+    List<AuctionListRes> findAllProceedingByHit() throws NotFoundException;
     List<AuctionListRes> findAllProceedingByFinishTimeLatest() throws NotFoundException;
     List<AuctionListRes> findAllProceedingByFinishTimeOldest() throws NotFoundException;
     List<AuctionListRes> getListForCarousel();
