@@ -30,7 +30,7 @@ const useAxios = () => {
         headers: requestConfig.headers ? requestConfig.headers : authHeader(),
         data: requestConfig.data && JSON.stringify(requestConfig.data),
         params: requestConfig.params,
-        
+      
         // status 받는 경우 -> status + 401
         // status 안받는 경우 -> api 명세 보고 고쳐야할듯
         validateStatus: (status) => {
@@ -44,6 +44,7 @@ const useAxios = () => {
           }
         }
       });
+      console.log(response)
       // 1. unauthorized 401 (access 만료)
       if (response.status === 401) {
         console.log("unauthorized!");

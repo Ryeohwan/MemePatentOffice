@@ -78,9 +78,13 @@ const HomePage: React.FC = () => {
         ).walletAddress;
         const userId = JSON.parse(sessionStorage.getItem("user")!).userId;
 
+        // await getUserInfo({
+        //   url: `/api/mpoffice/user/info/${userId}`
+        // });
+
         controlCheckModal(true);
-        // 최초로 연결한 지갑인 경우, 코인 지급하고 post address
-        if (walletAddress === null && account !== walletAddress) {
+        // 최초로 연결한 지갑인 경우, 코인 지급하고 post address      ///  && !againUserInfo.walletAddress
+        if (walletAddress === null) {
           await postWalletRequest({
             url: "/api/mpoffice/user/update/wallet",
             method: "POST",
@@ -148,6 +152,9 @@ const HomePage: React.FC = () => {
       }
     } catch (error) {
       console.log(error);
+      setModalTxt("이전에 등록한 지갑이 있는 걸로 보입니다.");
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      controlCheckModal(false);
     }
   };
   const checkBalance = async () => {
