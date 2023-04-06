@@ -18,7 +18,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -32,7 +31,7 @@ public class AuctionController {
     public ResponseEntity<?> getList(@RequestParam String sort) throws NotFoundException {
             List<AuctionListRes> auctionList = null;
             if ("popular".equals(sort)) {
-                auctionList = auctionService.findAllByHit();
+                auctionList = auctionService.findAllProceedingByHit();
             } else if ("latest".equals(sort)) {
                 auctionList = auctionService.findAllProceedingByFinishTimeLatest();
             } else if ("oldest".equals(sort)) {
@@ -64,8 +63,6 @@ public class AuctionController {
     @ApiOperation(value="경매 등록", notes = "경매를 예약합니다. 예약한 시간에 경매가 시작되고, 시작 후 60*24 후에 끝납니다.")
     @PostMapping("/register")
     public ResponseEntity<?> registerAuction(@RequestBody AuctionCreationReq auctionCreationReq) throws IOException, NotFoundException, AuctionException {
-        log.info("now(): "+ LocalDateTime.now());
-        log.info(auctionCreationReq.getStartDateTime().toString());
         return ResponseEntity.status(HttpStatus.CREATED).body(auctionService.registerAuction(auctionCreationReq));
     }
 

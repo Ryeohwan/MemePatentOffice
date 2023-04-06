@@ -1,4 +1,4 @@
-package com.memepatentoffice.auction.api.dto;
+package com.memepatentoffice.auction.api.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.AllArgsConstructor;
