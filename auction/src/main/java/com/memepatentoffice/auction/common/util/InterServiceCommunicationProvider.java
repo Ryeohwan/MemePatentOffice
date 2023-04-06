@@ -71,10 +71,6 @@ public class InterServiceCommunicationProvider {
         }
     }
 
-    public Optional<String> addTransaction(AuctionClosing a) throws JsonProcessingException{
-        return postRequestToUrlGetString(MPOFFICE_SERVER_URL+"/meme/addTransaction", a);
-    }
-
     public Optional<JSONObject> findUserById(Long userId){
         return getRequestToUrlGetJsonObject(MPOFFICE_SERVER_URL+"/user/"+userId);
     }
