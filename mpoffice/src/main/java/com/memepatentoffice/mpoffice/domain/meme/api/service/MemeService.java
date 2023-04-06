@@ -373,14 +373,16 @@ public class MemeService {
 
         MemeResponse result = MemeResponse.builder()
                 .id(a.getId())
-                .memeImage(a.getImageurl())
+                .title(a.getTitle())
                 .content(a.getContent())
                 .createdAt(a.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-                .searched(a.getSearched())
-                .tokenId(a.getTokenId())
+                .ownerId(a.getOwner().getId())
                 .ownerNickname(a.getOwner().getNickname())
+                .createrNickname(a.getCreater().getNickname())
+                .tokenId(a.getTokenId())
+                .searched(a.getSearched())
                 .situation(a.getSituation())
-                .title(a.getTitle())
+                .memeImage(a.getImageurl())
                 .build();
         return result;
     }
