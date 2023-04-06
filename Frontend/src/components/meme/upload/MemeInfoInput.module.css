@@ -28,7 +28,7 @@
 }   
 
 .errorBox {
-    border: 1px solid var(--impossible-color) !important;
+    border: 1px solid var(--red-color) !important;
 }
 
 .errorMsg {
