@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from "react";
-import { useNavigate } from "react-router";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router";
 import * as THREE from "three";
+import useAxios from "hooks/useAxios";
 
 import { useSelector } from "react-redux";
 import { biddingHistory } from "store/auction";
@@ -14,24 +15,48 @@ import FinishModalCharacter from "./FinishModalCharacter";
 
 const FinishModal: React.FC = () => {
   const navigate = useNavigate();
+  const params = useParams();
+  const auctionId = parseInt(params.auctionId!, 10);
+
+  // 경매 끝나자마자 get으로 경매 결과 받아옴
+  const { data: resultData, sendRequest: getResultData } = useAxios();
 
   const biddingHistory = useSelector<RootState, biddingHistory[]>(
     (state) => state.auction.auctionInfo.biddingHistory
   );
   // 모달창
-  const visible = useSelector<RootState, boolean>(state=>state.auction.finishModalVisible);
+  // const visible = useSelector<RootState, boolean>(state=>state.auction.finishModalVisible);
+  const visible = true;
 
   // 남은 시간
   // const [remainTime, setRemainTime] = useState<number>(5);
   const remainTime = useRef<number>(6);
+
   useEffect(() => {
+    let fromAccount:string;
+    let toAccount:string;
+    let price:string;
+    let memeTokenId:number;
+
     if (visible){
-      const interval = setInterval(() => {
-        remainTime.current -= 1
-        if (remainTime.current === 0) {
-          navigate('/main')
+      getResultData({
+        url: `/api/auction/result?auctionId=${auctionId}`
+      });
+  
+        console.log(resultData)
+        if (resultData) {
+          fromAccount = resultData.fromAccount;
+          toAccount = resultData.toAccount;
+          price = resultData.price;
+          memeTokenId = resultData.memeTokenId;
         }
-      }, 1000);
+
+
+
+
+
+
+
     }
   }, [visible]);
   const camera = useRef<THREE.PerspectiveCamera>(

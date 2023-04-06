@@ -10,9 +10,9 @@ const ChartTradeComp: React.FC = () => {
   const params = useParams();
   const memeid = parseInt(params.meme_id!, 10);
   const { data: tradeData, sendRequest: getTradeDataRequest } = useAxios();
-  
+
   useEffect(() => {
-    console.log(memeid)
+    console.log(memeid);
     getTradeDataRequest({
       url: `/api/mpoffice/meme/price?id=${memeid}`,
     });
@@ -20,9 +20,11 @@ const ChartTradeComp: React.FC = () => {
 
   return (
     <div className={styles.chartTradeWrapper}>
-      <div className={styles.nftChartWrapper}>
-        {tradeData && <NftChart tradeData={tradeData}/>}
-      </div>
+      {tradeData && (
+        <div className={styles.nftChartWrapper}>
+          <NftChart tradeData={tradeData} />
+        </div>
+      )}
       <TradeList tradeData={tradeData} />
     </div>
   );
