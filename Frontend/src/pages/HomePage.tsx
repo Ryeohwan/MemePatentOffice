@@ -52,6 +52,19 @@ const HomePage: React.FC = () => {
   const myBalance = useRef<number | undefined>();
 
   const { data: againUserInfo, sendRequest: getUserInfo } = useAxios();
+  const [ walletAddress, setWalletAddress ] = useState("");
+  const userId = JSON.parse(sessionStorage.getItem("user")!).userId;
+
+  useEffect(() => {
+    getUserInfo({
+      url: `/api/mpoffice/user/info/${userId}`
+    })
+  }, []);
+  useEffect(() => {
+    if (againUserInfo)
+    setWalletAddress(againUserInfo.walletAddress);
+  }, [againUserInfo]);
+
 
   // 돈 들어오고 있다고 모달로 알림
   const [modalTxt, setModalTxt] = useState("");
@@ -72,15 +85,6 @@ const HomePage: React.FC = () => {
           console.log(account);
         }
 
-        // 유저 디비에서 가져온 wallet_address
-        let walletAddress;
-        const userId = JSON.parse(sessionStorage.getItem("user")!).userId;
-        await getUserInfo({
-          url: `/api/mpoffice/user/info/${userId}`
-        });
-        if (againUserInfo) walletAddress = againUserInfo.walletAddress;
-
-
         controlCheckModal(true);
         // 최초로 연결한 지갑인 경우, 코인 지급하고 post address
         if (walletAddress === null) {
@@ -94,13 +98,12 @@ const HomePage: React.FC = () => {
           });
           const user = JSON.parse(sessionStorage.getItem("user")!);
           user.walletAddress = account;
-
           sessionStorage.setItem("user", JSON.stringify(user));
           setModalTxt(
             "최초로 연결된 지갑이네요. 500SSF를 선물로 받는 중입니다!"
           );
 
-          const giveCoinStatus = await giveSignInCoin();
+          const giveCoinStatus = await giveSignInCoin(account);
           if (giveCoinStatus) {
             setModalTxt("500SSF를 받았습니다!");
             await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -114,9 +117,10 @@ const HomePage: React.FC = () => {
           // 이전에 등록했던 지갑과 동일한 경우, 패스
           if (walletAddress === account) {
             setModalTxt("이전에 등록한 지갑과 동일한 지갑에 연결 중입니다.");
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+            await new Promise((resolve) => setTimeout(resolve, 2000));
             controlCheckModal(false);
           } else if (walletAddress !== account) {
+            console.log(walletAddress, account)
             // 이전에 등록한 지갑은 존재하지만 지금 지갑과 다를 경우, 새로 post
             postWalletRequest({
               url: "/api/mpoffice/user/update/wallet",

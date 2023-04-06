@@ -880,8 +880,8 @@ export const memeOwnerAccess = async () => {
     return tokenId;
 };
 // 회원가입했을 때 코인 주기
-export const giveSignInCoin = async () => {
-	const account = JSON.parse(sessionStorage.getItem('user')!).walletAddress;
+export const giveSignInCoin = async (account:string) => {
+	// const account = JSON.parse(sessionStorage.getItem('user')!).walletAddress;
 	console.log(account)
 
     const price = 500;
