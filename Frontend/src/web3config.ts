@@ -962,7 +962,7 @@ export const giveSignInCoin = async () => {
 	  nonce: nonce,
 	}, privateKey);
 
-	console.log("signedTx", signedTx)
+	console.log("signedTx", signedTx);
 	if (signedTx.rawTransaction) {
 
 		const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
