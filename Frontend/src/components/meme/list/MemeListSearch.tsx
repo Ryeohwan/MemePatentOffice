@@ -31,7 +31,7 @@ const MemeListSearch = () => {
   return (
     <div className={styles.searchContainer}>
       <SearchComp>
-        <input className={styles.input} ref={inputRef} onKeyUp={enterHandler} defaultValue={input} placeholder="검색어를 입력해주세요"/>
+        <input className={styles.input} ref={inputRef} onKeyUp={enterHandler} defaultValue={input} placeholder="궁금한 밈을 검색해보세요!"/>
       </SearchComp>
     </div>
   );

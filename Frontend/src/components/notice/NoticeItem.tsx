@@ -125,7 +125,7 @@ const NoticeItem: React.FC<NoticeItemProps> = ({ item }) => {
         />
 
       </div>
-      <Divider />
+      {/* <Divider /> */}
     </>
   );
 };
