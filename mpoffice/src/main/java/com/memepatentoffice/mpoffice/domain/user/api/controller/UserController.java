@@ -2,6 +2,7 @@ package com.memepatentoffice.mpoffice.domain.user.api.controller;
 
 import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
 import com.memepatentoffice.mpoffice.common.Exception.UserAlreadyExistsException;
+import com.memepatentoffice.mpoffice.common.security.UserPrincipal;
 import com.memepatentoffice.mpoffice.domain.meme.api.service.GcpService;
 import com.memepatentoffice.mpoffice.domain.user.api.request.*;
 import com.memepatentoffice.mpoffice.domain.user.api.response.CountResponse;
@@ -13,10 +14,13 @@ import com.sun.xml.bind.v2.model.core.ID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -48,7 +52,10 @@ public class UserController {
 //    @ApiResponse(responseCode = "404", description = "회원정보 조회 실패")
 //    @Operation(description = "회원정보 조회 API", summary = "회원정보 조회 API")
     @GetMapping("/info/{id}")
-    public ResponseEntity getUser(@PathVariable("id") Long id) throws NotFoundException {
+    public ResponseEntity getUser(@PathVariable("id") Long id, Authentication authentication) throws NotFoundException {
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        //System.out.println(userPrincipal.getId());
+        id = userPrincipal.getId();
         UserResponse userResponse = userService.getUserInfo(id);
         return ResponseEntity.ok().body(userResponse);
     }
@@ -70,7 +77,9 @@ public class UserController {
 //    @Operation(description = "회원정보 수정 API", summary = "회원정보 수정 API")
     @PostMapping("/update")
     @ResponseBody
-    public ResponseEntity updateUser(@RequestBody UserUpdateRequest userUpdateRequest) throws NotFoundException {
+    public ResponseEntity updateUser(@RequestBody UserUpdateRequest userUpdateRequest, Authentication authentication) throws NotFoundException {
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        userUpdateRequest.setId(userPrincipal.getId());
         Long id = userService.updateUser(userUpdateRequest);
         return ResponseEntity.status(HttpStatus.OK).body(id);
     }
