@@ -61,7 +61,7 @@ const Border: React.FC = () => {
     // console.log(date, targetTime)
     let diff=0;
     if (targetTime < date) {
-      if (targetTime - date < -60){
+      if (targetTime - date < -300){
         alert('이미 종료된 경매입니다.')
         navigate('/main')
       }
