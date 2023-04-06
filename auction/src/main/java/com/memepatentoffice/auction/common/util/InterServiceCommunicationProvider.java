@@ -15,11 +15,13 @@ import java.util.Optional;
 @Slf4j
 public class InterServiceCommunicationProvider {
     //TODO: baseUrl을 생성자 파라미터로 받기 위해 팩토리로 만들기
+    //TODO: 클래스 분리하고 상속받아서 만들기
     private final String MPOFFICE_SERVER_URL = "https://j8a305.p.ssafy.io/api/mpoffice";
     private final OkHttpClient client = new OkHttpClient();
     private final ObjectMapper mapper = new ObjectMapper();
     private final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    public Optional<JSONObject> getRequestToUrl(String url){
+
+    public Optional<String> getRequestToUrlGetString(String url){
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -27,7 +29,7 @@ public class InterServiceCommunicationProvider {
             if(response.isSuccessful()){
                 String respBody = response.body().string();
                 log.info(respBody);
-                return Optional.of(new JSONObject(respBody));
+                return Optional.of(respBody);
             }
             else{
                 log.error("InterServiceCommunicationProvider returned "+response.code()+" by "+url);
@@ -37,8 +39,15 @@ public class InterServiceCommunicationProvider {
             throw new RuntimeException(ex);
         }
     }
+    public Optional<JSONObject> getRequestToUrlGetJsonObject(String url){
+        Optional<String> respBody = getRequestToUrlGetString(url);
+//        return respBody.map(JSONObject::new);
+        if(respBody.isPresent())
+            return Optional.of(new JSONObject(respBody.get()));
+        else return Optional.empty();
+    }
 
-    public Optional<String> postRequestToUrl(String url, Object o) throws JsonProcessingException {
+    public Optional<String> postRequestToUrlGetString(String url, Object o) throws JsonProcessingException {
         RequestBody body = RequestBody.create(
                 mapper.writeValueAsString(o),
                 JSON
@@ -63,14 +72,21 @@ public class InterServiceCommunicationProvider {
     }
 
     public Optional<String> addTransaction(AuctionClosing a) throws JsonProcessingException{
-        return postRequestToUrl(MPOFFICE_SERVER_URL+"/meme/addTransaction", a);
+        return postRequestToUrlGetString(MPOFFICE_SERVER_URL+"/meme/addTransaction", a);
     }
 
     public Optional<JSONObject> findUserById(Long userId){
-        return getRequestToUrl(MPOFFICE_SERVER_URL+"/user/"+userId);
+        return getRequestToUrlGetJsonObject(MPOFFICE_SERVER_URL+"/user/"+userId);
     }
     public Optional<JSONObject> findMemeById(Long memeId){
-        return getRequestToUrl(MPOFFICE_SERVER_URL+"/meme/"+memeId);
+        return getRequestToUrlGetJsonObject(MPOFFICE_SERVER_URL+"/meme/"+memeId);
+    }
+    //path: register, start, end
+    public Optional<String> setAlarm(String path, Long auctionId, Long userId, Long memeId){
+        return getRequestToUrlGetString(MPOFFICE_SERVER_URL+"/alarm/auction/"+path+"?"+
+                "auction="+auctionId
+        +"&user="+userId
+        +"&meme="+memeId);
     }
     public Optional<JSONObject> findFromAddressAndToAddress(Long from, Long to, Long meme){
         String url = MPOFFICE_SERVER_URL+"/alarm/auction/transferinfo?from="+from+"&to="+to+"&meme="+meme;
