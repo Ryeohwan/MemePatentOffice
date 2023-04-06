@@ -27,9 +27,8 @@ const FinishModal: React.FC = () => {
     (state) => state.auction.auctionInfo.biddingHistory
   );
   // 모달창
-  // const visible = useSelector<RootState, boolean>(state=>state.auction.finishModalVisible);
-  const visible = true;
-
+  const visible = useSelector<RootState, boolean>(state=>state.auction.finishModalVisible);
+  // const visible = false;
   // 남은 시간
   // const [remainTime, setRemainTime] = useState<number>(5);
   const remainTime = useRef<number>(6);
@@ -54,7 +53,7 @@ const FinishModal: React.FC = () => {
         url: `/api/auction/result?auctionId=${auctionId}`
       });
     }
-  }, []);
+  }, [visible]);
 
 
   useEffect(() => {

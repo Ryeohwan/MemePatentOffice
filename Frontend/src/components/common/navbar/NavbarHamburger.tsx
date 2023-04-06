@@ -24,7 +24,7 @@ const NavbarHamburger: React.FC = () => {
   // const myBalance = useRef<number | undefined>();
   const [ myBalance, setMyBalance ] = useState<any>();
 
-  const userId = JSON.parse(sessionStorage.getItem("user")!).userId;
+  const userId = pathname.includes("redirect") ? "" : JSON.parse(sessionStorage.getItem("user")!).userId;
   const [ walletAddress, setWalletAddress ] = useState("");
   const [modalTxt, setModalTxt] = useState("");
   const [checkModalVisible, setCheckModalVisible] = useState<boolean>(false);
