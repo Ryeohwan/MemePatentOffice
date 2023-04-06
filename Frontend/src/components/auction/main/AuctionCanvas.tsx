@@ -228,8 +228,7 @@ const AuctionCanvas: React.FC<Characters> = ({
       setIsFull(false);
     }, 2000);
   };
-  console.log(auctionInfo.sellerNickname)
-  console.log(JSON.parse(sessionStorage.getItem("user")!).nickname)
+
   return (
     <section id="auction" className={styles.auctionWrapper}>
       <Scene
