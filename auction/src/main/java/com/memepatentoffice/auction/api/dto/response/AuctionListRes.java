@@ -12,7 +12,7 @@ public class AuctionListRes {
     private Long memeId;
     private Long auctionId;
     private String title;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm", timezone = "Asia/Seoul")
     private LocalDateTime finishTime;
     private Long highestBid;
     private String imgUrl;

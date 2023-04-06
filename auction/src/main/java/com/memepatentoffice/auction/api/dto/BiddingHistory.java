@@ -14,6 +14,6 @@ public class BiddingHistory {
     String nickname;
     @JsonProperty
     Long price;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'hh:mm", timezone = "Asia/Seoul")
     LocalDateTime time;
 }
