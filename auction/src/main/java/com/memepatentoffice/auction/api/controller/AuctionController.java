@@ -75,6 +75,11 @@ public class AuctionController {
     public ResponseEntity<?> bid(@RequestBody BidReq bidReq) throws NotFoundException, BiddingException {
         return ResponseEntity.status(HttpStatus.OK).body(auctionService.bid(bidReq));
     }
+    @ApiOperation(value="밈 아이디로 경매 상태 검색")
+    @GetMapping("/search")
+    public ResponseEntity<?> searchByMemeId(@RequestParam Long memeId){
+        return ResponseEntity.status(HttpStatus.OK).body(auctionService.searchByMemeId(memeId));
+    }
 
     @MessageMapping("/chat")
     public void sendChat(WebSocketChatReq req){

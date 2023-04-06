@@ -11,6 +11,8 @@ import com.memepatentoffice.auction.api.dto.message.WebSocketChatRes;
 import com.memepatentoffice.auction.api.dto.request.BidReq;
 import com.memepatentoffice.auction.api.dto.response.AuctionListRes;
 import com.memepatentoffice.auction.api.dto.response.AuctionRes;
+import com.memepatentoffice.auction.api.dto.response.MemeRes;
+import com.memepatentoffice.auction.api.dto.status.MemeStatus;
 import com.memepatentoffice.auction.common.exception.BiddingException;
 import com.memepatentoffice.auction.common.exception.NotFoundException;
 import com.memepatentoffice.auction.common.util.ExceptionSupplier;
@@ -260,6 +262,33 @@ public class AuctionServiceImpl implements AuctionService{
         List<AuctionListRes> listSortedByHit = this.findAllByHit();
         return new ArrayList<>(listSortedByHit.subList(0, Math.min(5, listSortedByHit.size())));
     }
+
+    @Override
+    public MemeRes searchByMemeId(Long memeId) {
+        List<Auction> list = auctionRepository.findByMemeId(memeId);
+        if(list.size()<1){
+            return MemeRes.builder()
+                    .memeStatus(MemeStatus.AUCTIONDOESNOTEXISTS).build();
+        }
+        else{
+            Auction auction = list.get(1);
+            if(auction.getStatus().equals(AuctionStatus.ENROLLED)){
+                return MemeRes.builder()
+                        .memeStatus(MemeStatus.HASENROLLEDAUCTION)
+                        .finishTime(auction.getFinishTime())
+                        .build();
+            }else if(auction.getStatus().equals(AuctionStatus.PROCEEDING)){
+                return MemeRes.builder()
+                        .memeStatus(MemeStatus.AUCTIONPROCEEDING)
+                        .finishTime(auction.getFinishTime())
+                        .build();
+            }else{//auction.getStatus().equals(AuctionStatus.TERMINATED)
+                return MemeRes.builder()
+                        .memeStatus(MemeStatus.AUCTIONDOESNOTEXISTS).build();
+            }
+        }
+    }
+
 
     @Override
     public void sendChat(WebSocketChatReq req){

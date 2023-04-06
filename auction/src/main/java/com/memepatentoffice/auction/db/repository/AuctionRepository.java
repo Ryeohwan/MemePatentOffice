@@ -30,4 +30,6 @@ public interface AuctionRepository extends JpaRepository<Auction, Long> {
     @Modifying(clearAutomatically = true)
     @Query("update Auction a set a.status = com.memepatentoffice.auction.db.entity.type.AuctionStatus.TERMINATED where a.id = :auctionId")
     void updateStatusToTerminated(@Param("auctionId") Long auctionId);
+
+    List<Auction> findByMemeId(@Param("memeId") Long memeId);
 }
