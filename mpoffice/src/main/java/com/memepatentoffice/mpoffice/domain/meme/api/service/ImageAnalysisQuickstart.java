@@ -38,7 +38,7 @@ public class ImageAnalysisQuickstart {
          *
          * Set a string variable equal to the path of a remote image.
          */
-        String pathToRemoteImage = "https://storage.googleapis.com/mpoffice/457da495-63fd-43b4-b7a4-8387196c0c6d";
+        String pathToRemoteImage = "https://storage.googleapis.com/mpoffice/61e96e87-8f0b-4e40-a593-f7159bca8987";
 
         // This list defines the features to be extracted from the image.
         List<VisualFeatureTypes> featuresToExtractFromRemoteImage = new ArrayList<>();

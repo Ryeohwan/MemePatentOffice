@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import retrofit2.http.Multipart;
 
 import java.util.List;
 
@@ -52,7 +53,6 @@ public class MemeController {
         String img = gcpService.uploadFile(uploadFile);
         memeCreateRequest.setImageUrl(img);
 
-        imageAnalysisQuickstart.mainFunc();
 
         Long id = memeService.createMeme(memeCreateRequest);
         return ResponseEntity.status(HttpStatus.OK).body(id);
@@ -142,5 +142,19 @@ public class MemeController {
     @GetMapping("/{memeId}")
     public ResponseEntity getMemeInfo(@PathVariable Long memeId) throws  NotFoundException{
         return ResponseEntity.status(HttpStatus.OK).body(memeService.findById(memeId));
+    }
+
+    @PostMapping("/imgTagtest")
+    @ResponseBody
+    public ResponseEntity ImgTest(@RequestParam(value = "uploadFile" ,required = false) MultipartFile uploadFile) throws Exception{
+        String img = gcpService.uploadFile(uploadFile);
+//        imageAnalysisQuickstart.mainFunc(img);
+        return ResponseEntity.status(HttpStatus.CREATED).body("hu");
+    }
+
+    @GetMapping("/newImageTest")
+    public ResponseEntity ImgRealTest(){
+        imageAnalysisQuickstart.mainFunc();
+        return ResponseEntity.status(HttpStatus.CREATED).body("hu");
     }
 }

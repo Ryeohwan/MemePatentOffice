@@ -30,6 +30,8 @@ public class MemeResponse {
     private int likeCount;
     private int hateCount;
     private int searched;
+
+    private int tokenId;
     private String situation;
     private String memeImage;
 
