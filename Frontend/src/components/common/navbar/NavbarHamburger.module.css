@@ -1,6 +1,6 @@
 .hamburger {
   color: #7D7D7D;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
 }
 
 .hamburger:hover {
@@ -33,5 +33,17 @@
 }
 
 .navLink:hover {
-  color: var(--point-color);
+  color: var(--navy-color);
+}
+
+.hamburgerMenu {
+  display: flex;
+  align-items:center;
+}
+
+.menuImg {
+  width: 20px;
+  height: 20px;
+  object-fit: cover;
+  margin-right: 5px;
 }

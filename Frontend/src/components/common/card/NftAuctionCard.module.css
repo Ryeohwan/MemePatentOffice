@@ -26,12 +26,12 @@
 @keyframes blink-effect {
     50% {
         opacity: 100%;
-        color: var(--impossible-color);
+        color: var(--red-color);
     }
 }
 
 .disabledTime {
-    color: var(--impossible-color);
+    color: var(--red-color);
 }
 
 
@@ -64,7 +64,7 @@
     width: 100px;
     height: 30px;
     border-radius: 5px;
-    background-color: var(--button-color);
+    background-color: var(--navy-color);
     display:flex;
     justify-content: center;
     align-items: center;
@@ -77,5 +77,5 @@
     display:flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--button-two-color);
+    background-color: var(--red-color);
 }

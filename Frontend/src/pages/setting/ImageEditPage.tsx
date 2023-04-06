@@ -40,7 +40,7 @@ const ImageEditPage: React.FC = () => {
       <Divider className="divider" />
       <div className={styles.body}>
         <div className={styles.basicImg}>
-          <p>기본</p>
+          <div className={styles.settingMenu}>기본</div>
           <Avatar
             onClick={() => {
               selectedImg === 0 ? setSelectedImg(-1) : setSelectedImg(0);
@@ -53,7 +53,7 @@ const ImageEditPage: React.FC = () => {
         </div>
 
         <div className={styles.myNFT}>
-          <p>내 NFT</p>
+          <div className={styles.settingMenu}>내 NFT</div>
           <div className={styles.myNftList}>
 
           {!isLoading && data && data.map((item: {id: number; imgUrl: string}) => {

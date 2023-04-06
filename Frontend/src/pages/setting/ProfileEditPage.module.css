@@ -6,7 +6,7 @@
 }
 
 .confirm {
-  color: var(--point-color);
+  color: var(--navy-color);
 }
 
 .bodyWrapper {
@@ -22,6 +22,7 @@
   align-items: center;
   width: 100%;
   position: relative;
+  object-fit: cover;
 }
 
 .avatar {
@@ -32,8 +33,8 @@
 
 .avatar > img {
   object-fit: cover;
-  width: 80% !important;
-  height: 80% !important;
+  width: 90% !important;
+  height: 90% !important;
 }
 
 .btnContainer {

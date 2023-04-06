@@ -2,7 +2,7 @@
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    background-color: var(--button-color);
+    background-color: var(--navy-color);
     display: flex;
     justify-content: center;
     align-items: center;

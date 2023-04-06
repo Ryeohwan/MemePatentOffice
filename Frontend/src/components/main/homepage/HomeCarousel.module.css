@@ -25,9 +25,10 @@
   top:80%;
   left:30%;
   width: 8rem;
-  height: 1.5rem;
+  height: 2rem;
   border: none;
-  border-radius: 1.5rem;
+  border-radius: 6px;
   color: var(--white-color);
-  background-color: var(--button-color);
+  background-color: var(--navy-color);
+  box-shadow: var(--box-shadow);
 }

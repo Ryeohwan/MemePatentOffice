@@ -22,7 +22,7 @@
 
 .alarmBtn {
     width: 130px;
-    background-color: var(--button-color);
+    background-color: var(--navy-color);
 }
 
 .auctionInfoBtn {
@@ -32,14 +32,14 @@
 
 .auctionInfoBtn2{
     width: 180px;
-    background-color: var(--button-color);
+    background-color: var(--red-color);
     animation: blink-effect 0.5s step-end 6;
 }
 
 @keyframes blink-effect {
     50% {
         opacity: 100%;
-        background-color: var(--point-color);
+        background-color: var(--red-color);
     }
   }
 
@@ -127,8 +127,8 @@
 }
 .dislikeHeartImoji {
     font-size: 44px;
-    color: var(--point-color);
-    border: 0.5px solid var(--point-color);
+    color: var(--red-color);
+    border: 0.5px solid var(--red-color);
     border-radius: 100%;
     padding: 6px;
 }
@@ -150,7 +150,7 @@
     width: 300px;
     height: 30px;
     margin: auto;
-    background-color: var(--button-color);
+    background-color: var(--navy-color);
     color: var(--white-color);
     border-radius: 6px;
     font-size: 13px;

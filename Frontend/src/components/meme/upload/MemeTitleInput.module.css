@@ -37,12 +37,12 @@
 }
 
 .errorBox {
-  border: 1px solid var(--impossible-color) !important;
+  border: 1px solid var(--red-color) !important;
 }
 
 .errorMsg {
   font-size: 10px;
-  color: var(--impossible-color);
+  color: var(--red-color);
   margin: 4px 0 0 4px;
   height: 10px;
 }

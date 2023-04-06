@@ -2,7 +2,7 @@
     width: 246px;
     height: 270px;
     position: relative;
-    transition: 1.7s;
+    transition: 1.4s;
     transition-timing-function: cubic-bezier(0.58, 0.45, 0.1, 1.2);
     transform-style: preserve-3d;
     perspective: 1100px;

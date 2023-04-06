@@ -13,8 +13,9 @@ import NftAuctionCard from "components/common/card/NftAuctionCard";
 import HomeCarousel from "components/main/homepage/HomeCarousel";
 import styles from "./HomePage.module.css";
 import CheckingModal from "components/auction/upload/CheckingModal";
+import { Icon } from "@iconify/react";
 
-import auctionCarousel from "assets/auctionCarousel.png"
+import auctionCarousel from "assets/auctionCarousel.png";
 import uploadMemeImg from "assets/uploadmeme.jpg";
 import memeGif from "assets/meme.gif";
 
@@ -52,19 +53,17 @@ const HomePage: React.FC = () => {
   const myBalance = useRef<number | undefined>();
 
   const { data: againUserInfo, sendRequest: getUserInfo } = useAxios();
-  const [ walletAddress, setWalletAddress ] = useState("");
+  const [walletAddress, setWalletAddress] = useState("");
   const userId = JSON.parse(sessionStorage.getItem("user")!).userId;
 
   useEffect(() => {
     getUserInfo({
-      url: `/api/mpoffice/user/info/${userId}`
-    })
+      url: `/api/mpoffice/user/info/${userId}`,
+    });
   }, []);
   useEffect(() => {
-    if (againUserInfo)
-    setWalletAddress(againUserInfo.walletAddress);
+    if (againUserInfo) setWalletAddress(againUserInfo.walletAddress);
   }, [againUserInfo]);
-
 
   // 돈 들어오고 있다고 모달로 알림
   const [modalTxt, setModalTxt] = useState("");
@@ -120,7 +119,7 @@ const HomePage: React.FC = () => {
             await new Promise((resolve) => setTimeout(resolve, 2000));
             controlCheckModal(false);
           } else if (walletAddress !== account) {
-            console.log(walletAddress, account)
+            console.log(walletAddress, account);
             // 이전에 등록한 지갑은 존재하지만 지금 지갑과 다를 경우, 새로 post
             postWalletRequest({
               url: "/api/mpoffice/user/update/wallet",
@@ -256,11 +255,14 @@ const HomePage: React.FC = () => {
         {/* main carousel */}
         <HomeCarousel info={MAIN_INFO} />
 
-        <div className={styles.contour}/>
-        
+        <div className={styles.contour} />
+
         {/* meme carousel */}
         <div className={styles.homeMenuWrapper}>
-          <div className={styles.homeMenuTitle}>요즘 HOT한 밈</div>
+          <div className={styles.homeMenuTitle}>
+            <Icon icon="bi:fire" className={styles.icon} />
+            <div>요즘 뜨는 특허</div>
+          </div>
         </div>
         {hotMemeLoading && (
           <div className={styles.skeletonWrapper}>
@@ -280,10 +282,13 @@ const HomePage: React.FC = () => {
           />
         )}
 
-        <div className={styles.contour}/>
+        <div className={styles.contour} />
 
         <div className={styles.homeMenuWrapper}>
-          <div className={styles.homeMenuTitle}>이번 주 비싸게 팔린 밈</div>
+          <div className={styles.homeMenuTitle}>
+            <Icon icon="clarity:coin-bag-solid" className={styles.icon}/>
+            <div>이번 주 비싸게 팔린 특허</div>
+          </div>
         </div>
         {expensiveMemeLoading && (
           <div className={styles.skeletonWrapper}>
@@ -303,10 +308,13 @@ const HomePage: React.FC = () => {
           />
         )}
 
-        <div className={styles.contour}/>
+        <div className={styles.contour} />
 
         <div className={styles.homeMenuWrapper}>
-          <div className={styles.homeMenuTitle}>이번 주 조회수 많은 밈</div>
+          <div className={styles.homeMenuTitle}>
+            <Icon icon="zondicons:view-show" className={styles.icon}/>
+            <div>이번 주 조회수 많은 특허</div>
+          </div>
         </div>
         {viewsMemeLoading && (
           <div className={styles.skeletonWrapper}>
@@ -326,15 +334,17 @@ const HomePage: React.FC = () => {
           />
         )}
 
-
         {/* auction carousel */}
         {/* 여기 데이터 없을 수도 있어서 없으면 아예 영역 자체 안띄우도록 해돔 */}
         {!hotAuctionLoading && hotAuction && hotAuction.length > 0 && (
-          <> 
-            <div className={styles.contour}/>
+          <>
+            <div className={styles.contour} />
 
             <div className={styles.homeMenuWrapper}>
-              <div className={styles.homeMenuTitle}>지금 HOT한 경매</div>
+              <div className={styles.homeMenuTitle}>
+                <Icon icon="bi:fire" className={styles.icon}/>
+                <div>지금 인기있는 경매</div>
+              </div>
             </div>
             <Carousel
               value={hotAuction}

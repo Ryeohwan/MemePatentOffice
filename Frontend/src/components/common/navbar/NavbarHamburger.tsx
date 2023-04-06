@@ -9,6 +9,7 @@ import { Sidebar } from "primereact/sidebar";
 import styles from "./NavbarHamburger.module.css";
 import { checkMyBalance, giveSignInCoin, web3 } from "web3config";
 import CheckingModal from "components/auction/upload/CheckingModal";
+import metamask from "assets/metamask.jpeg";
 
 interface RoutePath {
   pathname: string;
@@ -22,28 +23,21 @@ const NavbarHamburger: React.FC = () => {
   const { sendRequest: postWalletRequest } = useAxios();
   const { data: againUserInfo, sendRequest: getUserInfo } = useAxios();
   // const myBalance = useRef<number | undefined>();
-  const [ myBalance, setMyBalance ] = useState<any>();
+  const [myBalance, setMyBalance] = useState<any>();
 
-  const userId = pathname.includes("redirect") ? "" : JSON.parse(sessionStorage.getItem("user")!).userId;
-  const [ walletAddress, setWalletAddress ] = useState("");
+  const userId = pathname.includes("redirect")
+    ? ""
+    : JSON.parse(sessionStorage.getItem("user")!).userId;
   const [modalTxt, setModalTxt] = useState("");
   const [checkModalVisible, setCheckModalVisible] = useState<boolean>(false);
   const controlCheckModal = (visible: boolean) => {
     setCheckModalVisible(visible);
   };
 
-  useEffect(() => {
-    getUserInfo({
-      url: `/api/mpoffice/user/info/${userId}`
-    })
-  }, []);
-  useEffect(() => {
-    if (againUserInfo)
-    setWalletAddress(againUserInfo.walletAddress);
-  }, [againUserInfo]);
-
   // login 페이지에서는 user 없어서 일단 session에 user 없으면 null 박아둠
-  const myAccount = sessionStorage.user ? JSON.parse(sessionStorage.user).walletAddress : null;
+  const myAccount = sessionStorage.user
+    ? JSON.parse(sessionStorage.user).walletAddress
+    : null;
 
   // click하면 dropmenu
   const [open, setOpen] = useState<boolean>(false);
@@ -84,11 +78,15 @@ const NavbarHamburger: React.FC = () => {
         if (typeof accounts[0] === "string") {
           account = web3.utils.toChecksumAddress(accounts[0]);
           console.log(account);
-        };
+        }
 
         // 최초로 연결한 지갑인 경우, 코인 지급하고 post address
         controlCheckModal(true);
         // 최초로 연결한 지갑인 경우, 코인 지급하고 post address
+
+        const walletAddress = JSON.parse(
+          sessionStorage.getItem("user")!
+        ).walletAddress;
         if (walletAddress === null) {
           await postWalletRequest({
             url: "/api/mpoffice/user/update/wallet",
@@ -122,7 +120,7 @@ const NavbarHamburger: React.FC = () => {
             await new Promise((resolve) => setTimeout(resolve, 2000));
             controlCheckModal(false);
           } else if (walletAddress !== account) {
-            console.log(walletAddress, account)
+            console.log(walletAddress, account);
             // 이전에 등록한 지갑은 존재하지만 지금 지갑과 다를 경우, 새로 post
             postWalletRequest({
               url: "/api/mpoffice/user/update/wallet",
@@ -167,7 +165,7 @@ const NavbarHamburger: React.FC = () => {
     sessionStorage.clear();
     navigate("/");
   };
-  
+
   // 잔액 조회
   const checkBalance = async () => {
     const account = JSON.parse(sessionStorage.getItem("user")!).walletAddress;
@@ -192,7 +190,7 @@ const NavbarHamburger: React.FC = () => {
   useEffect(() => {
     if (myAccount !== null && open) {
       checkBalance();
-    };
+    }
   }, [pathname, open]);
 
   return (
@@ -217,8 +215,22 @@ const NavbarHamburger: React.FC = () => {
           <hr />
 
           <div className={styles.dropMenu}>
-
-            {myAccount !== null ? <div>내 잔액 : {myBalance ? myBalance/(10**18) : 0} SSF</div> : <div onClick={accountHandler}>지갑 연결하기</div> }
+            {myAccount !== null ? (
+              <div className={styles.hamburgerMenu}>
+                <img src={metamask} alt="" className={styles.menuImg}/>
+                <div className={styles.menuTxt}>
+                  내 잔액 :{" "}
+                  {myBalance ? myBalance / 10 ** 18 : 0} SSF
+                </div>
+              </div>
+            ) : (
+              <div onClick={accountHandler}  className={styles.hamburgerMenu}>
+                <img src={metamask} alt=""  className={styles.menuImg}/>
+                <div className={styles.menuTxt}>
+                  지갑 연결하기
+                </div>
+              </div>
+            )}
 
             <div className={styles.navLink} onClick={memeListHandler}>
               밈 사전
@@ -231,7 +243,7 @@ const NavbarHamburger: React.FC = () => {
             >
               경매 둘러보기
             </NavLink>
-            
+
             <div className={styles.navLink} onClick={mypageHandler}>
               마이페이지
             </div>

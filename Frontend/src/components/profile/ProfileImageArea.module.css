@@ -13,8 +13,8 @@
   border-radius: 50%;
   background: linear-gradient(
     76.83deg,
-    #03a9f46e 15.88%,
-    rgba(3, 85, 244, 0.32) 77.65%
+    #0384f46e 15.88%,
+    rgba(3, 67, 196, 0.32) 77.65%
   );
   position: absolute;
   top: -50%;
@@ -35,4 +35,5 @@
 .imgContainer > img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
 }
