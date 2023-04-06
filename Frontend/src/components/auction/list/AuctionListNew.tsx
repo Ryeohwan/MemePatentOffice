@@ -10,7 +10,6 @@ const AuctionListNew: React.FC = () => {
   const { data, status, isLoading, sendRequest } = useAxios();
 
   useEffect(() => {
-    console.log("new get!");
     sendRequest({ url: `/api/auction/list?sort=latest` });
   }, []);
   

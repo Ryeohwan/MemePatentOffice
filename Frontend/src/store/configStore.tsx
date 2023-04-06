@@ -2,7 +2,6 @@ import { configureStore } from '@reduxjs/toolkit';
 import {Action} from 'redux';
 import { ThunkAction } from 'redux-thunk';
 
-import  testReducer from 'store/test';
 import  chatReducer from 'store/chat';
 import auctionReducer from 'store/auction';
 import memeListReducer from 'store/memeList';
@@ -15,7 +14,6 @@ import commentListReducer from 'store/commentList';
 
 const store = configureStore({
   reducer: {
-    test: testReducer,
     chat: chatReducer,
     auction: auctionReducer,
     auctionUpload: auctionUploadReducer,

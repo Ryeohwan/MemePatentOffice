@@ -57,7 +57,6 @@ const FinishModal: React.FC = () => {
 
 
   useEffect(() => {
-    console.log(resultData)
     if (resultData) {
       memeTransaction(resultData);
     };

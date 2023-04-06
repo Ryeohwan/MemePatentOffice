@@ -21,7 +21,6 @@ const NftChart: React.FC<NftChartProps> = ({ tradeData }) => {
   const [lowestBid, setLowestBid] = useState<number>();
 
   useEffect(() => {
-    console.log("하위페이지 tradeData", tradeData);
     let getData: Serie[];
     if (tradeData) {
       const newBuyerList = tradeData.buyerList.reverse().map((item: any) => {
@@ -33,7 +32,6 @@ const NftChart: React.FC<NftChartProps> = ({ tradeData }) => {
           data: newBuyerList,
         },
       ];
-      console.log(getData);
       if (getData) setData(getData);
       setHighestBid(tradeData.highPrice);
       setLowestBid(tradeData.lowPrice);
@@ -41,7 +39,6 @@ const NftChart: React.FC<NftChartProps> = ({ tradeData }) => {
   }, [tradeData]);
 
   useEffect(() => {
-    console.log("data바꿈", data);
   }, [data]);
 
   return (

@@ -40,7 +40,6 @@ const ChatInputText: React.FC<WebSocketProps> = ({client, auctionId}) => {
       if(!client.current?.connected){
         return
       }
-      console.log(JSON.parse(sessionStorage.getItem('user')!).imgUrl)
       client.current.publish({
         destination: "/pub/chat",
         body: JSON.stringify({ 

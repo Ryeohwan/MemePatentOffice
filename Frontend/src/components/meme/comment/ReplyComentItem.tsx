@@ -44,7 +44,6 @@ const ReplyCommentItem: React.FC<ReplyCommentItemProps> = ({
         commentId: id,
       },
     });
-    console.log("대댓글 id ", id);
   };
 
   const profileNavigateHandler = (nickname: string) => {

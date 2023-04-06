@@ -83,7 +83,6 @@ export const getNoticeAxiosThunk = (lastRef: number): AppThunk =>
       const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/alarm/list/${JSON.parse(sessionStorage.user).userId}` +
       (lastRef !== -1 ? `?idx=${lastRef}` : "");
 
-      console.log('여기로 보낼거임', requestUrl);
       const response = await axios.get(requestUrl, {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
@@ -100,7 +99,6 @@ export const getNoticeAxiosThunk = (lastRef: number): AppThunk =>
     }
     try {
       const res = await sendRequest();
-      console.log("notice get!", res);
       if (!res || res.empty) {
         dispatch(noticeActions.changeLoading(false));
         return;
@@ -112,7 +110,6 @@ export const getNoticeAxiosThunk = (lastRef: number): AppThunk =>
       })
     );
     } catch (err) {
-      console.log(err);
     }
     dispatch(noticeActions.changeLoading(false));
   }

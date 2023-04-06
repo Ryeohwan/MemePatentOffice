@@ -137,7 +137,6 @@ const CommentItem: React.FC<CommentType> = (comment) => {
         commentId: commentId,
       },
     });
-    console.log("원댓글 id ", commentId);
     dispatch(commentListActions.commentDeleteHandler(commentId));
   };
 

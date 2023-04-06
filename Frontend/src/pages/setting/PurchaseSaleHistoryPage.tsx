@@ -32,7 +32,6 @@ const PurchaseHistoryPage: React.FC = () => {
   useEffect(() => {
     sendRequest({ url: `/api/mpoffice/meme/${sendUrl}` });
   }, []);
-  console.log(myHistoryList);
   return (
     <div className="wrapper">
       {/* 구매한, 판매한 구분 */}

@@ -155,7 +155,6 @@ export const getMemeNewListAxiosThunk =
 
     try {
       const res = await sendRequest();
-      console.log("new res", res);
       if (!res || res.empty) {
         dispatch(memeListActions.changeNewResult(false));
         dispatch(memeListActions.changeMemeListLoading(false));
@@ -170,7 +169,6 @@ export const getMemeNewListAxiosThunk =
         })
       );
     } catch (err) {
-      console.log(err);
     }
     if (lastPostRef === -1)
       dispatch(memeListActions.changeMemeListLoading(false));
@@ -201,7 +199,6 @@ export const getMemePopularListAxiosThunk =
         (range !== "all" ? `&days=${range}` : "") +
         (lastPostRef !== -1 ? `&idx=${lastPostRef}` : "");
 
-      console.log(requestUrl);
       const response = await axios.get(requestUrl, {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
@@ -221,7 +218,6 @@ export const getMemePopularListAxiosThunk =
 
     try {
       const res = await sendRequest();
-      console.log("popular res", res);
       if (!res || res.empty) {
         dispatch(memeListActions.changePopularResult(false));
         dispatch(memeListActions.changeMemeListLoading(false));
@@ -236,7 +232,6 @@ export const getMemePopularListAxiosThunk =
         })
       );
     } catch (err) {
-      console.log(err);
     }
     if (lastPostRef === -1 && !changeRange) {
       dispatch(memeListActions.changeMemeListLoading(false));

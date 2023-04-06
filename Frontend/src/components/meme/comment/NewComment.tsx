@@ -103,7 +103,6 @@ const NewComment: React.FC = () => {
 
   // 댓글 작성 후 받은 post response => redux
   useEffect(() => {
-    console.log("댓글 작성하고 받은 데이터", postCommentResponseData);
     if (postCommentResponseData) {
       commentInputRef.current!.value = "";
       setReplyStatus(false);

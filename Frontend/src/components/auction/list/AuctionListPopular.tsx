@@ -10,7 +10,6 @@ const AuctionListPopular: React.FC = () => {
   const { data, status, isLoading, sendRequest } = useAxios();
 
   useEffect(() => {
-    console.log("popular get!");
     sendRequest({ url: `/api/auction/list?sort=popular` });
   }, []);
 

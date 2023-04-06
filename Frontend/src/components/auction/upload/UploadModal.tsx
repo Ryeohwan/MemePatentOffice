@@ -51,11 +51,8 @@ const UploadModal: React.FC<UploadModalProps> = ({visible, modalHandler}) => {
     const time_diff = 9*60*60*1000
     const cur_date = new Date(submitMeme.startDateTime!)
     const seconds = cur_date.getSeconds() * 1000
-    // console.log(data)
     const utc = cur_date.getTime()
-    // console.log(utc+time_diff)
-    // console.log(new Date(utc))
-    // console.log(new Date(utc+time_diff ))
+
     await sendRequest({
       url: `/api/auction/register`,
       method: "POST",

@@ -45,7 +45,6 @@ const AuctionPage: React.FC = () => {
       heartbeatOutgoing: 2000,
       // 연결
       onConnect: async (frame) => {
-        console.log(`/api/auction/info?auctionId=${auctionId}`)
         await sendRequest({ url: `/api/auction/info?auctionId=${auctionId}` });
         await subscribe();
         client.current?.publish({
@@ -88,12 +87,10 @@ const AuctionPage: React.FC = () => {
 
   const subscribe = async () => {
     if (client.current == null) {
-      console.log("subscribe: client.current is null");
       return;
     }
     client.current.subscribe(`/sub/chat/${auctionId}`, (body) => {
       const json_body = JSON.parse(body.body);
-      // console.log(json_body)
       if(json_body.nickname !== userNickName){
         if(!isLooking){
           dispatch(chatActions.getChat())
@@ -139,7 +136,6 @@ const AuctionPage: React.FC = () => {
         })
       );
     });
-    console.log(`subscribe()`);
   };
   useEffect(() => {
     connect();
@@ -152,7 +148,6 @@ const AuctionPage: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      console.log(data);
       dispatch(auctionActions.getAuctionInfo(data));
       setIsLoading(false);
     }

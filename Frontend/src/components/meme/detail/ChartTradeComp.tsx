@@ -12,7 +12,6 @@ const ChartTradeComp: React.FC = () => {
   const { data: tradeData, sendRequest: getTradeDataRequest } = useAxios();
 
   useEffect(() => {
-    console.log(memeid);
     getTradeDataRequest({
       url: `/api/mpoffice/meme/price?id=${memeid}`,
     });

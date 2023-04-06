@@ -28,7 +28,6 @@ const MemeListPage: React.FC = () => {
   // input 변경시 new get axios dispatch (lastPost = -1 시작 의미) new / popular 둘다
   // useEffect(() => {
   //   if (!input) return;
-  //   console.log('input 바겼음!')
   //   appDispatch(getMemeNewListAxiosThunk(input, -1));
   //   appDispatch(getMemePopularListAxiosThunk(input, range, false, -1))
   // }, [input]);
@@ -36,7 +35,6 @@ const MemeListPage: React.FC = () => {
   // input 또는 range 변경시 popular get (lastPost = -1 시작 의미)
   // useEffect(() => {
   //   if (!input) return;
-  //   console.log('raneg 바꼈음!')
   //   appDispatch(getMemePopularListAxiosThunk(input, range, true, -1))
   // }, [range])
 

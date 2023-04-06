@@ -27,7 +27,6 @@ const NavbarSearch: React.FC = () => {
     if (inputRef.current.value.trim().length === 0) return;
     dispatch(memeListActions.changeInputTxt(inputRef.current.value.trim()));
     
-    console.log('input 바꼈음!')
     appDispatch(getMemeNewListAxiosThunk(inputRef.current.value.trim(), -1));
     appDispatch(getMemePopularListAxiosThunk(inputRef.current.value.trim(), range, false, -1))
     
