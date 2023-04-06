@@ -6,15 +6,11 @@ import com.memepatentoffice.auction.api.dto.message.WebSocketChatReq;
 import com.memepatentoffice.auction.api.dto.request.BidReq;
 import com.memepatentoffice.auction.api.dto.response.AuctionListRes;
 import com.memepatentoffice.auction.api.service.AuctionService;
-import com.memepatentoffice.auction.common.exception.BadRequestException;
 import com.memepatentoffice.auction.common.exception.BiddingException;
 import com.memepatentoffice.auction.common.exception.NotFoundException;
-//import io.swagger.annotations.Api;
-//import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -22,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auction")
@@ -54,7 +49,7 @@ public class AuctionController {
 
     @ApiOperation(value="경매 정보", notes = "경매 정보를 리턴합니다.")
     @GetMapping("/info")
-    public ResponseEntity<?> getInfo(@RequestParam Long auctionId) throws NotFoundException{
+    public ResponseEntity<?> getInfo(@RequestParam Long auctionId) throws Exception{
         return ResponseEntity.status(HttpStatus.OK).body(auctionService.getInfo(auctionId));
     }
 
