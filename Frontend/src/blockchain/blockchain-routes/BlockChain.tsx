@@ -25,10 +25,10 @@ const BlockChain: React.FC = () => {
       sessionStorage.setItem("user", JSON.stringify(user));
     }
   };
-  const fromAccount = "0xb30371Fa4280a9907a04b4b7780F7f1f1C294d1F";
   const toAccount = "0xd8df17B6a1758c52eA81219b001547A2c2e3d789";
-  const price = 99;
-  const memeTokenId = 6;
+  const fromAccount = "0xFE9bf05034D04EE9bAfb5c9ef3BD4b6EF33959bd";
+  const price = 10;
+  const memeTokenId = 5;
 
   const onClickTransfer = async () => {
     await transferNftCoin(toAccount, fromAccount, price);

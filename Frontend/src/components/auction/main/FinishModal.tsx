@@ -55,7 +55,6 @@ const FinishModal: React.FC = () => {
     }
   }, [visible]);
 
-
   useEffect(() => {
     console.log(resultData)
     if (resultData) {
