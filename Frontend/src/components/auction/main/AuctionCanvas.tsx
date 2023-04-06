@@ -253,19 +253,22 @@ const AuctionCanvas: React.FC<Characters> = ({
         {visible && playerState === 0 && (
           <Button className={styles.sitBtn} onClick={sitDownHandler}>
             <Icon icon="ic:round-chair-alt" className={styles.sitIcon} />
+            <p>앉기</p>
           </Button>
         )}
 
         {playerState === 5 && (
           <>
-            <Button onClick={() => biddingHandler(true)}>
+            <Button onClick={() => biddingHandler(true)} className={styles.bidBtn}>
               <Icon
                 icon="streamline:money-cash-dollar-coin-accounting-billing-payment-cash-coin-currency-money-finance"
                 className={styles.bidIcon}
-              />
+                />
+                <p>입찰</p>
             </Button>
             <Button className={styles.sitBtn} onClick={standUpHandler}>
               <Icon icon="ph:person-bold" className={styles.sitIcon} />
+              <p>일어서</p>
             </Button>
           </>
         )}
@@ -289,13 +292,19 @@ const AuctionCanvas: React.FC<Characters> = ({
               rounded
               icon="pi pi-search-plus"
               onClick={() => notFullMoniter()}
-            ></Button>
+            >
+              <p>
+                확대
+              </p>
+            </Button>
           ) : (
             <Button
               rounded
               icon="pi pi-search-minus"
               onClick={() => fullMoniter()}
-            ></Button>
+            >
+              <p>축소</p>
+            </Button>
           )
         ) : (
           <></>

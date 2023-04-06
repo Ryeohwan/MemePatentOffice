@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, KeyboardEventHandler } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "store/configStore";
 import { useParams } from "react-router-dom";
@@ -34,6 +34,21 @@ const NewComment: React.FC = () => {
   // 댓글 post
   const commentSubmitHandler = (e: React.FormEvent) => {
     e.preventDefault();
+    const enteredComment = commentInputRef.current!.value;
+    postCommentRequest({
+      url: "/api/mpoffice/meme/comment/create",
+      method: "POST",
+      data: {
+        userId: userId,
+        memeId: memeid,
+        content: enteredComment,
+        parentId: nowParentId,
+      },
+    });
+  };
+
+  const commentKeyDownSubmitHandler:KeyboardEventHandler<HTMLTextAreaElement> = (e)=> {
+    if(e.nativeEvent.key!=="Enter") return
     const enteredComment = commentInputRef.current!.value;
     postCommentRequest({
       url: "/api/mpoffice/meme/comment/create",
@@ -128,6 +143,7 @@ const NewComment: React.FC = () => {
               className={styles.commentInput}
               ref={commentInputRef}
               required
+              onKeyDown={commentKeyDownSubmitHandler}
             />
           </div>
           <div className={styles.submitBtnWrapper}>

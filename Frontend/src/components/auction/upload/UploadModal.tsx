@@ -20,7 +20,7 @@ interface UploadModalProps {
 
 const UploadModal: React.FC<UploadModalProps> = ({visible, modalHandler}) => {
   const [checkModalVisible, setCheckModalVisible] = useState<boolean>(false); // 유효성 검사 모달 보여주는 변수
-  const {data, status, sendRequest} = useAxios()
+  const {data, isLoading, status, sendRequest} = useAxios()
   const submitMeme = useSelector<RootState, submitMeme>(
     (state) => state.auctionUpload.submitMeme
   ); // 제출 객체
@@ -50,6 +50,7 @@ const UploadModal: React.FC<UploadModalProps> = ({visible, modalHandler}) => {
     }
     const time_diff = 9*60*60*1000
     const cur_date = new Date(submitMeme.startDateTime!)
+    const seconds = cur_date.getSeconds() * 1000
     // console.log(data)
     const utc = cur_date.getTime()
     // console.log(utc+time_diff)
@@ -62,17 +63,24 @@ const UploadModal: React.FC<UploadModalProps> = ({visible, modalHandler}) => {
         sellerId: submitMeme.sellerId,
         memeId: submitMeme.memeId,
         startingPrice: submitMeme.startingPrice,
-        startDateTime: new Date(utc+time_diff )
-      }
+        startDateTime: new Date(utc+time_diff-seconds)
+      },
     })
     setCheckModalVisible(false)
+
   };
 
   useEffect(()=>{
+    console.log(isLoading)
+    if (!isLoading) return;
     if(status === 201){
+      alert('등록되었습니다.')
       modalHandler(false)
     }
-  },[status])
+    if(status === 500){
+      alert('이미 등록된 밈입니다.')
+    }
+  },[isLoading])
   
   return (
     <>

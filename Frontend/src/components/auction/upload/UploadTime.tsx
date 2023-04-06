@@ -24,6 +24,7 @@ const UploadTime: React.FC = () => {
         onChange={(e: CalendarChangeEvent) => {
           console.log(e.value)
           if (e.value != undefined) {
+            console.log(e.value)
             setTimeValue(e.value as Date);
           }
         }}
