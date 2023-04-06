@@ -10,7 +10,6 @@ const AuctionListDeadline: React.FC = () => {
   const { data, status, isLoading, sendRequest } = useAxios();
 
   useEffect(() => {
-    console.log("deadline get!");
     sendRequest({ url: `/api/auction/list?sort=oldest` });
   }, []);
 

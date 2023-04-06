@@ -75,7 +75,6 @@ const Scene: React.FC<SceneProps> = ({
     setPlayers(info);
   }, [userNum]);
 
-  // console.log(characters)
   // 카메라
   const cameraPosition = new THREE.Vector3(35, 20, 80);
 
@@ -100,7 +99,6 @@ const Scene: React.FC<SceneProps> = ({
     setMeshes((prev) => [...prev, mesh]);
   };
 
-  // console.log(characters)
   const checkIntersects = () => {
     const intersects = raycaster.current.intersectObjects(meshes);
     for (const item of intersects) {

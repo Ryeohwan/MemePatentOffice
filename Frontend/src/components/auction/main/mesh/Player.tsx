@@ -142,7 +142,6 @@ const Player: React.FC<PlayerProps> = ({
   }, []);
 
   useFrame((state, delta) => {
-    // console.log(state)
     mixer.update(delta);
 
     const box2 = new THREE.Box3().setFromObject(text); // object는 Object3D 객체

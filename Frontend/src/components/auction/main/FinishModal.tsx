@@ -83,9 +83,9 @@ const FinishModal: React.FC = () => {
   }, [visible]);
 
   useEffect(() => {
-    console.log(resultData);
-
-    memeTransaction(resultData);
+    if (resultData) {
+      memeTransaction(resultData);
+    };
   }, [resultData]);
 
   const camera = useRef<THREE.PerspectiveCamera>(

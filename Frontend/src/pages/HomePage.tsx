@@ -81,7 +81,6 @@ const HomePage: React.FC = () => {
         let account = "";
         if (typeof accounts[0] === "string") {
           account = web3.utils.toChecksumAddress(accounts[0]);
-          console.log(account);
         }
 
         controlCheckModal(true);
@@ -119,7 +118,6 @@ const HomePage: React.FC = () => {
             await new Promise((resolve) => setTimeout(resolve, 2000));
             controlCheckModal(false);
           } else if (walletAddress !== account) {
-            console.log(walletAddress, account);
             // 이전에 등록한 지갑은 존재하지만 지금 지갑과 다를 경우, 새로 post
             postWalletRequest({
               url: "/api/mpoffice/user/update/wallet",
@@ -147,13 +145,7 @@ const HomePage: React.FC = () => {
       }
       controlCheckModal(false);
       await checkBalance();
-      if (!myBalance.current || myBalance.current === undefined) {
-        console.log("잔액 조회에 실패했습니다, 지갑 다시 연결해보셈");
-      } else {
-        console.log("지갑 연결하자마자 잔액 조회", myBalance.current);
-      }
     } catch (error) {
-      console.log(error);
       setModalTxt("이전에 등록한 지갑이 있는 걸로 보입니다.");
       await new Promise((resolve) => setTimeout(resolve, 1000));
       controlCheckModal(false);
@@ -163,10 +155,8 @@ const HomePage: React.FC = () => {
     const account = JSON.parse(sessionStorage.getItem("user")!).walletAddress;
     try {
       if (!account) return false;
-      console.log("home에서 잔액조회 실행됨");
       await checkMyBalance()
         .then((balance) => {
-          console.log("내 지갑 잔액:", balance);
           myBalance.current = balance;
         })
         .catch((error) => {
@@ -174,7 +164,6 @@ const HomePage: React.FC = () => {
         });
       return myBalance.current;
     } catch (e) {
-      console.log(e);
       return false;
     }
   };

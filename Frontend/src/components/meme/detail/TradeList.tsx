@@ -14,7 +14,6 @@ interface ColumnMeta {
 
 const TradeList:React.FC<NftChartProps> = ({ tradeData }) => {
     useEffect(() => {
-        console.log(tradeData)
     }, [])
     const format = (value:string) => {
         const date = new Date(value);

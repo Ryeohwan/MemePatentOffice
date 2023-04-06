@@ -76,7 +76,6 @@ export const getHistoryAxiosThunk = (lastRef: number): AppThunk =>
       const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/myComments?userId=${JSON.parse(sessionStorage.user).userId}` +
       (lastRef !== -1 ? `&idx=${lastRef}` : "");
 
-      console.log('여기로 보낼거임', requestUrl)
       const response = await axios.get(requestUrl, {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
@@ -93,7 +92,6 @@ export const getHistoryAxiosThunk = (lastRef: number): AppThunk =>
     }
     try {
       const res = await sendRequest();
-      console.log("comment get!", res);
       if (!res || res.empty) {
         dispatch(historyActions.changeLoading(false));
         return;
@@ -105,7 +103,6 @@ export const getHistoryAxiosThunk = (lastRef: number): AppThunk =>
       })
       );
     } catch (err) {
-      console.log(err);    
     }
     dispatch(historyActions.changeLoading(false));
   };

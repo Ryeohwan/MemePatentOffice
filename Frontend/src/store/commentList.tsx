@@ -67,7 +67,6 @@ const commentListSlice = createSlice({
     // 댓글 입력 시
     commentAddHandler: (state, actions) => {
       state.commentNewList = [actions.payload, ...state.commentNewList];
-      console.log("댓글 입력 리덕스 실행됨")
     },
     // 대댓글 입력 시
     replyAddHandler: (state, actions) => {
@@ -133,7 +132,6 @@ export const getCommentListAxiosThunk =
       const userId = JSON.parse(sessionStorage.user).userId;
       const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/list?memeId=${memeId}&userId=${userId}${lastPostRef !== -1 ?`&idx=${lastPostRef}` : `&idx=0`}`;
 
-      console.log("get new comment list!", requestUrl);
 
       const response = await axios.get(requestUrl, {
         headers: {
@@ -154,7 +152,6 @@ export const getCommentListAxiosThunk =
 
     try {
       const res = await sendRequest();
-      console.log("최신순 댓글", res);
       if (!res || res.empty) {
         return;
       }
@@ -165,7 +162,6 @@ export const getCommentListAxiosThunk =
         hasNext: !res.last,
       }))
     } catch (err) {
-      console.log(err);
     }
   };
 
@@ -177,7 +173,6 @@ export const getBestCommentListAxiosThunk =
       const userId = JSON.parse(sessionStorage.user).userId;
       const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/bestList?memeId=${memeId}&userId=${userId}`;
 
-      console.log("get best comment list!", requestUrl);
 
       const response = await axios.get(requestUrl, {
         headers: {
@@ -198,13 +193,11 @@ export const getBestCommentListAxiosThunk =
 
     try {
       const res = await sendRequest();
-      console.log("베스트 댓글", res);
       if (!res || res.empty) {
         return;
       }
       dispatch(commentListActions.getBestCommentList(res.content));
     } catch (err) {
-      console.log(err);
     }
   };
 
@@ -216,7 +209,6 @@ export const getBestCommentListAxiosThunk =
 //       const userId = JSON.parse(sessionStorage.user).userId;
 //       const requestUrl = `${process.env.REACT_APP_HOST}/api/mpoffice/meme/comment/reply?memeId=${memeId}&userId=${userId}&commentId=${commentId}${lastCommentRef !== -1 ?`&idx=${lastCommentRef}` : `&idx=0`}`;
 
-//       console.log("대댓글리스트 조회!", requestUrl);
 
 //       const response = await axios.get(requestUrl, {
 //         headers: {
@@ -237,7 +229,6 @@ export const getBestCommentListAxiosThunk =
 
 //     try {
 //       const res = await sendRequest();
-//       console.log("대댓글", res);
 //       if (!res || res.empty) {
 //         return;
 //       }
@@ -247,7 +238,6 @@ export const getBestCommentListAxiosThunk =
 //         hasNext: !res.last,
 //       }))
 //     } catch (err) {
-//       console.log(err);
 //     }
 //   };
 

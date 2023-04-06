@@ -58,7 +58,6 @@ const Border: React.FC = () => {
 
   const getRemainTime = () => {
     const date = Math.floor(+new Date() / 1000);
-    // console.log(date, targetTime)
     let diff=0;
     if (targetTime < date) {
       if (targetTime - date < -300){

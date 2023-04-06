@@ -47,7 +47,6 @@ const LoginPage: React.FC = () => {
   // userInfo 받아와서 session 저장 -> main이동
   useEffect(() => {
     if (status !== 200) return;
-    console.log(data);
 
     const user = new User(data.id, data.nickname, data.profileImage, data.walletAddress)
     sessionStorage.setItem("user", JSON.stringify(user));
