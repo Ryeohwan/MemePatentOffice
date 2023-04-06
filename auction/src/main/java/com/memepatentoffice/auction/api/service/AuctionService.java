@@ -8,6 +8,7 @@ import com.memepatentoffice.auction.api.dto.response.AuctionClosingRes;
 import com.memepatentoffice.auction.api.dto.response.AuctionListRes;
 import com.memepatentoffice.auction.api.dto.response.AuctionRes;
 import com.memepatentoffice.auction.api.dto.response.MemeRes;
+import com.memepatentoffice.auction.common.exception.AuctionException;
 import com.memepatentoffice.auction.common.exception.BiddingException;
 import com.memepatentoffice.auction.common.exception.NotFoundException;
 
@@ -16,7 +17,7 @@ import java.util.List;
 
 public interface AuctionService {
 
-    Long registerAuction(AuctionCreationReq auctionCreationReq) throws NotFoundException, IOException;
+    Long registerAuction(AuctionCreationReq auctionCreationReq) throws NotFoundException, IOException, AuctionException;
     AuctionRes getInfo(Long auctionId) throws Exception;
     Long bid(BidReq bidReq) throws NotFoundException, BiddingException;
 

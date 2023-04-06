@@ -16,6 +16,9 @@ public interface AuctionRepository extends JpaRepository<Auction, Long> {
     @Query("select a from Auction a where a.sellerNickname = :sellerNickname and a.status = com.memepatentoffice.auction.db.entity.type.AuctionStatus.PROCEEDING")
     List<Auction> findAllBySellerNickname(@Param("sellerNickname")String sellerNickname);
 
+    @Query("select a from Auction a where a.memeId = :memeId and a.status <> com.memepatentoffice.auction.db.entity.type.AuctionStatus.TERMINATED")
+    List<Auction> findAllByMemeIdWhereStatusIsNotTerminated(@Param("memeId")Long memeId);
+
     @Query("select a from Auction a where a.status = com.memepatentoffice.auction.db.entity.type.AuctionStatus.PROCEEDING order by a.startTime")
     List<Auction> findAllProceedingByFinishTimeOldest();
 

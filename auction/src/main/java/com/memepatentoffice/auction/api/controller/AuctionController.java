@@ -6,6 +6,7 @@ import com.memepatentoffice.auction.api.dto.message.WebSocketChatReq;
 import com.memepatentoffice.auction.api.dto.request.BidReq;
 import com.memepatentoffice.auction.api.dto.response.AuctionListRes;
 import com.memepatentoffice.auction.api.service.AuctionService;
+import com.memepatentoffice.auction.common.exception.AuctionException;
 import com.memepatentoffice.auction.common.exception.BiddingException;
 import com.memepatentoffice.auction.common.exception.NotFoundException;
 import io.swagger.annotations.ApiOperation;
@@ -63,7 +64,7 @@ public class AuctionController {
 
     @ApiOperation(value="경매 등록", notes = "경매를 예약합니다. 예약한 시간에 경매가 시작되고, 시작 후 60*24 후에 끝납니다.")
     @PostMapping("/register")
-    public ResponseEntity<?> registerAuction(@RequestBody AuctionCreationReq auctionCreationReq) throws IOException, NotFoundException{
+    public ResponseEntity<?> registerAuction(@RequestBody AuctionCreationReq auctionCreationReq) throws IOException, NotFoundException, AuctionException {
         log.info("now(): "+ LocalDateTime.now());
         log.info(auctionCreationReq.getStartDateTime().toString());
         return ResponseEntity.status(HttpStatus.CREATED).body(auctionService.registerAuction(auctionCreationReq));

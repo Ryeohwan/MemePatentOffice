@@ -60,7 +60,7 @@ public class AuctionServiceImpl implements AuctionService{
 
     @Transactional
     @Override
-    public Long registerAuction(AuctionCreationReq req) throws NotFoundException{
+    public Long registerAuction(AuctionCreationReq req) throws NotFoundException, AuctionException{
         // TODO: 트랜잭션화하기
         JSONObject jsonObject = isp.findMemeById(req.getMemeId())
                 .orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
@@ -69,6 +69,10 @@ public class AuctionServiceImpl implements AuctionService{
         jsonObject = isp.findUserById(req.getSellerId())
                 .orElseThrow(()->new NotFoundException("sellerId가 유효하지 않습니다"));
         String sellerNickname = jsonObject.getString("nickname");
+
+        List<Auction> existingAuctionList = auctionRepository.findAllByMemeIdWhereStatusIsNotTerminated(req.getMemeId());
+        if(existingAuctionList.size()>0) throw new AuctionException("이 밈은 이미 경매가 등록된 상태입니다.");
+
         Auction auction = auctionRepository.save(Auction.builder()
                         .memeId(req.getMemeId())
                         .memeImgUrl(memeImgUrl)
@@ -93,7 +97,6 @@ public class AuctionServiceImpl implements AuctionService{
                 new AuctionTerminater(auction.getId()),
                 terminateDate
         );
-        log.info(auction.getStartTime().toString());
         isp.setAlarm("register", auction.getId(), auction.getSellerId(),auction.getMemeId());
         return auction.getId();
     }
