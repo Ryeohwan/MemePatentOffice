@@ -23,7 +23,7 @@ const NoticeItem: React.FC<NoticeItemProps> = ({ item }) => {
   const navigateHandler = (type: string) => {
     if (type === "toProfile") {
       navigate(`/profile/${item.nickname}/tab=nft`)
-    } else if (type === "toDetail ") {
+    } else if (type === "toDetail") {
       navigate(`/meme-detail/${item.memeId}/tab=trade`)
     } else if (type === "toDetailComment") {
       navigate(`/meme-detail/${item.memeId}/tab=comment`, {state:{from: "comment"}})
@@ -44,7 +44,7 @@ const NoticeItem: React.FC<NoticeItemProps> = ({ item }) => {
       navigateHandler("toDetailAuction")
     } else if (key === "AUCTION_END") {
       navigateHandler("toDetail")
-    }
+    } 
   }
 
   return (
@@ -114,7 +114,7 @@ const NoticeItem: React.FC<NoticeItemProps> = ({ item }) => {
               <span>{item.title}</span>
               밈의 경매가 종료되었습니다.
             </p>
-            <p>{elapsedText}</p>
+            <p className={styles.elapsedText}>{elapsedText}</p>
           </div>
 
         ) : (

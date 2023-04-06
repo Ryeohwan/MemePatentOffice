@@ -173,9 +173,8 @@ const NavbarHamburger: React.FC = () => {
         <hr />
 
         <div className={styles.dropMenu}>
-          {/* <NavLink to="/meme-list/type=new" className={styles.navLink}>
-            밈 사전
-          </NavLink> */}
+
+          {myAccount !== null ? <div>내 잔액 : {myBalance/(10**18)} SSF</div> : <div onClick={accountHandler}>지갑 연결하기</div> }
 
           <div className={styles.navLink} onClick={memeListHandler}>
             밈 사전
@@ -189,8 +188,6 @@ const NavbarHamburger: React.FC = () => {
             경매 둘러보기
           </NavLink>
           
-          {myAccount !== null ? <div>내 잔액 : {myBalance/(10**18)} SSF</div> : <div onClick={accountHandler}>지갑 연결하기</div> }
-
           <div className={styles.navLink} onClick={mypageHandler}>
             마이페이지
           </div>

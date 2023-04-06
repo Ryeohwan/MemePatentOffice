@@ -3,8 +3,8 @@
     box-shadow: var(--box-shadow);
     width: 246px;
     height: 310px;
-    margin-left: 10px;
     font-size: 12px;
+    margin: 0 10px;
 }
 
 .auctionImg {

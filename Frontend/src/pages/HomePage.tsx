@@ -14,6 +14,10 @@ import HomeCarousel from "components/main/homepage/HomeCarousel";
 import styles from "./HomePage.module.css";
 import CheckingModal from "components/auction/upload/CheckingModal";
 
+import auctionCarousel from "assets/auctionCarousel.png"
+import uploadMemeImg from "assets/uploadmeme.jpg";
+import memeGif from "assets/meme.gif";
+
 const HomePage: React.FC = () => {
   // 요즘 핫한 밈
   const {
@@ -65,13 +69,13 @@ const HomePage: React.FC = () => {
           account = web3.utils.toChecksumAddress(accounts[0]);
           console.log(account);
         }
-        
+
         // 유저 디비에서 가져온 wallet_address
         const walletAddress = JSON.parse(
           sessionStorage.getItem("user")!
-          ).walletAddress;
+        ).walletAddress;
         const userId = JSON.parse(sessionStorage.getItem("user")!).userId;
-          
+
         controlCheckModal(true);
         // 최초로 연결한 지갑인 경우, 코인 지급하고 post address
         if (walletAddress === null) {
@@ -87,19 +91,20 @@ const HomePage: React.FC = () => {
           user.walletAddress = account;
 
           sessionStorage.setItem("user", JSON.stringify(user));
-          setModalTxt("최초로 연결된 지갑이네요. 10SSF를 선물로 받는 중입니다!")
+          setModalTxt(
+            "최초로 연결된 지갑이네요. 500SSF를 선물로 받는 중입니다!"
+          );
 
           const giveCoinStatus = await giveSignInCoin();
           if (giveCoinStatus) {
-            setModalTxt("10SSF를 받았습니다!")
+            setModalTxt("500SSF를 받았습니다!");
             await new Promise((resolve) => setTimeout(resolve, 1000));
             controlCheckModal(false);
           } else {
-            setModalTxt("네트워크가 불안정해 선물을 받지 못했습니다.")
+            setModalTxt("네트워크가 불안정해 선물을 받지 못했습니다.");
             await new Promise((resolve) => setTimeout(resolve, 1000));
             controlCheckModal(false);
           }
-
         } else {
           // 이전에 등록했던 지갑과 동일한 경우, 패스
           if (walletAddress === account) {
@@ -118,7 +123,7 @@ const HomePage: React.FC = () => {
             });
             setModalTxt("최초 등록된 지갑에 한해서만 10SSF가 지급됩니다");
             await new Promise((resolve) => setTimeout(resolve, 2000));
-            controlCheckModal(false)
+            controlCheckModal(false);
             const user = JSON.parse(sessionStorage.getItem("user")!);
             user.walletAddress = account;
             sessionStorage.setItem("user", JSON.stringify(user));
@@ -131,7 +136,6 @@ const HomePage: React.FC = () => {
         setModalTxt("Metamask를 설치해 주세요.");
         await new Promise((resolve) => setTimeout(resolve, 1000));
         controlCheckModal(false);
-
       }
       controlCheckModal(false);
       await checkBalance();
@@ -164,8 +168,6 @@ const HomePage: React.FC = () => {
     }
   };
 
-
-
   // landering 될때 data get 하기
   // loading 중에는 skeleton
   useEffect(() => {
@@ -177,26 +179,25 @@ const HomePage: React.FC = () => {
     hotAuctionRequest({ url: "/api/auction/carousel" });
   }, []);
 
-
   // Main Carousel에 내려보낼 props
   const MAIN_INFO = [
     {
       id: 1,
-      imgUrl: "home/meme.gif",
+      imgUrl: memeGif,
       btnTxt: "지갑 연결하기",
       btnUrl: null,
       btnEffect: accountHandler,
     },
     {
       id: 2,
-      imgUrl: "home/uploadmeme.jpg",
+      imgUrl: uploadMemeImg,
       btnTxt: "밈 등록하러 가기",
       btnUrl: "/meme-upload",
       btnEffect: async () => {},
     },
     {
       id: 3,
-      imgUrl: "home/auction.jpg",
+      imgUrl: auctionCarousel,
       btnTxt: "경매 구경하러 가기",
       btnUrl: "/auction-list/type=popular",
       btnEffect: async () => {},
@@ -224,15 +225,17 @@ const HomePage: React.FC = () => {
 
   // 밈, 경매 캐러셀
   const nftCarousel = (nft: memeType | auctionCardType) => {
-    if ("description" in nft) {
-      return <NftCard items={nft} />;
-    } else {
-      return (
-        <div className={styles.auctionCarousel}>
-          <NftAuctionCard items={nft} />
-        </div>
-      );
-    }
+    return (
+      <div className={styles.carouselCardContainer}>
+        {"description" in nft ? (
+          <NftCard items={nft} />
+        ) : (
+          <div className={styles.auctionCarousel}>
+            <NftAuctionCard items={nft} />
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -241,6 +244,8 @@ const HomePage: React.FC = () => {
         {/* main carousel */}
         <HomeCarousel info={MAIN_INFO} />
 
+        <div className={styles.contour}/>
+        
         {/* meme carousel */}
         <div className={styles.homeMenuWrapper}>
           <div className={styles.homeMenuTitle}>요즘 HOT한 밈</div>
@@ -263,6 +268,8 @@ const HomePage: React.FC = () => {
           />
         )}
 
+        <div className={styles.contour}/>
+
         <div className={styles.homeMenuWrapper}>
           <div className={styles.homeMenuTitle}>이번 주 비싸게 팔린 밈</div>
         </div>
@@ -283,6 +290,8 @@ const HomePage: React.FC = () => {
             responsiveOptions={responsiveOptions}
           />
         )}
+
+        <div className={styles.contour}/>
 
         <div className={styles.homeMenuWrapper}>
           <div className={styles.homeMenuTitle}>이번 주 조회수 많은 밈</div>
@@ -305,12 +314,13 @@ const HomePage: React.FC = () => {
           />
         )}
 
-        <hr />
 
         {/* auction carousel */}
         {/* 여기 데이터 없을 수도 있어서 없으면 아예 영역 자체 안띄우도록 해돔 */}
         {!hotAuctionLoading && hotAuction && hotAuction.length > 0 && (
-          <>
+          <> 
+            <div className={styles.contour}/>
+
             <div className={styles.homeMenuWrapper}>
               <div className={styles.homeMenuTitle}>지금 HOT한 경매</div>
             </div>
@@ -326,7 +336,6 @@ const HomePage: React.FC = () => {
             />
           </>
         )}
-
       </div>
       <CheckingModal
         checkModalVisible={checkModalVisible}

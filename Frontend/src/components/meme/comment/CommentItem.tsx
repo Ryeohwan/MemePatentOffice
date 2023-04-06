@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import styles from "./CommentItem.module.css";
 import commentList, { commentType } from "store/commentList";
@@ -17,6 +18,7 @@ interface CommentType {
 }
 
 const CommentItem: React.FC<CommentType> = (comment) => {
+  const navigate = useNavigate();
   const userNickname = JSON.parse(sessionStorage.getItem("user")!).nickname;
   const userId = JSON.parse(sessionStorage.user).userId;
   const params = useParams();
@@ -42,11 +44,13 @@ const CommentItem: React.FC<CommentType> = (comment) => {
   const { sendRequest: deleteCommentRequest } = useAxios();
   const [clickViewReply, setClickViewReply] = useState(false);
 
-  const newReply = useSelector<RootState, commentType|null>(state=>state.commentList.replyComment)
+  const newReply = useSelector<RootState, commentType | null>(
+    (state) => state.commentList.replyComment
+  );
   const [replyCommentList, setReplyCommentList] = useState<commentType[]>([]);
   const [lastCommentRef, setLastCommentRef] = useState(-1);
   const { data: replyData, sendRequest } = useAxios();
-  const {sendRequest : deleteReplyRequest} = useAxios()
+  const { sendRequest: deleteReplyRequest } = useAxios();
   // 좋아요 눌렀을 때 내가 이미 좋아한 댓글이면 좋아요 취소, 아니면 좋아요 => 좋아요 개수 -1, +1
   const handleHeart = () => {
     // 좋아요 토글
@@ -70,7 +74,7 @@ const CommentItem: React.FC<CommentType> = (comment) => {
       }`,
     });
 
-    if(!clickViewReply){
+    if (!clickViewReply) {
       setClickViewReply(true);
     }
   };
@@ -84,7 +88,7 @@ const CommentItem: React.FC<CommentType> = (comment) => {
     if (replyData) {
       setReplyCommentList((prev) => [...prev, ...replyData.content]);
       setLastCommentRef(replyData.content[replyData.content.length - 1].id);
-      setHasNext(!replyData.last)
+      setHasNext(!replyData.last);
     }
   }, [replyData]);
 
@@ -93,33 +97,35 @@ const CommentItem: React.FC<CommentType> = (comment) => {
     dispatch(commentListActions.changeNowParentId(commentId));
     dispatch(commentListActions.changeNowParentName(commentWriterName));
   };
-  
-  useEffect(()=>{
-    if(newReply?.parentId === commentId){
-      setReplyCommentList((prev)=>[...prev, newReply!])
-      setClickViewReply(true);
-      setReplyCnt(prev=>prev+1)
-    }
-  },[newReply])
 
-  const deleteReply = (id:number) => {
+  useEffect(() => {
+    if (newReply?.parentId === commentId) {
+      setReplyCommentList((prev) => [...prev, newReply!]);
+      setClickViewReply(true);
+      setReplyCnt((prev) => prev + 1);
+    }
+  }, [newReply]);
+
+  const deleteReply = (id: number) => {
     deleteReplyRequest({
       url: "/api/mpoffice/meme/comment/delete",
       method: "POST",
       data: {
         userId: userId,
         memeId: memeid,
-        commentId: id
-      }
+        commentId: id,
+      },
     });
 
-    if (replyCommentList.length>0){
-      setReplyCommentList(replyCommentList.filter((comment) => {
-        return comment.id !== id
-      }))
+    if (replyCommentList.length > 0) {
+      setReplyCommentList(
+        replyCommentList.filter((comment) => {
+          return comment.id !== id;
+        })
+      );
     }
-    setReplyCnt((prev)=>prev-1)
-  }
+    setReplyCnt((prev) => prev - 1);
+  };
 
   const onClickDelete = () => {
     deleteCommentRequest({
@@ -136,17 +142,31 @@ const CommentItem: React.FC<CommentType> = (comment) => {
   };
 
   // 무한 스크롤
-  const [hasNext,setHasNext] = useState<boolean>()
+  const [hasNext, setHasNext] = useState<boolean>();
+
+  const profileNavigateHandler = (nickname: string) => {
+    navigate(`/profile/${nickname}/tab=nft`);
+  };
 
   return (
     <div className={styles.commentItemContainer}>
       <div className={styles.userImgWrapper}>
-        <img src={writerProfileImg} alt="" className={styles.commentUserImg} />
+        <img
+          src={writerProfileImg}
+          alt=""
+          className={styles.commentUserImg}
+          onClick={() => profileNavigateHandler(commentWriterName)}
+        />
       </div>
 
       <div className={styles.commentInfoWrapper}>
         <div className={styles.commentHeader}>
-          <div className={styles.commentUserName}>{commentWriterName}</div>
+          <div
+            className={styles.commentUserName}
+            onClick={() => profileNavigateHandler(commentWriterName)}
+          >
+            {commentWriterName}
+          </div>
 
           {/* 날짜 형식 바꾸고 넣기 */}
           <div className={styles.commentTime}>{elapsedText}</div>
