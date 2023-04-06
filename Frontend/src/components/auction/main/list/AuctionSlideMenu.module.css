@@ -10,5 +10,15 @@
 }
 
 .slideBtn{
+    display: flex;
+    flex-direction: column;
     background-color: var(--button-color) !important;
+}
+.slideBtn > p {
+   font-size: 8px; 
+   font-weight: bold;
+}
+
+.slideBtn > span {
+    font-size: 1.5rem;
 }

@@ -1,6 +1,5 @@
 import React from "react";
 
-import { Sidebar } from "primereact/sidebar";
 import styles from "components/auction/main/list/BiddingHistory.module.css";
 import BiddingHistoryList from "./BiddingHistoryList";
 import { Dialog } from "primereact/dialog";

@@ -82,7 +82,7 @@ const AuctionSlideMenu: React.FC = () => {
           onClick={(event) => {
             menu.current?.toggle(event);
           }}
-        ></Button>
+        ><p>메뉴</p></Button>
       </div>
     </>
   );

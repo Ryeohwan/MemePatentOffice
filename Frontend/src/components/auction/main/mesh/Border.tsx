@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { auctionActions } from "store/auction";
 import { useSelector } from "react-redux";
@@ -12,6 +12,7 @@ import GifTexture from "three-gif-loader/lib/gif-texture";
 
 const Border: React.FC = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const texCanvas = document.createElement("canvas") as HTMLCanvasElement;
   const texContext = texCanvas.getContext("2d");
   const nftTexture = useRef<THREE.Texture | GifTexture>();
@@ -58,16 +59,22 @@ const Border: React.FC = () => {
   const getRemainTime = () => {
     const date = Math.floor(+new Date() / 1000);
     // console.log(date, targetTime)
-    let diff;
+    let diff=0;
     if (targetTime < date) {
+      if (targetTime - date < -60){
+        alert('이미 종료된 경매입니다.')
+        navigate('/main')
+      }
       diff = 0;
+    } else if (targetTime - date > 15*60){
+      alert('아직 시작하지 않은 경매입니다.')
+      navigate('/main')
     } else {
       diff = targetTime - date;
     }
     const remainTime = new Date(0);
     remainTime.setSeconds(diff);
 
-    const hours = remainTime.getUTCHours().toString().padStart(2, "0");
     const minutes = remainTime.getUTCMinutes().toString().padStart(2, "0");
     const seconds = remainTime.getUTCSeconds().toString().padStart(2, "0");
 

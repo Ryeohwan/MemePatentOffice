@@ -33,7 +33,10 @@ const ChatMain: React.FC<WebSocketProps> = ({
       {seeChat ? (
         <>
           <Button className={styles.chatBtn} onClick={chatVisibleHandlerTrue}>
-            <i className="pi pi-comment p-overlay-badge" style={{ fontSize: '1.5rem' }}>
+            <i
+              className="pi pi-comment p-overlay-badge"
+              style={{ fontSize: "1.5rem" }}
+            >
               <Badge value={`${chatcnt}`} severity="danger"></Badge>
             </i>
           </Button>
@@ -41,9 +44,13 @@ const ChatMain: React.FC<WebSocketProps> = ({
       ) : (
         <>
           <Button className={styles.chatBtn} onClick={chatVisibleHandlerTrue}>
-            <i className="pi pi-comment p-overlay-badge" style={{ fontSize: '1.5rem' }}>
+            <i
+              className="pi pi-comment p-overlay-badge"
+              style={{ fontSize: "1.5rem" }}
+            >
               <Badge value="0"></Badge>
             </i>
+            <p>채팅</p>
           </Button>
         </>
       )}

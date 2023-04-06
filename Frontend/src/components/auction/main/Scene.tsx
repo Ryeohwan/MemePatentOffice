@@ -133,7 +133,7 @@ const Scene: React.FC<SceneProps> = ({
   };
 
   const mouseUpHandler = (e: React.MouseEvent) => {
-    if (playerState===2 || playerState ===5 ) return
+    if (playerState===2 || playerState ===5 || playerState === 3 || playerState === 4 ) return
     
     calculateMousePosition(e);
       raycasting();

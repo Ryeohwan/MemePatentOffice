@@ -25,6 +25,28 @@
 
 .sitBtn {
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap:2px
+  
+}
+
+.sitBtn > p { 
+  font-size: 8px;
+  font-weight: bold;
+}
+
+.sitBtn {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap:2px
+  
+}
+
+.sitBtn > p { 
+  font-size: 8px;
+  font-weight: bold;
 }
 
 .fullMoniterBtn {
@@ -35,12 +57,30 @@
 
 .fullMoniterBtn > button {
   background-color: var(--button-color);
-  font-size: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.fullMoniterBtn > button > p {
+  font-size: 8px;
+  font-weight: bold;
 }
 
 .sitIcon {
   font-size: 2rem;
 }
-.bidIcon{
-    font-size: 2rem;
+.bidIcon {
+  font-size: 2rem;
+}
+
+.bidBtn{
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bidBtn>p{
+  font-size: 8px;
+  font-weight: bold;
 }

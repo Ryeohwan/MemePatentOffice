@@ -34,7 +34,7 @@ const useAxios = () => {
         // status 받는 경우 -> status + 401
         // status 안받는 경우 -> api 명세 보고 고쳐야할듯
         validateStatus: (status) => {
-          if (requestConfig.validatedateStatus) {
+          if (requestConfig.validateStatus) {
             return (
               requestConfig.validatedateStatus.includes(status) ||
               status === 401
