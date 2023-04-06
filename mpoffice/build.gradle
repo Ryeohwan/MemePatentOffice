@@ -88,3 +88,9 @@ configurations {
 	querydsl.extendsFrom compileClasspath
 }
 //querydsl 추가 끝
+
+tasks.withType(JavaExec) {
+	systemProperty "jdk.module.illegalAccess.silent", "true"
+	systemProperty "jdk.module.illegalAccess.warning", "true"
+	jvmArgs = ['--add-opens', 'java.base/java.util=ALL-UNNAMED']
+}

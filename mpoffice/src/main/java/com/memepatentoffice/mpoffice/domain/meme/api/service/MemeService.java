@@ -60,6 +60,7 @@ public class MemeService {
                 .title(meme.getTitle())
                 .likeCount(userMemeLikeRepository.countLikeOrHate(meme.getId(),MemeLike.LIKE))
                 .hateCount(userMemeLikeRepository.countLikeOrHate(meme.getId(),MemeLike.HATE))
+                .tokenId(meme.getTokenId())
                 .build();
         if(cartRepository.existsUserMemeAuctionAlertByUserIdAndMemeId(user.getId(),meme.getId())){
             result.setCart(cartRepository.findUserMemeAuctionAlertByUserIdAndMemeId(user.getId(),meme.getId()).getCart());
@@ -160,7 +161,6 @@ public class MemeService {
     // 찜하기
     @Transactional
     public boolean addCart(CartRequest cartRequest) throws Exception{
-        imageAnalysisQuickstart.mainFunc();
         log.info("여기 오긴 하니?");
         Long userId = cartRequest.getUserId();
         Long memeId = cartRequest.getMemeId();
@@ -377,6 +377,7 @@ public class MemeService {
                 .content(a.getContent())
                 .createdAt(a.getCreatedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                 .searched(a.getSearched())
+                .tokenId(a.getTokenId())
                 .ownerNickname(a.getOwner().getNickname())
                 .situation(a.getSituation())
                 .title(a.getTitle())
