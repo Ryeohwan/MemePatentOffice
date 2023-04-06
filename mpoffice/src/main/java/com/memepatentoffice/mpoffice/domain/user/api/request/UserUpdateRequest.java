@@ -25,4 +25,8 @@ public class UserUpdateRequest {
     public void setUserImage(String userImage){
         this.userImage = userImage;
     }
+
+    public void setId(@Nullable Long id) {
+        this.id = id;
+    }
 }
