@@ -80,6 +80,11 @@ public class AuctionController {
     public ResponseEntity<?> searchByMemeId(@RequestParam Long memeId){
         return ResponseEntity.status(HttpStatus.OK).body(auctionService.searchByMemeId(memeId));
     }
+    @ApiOperation(value="프론트에서 호출하기 위한 경매 결과")
+    @GetMapping("/result")
+    public ResponseEntity<?> getResult(@RequestParam Long auctionId) throws Exception {
+        return ResponseEntity.status(HttpStatus.OK).body(auctionService.getResultById(auctionId));
+    }
 
     @MessageMapping("/chat")
     public void sendChat(WebSocketChatReq req){
