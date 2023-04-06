@@ -18,43 +18,69 @@ const FinishModal: React.FC = () => {
   const navigate = useNavigate();
   const params = useParams();
   const auctionId = parseInt(params.auctionId!, 10);
-  const walletAddress = JSON.parse(sessionStorage.getItem('user')!).walletAddress;
+  const walletAddress = JSON.parse(
+    sessionStorage.getItem("user")!
+  ).walletAddress;
 
   // 경매 끝나자마자 get으로 경매 결과 받아옴
   const { data: resultData, sendRequest: getResultData } = useAxios();
-
+  const { data: postDataStatus, sendRequest: postResultData } = useAxios();
   const biddingHistory = useSelector<RootState, biddingHistory[]>(
     (state) => state.auction.auctionInfo.biddingHistory
   );
+  
   // 모달창
-  const visible = useSelector<RootState, boolean>(state=>state.auction.finishModalVisible);
+  const visible = useSelector<RootState, boolean>(
+    (state) => state.auction.finishModalVisible
+  );
   // const visible = false;
   // 남은 시간
   // const [remainTime, setRemainTime] = useState<number>(5);
   const remainTime = useRef<number>(6);
-  
-  const memeTransaction = async (resultData:any) => {
+
+  const memeTransaction = (resultData: any) => {
+    if (resultData) {
       const fromAccount = resultData.fromAccount;
       const toAccount = resultData.toAccount;
-      const price = resultData.price;
+      const resultPrice = resultData.price;
       const memeTokenId = resultData.memeTokenId;
 
+      const memeId = resultData.memeId;
+      const buyerId = resultData.buyerId;
+      const sellerId = resultData.sellerId;
+      const createdAt = resultData.createdAt;
+      const price = resultData.price;
+
       // 판매자 : fromAccount, 구매자 : toAccount
-      if (walletAddress === fromAccount || walletAddress === toAccount) {
-        await transferNftCoin(fromAccount, toAccount, price);
-        await transferNftOwnership(toAccount, memeTokenId);
-        // 모달 닫기
-      } 
-    }  
+      // if (walletAddress === toAccount) {
+      //   const transferCoinStatus = await transferNftCoin(fromAccount, toAccount, resultPrice);
+      //   const transferOwnershipStatus = await transferNftOwnership(toAccount, memeTokenId);
+      const transferCoinStatus = true;
+      const transferOwnershipStatus = true;
+      if (transferCoinStatus && transferOwnershipStatus) {
+        postResultData({
+          url: `/api/mpoffice/meme/addTransaction`,
+          method: "POST",
+          data: {
+            memeId: memeId,
+            buyerId: buyerId,
+            sellerId: sellerId,
+            createdAt: createdAt,
+            price: price,
+          },
+        });
+      }
+    // }
+    } 
+  };
 
   useEffect(() => {
-    if (visible){
+    if (visible) {
       getResultData({
-        url: `/api/auction/result?auctionId=${auctionId}`
+        url: `/api/auction/result?auctionId=${auctionId}`,
       });
     }
   }, [visible]);
-
 
   useEffect(() => {
     if (resultData) {
@@ -83,7 +109,7 @@ const FinishModal: React.FC = () => {
     >
       {/* 경매 끝났을 때 최고가 닉네임 띄우기 */}
       <div className={styles.wrapper}>
-        {biddingHistory.length === 0? (
+        {biddingHistory.length === 0 ? (
           <>
             <p>경매가 종료되었습니다.</p>
             <Button

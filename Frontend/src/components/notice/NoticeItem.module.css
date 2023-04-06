@@ -1,9 +1,10 @@
 .itemWrapper{
     width: 100%;
+    min-height: 44px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin: 2% 0;
+    margin: 3% 0;
     z-index: 0;
 }
 
@@ -36,7 +37,7 @@
 
 .textWrapper > .elapsedText {
     font-size:8px;
-    padding-top: 8px;
+    padding-top: 4px;
     text-align: end;
     opacity: 0.3;
 }

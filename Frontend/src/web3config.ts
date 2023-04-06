@@ -844,7 +844,7 @@ export const saleMemeTokenContract = new web3.eth.Contract(
 	saleMemeTokenAddress
 );
 
-// Minting
+// Minting (ok)
 export const memeOwnerAccess = async () => {
 	const account = JSON.parse(sessionStorage.getItem('user')!).walletAddress;
   
@@ -944,7 +944,8 @@ export const transferNftOwnership = async (toAccount:string, tokenId: number|und
       console.error('Error encoding ABI:', err);
       return;
     }
-    const nonce = await web3.eth.getTransactionCount(ownerAddress, 'latest');
+    const nonce = await web3.eth.getTransactionCount(ownerAddress, 'latest')
+	const newNonce = nonce + 1;
     
     const signedTx = await web3.eth.accounts.signTransaction({
       from: ownerAddress,
@@ -952,18 +953,19 @@ export const transferNftOwnership = async (toAccount:string, tokenId: number|und
       data: data,
       gas: gasLimit,
       gasPrice: gasPrice,
-      nonce: nonce,
+      nonce: newNonce,
     }, privateKey);
 
     console.log("signedTx", signedTx)
     if (signedTx.rawTransaction) {
         await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
-		console.log("success transfer nft ownership")
+		console.log("success transfer nft ownership");
+		return true;
     } else {
         console.error("Signed transaction is undefined");
+		return false;
     };
 };
-
 
 
 // 코인 거래 (경매 후)  (판매자 : fromAccount, 구매자 : toAccount)
@@ -972,7 +974,8 @@ export const transferNftCoin = async ( toAccount:string, fromAccount:string, pri
 	const ownerAddress = "0xd8df17B6a1758c52eA81219b001547A2c2e3d789";
 	const privateKey = "0xcd3352d522fb229242472dddc60abc0831ba87db490573616e7cc43f4d179a28";
 	
-	const gasPrice = await web3.eth.getGasPrice();
+	// const gasPrice = 1500000000;
+	// console.log(gasPrice);
 	const gasLimit = 3000000;
     console.log("sale");
     
@@ -983,25 +986,28 @@ export const transferNftCoin = async ( toAccount:string, fromAccount:string, pri
 	} catch (err) {
 	  console.error('Error encoding ABI:', err);
 	  return;
-	}
-	const nonce = await web3.eth.getTransactionCount(ownerAddress, 'latest');
-	
-	const signedTx = await web3.eth.accounts.signTransaction({
-	  from: ownerAddress,
-	  to: saleMemeTokenAddress,
-	  data: data,
-	  gas: gasLimit,
-	  gasPrice: gasPrice,
-	  nonce: nonce,
-	}, privateKey);
+	};
 
-	console.log("signedTx", signedTx)
+    const nonce = await web3.eth.getTransactionCount(ownerAddress, 'latest')
+	const newNonce = nonce + 1;
+    
+    const signedTx = await web3.eth.accounts.signTransaction({
+      from: ownerAddress,
+      to: mintMemeTokenAddress,
+      data: data,
+      gas: gasLimit,
+      nonce: newNonce,
+    }, privateKey);
+
+	console.log("signedTx", signedTx);
+
 	if (signedTx.rawTransaction) {
 		await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
-		console.log("success transfer coin")
-
+		console.log("success transfer coin");
+		return true;
 	} else {
 		console.error("Signed transaction is undefined");
+		return false;
 	};
 };
 

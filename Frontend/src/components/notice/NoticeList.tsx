@@ -64,7 +64,7 @@ const NoticeList: React.FC = () => {
     <div className={styles.listWrapper}>
       {today.length > 0 && (
         <div className={styles.todayList}>
-          <p>오늘</p>
+          <p className={styles.date}>오늘</p>
           {today.map((item) => {
             return <NoticeItem key={item.alarmId} item={item} />;
           })}
@@ -72,8 +72,9 @@ const NoticeList: React.FC = () => {
       )}
       {week.length > 0 && (
         <>
+          <Divider />
           <div className={styles.weekList}>
-            <p>이번 주</p>
+            <p className={styles.date}>이번 주</p>
             {week.map((item) => {
               return <NoticeItem key={item.alarmId} item={item} />;
             })}
@@ -84,7 +85,7 @@ const NoticeList: React.FC = () => {
         <>
           <Divider />
           <div className={styles.monthList}>
-            <p>이전</p>
+            <p className={styles.date}>이전</p>
             {previous.map((item) => {
               return <NoticeItem key={item.alarmId} item={item} />;
             })}
@@ -103,7 +104,7 @@ const NoticeList: React.FC = () => {
           marginLeft: "0",
           bottom: "16px",
           right: "16px",
-          background: "var(--button-color)",
+          background: "var(--navy-color)",
           width: "44px",
           height: "44px",
         }}
