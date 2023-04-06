@@ -345,6 +345,7 @@ public class AuctionServiceImpl implements AuctionService{
         public void run() {
             // TODO: 트랜잭션화하기
             log.info("AuctionStarter가 실행되었습니다");
+            log.info("auction Id: "+auctionId.toString());
             Auction auction = auctionRepository.findById(auctionId)
                     .orElseThrow(()->new RuntimeException("auctionID가 없습니다"));
             log.info("실행할 Auction id는 "+auction.getId()+"입니다.");
@@ -352,7 +353,7 @@ public class AuctionServiceImpl implements AuctionService{
                 auctionRepository.updateStatusToProceeding(auctionId);
                 log.info("경매 번호 "+auction.getId()+"번 경매를 시작했습니다");
             }else{
-                log.info("경매 번호 "+auction.getId()+"번 경매를 시작이 실패해서 아직 ENROLLED상태입니다");
+                log.info("경매 번호 "+auction.getId()+"번 경매를 시작이 실패해서 아직 "+auction.getStatus()+"상태입니다");
             }
             isp.setAlarm("start", auction.getId(), auction.getSellerId(),auction.getMemeId());
         }
@@ -366,6 +367,7 @@ public class AuctionServiceImpl implements AuctionService{
         public void run() {
             // TODO: 트랜잭션화하기
             log.info("AuctionTerminater가 시작되었습니다");
+            log.info("auction Id: "+auctionId.toString());
             Auction auction = auctionRepository.findById(auctionId)
                     .orElseThrow(()->new RuntimeException("auctionID가 없습니다"));
             log.info("종료할 Auction id는 "+auction.getId()+"입니다.");
@@ -374,7 +376,7 @@ public class AuctionServiceImpl implements AuctionService{
                 auctionRepository.updateStatusToTerminated(auctionId);
                 log.info("경매 번호 "+auction.getId()+"번 경매를 종료합니다");
             }else{
-                log.info("경매 번호 "+auction.getId()+"번 경매 종료가 실패해서 아직 PROCEEDING 상태입니다");
+                log.info("경매 번호 "+auction.getId()+"번 경매 종료가 실패해서 아직 "+auction.getStatus()+" 상태입니다");
             }
             //1. 스마트 컨트랙트 호출
             //2. mpoffice에 체결 요청 보냄
