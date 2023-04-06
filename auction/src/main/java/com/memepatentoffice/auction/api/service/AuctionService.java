@@ -17,7 +17,7 @@ import java.util.List;
 public interface AuctionService {
 
     Long registerAuction(AuctionCreationReq auctionCreationReq) throws NotFoundException, IOException;
-    AuctionRes getInfo(Long auctionId) throws NotFoundException;
+    AuctionRes getInfo(Long auctionId) throws Exception;
     Long bid(BidReq bidReq) throws NotFoundException, BiddingException;
 
     List<AuctionListRes> findAllBySellerNickname(String sellerNickname) throws NotFoundException;

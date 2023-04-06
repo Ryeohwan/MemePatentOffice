@@ -100,10 +100,12 @@ public class AuctionServiceImpl implements AuctionService{
     }
 
     @Override
-    public AuctionRes getInfo(Long auctionId) throws NotFoundException {
+    public AuctionRes getInfo(Long auctionId) throws Exception {
         Auction auction = auctionRepository.findById(auctionId)
                 .orElseThrow(()->new NotFoundException("auctionId가 유효하지 않습니다"));
-
+        if(AuctionStatus.TERMINATED.equals(auction.getStatus())){
+            throw new Exception("경매가 이미 종료되었습니다");
+        }
         AuctionRes auctionRes =  AuctionRes.builder()
                 .sellerNickname(auction.getSellerNickname())
                 .finishTime(auction.getFinishTime())
