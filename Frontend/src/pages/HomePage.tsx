@@ -14,6 +14,10 @@ import HomeCarousel from "components/main/homepage/HomeCarousel";
 import styles from "./HomePage.module.css";
 import CheckingModal from "components/auction/upload/CheckingModal";
 
+import auctionImg from 'assets/auction.jpg'
+import uploadMemeImg from 'assets/uploadmeme.jpg'
+import memeGif from 'assets/meme.gif'
+
 const HomePage: React.FC = () => {
   // 요즘 핫한 밈
   const {
@@ -182,21 +186,21 @@ const HomePage: React.FC = () => {
   const MAIN_INFO = [
     {
       id: 1,
-      imgUrl: "home/meme.gif",
+      imgUrl: memeGif,
       btnTxt: "지갑 연결하기",
       btnUrl: null,
       btnEffect: accountHandler,
     },
     {
       id: 2,
-      imgUrl: "home/uploadmeme.jpg",
+      imgUrl: uploadMemeImg,
       btnTxt: "밈 등록하러 가기",
       btnUrl: "/meme-upload",
       btnEffect: async () => {},
     },
     {
       id: 3,
-      imgUrl: "home/auction.jpg",
+      imgUrl: auctionImg,
       btnTxt: "경매 구경하러 가기",
       btnUrl: "/auction-list/type=popular",
       btnEffect: async () => {},

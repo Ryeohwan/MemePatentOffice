@@ -55,7 +55,7 @@ const HomeCarousel: React.FC<HomeCarouselProps> = ({ info }) => {
     <div className={styles.mainCarousel}>
       <i className="pi pi-chevron-left" id="left" onClick={handlePrevClick} />
       <img
-        src={`http://localhost:3000/${info[currentImageIndex].imgUrl}`}
+        src={info[currentImageIndex].imgUrl}
         alt="carousel"
       />
       <i className="pi pi-chevron-right" id="right" onClick={handleNextClick} />
