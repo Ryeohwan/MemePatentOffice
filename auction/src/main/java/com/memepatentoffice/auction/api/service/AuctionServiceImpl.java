@@ -364,11 +364,11 @@ public class AuctionServiceImpl implements AuctionService{
         public void run() {
             // TODO: 트랜잭션화하기
             log.info("AuctionTerminater가 시작되었습니다");
-            log.info("auction Id: "+auctionId.toString());
+            log.info("auctionId: "+auctionId.toString());
             Auction auction = auctionRepository.findById(auctionId)
                     .orElseThrow(()->new RuntimeException("auctionID가 없습니다"));
-            log.info("종료할 Auction id는 "+auction.getId()+"입니다.");
-            //3. state 바꾸기
+            log.info("auction.getId(): "+auction.getId());
+            //0. state 바꾸기
             if(AuctionStatus.PROCEEDING.equals(auction.getStatus())){
                 auctionRepository.updateStatusToTerminated(auctionId);
                 log.info("경매 번호 "+auction.getId()+"번 경매를 종료합니다");
@@ -376,27 +376,23 @@ public class AuctionServiceImpl implements AuctionService{
                 log.info("경매 번호 "+auction.getId()+"번 경매 종료가 실패해서 아직 "+auction.getStatus()+" 상태입니다");
             }
             //1. 스마트 컨트랙트 호출
-            //2. mpoffice에 체결 요청 보냄
-            AtomicReference<Long> buyerId = new AtomicReference<>(0L);
-            AtomicReference<Long> price = new AtomicReference<>(0L);
+            //2. mpoffice에 체결 요청 보냄(배팅한 사람 있을때만)
             bidRepository.findTopByAuctionIdOrderByAskingpriceDesc(auctionId)
                     .ifPresent(currentTopBid->{
-                        buyerId.set(currentTopBid.getUserId());
-                        price.set(currentTopBid.getAskingprice());
+                        AuctionClosing auctionClosing = AuctionClosing.builder()
+                                .memeId(auction.getMemeId())
+                                .buyerId(currentTopBid.getUserId())
+                                .sellerId(auction.getSellerId())
+                                .createdAt(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                                .price(currentTopBid.getAskingprice())
+                                .build();
+                        try{
+                            isp.addTransaction(auctionClosing);
+                        }catch (JsonProcessingException e) {
+                            throw new RuntimeException(e);
+                        }
                     });
-            AuctionClosing auctionClosing = AuctionClosing.builder()
-                    .memeId(auction.getMemeId())
-                    .buyerId(buyerId.get())
-                    .sellerId(auction.getSellerId())
-                    .createdAt(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-                    .price(price.get())
-                    .build();
-            log.info(auctionClosing.toString());
-            try{
-                isp.addTransaction(auctionClosing);
-            }catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
+            //경매 끝났다는 알람 보내기
             isp.setAlarm("end", auction.getId(), auction.getSellerId(),auction.getMemeId());
         }
     }
