@@ -275,7 +275,7 @@ public class AuctionServiceImpl implements AuctionService{
                     .memeStatus(MemeStatus.AUCTIONDOESNOTEXISTS).build();
         }
         else{
-            Auction auction = list.get(1);
+            Auction auction = list.get(0);
             if(auction.getStatus().equals(AuctionStatus.ENROLLED)){
                 return MemeRes.builder()
                         .memeStatus(MemeStatus.HASENROLLEDAUCTION)
