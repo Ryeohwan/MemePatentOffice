@@ -21,6 +21,7 @@ public class MemeResponse {
     private String title;
     private String content;
     private String createdAt;
+    private Long ownerId;
     private String ownerNickname;
     private String createrNickname;
     @Enumerated(EnumType.STRING)
