@@ -46,5 +46,5 @@ public class Alarm extends BaseEntity{
 
     public void setChecked(int checked) {
         this.checked = checked;
-    }
+    } 
 }
