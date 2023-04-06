@@ -3,15 +3,20 @@ package com.memepatentoffice.mpoffice.domain.user.api.controller;
 
 import com.memepatentoffice.mpoffice.common.Exception.NotFoundException;
 import com.memepatentoffice.mpoffice.db.entity.AlarmType;
+import com.memepatentoffice.mpoffice.domain.meme.api.response.WalletResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.response.AlarmCheckResponse;
 import com.memepatentoffice.mpoffice.domain.user.api.service.AlarmService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @RequiredArgsConstructor
 @RequestMapping("api/mpoffice/alarm")
@@ -55,7 +60,7 @@ public class AlarmController {
     }
 
     @GetMapping("/auction/end")
-    public ResponseEntity addEndAuctionAlarm(
+    public ResponseEntity addEndAuctionAlarm (
             @RequestParam(value = "auction") Long auctionId,
             @RequestParam(value = "user") Long userId,
             @RequestParam(value = "meme") Long memeId
@@ -64,4 +69,18 @@ public class AlarmController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @GetMapping("/auction/wallet")
+    public ResponseEntity redirectTransfer (
+            @RequestParam(value = "from") Long fromId,
+            @RequestParam(value = "to") Long toId
+    ) throws URISyntaxException, NotFoundException {
+        // 둘다 모두 지갑주소가 디비에 저장되어있다는 가정아래
+        String fromAddress = alarmService.getWalletAddressByUserId(fromId);
+        String toAddress = alarmService.getWalletAddressByUserId(toId);
+        WalletResponse walletResponse = WalletResponse.builder()
+                .fromAddress(fromAddress)
+                .toAddress(toAddress)
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(walletResponse);
+    }
 }
