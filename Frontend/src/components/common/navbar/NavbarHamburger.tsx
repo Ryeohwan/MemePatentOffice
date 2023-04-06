@@ -220,7 +220,7 @@ const NavbarHamburger: React.FC = () => {
                 <img src={metamask} alt="" className={styles.menuImg}/>
                 <div className={styles.menuTxt}>
                   내 잔액 :{" "}
-                  {myBalance ? myBalance / 10 ** 18 : 0} SSF
+                  {myBalance ? myBalance : 0} SSF
                 </div>
               </div>
             ) : (

@@ -3,8 +3,8 @@ import { AbiItem } from "web3-utils";
 
 export const web3 = new Web3(window.ethereum);
 
-export const saleMemeTokenAddress = "0x991A4A2c004061a87D26E5aDB19f827F64078FB8";
-export const mintMemeTokenAddress = "0x729c78AE9F9c186Fbac20f7f2BfEAC363150dcea";
+export const saleMemeTokenAddress = "0x2Bf8E4173E8Ce99cD09810Af9Ec8B89Da8C08460";
+export const mintMemeTokenAddress = "0x1ed860B3F1565f12E22F2EF5CE32C7b88cfe5048";
 
 const saleMemeTokenAbi:AbiItem[] = [
 	{
@@ -230,7 +230,7 @@ const saleMemeTokenAbi:AbiItem[] = [
 				"type": "bool"
 			}
 		],
-		"stateMutability": "nonpayable",
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -342,7 +342,7 @@ const saleMemeTokenAbi:AbiItem[] = [
 				"type": "bool"
 			}
 		],
-		"stateMutability": "nonpayable",
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -590,7 +590,7 @@ const mintMemeTokenAbi:AbiItem[] = [
 				"type": "uint256"
 			}
 		],
-		"stateMutability": "nonpayable",
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -816,7 +816,7 @@ const mintMemeTokenAbi:AbiItem[] = [
 		],
 		"name": "transferNFT",
 		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -844,7 +844,7 @@ export const saleMemeTokenContract = new web3.eth.Contract(
 	saleMemeTokenAddress
 );
 
-// Minting
+// Minting (ok)
 export const memeOwnerAccess = async () => {
 	const account = JSON.parse(sessionStorage.getItem('user')!).walletAddress;
   
@@ -944,7 +944,8 @@ export const transferNftOwnership = async (toAccount:string, tokenId: number|und
       console.error('Error encoding ABI:', err);
       return;
     }
-    const nonce = await web3.eth.getTransactionCount(ownerAddress, 'latest');
+    const nonce = await web3.eth.getTransactionCount(ownerAddress, 'latest')
+	const newNonce = nonce + 1;
     
     const signedTx = await web3.eth.accounts.signTransaction({
       from: ownerAddress,
@@ -952,7 +953,7 @@ export const transferNftOwnership = async (toAccount:string, tokenId: number|und
       data: data,
       gas: gasLimit,
       gasPrice: gasPrice,
-      nonce: nonce,
+      nonce: newNonce,
     }, privateKey);
 
     console.log("signedTx", signedTx)
@@ -983,23 +984,25 @@ export const transferNftCoin = async ( toAccount:string, fromAccount:string, pri
 	} catch (err) {
 	  console.error('Error encoding ABI:', err);
 	  return;
-	}
-	const nonce = await web3.eth.getTransactionCount(ownerAddress, 'latest');
-	
-	const signedTx = await web3.eth.accounts.signTransaction({
-	  from: ownerAddress,
-	  to: saleMemeTokenAddress,
-	  data: data,
-	  gas: gasLimit,
-	  gasPrice: gasPrice,
-	  nonce: nonce,
-	}, privateKey);
+	};
+
+    const nonce = await web3.eth.getTransactionCount(ownerAddress, 'latest')
+	const newNonce = nonce + 1;
+    
+    const signedTx = await web3.eth.accounts.signTransaction({
+      from: ownerAddress,
+      to: mintMemeTokenAddress,
+      data: data,
+      gas: gasLimit,
+      gasPrice: gasPrice,
+      nonce: newNonce,
+    }, privateKey);
 
 	console.log("signedTx", signedTx)
+
 	if (signedTx.rawTransaction) {
 		await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
-		console.log("success transfer coin")
-
+		console.log("success transfer coin");
 	} else {
 		console.error("Signed transaction is undefined");
 	};
