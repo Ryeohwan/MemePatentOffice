@@ -22,20 +22,18 @@ const UploadTime: React.FC = () => {
       <Calendar
         value={timeValue}
         onChange={(e: CalendarChangeEvent) => {
-          console.log(e.value)
           if (e.value != undefined) {
-            console.log(e.value)
             setTimeValue(e.value as Date);
           }
         }}
-        // minDate={new Date(+new Date() + 24 * 60 * 60 * 1000)}
+        minDate={new Date()}
         showIcon
         touchUI
         className={styles.calendar}
         showTime
         hourFormat="24"
         hideOnDateTimeSelect
-        // stepMinute={5}
+        stepMinute={5}
       />
     </>
   );

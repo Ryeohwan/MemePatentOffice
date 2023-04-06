@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router";
 import * as THREE from "three";
 import useAxios from "hooks/useAxios";
