@@ -966,7 +966,7 @@ export const transferNftOwnership = async (toAccount:string, tokenId: number|und
 
 
 
-// 코인 거래 (경매 후) : userAccount가 yenniAccount에게 돈을 줘야 함 (판매자 : fromAccount, 구매자 : toAccount)
+// 코인 거래 (경매 후)  (판매자 : fromAccount, 구매자 : toAccount)
 export const transferNftCoin = async ( toAccount:string, fromAccount:string, price:number) => {
 
 	const ownerAddress = "0xd8df17B6a1758c52eA81219b001547A2c2e3d789";
