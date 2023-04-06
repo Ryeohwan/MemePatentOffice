@@ -1,4 +1,4 @@
-import React, { KeyboardEventHandler } from "react";
+import React, { KeyboardEventHandler, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { chatActions } from "store/chat";
 import { RootState } from "store/configStore";
@@ -11,19 +11,17 @@ import { WebSocketProps } from "type";
 
 const ChatInputText: React.FC<WebSocketProps> = ({client, auctionId}) => {
   const dispatch = useDispatch();
-  const value = useSelector<RootState, string>((state) => state.chat.input);
-
+  const [value,setState] = useState<string>('')
   const inputChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    dispatch(chatActions.inputText({ input: e.target.value }));
+    // dispatch(chatActions.inputText({ input: e.target.value }));
+    setState(e.target.value)
       };
 
   const sendMessageHandler = (value: string) => {
     if (value.trim()) {
       if(!client.current?.connected){
-        console.log('sendSub: client.current is not connected')
         return
       }
-      console.log(JSON.parse(sessionStorage.getItem('user')!).imgUrl)
       client.current.publish({
         destination: "/pub/chat",
         body: JSON.stringify({ 
@@ -33,14 +31,13 @@ const ChatInputText: React.FC<WebSocketProps> = ({client, auctionId}) => {
           profileImgUrl: JSON.parse(sessionStorage.getItem('user')!).imgUrl,
         }),
       });
-      
+      setState('')
     }
   };
   const keyUpHandler:KeyboardEventHandler<HTMLTextAreaElement> = (e)=> {
     if(e.nativeEvent.key!=="Enter") return
     if (value.trim()) {
       if(!client.current?.connected){
-        console.log('sendSub: client.current is not connected')
         return
       }
       console.log(JSON.parse(sessionStorage.getItem('user')!).imgUrl)
@@ -53,7 +50,8 @@ const ChatInputText: React.FC<WebSocketProps> = ({client, auctionId}) => {
           profileImgUrl: JSON.parse(sessionStorage.getItem('user')!).imgUrl,
         }),
       });
-      
+      setState('')
+
     }
   };  
   return (
