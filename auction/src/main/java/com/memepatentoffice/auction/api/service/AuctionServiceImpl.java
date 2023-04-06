@@ -134,6 +134,9 @@ public class AuctionServiceImpl implements AuctionService{
         }
         JSONObject jsonObject = isp.findUserById(bidReq.getUserId())
                 .orElseThrow(()->new NotFoundException("sellerId가 유효하지 않습니다"));
+        if(auction.getSellerId().equals(bidReq.getUserId())){
+            throw new BiddingException("자신의 경매에는 입찰을 할 수 없습니다");
+        }
         String nickname = jsonObject.getString("nickname");
 
         bidRepository.findTopByAuctionIdOrderByAskingpriceDesc(bidReq.getAuctionId())
