@@ -72,16 +72,20 @@ public class AuctionServiceImpl implements AuctionService{
         List<Auction> existingAuctionList = auctionRepository.findAllByMemeIdWhereStatusIsNotTerminated(req.getMemeId());
         if(existingAuctionList.size()>0) throw new AuctionException("이 밈은 이미 경매가 등록된 상태입니다.");
 
+        LocalDateTime startDateTime = req.getStartDateTime();
+        LocalDateTime now = LocalDateTime.now();
+        if(startDateTime.isBefore(now)) throw new AuctionException("예약된 경매시작 시간이 현재 시간보다 빠릅니다");
+
         Auction auction = auctionRepository.save(Auction.builder()
                         .memeId(req.getMemeId())
                         .memeImgUrl(memeImgUrl)
-                        .startTime(req.getStartDateTime())
+                        .startTime(startDateTime)
                         .sellerId(req.getSellerId())
                         .sellerNickname(sellerNickname)
                         .startingPrice(req.getStartingPrice())
                 .build());
 
-        ZonedDateTime startZdt = auction.getStartTime()
+        ZonedDateTime startZdt = startDateTime
                 .atZone(ZoneId.systemDefault());
         Date startDate = Date.from(startZdt.toInstant());
         ZonedDateTime terminateZdt = auction.getFinishTime()
