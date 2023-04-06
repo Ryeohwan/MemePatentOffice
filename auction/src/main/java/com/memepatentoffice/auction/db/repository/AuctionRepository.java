@@ -14,7 +14,7 @@ public interface AuctionRepository extends JpaRepository<Auction, Long> {
     List<Auction> findAllProceeding();
 
     @Query("select a from Auction a where a.sellerNickname = :sellerNickname and a.status = com.memepatentoffice.auction.db.entity.type.AuctionStatus.PROCEEDING")
-    List<Auction> findAllBySellerNickname(@Param("sellerNickname")String sellerNickname);
+    List<Auction> findAllProceedingBySellerNickname(@Param("sellerNickname")String sellerNickname);
 
     @Query("select a from Auction a where a.memeId = :memeId and a.status <> com.memepatentoffice.auction.db.entity.type.AuctionStatus.TERMINATED")
     List<Auction> findAllByMemeIdWhereStatusIsNotTerminated(@Param("memeId")Long memeId);
@@ -35,5 +35,4 @@ public interface AuctionRepository extends JpaRepository<Auction, Long> {
     @Query("update Auction a set a.status = com.memepatentoffice.auction.db.entity.type.AuctionStatus.TERMINATED where a.id = :auctionId")
     void updateStatusToTerminated(@Param("auctionId") Long auctionId);
 
-    List<Auction> findByMemeId(@Param("memeId") Long memeId);
 }

@@ -21,7 +21,7 @@ public interface AuctionService {
     AuctionRes getInfo(Long auctionId) throws Exception;
     Long bid(BidReq bidReq) throws NotFoundException, BiddingException;
 
-    List<AuctionListRes> findAllBySellerNickname(String sellerNickname) throws NotFoundException;
+    List<AuctionListRes> findAllProceedingBySellerNickname(String sellerNickname) throws NotFoundException;
     List<AuctionListRes> findAllByHit() throws NotFoundException;
     List<AuctionListRes> findAllProceedingByFinishTimeLatest() throws NotFoundException;
     List<AuctionListRes> findAllProceedingByFinishTimeOldest() throws NotFoundException;

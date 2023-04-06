@@ -12,7 +12,6 @@ import com.memepatentoffice.auction.common.exception.NotFoundException;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.asm.Advice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -46,7 +45,7 @@ public class AuctionController {
     @GetMapping(value = "/list",params={"userNickname"})
     public ResponseEntity<?> getListByUserNickname(@RequestParam String userNickname) throws NotFoundException {
         return ResponseEntity.status(HttpStatus.OK).body(
-                auctionService.findAllBySellerNickname(userNickname)
+                auctionService.findAllProceedingBySellerNickname(userNickname)
         );
     }
 

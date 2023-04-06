@@ -163,8 +163,8 @@ public class AuctionServiceImpl implements AuctionService{
     }
 
     @Override
-    public List<AuctionListRes> findAllBySellerNickname(String sellerNickname){
-        return auctionRepository.findAllBySellerNickname(sellerNickname).stream()
+    public List<AuctionListRes> findAllProceedingBySellerNickname(String sellerNickname){
+        return auctionRepository.findAllProceedingBySellerNickname(sellerNickname).stream()
                 .map(auction -> streamExceptionHandler(()->{
                     JSONObject jsonObject = isp.findMemeById(auction.getMemeId()).orElseThrow(()->new NotFoundException("유효하지 않은 밈 아이디입니다"));
                     String title = jsonObject.getString("title");
@@ -273,7 +273,7 @@ public class AuctionServiceImpl implements AuctionService{
 
     @Override
     public MemeRes searchByMemeId(Long memeId) {
-        List<Auction> list = auctionRepository.findByMemeId(memeId);
+        List<Auction> list = auctionRepository.findAllByMemeIdWhereStatusIsNotTerminated(memeId);
         if(list.size()<1){
             return MemeRes.builder()
                     .memeStatus(MemeStatus.AUCTIONDOESNOTEXISTS).build();
@@ -285,14 +285,11 @@ public class AuctionServiceImpl implements AuctionService{
                         .memeStatus(MemeStatus.HASENROLLEDAUCTION)
                         .startTime(auction.getStartTime())
                         .build();
-            }else if(auction.getStatus().equals(AuctionStatus.PROCEEDING)){
+            }else {/*auction.getStatus().equals(AuctionStatus.PROCEEDING)*/
                 return MemeRes.builder()
                         .memeStatus(MemeStatus.AUCTIONPROCEEDING)
                         .auctionId(auction.getId())
                         .build();
-            }else{//auction.getStatus().equals(AuctionStatus.TERMINATED)
-                return MemeRes.builder()
-                        .memeStatus(MemeStatus.AUCTIONDOESNOTEXISTS).build();
             }
         }
     }
@@ -394,6 +391,7 @@ public class AuctionServiceImpl implements AuctionService{
                     .createdAt(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                     .price(price.get())
                     .build();
+            log.info(auctionClosing.toString());
             try{
                 isp.addTransaction(auctionClosing);
             }catch (JsonProcessingException e) {
