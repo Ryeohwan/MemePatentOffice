@@ -927,11 +927,8 @@ export const giveSignInCoin = async () => {
 
 
 // NFT 소유권 이전 (경매 후)
-export const transferNftOwnership = async (tokenId: number|undefined) => {
+export const transferNftOwnership = async (toAccount:string, tokenId: number|undefined) => {
     console.log(tokenId)
-    
-    // 소유권을 가져갈 주소 (경매 끝나고 최고가로 사들이는 사람의 지갑 주소)
-    const yenniAccount = "0x062294073b003EEB03eBA75B668c54C290F8730a";
 
     const ownerAddress = "0xd8df17B6a1758c52eA81219b001547A2c2e3d789";
     const privateKey = "0xcd3352d522fb229242472dddc60abc0831ba87db490573616e7cc43f4d179a28";
@@ -942,7 +939,7 @@ export const transferNftOwnership = async (tokenId: number|undefined) => {
     
     let data;
     try {
-      data = mintMemeTokenContract.methods.transferNFT(yenniAccount, tokenId).encodeABI();
+      data = mintMemeTokenContract.methods.transferNFT(toAccount, tokenId).encodeABI();
     } catch (err) {
       console.error('Error encoding ABI:', err);
       return;
@@ -960,7 +957,7 @@ export const transferNftOwnership = async (tokenId: number|undefined) => {
 
     console.log("signedTx", signedTx)
     if (signedTx.rawTransaction) {
-        web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+        await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
 		console.log("success transfer nft ownership")
     } else {
         console.error("Signed transaction is undefined");
@@ -969,18 +966,8 @@ export const transferNftOwnership = async (tokenId: number|undefined) => {
 
 
 
-// 코인 거래 (경매 후) : userAccount가 yenniAccount에게 돈을 줘야 함 (판매자 : yenniAccount, 구매자 : userAccount)
-export const transferNftCoin = async () => {
-    // 구매자 (돈이 빠져나가는 지갑)
-	const account = JSON.parse(sessionStorage.getItem('user')!).walletAddress;
-
-
-    // 판매자 (돈이 들어가야할 지갑)
-    const yenniAccount = "0x062294073b003EEB03eBA75B668c54C290F8730a";
-	
-
-    // 경매 거래가
-    const price = 10 ;
+// 코인 거래 (경매 후) : userAccount가 yenniAccount에게 돈을 줘야 함 (판매자 : fromAccount, 구매자 : toAccount)
+export const transferNftCoin = async ( toAccount:string, fromAccount:string, price:number) => {
 
 	const ownerAddress = "0xd8df17B6a1758c52eA81219b001547A2c2e3d789";
 	const privateKey = "0xcd3352d522fb229242472dddc60abc0831ba87db490573616e7cc43f4d179a28";
@@ -991,7 +978,7 @@ export const transferNftCoin = async () => {
     
 	let data;
 	try {
-	  data = saleMemeTokenContract.methods.transferCoin(account, yenniAccount, price).encodeABI();
+	  data = saleMemeTokenContract.methods.transferCoin(toAccount, fromAccount, price).encodeABI();
 	  console.log("성공", data)
 	} catch (err) {
 	  console.error('Error encoding ABI:', err);
@@ -1010,7 +997,9 @@ export const transferNftCoin = async () => {
 
 	console.log("signedTx", signedTx)
 	if (signedTx.rawTransaction) {
-		web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+		await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+		console.log("success transfer coin")
+
 	} else {
 		console.error("Signed transaction is undefined");
 	};

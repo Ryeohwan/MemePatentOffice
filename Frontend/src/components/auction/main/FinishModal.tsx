@@ -12,11 +12,13 @@ import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import styles from "components/auction/main/FinishModal.module.css";
 import FinishModalCharacter from "./FinishModalCharacter";
+import { transferNftCoin, transferNftOwnership } from "web3config";
 
 const FinishModal: React.FC = () => {
   const navigate = useNavigate();
   const params = useParams();
   const auctionId = parseInt(params.auctionId!, 10);
+  const walletAddress = JSON.parse(sessionStorage.getItem('user')!).walletAddress;
 
   // 경매 끝나자마자 get으로 경매 결과 받아옴
   const { data: resultData, sendRequest: getResultData } = useAxios();
@@ -25,18 +27,39 @@ const FinishModal: React.FC = () => {
     (state) => state.auction.auctionInfo.biddingHistory
   );
   // 모달창
-  // const visible = useSelector<RootState, boolean>(state=>state.auction.finishModalVisible);
-  const visible = true;
+  const visible = useSelector<RootState, boolean>(state=>state.auction.finishModalVisible);
+  // const visible = true;
 
   // 남은 시간
   // const [remainTime, setRemainTime] = useState<number>(5);
   const remainTime = useRef<number>(6);
+  
+  const memeTransaction = async (resultData:any) => {
+    let fromAccount;
+    let toAccount;
+    let price;
+    let memeTokenId;
+
+    if (resultData) {
+      fromAccount = resultData.fromAccount;
+      toAccount = resultData.toAccount;
+      price = resultData.price;
+      memeTokenId = resultData.memeTokenId;
+
+      // 판매자 : fromAccount, 구매자 : toAccount
+      if (walletAddress === fromAccount || walletAddress === toAccount) {
+        await transferNftCoin(fromAccount, toAccount, price);
+        await transferNftOwnership(toAccount, memeTokenId);
+        // 모달 닫기
+      } 
+    }  
+
+
+  };
+
 
   useEffect(() => {
-    let fromAccount:string;
-    let toAccount:string;
-    let price:string;
-    let memeTokenId:number;
+
 
     if (visible){
       getResultData({
@@ -45,16 +68,8 @@ const FinishModal: React.FC = () => {
   
         console.log(resultData)
         if (resultData) {
-          fromAccount = resultData.fromAccount;
-          toAccount = resultData.toAccount;
-          price = resultData.price;
-          memeTokenId = resultData.memeTokenId;
+
         }
-
-
-
-
-
 
 
     }
