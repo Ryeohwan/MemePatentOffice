@@ -38,13 +38,8 @@ const FinishModal: React.FC = () => {
   // const [remainTime, setRemainTime] = useState<number>(5);
   const remainTime = useRef<number>(6);
 
-  const memeTransaction = async (resultData: any) => {
+  const memeTransaction = (resultData: any) => {
     if (resultData) {
-      const fromAccount = resultData.fromAccount;
-      const toAccount = resultData.toAccount;
-      const resultPrice = resultData.price;
-      const memeTokenId = resultData.memeTokenId;
-
       const memeId = resultData.memeId;
       const buyerId = resultData.buyerId;
       const sellerId = resultData.sellerId;
@@ -52,28 +47,24 @@ const FinishModal: React.FC = () => {
       const price = resultData.price;
 
       // 판매자 : fromAccount, 구매자 : toAccount
-      if (walletAddress === toAccount) {
-        await transferNftCoin(fromAccount, toAccount, resultPrice);
-        await transferNftOwnership(toAccount, memeTokenId);}
-      // const transferCoinStatus = true;
-      // const transferOwnershipStatus = true;
-      // if (transferCoinStatus && transferOwnershipStatus) {
-      //   postResultData({
-      //     url: `/api/mpoffice/meme/addTransaction`,
-      //     method: "POST",
-      //     data: {
-      //       memeId: memeId,
-      //       buyerId: buyerId,
-      //       sellerId: sellerId,
-      //       createdAt: createdAt,
-      //       price: price,
-      //     },
-      //   });
-      }
-    // }
-    
+      const transferCoinStatus = true;
+      const transferOwnershipStatus = true;
+      if (transferCoinStatus && transferOwnershipStatus) {
+        postResultData({
+          url: `/api/mpoffice/meme/addTransaction`,
+          method: "POST",
+          data: {
+            memeId: memeId,
+            buyerId: buyerId,
+            sellerId: sellerId,
+            createdAt: createdAt,
+            price: price,
+          },
+        });
+      };
+    };
   };
-
+  
   useEffect(() => {
     if (visible) {
       getResultData({

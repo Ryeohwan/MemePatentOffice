@@ -856,7 +856,8 @@ export const memeOwnerAccess = async () => {
 
 	const data = mintMemeTokenContract.methods.mintMemeToken(account).encodeABI();
 
-	const nonce = await web3.eth.getTransactionCount(ownerAddress, 'latest');
+	const nonce = await web3.eth.getTransactionCount(ownerAddress, 'latest')
+	const newNonce = nonce + 1;
 	
 	const signedTx = await web3.eth.accounts.signTransaction({
 	  from: ownerAddress,
@@ -864,7 +865,7 @@ export const memeOwnerAccess = async () => {
 	  data: data,
 	  gas: gasLimit,
 	  gasPrice: gasPrice,
-	  nonce: nonce,
+	  nonce: newNonce,
 	}, privateKey);
 
     let tokenId;
@@ -872,17 +873,14 @@ export const memeOwnerAccess = async () => {
         const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
         const tokenIdHex = receipt.logs[0].topics[3];
         tokenId = parseInt(tokenIdHex, 16);
-        console.log("memeOwnerAccess에서 찍은 ",tokenId)
-        // return tokenId
 	} else {
 		console.error("Signed transaction is undefined");
     };
     return tokenId;
 };
+
 // 회원가입했을 때 코인 주기
 export const giveSignInCoin = async (account:string) => {
-	// const account = JSON.parse(sessionStorage.getItem('user')!).walletAddress;
-	console.log(account)
 
     const price = 500;
 
@@ -893,15 +891,10 @@ export const giveSignInCoin = async (account:string) => {
 	console.log(gasPrice)
 	const gasLimit = 3000000;
 	let data;
-	try {
-	  data = saleMemeTokenContract.methods.mintCoin(account, price).encodeABI();
-	  console.log("give sign in coin data : ", data)
-	} catch (err) {
-	  console.error('Error encoding ABI : ', err);
-	  return;
-	}
-
-	const nonce = await web3.eth.getTransactionCount(ownerAddress, 'latest');
+	data = saleMemeTokenContract.methods.mintCoin(account, price).encodeABI();
+	
+	const nonce = await web3.eth.getTransactionCount(ownerAddress, 'latest')
+	const newNonce = nonce + 1;
 	
 	const signedTx = await web3.eth.accounts.signTransaction({
 	  from: ownerAddress,
@@ -909,41 +902,29 @@ export const giveSignInCoin = async (account:string) => {
 	  data: data,
 	  gas: gasLimit,
 	  gasPrice: gasPrice,
-	  nonce: nonce,
+	  nonce: newNonce,
 	}, privateKey);
 
 	console.log("signedTx", signedTx);
 	if (signedTx.rawTransaction) {
-
 		const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
-		console.log(receipt.status)
 		return receipt.status;
-	} else {
-		console.error("Signed transaction is undefined");
 	};
-	console.log("코인 주기 실행 끝")
-
 };
 
 
 // NFT 소유권 이전 (경매 후)
 export const transferNftOwnership = async (toAccount:string, tokenId: number|undefined) => {
-    console.log(tokenId)
 
     const ownerAddress = "0xd8df17B6a1758c52eA81219b001547A2c2e3d789";
     const privateKey = "0xcd3352d522fb229242472dddc60abc0831ba87db490573616e7cc43f4d179a28";
     
     const gasPrice = await web3.eth.getGasPrice();
     const gasLimit = 3000000;
-    console.log("sale");
     
     let data;
-    try {
-      data = mintMemeTokenContract.methods.transferNFT(toAccount, tokenId).encodeABI();
-    } catch (err) {
-      console.error('Error encoding ABI:', err);
-      return;
-    }
+    data = mintMemeTokenContract.methods.transferNFT(toAccount, tokenId).encodeABI();
+
     const nonce = await web3.eth.getTransactionCount(ownerAddress, 'latest')
 	const newNonce = nonce + 1;
     
@@ -958,11 +939,9 @@ export const transferNftOwnership = async (toAccount:string, tokenId: number|und
 
     console.log("signedTx", signedTx)
     if (signedTx.rawTransaction) {
-        await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
-		console.log("success transfer nft ownership");
+        await web3.eth.sendSignedTransaction(signedTx.rawTransaction)
 		return true;
     } else {
-        console.error("Signed transaction is undefined");
 		return false;
     };
 };
@@ -979,14 +958,7 @@ export const transferNftCoin = async ( toAccount:string, fromAccount:string, pri
     console.log("sale");
     
 	let data;
-	try {
-	  data = saleMemeTokenContract.methods.transferCoin(toAccount, fromAccount, price).encodeABI();
-	  console.log("성공", data)
-	} catch (err) {
-	  console.error('Error encoding ABI:', err);
-	  return;
-	};
-
+	data = saleMemeTokenContract.methods.transferCoin(toAccount, fromAccount, price).encodeABI();
     const nonce = await web3.eth.getTransactionCount(ownerAddress, 'latest')
 	const newNonce = nonce + 1;
     
@@ -1003,10 +975,8 @@ export const transferNftCoin = async ( toAccount:string, fromAccount:string, pri
 
 	if (signedTx.rawTransaction) {
 		await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
-		console.log("success transfer coin");
 		return true;
 	} else {
-		console.error("Signed transaction is undefined");
 		return false;
 	};
 };
@@ -1015,6 +985,5 @@ export const transferNftCoin = async ( toAccount:string, fromAccount:string, pri
 export const checkMyBalance = async () => {
     const account = JSON.parse(sessionStorage.getItem('user')!).walletAddress;
 	const balanceLength = await saleMemeTokenContract.methods.balanceOf(account).call();
-	console.log("web3config.ts", balanceLength)
     return balanceLength;
 };

@@ -168,9 +168,6 @@ const NavbarHamburger: React.FC = () => {
         .then((balance) => {
           setMyBalance(balance);
         })
-        .catch((error) => {
-          console.error(error);
-        });
       return myBalance;
     } catch (e) {
       return false;

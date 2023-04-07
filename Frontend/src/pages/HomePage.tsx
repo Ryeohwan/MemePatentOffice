@@ -159,9 +159,6 @@ const HomePage: React.FC = () => {
         .then((balance) => {
           myBalance.current = balance;
         })
-        .catch((error) => {
-          console.error(error);
-        });
       return myBalance.current;
     } catch (e) {
       return false;
