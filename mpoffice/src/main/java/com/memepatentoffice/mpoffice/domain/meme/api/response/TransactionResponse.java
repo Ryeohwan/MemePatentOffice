@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 public class TransactionResponse {
     private String createdAt;
     private String nickName;
-    private Double price;
+    private int price;
 
 }

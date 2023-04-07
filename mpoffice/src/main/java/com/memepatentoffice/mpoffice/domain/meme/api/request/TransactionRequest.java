@@ -20,5 +20,5 @@ public class TransactionRequest {
     private Long buyerId;
     private Long sellerId;
     private String createdAt;
-    private Double price;
+    private int price;
 }

@@ -33,5 +33,5 @@ public class Transaction extends BaseEntity{
     private LocalDateTime createdAt;
 
     @Column(name = "price", nullable = false)
-    private Double price;
+    private int price;
 }
