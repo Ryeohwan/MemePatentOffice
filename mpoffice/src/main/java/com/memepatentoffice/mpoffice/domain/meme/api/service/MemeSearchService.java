@@ -61,7 +61,7 @@ public class MemeSearchService {
         List<SearchResponse> result = new ArrayList<>();
         int ranking = 1;
         for(Object b: all){
-            if(ranking == 10){
+            if(ranking == 11){
                 break;
             }
             Object[] arr = (Object[]) b;
@@ -86,7 +86,7 @@ public class MemeSearchService {
         List<SearchResponse> result = new ArrayList<>();
         int ranking = 1;
         for(Object b: all){
-            if(ranking == 10){
+            if(ranking == 11){
                 break;
             }
             Object[] arr = (Object[]) b;
