@@ -11,7 +11,7 @@ public class MyHistoryList {
     private Long id;
     private String title;
     private String seller;
-    private Double price;
+    private int price;
     private String imgSrc;
     private String date;
 }
