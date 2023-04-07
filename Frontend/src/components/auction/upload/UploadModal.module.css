@@ -1,0 +1,76 @@
+.modal{
+    width:80%;
+    height:70%;
+}
+
+.wrapper{
+    font-size: 13px;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper > div > p {
+    margin-bottom: 5px;
+}
+
+.dropDown {
+    margin: 5% 0 5% 0;
+}
+
+.calendar {
+    margin: 5% 0 5% 0;
+}
+
+.price {
+    margin: 5% 0 5% 0;
+}
+
+.checkboxWrapper{
+    font-size: 10px;
+    color: var(--disabled-gray-color);
+    margin-top: 10%;
+    display: flex;
+    flex-direction: column;
+}
+.checkboxWrapper > p,span{
+    font-weight: normal;
+}
+.checkboxWrapper > div{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+}
+
+.checkbox{    
+    margin-left: 5%;
+}
+
+.submit{
+    margin-top: 10%;
+    height:10%;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+
+.submitTrue {
+    width: 16%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: var(--navy-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.submitFalse {
+    width: 16%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: var(--disabled-gray-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

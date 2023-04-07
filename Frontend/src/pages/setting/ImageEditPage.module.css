@@ -1,0 +1,62 @@
+.header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: end;
+}
+
+.submit{
+    color: var(--navy-color);
+}
+
+.body{
+    padding: 16px;
+    font-size:18px;
+    font-weight: bold;
+}
+.settingMenu {
+    font-size: 16px;
+    margin: 5px 0px 15px 5px;
+}
+.basicImg > p{
+    margin-bottom: 5%;
+}
+
+.myNFT > p {
+    margin-bottom: 5%;
+}
+
+.myNftList{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.avatar{
+    object-fit : cover;
+    border: 1px var(--section-line-color) solid;
+    width: 5rem !important;
+    height: 5rem !important;
+    margin-right: 6%;
+    margin-bottom: 10%;
+}
+
+.avatar > img{
+    width: 90% !important;
+    height: 90% !important;
+    object-fit: cover;
+}
+
+.selected{
+    object-fit : cover;
+    border: 1.5px var(--navy-color) solid;
+    width: 5rem !important;
+    height: 5rem !important;
+    margin-right: 6%;
+    margin-bottom: 10%;
+}
+
+.selected > img{
+    width: 90% !important;
+    height: 90% !important;
+    object-fit: cover;
+}

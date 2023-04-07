@@ -1,0 +1,11 @@
+.chatBtn{
+    width:4rem !important;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.chatBtn>p{
+    font-size: 8px;
+    font-weight: bold;
+}

@@ -1,0 +1,40 @@
+.dropdown{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 3rem;
+}
+.dropdown > .p-dropdown-trigger{
+    width: 2rem !important;;
+}
+.optionItem{
+    display:flex;
+    flex-direction: row;
+    justify-self: center;
+    align-items: center;
+    width:100%;
+    font-size: 12px !important;
+    font-weight: bold;
+    overflow: hidden;
+}
+
+.optionTitle{
+    margin-left: 16px;
+    overflow: hidden;
+}
+
+.memeImg{
+    border-radius: 6px;
+    overflow: hidden;
+    width:20% !important;
+}
+
+.memeImg>img{
+    object-fit: cover;
+}
+
+.panel{
+    left : 16% !important;
+    width:60%;
+}
