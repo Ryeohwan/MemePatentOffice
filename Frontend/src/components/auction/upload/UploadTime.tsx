@@ -33,7 +33,7 @@ const UploadTime: React.FC = () => {
         showTime
         hourFormat="24"
         hideOnDateTimeSelect
-        stepMinute={5}
+        // stepMinute={5}
       />
     </>
   );
