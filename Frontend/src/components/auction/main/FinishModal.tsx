@@ -41,9 +41,9 @@ const FinishModal: React.FC = () => {
   const memeTransaction = (resultData: any) => {
     if (resultData) {
       const memeId = resultData.memeId;
-      const buyerId = resultData.buyerId;
-      const sellerId = resultData.sellerId;
-      const createdAt = resultData.createdAt;
+      const buyerId = resultData.buyerUserId;
+      const sellerId = resultData.sellerUserId;
+      const createdAt = resultData.finishTime;
       const price = resultData.price;
 
       // 판매자 : fromAccount, 구매자 : toAccount
@@ -64,7 +64,7 @@ const FinishModal: React.FC = () => {
       };
     };
   };
-  
+
   useEffect(() => {
     if (visible) {
       getResultData({
