@@ -34,9 +34,6 @@ import NotificationListPage from "pages/NotificationListPage";
 import NotFoundPage from "pages/NotFoundPage";
 
 import Frame from "layout/Frame";
-import BlockChain from "blockchain/blockchain-routes/BlockChain";
-import Animals from "blockchain/blockchain-routes/Animals";
-import SaleAnimal from "blockchain/blockchain-routes/Sales";
 
 import AuthRoute from "components/common/AuthRoute";
 const App: React.FC = () => {
@@ -58,10 +55,6 @@ const App: React.FC = () => {
     <ScrollToTop width={0} height={0} />
     <Frame>
     <Routes>
-    {/* blockchain 시험용 페이지 */}
-    <Route path="/blockchain" element={<BlockChain />} />
-    <Route path="/my-animal" element={<Animals />} />
-    <Route path="/sale-animal" element={<SaleAnimal />} />
     
     <Route path="" element={<LandingPage />} />
     <Route path="/oauth2/redirect" element={<LoginPage />} />
