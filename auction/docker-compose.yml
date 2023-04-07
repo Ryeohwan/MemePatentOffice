@@ -1,0 +1,11 @@
+#version: "3"
+#services:
+#  springboot:
+#    container_name: springboot-auction
+#    build:
+#      context: .
+#      dockerfile: ./Dockerfile
+#    ports:
+#      - "8072:8072"
+#    environment:
+#      - TZ=Asia/Seoul

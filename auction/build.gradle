@@ -21,7 +21,6 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
@@ -31,6 +30,26 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+
+	/*websocket*/
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+	/*okhttp3*/
+	implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.11'
+	/*json*/
+	implementation 'org.json:json:20230227'
+
+	/*web3*/
+	// https://mvnrepository.com/artifact/org.web3j/core
+	implementation 'org.web3j:core:5.0.0'
+
+
+
+
+	/* swagger2 */
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+
 }
 
 tasks.named('test') {
