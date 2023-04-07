@@ -322,6 +322,7 @@ public class AuctionServiceImpl implements AuctionService{
                     .fromAccount(fromAddress)
                     .toAccount(toAddress)
                     .memeTokenId(memeTokenId)
+                    .finishTime(auction.getFinishTime())
                     .price(currentTopBid.get().getAskingprice()).build();
         }
         return null;
