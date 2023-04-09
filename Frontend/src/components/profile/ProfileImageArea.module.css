@@ -1,0 +1,39 @@
+.areaContainer {
+  width: 100%;
+  height: 250px;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.backgroundContainer {
+  width: 120%;
+  height: 120%;
+  border-radius: 50%;
+  background: linear-gradient(
+    76.83deg,
+    #0384f46e 15.88%,
+    rgba(3, 67, 196, 0.32) 77.65%
+  );
+  position: absolute;
+  top: -50%;
+  z-index: 1;
+}
+
+.imgContainer {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--white-color);
+  position: absolute;
+  bottom: 10%;
+  z-index: 2;
+}
+
+.imgContainer > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

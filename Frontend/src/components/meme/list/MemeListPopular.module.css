@@ -1,0 +1,34 @@
+.memeListPopularContainer {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  overflow: auto;
+}
+
+.sortContainer {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 3vh;
+  margin-left: 10%;
+}
+
+.sortContainer > div {
+  font-size: 13px;
+}
+
+.active {
+  color: var(--navy-color);
+}
+
+.nonActive {
+  color: var(--disabled-gray-color);
+}
+
+.memeListCardContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  
+}
