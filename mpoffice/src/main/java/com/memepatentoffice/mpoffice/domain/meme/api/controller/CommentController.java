@@ -112,7 +112,7 @@ public class CommentController {
     }
 
     @GetMapping("/reply")
-    // 대댓글받기
+    // 대댓글
     public ResponseEntity ReplyList(
             @RequestParam(name = "memeId") Long memeId,
             @RequestParam(name = "userId") Long userId,
