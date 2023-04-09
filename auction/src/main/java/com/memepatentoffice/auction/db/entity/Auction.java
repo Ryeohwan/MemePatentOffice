@@ -36,7 +36,7 @@ public class Auction extends BaseEntity{
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private AuctionStatus status;
-
+    // time
     private static final Integer AUCTION_DURATION_MINUTES = 15;
     @Builder
     public Auction(Long memeId, LocalDateTime startTime, Long sellerId,
