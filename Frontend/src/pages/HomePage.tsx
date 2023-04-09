@@ -53,17 +53,17 @@ const HomePage: React.FC = () => {
   const myBalance = useRef<number | undefined>();
 
   const { data: againUserInfo, sendRequest: getUserInfo } = useAxios();
-  const [walletAddress, setWalletAddress] = useState("");
+  // const [walletAddress, setWalletAddress] = useState("");
   const userId = JSON.parse(sessionStorage.getItem("user")!).userId;
 
-  useEffect(() => {
-    getUserInfo({
-      url: `/api/mpoffice/user/info/${userId}`,
-    });
-  }, []);
-  useEffect(() => {
-    if (againUserInfo) setWalletAddress(againUserInfo.walletAddress);
-  }, [againUserInfo]);
+  // useEffect(() => {
+  //   getUserInfo({
+  //     url: `/api/mpoffice/user/info/${userId}`,
+  //   });
+  // }, []);
+  // useEffect(() => {
+  //   if (againUserInfo) setWalletAddress(againUserInfo.walletAddress);
+  // }, [againUserInfo]);
 
   // 돈 들어오고 있다고 모달로 알림
   const [modalTxt, setModalTxt] = useState("");
@@ -84,6 +84,11 @@ const HomePage: React.FC = () => {
         }
 
         controlCheckModal(true);
+        const walletAddress = JSON.parse(
+          sessionStorage.getItem("user")!
+        ).walletAddress;
+
+
         // 최초로 연결한 지갑인 경우, 코인 지급하고 post address
         if (walletAddress === null) {
           await postWalletRequest({
@@ -100,17 +105,21 @@ const HomePage: React.FC = () => {
           setModalTxt(
             "최초로 연결된 지갑이네요. 500SSF를 선물로 받는 중입니다!"
           );
+          await new Promise((resolve) => setTimeout(resolve, 7000));
+          setModalTxt("500SSF를 받았습니다! 잔액을 확인해보세요.");
+          await new Promise((resolve) => setTimeout(resolve, 3000));
+          controlCheckModal(false);
 
-          const giveCoinStatus = await giveSignInCoin(account);
-          if (giveCoinStatus) {
-            setModalTxt("500SSF를 받았습니다!");
-            await new Promise((resolve) => setTimeout(resolve, 2000));
-            controlCheckModal(false);
-          } else {
-            setModalTxt("네트워크가 불안정해 선물을 받지 못했습니다.");
-            await new Promise((resolve) => setTimeout(resolve, 2000));
-            controlCheckModal(false);
-          }
+          // const giveCoinStatus = await giveSignInCoin(account);
+          // if (giveCoinStatus) {
+          //   setModalTxt("500SSF를 받았습니다!");
+          //   await new Promise((resolve) => setTimeout(resolve, 2000));
+          //   controlCheckModal(false);
+          // } else {
+          //   setModalTxt("네트워크가 불안정해 선물을 받지 못했습니다.");
+          //   await new Promise((resolve) => setTimeout(resolve, 2000));
+          //   controlCheckModal(false);
+          // }
         } else {
           // 이전에 등록했던 지갑과 동일한 경우, 패스
           if (walletAddress === account) {

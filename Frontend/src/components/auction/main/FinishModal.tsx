@@ -40,6 +40,7 @@ const FinishModal: React.FC = () => {
 
   const memeTransaction = (resultData: any) => {
     if (resultData) {
+      console.log(resultData);
       const memeId = resultData.memeId;
       const buyerId = resultData.buyerUserId;
       const sellerId = resultData.sellerUserId;

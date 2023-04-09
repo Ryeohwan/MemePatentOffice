@@ -36,6 +36,7 @@ import NotFoundPage from "pages/NotFoundPage";
 import Frame from "layout/Frame";
 
 import AuthRoute from "components/common/AuthRoute";
+import LastToilet from "blockchain/lastToilet";
 const App: React.FC = () => {
   const [windowSize, setWindowSize] = useState<boolean>(window.innerWidth >420 ? true: false)
   window.addEventListener('resize', ()=>{
@@ -56,6 +57,9 @@ const App: React.FC = () => {
     <Frame>
     <Routes>
     
+    {/* blockchain toilet */}
+    <Route path="/toilet" element={<LastToilet/>}/>
+
     <Route path="" element={<LandingPage />} />
     <Route path="/oauth2/redirect" element={<LoginPage />} />
     <Route
