@@ -1,0 +1,81 @@
+.auctionCardWrapper {
+    border-radius: 6px;
+    box-shadow: var(--box-shadow);
+    width: 246px;
+    height: 310px;
+    font-size: 12px;
+    margin: 0 10px;
+}
+
+.auctionImg {
+    width: 246px;
+    height: 164px;
+    object-fit: cover;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+}
+
+.auctionTime, .auctionBid {
+    display: inline-block;
+    margin-left: 40px;
+}
+
+.pointTime {
+    animation: blink-effect 1s infinite;
+}
+@keyframes blink-effect {
+    50% {
+        opacity: 100%;
+        color: var(--red-color);
+    }
+}
+
+.disabledTime {
+    color: var(--red-color);
+}
+
+
+.auctionTimeTxt, .auctionBidTxt {
+    display: inline-block;
+    width: 50px;
+    margin-left: 10px;
+    margin-bottom: 7px;
+}
+
+.nftTitleText {
+    padding: 6px 5px 9px 9px;
+    height: 55px;
+    line-height: 20px; 
+    font-size: 14px;
+}
+
+.btnWrapper {
+    display: flex;
+    justify-content: space-between;
+    margin: 4px 9px 4px 9px;
+}
+
+.navLink {
+    text-decoration: none;
+    color: white;
+}
+
+.nftDetailBtn {
+    width: 100px;
+    height: 30px;
+    border-radius: 5px;
+    background-color: var(--navy-color);
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auctionDetailBtn {
+    width: 100px;
+    height: 30px;
+    border-radius: 5px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--red-color);
+}

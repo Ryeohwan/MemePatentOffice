@@ -1,0 +1,34 @@
+.skeletonContainer{
+        width: 246px;
+        height: 270px;
+        position: relative;
+        top: 0;
+        left: 0;
+        display: flex;
+        margin-left: 10px;
+        border: 1px var(--section-line-color) solid;
+        box-shadow: var(--box-shadow);
+        border-radius: 5%;
+}
+
+.skeletonCard{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+}
+
+.skeletonImg{
+    margin-top: 10%;
+    width:90% !important;
+    height:70% !important;
+}
+
+.skeletontext{
+    margin-top: 5%;
+    width:90% !important;
+    height:10% !important;
+}

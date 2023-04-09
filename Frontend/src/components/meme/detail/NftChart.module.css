@@ -1,0 +1,42 @@
+.detailInfoBox {
+    background-color: var(--white-color);
+    padding: 9px 12px;
+    border: 0.5px solid var(--disabled-gray-color);
+    border-radius: 5px;
+    height: 46px;
+    width: 140px;
+    font-size: 12px;
+    line-height: 11px;
+}
+
+.priceArrow {
+    font-size: 15px;
+    color: var(--disabled-gray-color);
+}
+
+.bidText {
+    font-size: 12px;
+    color: var(--disabled-gray-color);
+    margin-left: 5px;
+}
+
+.bidWrapper {
+    display: flex;
+    align-items: center;
+}
+
+.bidWrapperDiv {
+    display: flex;
+    justify-content: center;
+    gap: 1.3rem;
+    margin-top: 30px;
+    /* overflow-x: auto; */
+}
+
+.noTradeData {
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+}

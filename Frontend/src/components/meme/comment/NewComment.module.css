@@ -1,0 +1,77 @@
+.newCommentContainer {
+    position: sticky;
+    height: 60px;
+    bottom: 0px;
+    background-color: var(--white-color);
+
+}
+
+.commentContainer {
+    width: 100%;
+    border: 0.5px solid var(--section-line-color);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+}
+
+.commentInputWrapper, .replyNotifierContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.replyNotifier {
+    width: 100%;
+    height: 20px;
+    font-size: 10px;
+    padding: 3px;
+    margin-left: 5px;
+}
+
+.cancelBtnWrapper {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding: 3px;
+    margin-right: 5px;
+}
+
+.cancelBtn{
+    color: var(--black-color);
+    font-size: 1rem;
+}
+
+.commentInputWrapper textarea {
+    width: 100%;
+    height: 30px;
+    max-height: 100px;
+    border: none;
+    margin-left: 2px;
+    resize: none;
+    font-size: 13px;
+}
+
+.commentInput:focus {
+    outline: none;
+}
+
+.commentInput::-webkit-scrollbar {
+    width: 0px;
+}
+
+.submitBtnWrapper {
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.submitBtn {
+    color: var(--navy-color);
+    font-size: 2rem;
+}
+
+.submitDisableBtn {
+    font-size: 2rem;
+    color: var(--section-line-color);
+}
