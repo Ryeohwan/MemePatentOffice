@@ -140,4 +140,4 @@ N사에서는 피드에 띄울 기사들 그리고 게시글들의 선택을 인
 
 ## 10. 경매
 <br>
-![경매](https://youtu.be/SXTjGhmPpiI))
+https://youtu.be/SXTjGhmPpiI
