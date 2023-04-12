@@ -138,6 +138,6 @@ N사에서는 피드에 띄울 기사들 그리고 게시글들의 선택을 인
 현재 진행중인 경매를 인기순, 최신순, 마감임박순으로 정렬하여 확인할 수 있다.
 또한, 사용자가 보유한 nft로 경매 등록이 가능하다.
 
-## 10. 경매 -> 아예 정리해서 동영상으로 (경매 리스트 -> 경매장)
+## 10. 경매
 <br>
-[![경매장 유튜브 링크](http://img.youtube.com/vi/SXTjGhmPpiI/0.jpg)](https://youtu.be/SXTjGhmPpiI?t=0s)
+[![경매](http://img.youtube.com/vi/SXTjGhmPpiI/0.jpg)](https://youtu.be/SXTjGhmPpiI))
