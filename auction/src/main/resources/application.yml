@@ -1,0 +1,35 @@
+server:
+  port: 8072
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://j8a305.p.ssafy.io:3072/auction-project
+    username: a305
+    password: dkanakf156346!!
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  jackson:
+    deserialization:
+      adjust-dates-to-context-time-zone: false
+    time-zone: Asia/Seoul
+app:
+  business:
+    url: https://j8a305.p.ssafy.io/api/mpoffice
+  cors:
+    allowedOrigins: http://localhost:3000
