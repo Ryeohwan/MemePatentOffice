@@ -1,2 +1,14 @@
+<<<<<<< HEAD
 .DS_Store
 package-lock.json
+=======
+/.idea/compiler.xml
+/.idea/gradle.xml
+/.idea/jarRepositories.xml
+/.idea/jpa-buddy.xml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/S08P22A305.iml
+/.idea/vcs.xml
+/.idea/workspace.xml
+>>>>>>> origin/develop/auth
