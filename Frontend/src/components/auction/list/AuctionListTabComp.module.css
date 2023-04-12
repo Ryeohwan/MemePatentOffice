@@ -1,0 +1,20 @@
+.tabContainer {
+  width: 100%;
+}
+
+.auctionListCardContainer {
+  width: 100%;
+  height: 100%;
+  padding-bottom: 3%;
+  position: absolute;
+  overflow: auto;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.noContentContainer {
+  padding-top: 60%;
+}

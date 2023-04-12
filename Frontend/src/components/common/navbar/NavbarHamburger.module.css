@@ -1,0 +1,49 @@
+.hamburger {
+  color: #7D7D7D;
+  font-size: 1.6rem;
+}
+
+.hamburger:hover {
+  cursor: pointer;
+}
+
+.dropContainer {
+  padding-top: 1rem;
+  height: 17rem !important;
+  border-radius: 0 0 6px 6px;
+}
+
+.loginDropContainer {
+  padding-top: 1rem;
+  height: 14rem !important;
+  border-radius: 0 0 6px 6px;
+}
+
+.dropMenu {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  gap: 1rem;
+}
+
+.navLink {
+  text-decoration: none;
+  color: var(--black);
+  font-size: 100%;
+}
+
+.navLink:hover {
+  color: var(--navy-color);
+}
+
+.hamburgerMenu {
+  display: flex;
+  align-items:center;
+}
+
+.menuImg {
+  width: 20px;
+  height: 20px;
+  object-fit: cover;
+  margin-right: 5px;
+}

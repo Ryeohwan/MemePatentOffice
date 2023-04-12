@@ -1,96 +1,187 @@
-// auction page (/auction/:auction_id)
+import React, { useState, useEffect, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "store/configStore";
+import { Client } from "@stomp/stompjs";
+import AuctionCanvas from "components/auction/main/AuctionCanvas";
+import { chatActions } from "store/chat";
+import { auctionActions } from "store/auction";
+import { playersInfo } from "store/auction";
+import useAxios from "hooks/useAxios";
 
-import React, { useRef, useState, useCallback } from "react";
-import Scene from "components/auction/main/Scene";
-import styles from "pages/AuctionPage.module.css";
-import * as THREE from "three";
-import gsap from "gsap";
-
+const ENDPOINT = "wss://j8a305.p.ssafy.io/ws";
 const AuctionPage: React.FC = () => {
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-  const [visible, setVisible] = useState<Boolean>(false);
-  const player = useRef<THREE.Object3D>(new THREE.Object3D());
-  const chairPoint = useRef<THREE.Mesh>(new THREE.Mesh());
-  const playerAnimation = useRef<THREE.AnimationAction | undefined>();
-  const sitting = useRef(false);
-
-  const canSit = useCallback(() => {
-    setVisible(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const characters = useRef<playersInfo[]>([]);
+  const [userNum, setUserNum] = useState<number>(0);
+  const { data, status, sendRequest } = useAxios();
+  const navigate = useNavigate();
+  const userId = JSON.parse(sessionStorage.getItem("user")!).userId;
+  const userNickName = JSON.parse(sessionStorage.getItem("user")!).nickname;
+  const { auctionId } = useParams();
+  const client = useRef<Client>();
+  const dispatch = useDispatch();
+  const [seeChat, setSeeChat] = useState<boolean>(false);
+  const isLooking = useSelector<RootState,boolean>(state=>state.chat.isLooking)
+  const seeChatHandelr = () => {
+    setSeeChat(false);
+  };
+  useEffect(() => {
+    dispatch(auctionActions.openAuction());
   }, []);
-  const cantSit = useCallback(() => {
-    setVisible(false);
-  }, []);
+  const connect = () => {
+    client.current = new Client({
+      //   주소
+      brokerURL: ENDPOINT,
 
-  const sitDownHandler = () => {
-    player.current.lookAt(0, 1, -30);
-    player.current.rotation.y = 0;
-    gsap.fromTo(
-      player.current.position,
-      {
-        x: player.current.position.x,
-        z: player.current.position.z,
+      // 연결 확인
+      // debug: function (str) {
+      //   console.log(str);
+      // },
+
+      // 재연결 시도
+      reconnectDelay: 3000,
+      heartbeatIncoming: 2000,
+      heartbeatOutgoing: 2000,
+      // 연결
+      onConnect: async (frame) => {
+        await sendRequest({ url: `/api/auction/info?auctionId=${auctionId}` });
+        await subscribe();
+        client.current?.publish({
+          destination: "/pub/chat",
+          body: JSON.stringify({
+            auctionId: auctionId,
+            nickname: "알림",
+            message: `${
+              JSON.parse(sessionStorage.getItem("user")!).nickname
+            }님이 입장하셨습니다.`,
+          }),
+        });
       },
-      {
-        x: chairPoint.current.position.x,
-        z: chairPoint.current.position.z + 0.8,
-        duration: 1,
-      }
-    );
 
+<<<<<<< HEAD
     if (playerAnimation.current) {
       playerAnimation.current.play();
     }
     sitting.current = true;
     cantSit()
-  };
-
-  const standUpHandler = () => {
-    player.current.lookAt(0, 1, -30);
-    player.current.rotation.y = 0;
-    gsap.fromTo(
-      player.current.position,
-      {
-        x: chairPoint.current.position.x,
-        z: chairPoint.current.position.z + 0.8,
+=======
+      onStompError: (frame) => {
+        console.log(frame);
       },
-      {
-        x: chairPoint.current.position.x,
-        z: chairPoint.current.position.z-0.8,
-        duration: 1,
-      }
-    );
-
-    if (playerAnimation.current) {
-      playerAnimation.current.play();
-    }
-    sitting.current = false;
+    });
+    client.current.activate();
+>>>>>>> origin/develop/frontend
   };
+
+  // 연결 끊기
+  const disconnect = () => {
+    client.current?.publish({
+      destination: "/pub/character",
+      body: JSON.stringify({
+        auctionId: auctionId,
+        nickname: JSON.parse(sessionStorage.getItem("user")!).nickname,
+        x: -100,
+        y: -100,
+        z: -100,
+        rotation_x: 0,
+        rotation_y: 0,
+        rotation_z: 0,
+        status: "DEFAULT",
+      }),
+    });
+    client.current?.deactivate();
+  };
+
+  const subscribe = async () => {
+    if (client.current == null) {
+      return;
+    }
+    client.current.subscribe(`/sub/chat/${auctionId}`, (body) => {
+      const json_body = JSON.parse(body.body);
+      if(json_body.nickname !== userNickName){
+        if(!isLooking){
+          dispatch(chatActions.getChat())
+          setSeeChat(true);
+        }
+      }
+      dispatch(
+        chatActions.sendChat({
+          chat: {
+            id: json_body.nickname,
+            message: json_body.message,
+            time: json_body.createdAt,
+            profileImgUrl: json_body.profileImgUrl,
+          },
+        })
+      );
+    });
+    client.current.subscribe(`/sub/character/${auctionId}`, (body) => {
+      const json_body = JSON.parse(body.body);
+      const character = characters.current.find(
+        (c) => c.nickname === json_body.nickname
+      );
+      if (character) {
+        character.x = json_body.x;
+        character.y = json_body.y;
+        character.z = json_body.z;
+        character.rotation_x = json_body.rotation_x;
+        character.rotation_y = json_body.rotation_y;
+        character.rotation_z = json_body.rotation_z;
+        character.status = json_body.status;
+      } else {
+        characters.current.push(json_body);
+        setUserNum((prev) => prev + 1);
+      }
+    });
+    client.current.subscribe(`/sub/bid/${auctionId}`, (body) => {
+      const json_body = JSON.parse(body.body);
+      dispatch(
+        auctionActions.putBiddingHistory({
+          price: json_body.askingPrice,
+          nickname: json_body.nickname,
+          time: json_body.createdAt,
+        })
+      );
+    });
+  };
+  useEffect(() => {
+    connect();
+    dispatch(chatActions.closeAuction())
+    return () => {
+      disconnect();
+      dispatch(chatActions.closeAuction())
+    };
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      dispatch(auctionActions.getAuctionInfo(data));
+      setIsLoading(false);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (status === 500) {
+      alert("없는 경매입니다.");
+      navigate("/main");
+    }
+  }, [status]);
+
   return (
-    <section className={styles.auctionWrapper}>
-      <Scene
-        width={width}
-        height={height}
-        canSit={canSit}
-        cantSit={cantSit}
-        player={player}
-        chairPoint={chairPoint}
-        playerAnimation={playerAnimation}
-        sitting={sitting}
-      />
-      <div>
-        {visible && !sitting.current && (
-          <button className={styles.sitBtn} onClick={sitDownHandler}>
-            앉기
-          </button>
-        )} 
-        {sitting.current && (
-          <button className={styles.sitBtn} onClick={standUpHandler}>
-            일어나
-          </button>
-        )}
-      </div>
-    </section>
+    <>
+      {isLoading && <p>loading,,,</p>}
+      {!isLoading && (
+        <AuctionCanvas
+          seeChat={seeChat}
+          seeChatHandler={seeChatHandelr}
+          client={client}
+          auctionId={Number(auctionId)}
+          characters={characters}
+          userNum={userNum}
+        />
+      )}
+    </>
   );
 };
 

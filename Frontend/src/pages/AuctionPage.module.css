@@ -1,5 +1,6 @@
-.auctionWrapper{
+.btn{
     position: absolute;
+<<<<<<< HEAD
     width: 100vw;
     height:80vh;
 }
@@ -11,4 +12,6 @@
 
 .sitBtnNone{
     display: none;
+=======
+>>>>>>> origin/develop/frontend
 }

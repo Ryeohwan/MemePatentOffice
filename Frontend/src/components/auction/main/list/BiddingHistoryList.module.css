@@ -1,0 +1,30 @@
+.wraper{
+    display: flex;
+    flex-direction: column;
+    height: 18%;
+    background-color: rgba(255, 255, 255, 0) !important;
+}
+
+.container{
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    font-size: 12px;
+    font-weight: bolder;
+    margin-top: 10px;
+    position: sticky;
+
+}
+
+.container > p > span{
+    font-size: 7px;
+    color: var(--section-line-color);
+}
+
+.divider{
+    margin:5% !important;
+}
+
+.historyWraper{
+    height:82%;
+    overflow: auto;
+}

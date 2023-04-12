@@ -22,6 +22,7 @@ const Chair: React.FC<ChairProps> = ({
   const chairHeight = box.max.y - box.min.y;
 
   useEffect(() => {
+<<<<<<< HEAD
     for (let i = 0; i < 56; i++) {
       const chair = glb.scene.children[0].clone() as THREE.Mesh;
       chair.material = new THREE.MeshStandardMaterial({
@@ -30,8 +31,18 @@ const Chair: React.FC<ChairProps> = ({
       });
       chair.position.set(
         (i % 7) - 11,
+=======
+    for (let i = 0; i < 53; i++) {
+      const chair = glb.scene.children[0].clone() as THREE.Mesh;
+      chair.material = new THREE.MeshStandardMaterial({
+        // map: texture,
+        color: "#D0D0D0",
+      });
+      chair.position.set(
+        (i % 5)*1.8 - 11,
+>>>>>>> origin/develop/frontend
         chairHeight / 2,
-        Math.floor(i / 8) * 5 - 12
+        Math.floor(i / 8) * 5.5 - 12
       );
       chair.castShadow = true;
       chair.receiveShadow = true;
@@ -40,7 +51,7 @@ const Chair: React.FC<ChairProps> = ({
       tableAndChairs.current.push(chair);
 
       const pointMesh = new THREE.Mesh(
-        new THREE.PlaneGeometry(1, 1),
+        new THREE.PlaneGeometry(1.5, 1.5),
         new THREE.MeshStandardMaterial({
           color: "#858585",
           transparent: true,
@@ -49,6 +60,7 @@ const Chair: React.FC<ChairProps> = ({
       );
       pointMesh.receiveShadow = true;
       pointMesh.rotation.x = -Math.PI / 2;
+<<<<<<< HEAD
       pointMesh.position.set(chair.position.x, 0.1, chair.position.z - 1);
       chairPoints.current.push(pointMesh);
     }
@@ -59,17 +71,32 @@ const Chair: React.FC<ChairProps> = ({
       });
       chair.position.set(
         (i % 7) + 3,
+=======
+      pointMesh.position.set(chair.position.x-0.3, 0.1, chair.position.z - 1);
+      chairPoints.current.push(pointMesh);
+    }
+    for (let i = 0; i < 53; i++) {
+      const chair = glb.scene.children[0].clone() as THREE.Mesh;
+      chair.material = new THREE.MeshStandardMaterial({
+        color: "#D0D0D0",
+      });
+      chair.position.set(
+        (i % 5)*1.8 + 3,
+>>>>>>> origin/develop/frontend
         chairHeight / 2,
-        Math.floor(i / 8) * 5 - 12
+        Math.floor(i / 8) * 5.5 - 12
       );
       chair.castShadow = true;
       chair.receiveShadow = true;
       chair.rotation.y = Math.PI;
       chairs.current.push(chair);
+<<<<<<< HEAD
       tableAndChairs.current.push(chair);
+=======
+>>>>>>> origin/develop/frontend
 
       const pointMesh = new THREE.Mesh(
-        new THREE.PlaneGeometry(1, 1),
+        new THREE.PlaneGeometry(1.5, 1.5),
         new THREE.MeshStandardMaterial({
           color: "#858585",
           transparent: true,
@@ -78,7 +105,11 @@ const Chair: React.FC<ChairProps> = ({
       );
       pointMesh.receiveShadow = true;
       pointMesh.rotation.x = -Math.PI / 2;
+<<<<<<< HEAD
       pointMesh.position.set(chair.position.x, 0.1, chair.position.z - 1);
+=======
+      pointMesh.position.set(chair.position.x-0.3, 0.1, chair.position.z - 1);
+>>>>>>> origin/develop/frontend
       chairPoints.current.push(pointMesh);
     }
   }, []);

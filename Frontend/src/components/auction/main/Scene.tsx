@@ -1,4 +1,14 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
+<<<<<<< HEAD
+=======
+
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "store/configStore";
+import { auctionActions } from "store/auction";
+import { WebSocketProps } from "type";
+import { playersInfo } from "store/auction";
+
+>>>>>>> origin/develop/frontend
 import { Canvas } from "react-three-fiber";
 import * as THREE from "three";
 import Box from "components/auction/main/mesh/Box";
@@ -8,44 +18,74 @@ import Chair from "components/auction/main/mesh/Chair";
 import Table from "components/auction/main/mesh/Table";
 import Auctioneer from "components/auction/main/mesh/AuctioneerChar";
 import Border from "components/auction/main/mesh/Border";
-
 import styles from "components/auction/main/Scene.module.css";
+import Players from "./mesh/Players";
 
-interface SceneProps {
-  width: number;
-  height: number;
-  canSit: () => void;
-  cantSit: () => void;
+interface SceneProps extends WebSocketProps {
+  canSitHandler: (state: boolean) => void;
   player: React.MutableRefObject<THREE.Object3D>;
   chairPoint: React.MutableRefObject<THREE.Mesh>;
   playerAnimation: React.MutableRefObject<THREE.AnimationAction | undefined>;
-  sitting: React.MutableRefObject<Boolean>;
+  camera: React.MutableRefObject<
+    THREE.OrthographicCamera | THREE.PerspectiveCamera
+  >;
+  playerPosition: React.MutableRefObject<THREE.Vector3>;
+  isSitting: React.MutableRefObject<boolean>;
+  characters: React.MutableRefObject<playersInfo[]>
+  userNum: number;
+  chairPoints: React.MutableRefObject<THREE.Mesh[]>;
+  changeHandler:()=>void
+
 }
 
 const Scene: React.FC<SceneProps> = ({
-  width,
-  height,
-  canSit,
-  cantSit,
+  canSitHandler,
+  changeHandler,
   player,
   chairPoint,
   playerAnimation,
-  sitting,
+  camera,
+  playerPosition,
+  isSitting,
+  client,
+  auctionId,
+  characters,
+  userNum,
+  chairPoints,
+  seeChat,
+  seeChatHandler,
 }) => {
+<<<<<<< HEAD
   const canvas = useRef<any>();
   const [meshes, setMeshes] = useState<THREE.Mesh[]>([]);
   const tableAndChairs = useRef<THREE.Mesh[]>([])
+=======
+  const dispatch = useDispatch();
+  const canvas = useRef<any>();
+  const playerState = useSelector<RootState, number>(
+    (state) => state.auction.playerState
+  );
+  const [meshes, setMeshes] = useState<THREE.Mesh[]>([]);
+  const tableAndChairs = useRef<THREE.Mesh[]>([]);
+>>>>>>> origin/develop/frontend
   const table = useRef<THREE.Object3D>(new THREE.Object3D());
   const chairs = useRef<Array<THREE.Mesh>>([]);
   const raycaster = useRef<THREE.Raycaster>(new THREE.Raycaster());
   const mouse = useRef<THREE.Vector2>(new THREE.Vector2());
   const clickPosition = useRef<THREE.Vector3>(new THREE.Vector3());
-  const chairPoints = useRef<Array<THREE.Mesh>>([]);
+  const [players, setPlayers] = useState<playersInfo[]>([]);
 
-  const playerPosition = useRef<THREE.Vector3>(new THREE.Vector3());
-  const moving = useRef(false);
+  useEffect(() => {
+    const info = characters.current.filter((player) => {
+      return (
+        player.nickname !== JSON.parse(sessionStorage.getItem("user")!).nickname
+      );
+    });
+    setPlayers(info);
+  }, [userNum]);
 
   // 카메라
+<<<<<<< HEAD
   const cameraPosition = new THREE.Vector3(13, 10, 25);
   const camera = useRef<THREE.OrthographicCamera>(
     new THREE.OrthographicCamera(
@@ -57,6 +97,9 @@ const Scene: React.FC<SceneProps> = ({
       1000
     )
   );
+=======
+  const cameraPosition = new THREE.Vector3(35, 20, 80);
+>>>>>>> origin/develop/frontend
 
   useEffect(() => {
     if (document.querySelector("#three-canvas")) {
@@ -66,11 +109,16 @@ const Scene: React.FC<SceneProps> = ({
   // 이벤트
   const createdHandler = () => {
     camera.current.position.set(
-      cameraPosition.x,
-      cameraPosition.y,
-      cameraPosition.z
+      cameraPosition.x + 13,
+      cameraPosition.y + 10,
+      cameraPosition.z + 29
     );
+<<<<<<< HEAD
     camera.current.zoom = 20;
+=======
+    camera.current.zoom = 30;
+    camera.current.lookAt(13, 10, 29);
+>>>>>>> origin/develop/frontend
     camera.current.updateProjectionMatrix();
   };
 
@@ -110,11 +158,12 @@ const Scene: React.FC<SceneProps> = ({
   };
 
   const mouseUpHandler = (e: React.MouseEvent) => {
-    if (!sitting.current) {
-      calculateMousePosition(e);
+    if (playerState===2 || playerState ===5 || playerState === 3 || playerState === 4 ) return
+    
+    calculateMousePosition(e);
       raycasting();
-      moving.current = true;
-    }
+      dispatch(auctionActions.controlPlayerState(1));
+    
   };
   return (
     <Canvas
@@ -142,25 +191,46 @@ const Scene: React.FC<SceneProps> = ({
 
       <Floor position={[0, 0.01, 0]} pushMesh={pushMesh} />
       <Player
-        moving={moving}
-        sitting={sitting}
         clickPosition={clickPosition}
         playerPosition={playerPosition}
         player={player}
         camera={camera}
         cameraPosition={cameraPosition}
-        canSit={canSit}
-        cantSit={cantSit}
+        canSitHandler={canSitHandler}
         chairPoints={chairPoints}
         chairPoint={chairPoint}
         playerAnimation={playerAnimation}
         tableAndChairs={tableAndChairs}
+<<<<<<< HEAD
       />
       <Box position={[0, 15, 0]} />
       <Table table={table} pushMesh={pushMesh} tableAndChairs={tableAndChairs}/>
       <Chair chairs={chairs} chairPoints={chairPoints} tableAndChairs={tableAndChairs}/>
+=======
+        isSitting={isSitting}
+        client={client}
+        auctionId={auctionId}
+        characters={characters}
+        seeChat={seeChat}
+        seeChatHandler={seeChatHandler}
+      />
+      <Box position={[0, 10, 0]} />
+      <Table
+        table={table}
+        pushMesh={pushMesh}
+        tableAndChairs={tableAndChairs}
+      />
+      <Chair
+        chairs={chairs}
+        chairPoints={chairPoints}
+        tableAndChairs={tableAndChairs}
+      />
+>>>>>>> origin/develop/frontend
       <Auctioneer />
       <Border />
+      {players.map((info)=>{
+        return <Players info={info} userNum={userNum} characters={characters} changeHandler={changeHandler}/> 
+      })}
     </Canvas>
   );
 };

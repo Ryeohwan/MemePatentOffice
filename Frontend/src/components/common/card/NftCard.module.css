@@ -1,0 +1,28 @@
+.nftCardContainer {
+    width: 246px;
+    height: 270px;
+    position: relative;
+    transition: 1.4s;
+    transition-timing-function: cubic-bezier(0.58, 0.45, 0.1, 1.2);
+    transform-style: preserve-3d;
+    perspective: 1100px;
+    top: 0;
+    left: 0;
+    display: flex;
+    margin: 0 10px;
+}
+
+.nftCardContainer.nftCardFlipped {
+    transform: rotateY(180deg);
+}
+
+.nftCardFront, .nftCardBack{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+}
+
+.nftCardBack {
+    transform: rotateY(-180deg);
+}

@@ -1,0 +1,6 @@
+.sideBar{
+    height: 63vh !important;
+    border-radius: 20px 20px 0 0;
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    color: white !important;
+}

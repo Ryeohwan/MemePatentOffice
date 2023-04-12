@@ -1,7 +1,8 @@
 body{
   margin: 0;
-
+  --box-shadow: 1px 1px 10px -4px #858585;
   --point-color: #03A9F4;
+  --navy-color: #043763;
   --button-color: #448AFF;
   --button-two-color: #774AF9;
   --setting-color: #0277BD;
@@ -11,6 +12,8 @@ body{
   --black-color: #282828;
   --impossible-color: #FE7171;
   --possible-color: #56FB67;
+  --heart-color: rgb(249, 125, 145);
+  --red-color: #ea4444;
 }
 
 p {
@@ -18,9 +21,21 @@ p {
 }
 
 * {
+<<<<<<< HEAD
   font-family: 'Gmarket Sans TTF';
+=======
+  font-family: 'MyWebFont', sans-serif;
+>>>>>>> origin/develop/frontend
 }
 
 .Scene_scene__mRBD8{
   position: absolute !important;
+<<<<<<< HEAD
+=======
+}
+
+@font-face {
+  font-family: 'MyWebFont';
+  src: url('/public/GmarketSansTTFMedium.ttf') format('truetype');
+>>>>>>> origin/develop/frontend
 }
